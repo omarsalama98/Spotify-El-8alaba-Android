@@ -1,5 +1,5 @@
 <resources>
-    <string name = "app_name">Spotify_El8alaba</string>
+    <string name = "app_name">Spotify El8alaba</string>
     <string name = "title_activity_main">MainActivity</string>
     <string name = "title_home">Home</string>
     <string name = "title_search">Search</string>
@@ -11,5 +11,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name = "hello_blank_fragment">Hello blank fragment</string>
+
+    <string name = "title_library_playlists">Playlists</string>
+    <string name = "title_library_artists">Artists</string>
+    <string name = "title_library_albums">Albums</string>
 
 </resources>
