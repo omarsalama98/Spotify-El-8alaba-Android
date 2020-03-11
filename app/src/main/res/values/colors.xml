@@ -10,7 +10,10 @@
     <color name = "black">#000000</color>
     <color name = "spotifyBlue">#017AFF</color>
     <color name = "white">#FFFFFF</color>
-    <color name = "lightGrey">#6E6E6E</color>
-    <color name = "darkGrey">#545453</color>
+    <color name = "lightGray">#424244</color>
+    <color name = "darkGray">#151515</color>
+    <color name = "midGray">#232228</color>
     <color name = "green">#2DD22D</color>
+    <color name = "statusBarColor">#9C000000</color>
+
 </resources>
