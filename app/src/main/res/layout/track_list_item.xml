@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:id = "@+id/library_playlist_track_body"
+        android:orientation = "horizontal"
+        android:background = "@drawable/playlist_item_background_ripple"
+        android:layout_margin = "8dp"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content">
+
+    <RelativeLayout
+            android:layout_width = "@dimen/track_list_item"
+            android:layout_height = "@dimen/track_list_item">
+
+        <ImageView
+                android:id = "@+id/library_playlist_track_art"
+                android:layout_width = "64dp"
+                android:layout_height = "64dp"
+                android:src = "@drawable/artist_mock"
+                android:layout_centerInParent = "true" />
+
+        <ImageView
+                android:id = "@+id/library_playlist_play_icon"
+                android:layout_width = "@dimen/playlist_icon"
+                android:layout_height = "@dimen/playlist_icon"
+                android:src = "@drawable/play_arrow"
+                android:layout_centerInParent = "true"
+                android:tint = "@android:color/white" />
+
+        <ProgressBar
+                android:id = "@+id/library_playlist_progress_bar"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_centerInParent = "true"
+                android:indeterminateTint = "@color/colorPrimary"
+                android:visibility = "gone" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:layout_width = "0dp"
+            android:layout_height = "match_parent"
+            android:layout_weight = "1"
+            android:orientation = "vertical"
+            android:layout_margin = "8dp">
+
+
+        <TextView
+                android:id = "@+id/library_playlist_track_name"
+                android:layout_width = "match_parent"
+                android:layout_height = "0dp"
+                android:layout_weight = "1"
+                android:gravity = "bottom"
+                android:layout_gravity = "center"
+                android:textColor = "@color/colorPrimaryText"
+                android:textStyle = "bold"
+                tools:text = "Song Name" />
+
+        <TextView
+                android:id = "@+id/library_playlist_artist_name"
+                android:layout_width = "match_parent"
+                android:layout_height = "0dp"
+                android:layout_weight = "1"
+                android:layout_gravity = "top"
+                android:textColor = "@color/colorSecondaryText"
+                tools:text = "Artist Name" />
+
+    </LinearLayout>
+
+    <ToggleButton
+            android:id = "@+id/library_playlist_like_track"
+            android:layout_width = "@dimen/playlist_icon"
+            android:layout_height = "@dimen/playlist_icon"
+            android:layout_gravity = "center"
+            android:padding = "@dimen/playlist_icon"
+            android:textOff = ""
+            android:textOn = ""
+            android:background = "@drawable/like_track_unliked" />
+
+    <ToggleButton
+            android:id = "@+id/library_playlist_hide_track"
+            android:layout_width = "@dimen/playlist_icon"
+            android:layout_height = "@dimen/playlist_icon"
+            android:layout_gravity = "center"
+            android:layout_margin = "@dimen/margin_small"
+            android:textOff = ""
+            android:textOn = ""
+            android:background = "@drawable/hide_track_visible" />
+
+    <Button
+            android:id = "@+id/library_playlist_others_menu"
+            android:layout_width = "@dimen/playlist_icon"
+            android:layout_height = "@dimen/playlist_icon"
+            android:layout_gravity = "center"
+            android:layout_margin = "@dimen/margin_small"
+            android:background = "@drawable/three_dots_menu"
+            android:backgroundTint = "@color/colorIcons" />
+
+
+</LinearLayout>

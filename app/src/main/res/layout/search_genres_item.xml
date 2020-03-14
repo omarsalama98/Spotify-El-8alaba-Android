@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:layout_width = "match_parent"
+        android:layout_height = "150dp"
+        android:orientation = "horizontal"
+        android:paddingTop = "10dp"
+        android:background = "@drawable/genres_background"
+        android:weightSum = "100">
+
+    <TextView
+            android:layout_width = "0dp"
+            android:layout_weight = "70"
+            android:layout_height = "wrap_content"
+            android:text = "Title"
+            android:textSize = "25sp"
+            android:padding = "10dp"
+            android:textColor = "@color/white" />
+    <ImageView
+            android:layout_width = "0dp"
+            android:layout_weight = "40"
+            android:layout_height = "wrap_content"
+            android:src = "@drawable/bika"
+            android:rotation = "25" />
+</LinearLayout>

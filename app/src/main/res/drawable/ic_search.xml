@@ -1,24 +1,5 @@
-<vector xmlns:android = "http://schemas.android.com/apk/res/android"
-        xmlns:aapt = "http://schemas.android.com/aapt"
-        android:width = "512dp"
-        android:height = "512dp"
-        android:viewportWidth = "98"
-        android:viewportHeight = "98">
-    <path android:pathData = "M89.6,85.2L72,67.6c5.4,-6.4 8.7,-14.6 8.7,-23.6C80.7,24 64.3,7.6 44.1,7.6S7.5,24 7.5,44s16.4,36.5 36.6,36.5c9,0 17.2,-3.3 23.6,-8.6l17.7,17.6c0.6,0.6 1.4,0.9 2.1,0.9c0.8,0 1.5,-0.3 2.1,-0.9C90.8,88.2 90.8,86.3 89.6,85.2zM13.5,44c0,-16.8 13.7,-30.5 30.6,-30.5S74.7,27.2 74.7,44c0,8.4 -3.4,16 -8.9,21.5l-0.1,0.1l-0.1,0.1c-5.5,5.4 -13.1,8.8 -21.5,8.8C27.2,74.5 13.5,60.9 13.5,44z">
-        <aapt:attr name = "android:fillColor">
-            <gradient
-                    android:startY = "9.55"
-                    android:startX = "49"
-                    android:endY = "92.3502"
-                    android:endX = "49"
-                    android:type = "linear">
-                <item
-                        android:offset = "0"
-                        android:color = "#FF00EFD1" />
-                <item
-                        android:offset = "1"
-                        android:color = "#FF00ACEA" />
-            </gradient>
-        </aapt:attr>
-    </path>
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android = "http://schemas.android.com/apk/res/android">
+    <item android:drawable = "@drawable/ic_search_selected" android:state_checked = "true" />
+    <item android:drawable = "@drawable/ic_search_unselected" android:state_checked = "false" />
+</selector>

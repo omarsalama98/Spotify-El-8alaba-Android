@@ -15,13 +15,13 @@
             android:id = "@+id/navigation_search"
             android:name = "com.vnoders.spotify_el8alaba.ui.search.SearchFragment"
             android:label = "@string/title_search"
-            tools:layout = "@layout/fragment_search" />
+            tools:layout = "@layout/fragment_search_genres" />
 
     <fragment
             android:id = "@+id/navigation_your_library"
-            android:name = "com.vnoders.spotify_el8alaba.ui.yourLibrary.YourLibraryFragment"
+            android:name = "com.vnoders.spotify_el8alaba.ui.library.LibraryFragment"
             android:label = "@string/title_your_library"
-            tools:layout = "@layout/fragment_your_library" />
+            tools:layout = "@layout/fragment_library" />
 
     <fragment
             android:id = "@+id/navigation_premium"
