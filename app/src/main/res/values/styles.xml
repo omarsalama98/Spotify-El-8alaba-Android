@@ -4,8 +4,8 @@
     <style name = "AppTheme" parent = "Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name = "colorPrimary">@color/colorPrimary</item>
-        <item name = "colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name = "colorAccent">@color/colorAccent</item>
+        <item name = "colorPrimaryDark">@color/black</item>
+        <item name = "colorAccent">@color/green_login</item>
         <item name = "android:statusBarColor">@color/statusBarColor</item>
         <item name = "android:windowTranslucentStatus">true</item>
         <item name = "android:windowTranslucentNavigation">true</item>

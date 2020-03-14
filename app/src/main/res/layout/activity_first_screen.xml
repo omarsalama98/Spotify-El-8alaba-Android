@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<LinearLayout
+xmlns:android = "http://schemas.android.com/apk/res/android"
+xmlns:tools = "http://schemas.android.com/tools"
+xmlns:app = "http://schemas.android.com/apk/res-auto"
+android:layout_width = "match_parent"
+android:layout_height = "match_parent"
+android:orientation="vertical"
+tools:context = ".MainActivity"
+android:background="@drawable/background_gradient"
+
+>
+<ImageView
+        android:layout_marginTop="110dp"
+        android:layout_marginBottom="80dp"
+        android:layout_width = "80dp"
+        android:layout_height = "80dp"
+        android:src="@drawable/spotify"
+        android:layout_gravity="center"
+
+/>
+<TextView
+        android:textColor="@color/white"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:text="@string/firstPageTitle1"
+        android:textSize="37dp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+
+/>
+<TextView
+        android:textColor="@color/white"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:text="@string/firstPageTitle2"
+        android:textSize="37dp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+/>
+<Button
+android:id="@+id/sign_up_button"
+        android:layout_width = "300dp"
+        android:layout_height = "wrap_content"
+        android:text="@string/signUpButton"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:background="@drawable/custom_signup"
+/>
+
+<Button
+        android:id="@+id/facebook_button"
+        android:layout_width = "300dp"
+        android:layout_height = "wrap_content"
+        android:text="@string/signUpFacebook"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/custom_face"
+        android:textSize="15dp"
+        android:textStyle="bold"
+
+
+
+/>
+<Button
+        android:layout_width = "300dp"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:layout_height = "wrap_content"
+        android:text="@string/logInButton"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center"
+        android:id="@+id/Login_button"
+
+/>
+
+
+
+</LinearLayout>
+
+

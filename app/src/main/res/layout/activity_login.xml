@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:orientation="vertical"
+        android:background="@color/black"
+        tools:context = ".LoginActivit">
+
+<ImageButton
+        android:layout_marginTop="20dp"
+        android:id="@+id/back_button"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:src="@drawable/ic_left_arrow"
+        android:background="@android:color/transparent"
+/>
+
+    <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:text="@string/LoginFirstText"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="15dp"
+            android:textStyle="bold"
+    />
+    <EditText
+            android:id="@+id/email_edit_text"
+            android:textCursorDrawable="@drawable/cursor"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width ="match_parent"
+            android:layout_height ="50dp"
+            android:background="@drawable/custom_login_edit_text"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+
+
+    />
+
+    <TextView
+            android:id="@+id/invalid_email"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:textColor="@color/white"
+    />
+
+
+    <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:text="@string/LoginSecondText"
+            android:textSize="30sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="40dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+    />
+
+
+<com.google.android.material.textfield.TextInputLayout
+
+        app:passwordToggleEnabled="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width ="match_parent"
+        android:layout_height ="50dp"
+        android:background="@drawable/custom_login_edit_text"
+
+
+>
+
+    <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_edit_text"
+            android:textCursorDrawable="@drawable/cursor"
+            android:layout_width ="match_parent"
+            android:layout_height ="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:background="@null"
+
+
+    />
+
+</com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <Button
+            android:id="@+id/Login_button"
+            android:layout_width = "120dp"
+            android:layout_height = "wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_login_button"
+            android:text="@string/logInButton"
+    />
+
+    <Button
+            android:layout_width = "200dp"
+            android:layout_height = "20dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/custom_face"
+            android:text="@string/ForgetPassword"
+            android:textColor="@color/white"
+    />
+
+</LinearLayout>

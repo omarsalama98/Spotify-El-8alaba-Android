@@ -5,14 +5,14 @@
     <string name = "title_search">Search</string>
     <string name = "title_your_library">Your Library</string>
     <string name = "title_premium">Premium</string>
-    <string name="heart_button">♡</string>
-    <string name="song_picture_desc">Song Picture</string>
-    <string name="desktop_image_desc">Desktop Image</string>
-    <string name="speaker_image_desc">Speaker Image</string>
-    <string name="share_image_desc">Share Image</string>
-    <string name="playing_from_playlist">Playing from playlist</string>
-    <string name="playing_from_artist">Playing from artist</string>
-    <string name="play_button_desc">Play Button</string>
+    <string name = "heart_button">♡</string>
+    <string name = "song_picture_desc">Song Picture</string>
+    <string name = "desktop_image_desc">Desktop Image</string>
+    <string name = "speaker_image_desc">Speaker Image</string>
+    <string name = "share_image_desc">Share Image</string>
+    <string name = "playing_from_playlist">Playing from playlist</string>
+    <string name = "playing_from_artist">Playing from artist</string>
+    <string name = "play_button_desc">Play Button</string>
     <string name = "find_the_music_you_love">Find the music you love</string>
     <string name = "search_for_artists_songs">Search for artists, songs, playlists and more.</string>
     <string name = "search">Search</string>
@@ -23,5 +23,16 @@
     <string name = "title_library_playlists">Playlists</string>
     <string name = "title_library_artists">Artists</string>
     <string name = "title_library_albums">Albums</string>
-
+    <string name = "firstPageTitle1">Millions of songs.</string>
+    <string name = "firstPageTitle2">Free on Spotify.</string>
+    <string name = "signUpButton">SIGN UP FREE</string>
+    <string name = "signUpFacebook">CONTINUE WITH FACEBOOK</string>
+    <string name = "logInButton">LOG IN</string>
+    <string name = "LoginFirstText">Email or username</string>
+    <string name = "LoginSecondText">Password</string>
+    <string name = "ForgetPassword">FORGOT YOUR PASSWORD?</string>
+    <string name = "baseURL">https://my-json-server.typicode.com/MohamedSamiMohamed/MOCKING/</string>
+    <string name = "offline">You\'re offline</string>
+    <string name = "check_connection">Check your connection and try again.</string>
+    <string name = "OK">OK</string>
 </resources>

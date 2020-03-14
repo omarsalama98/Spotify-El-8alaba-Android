@@ -17,7 +17,20 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView navView;
 
     @Override
-    public void onBackPressed() {
+
+
+        public void onBackPressed() {
+        if (navView.getSelectedItemId() == R.id.navigation_home) {
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+  /*  public void onBackPressed() {
         if (navView.getSelectedItemId() == R.id.navigation_home) {
             moveTaskToBack(true);
             android.os.Process.killProcess(android.os.Process.myPid());
@@ -25,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
-    }
+    }*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,5 +59,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
     }
+
 
 }
