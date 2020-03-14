@@ -72,7 +72,7 @@
             android:layout_width = "@dimen/playlist_icon"
             android:layout_height = "@dimen/playlist_icon"
             android:layout_gravity = "center"
-            android:padding = "@dimen/playlist_icon"
+            android:layout_margin = "@dimen/margin_small"
             android:textOff = ""
             android:textOn = ""
             android:background = "@drawable/like_track_unliked" />
