@@ -5,6 +5,14 @@
     <string name = "title_search">Search</string>
     <string name = "title_your_library">Your Library</string>
     <string name = "title_premium">Premium</string>
+    <string name="heart_button">♡</string>
+    <string name="song_picture_desc">Song Picture</string>
+    <string name="desktop_image_desc">Desktop Image</string>
+    <string name="speaker_image_desc">Speaker Image</string>
+    <string name="share_image_desc">Share Image</string>
+    <string name="playing_from_playlist">Playing from playlist</string>
+    <string name="playing_from_artist">Playing from artist</string>
+    <string name="play_button_desc">Play Button</string>
     <string name = "find_the_music_you_love">Find the music you love</string>
     <string name = "search_for_artists_songs">Search for artists, songs, playlists and more.</string>
     <string name = "search">Search</string>

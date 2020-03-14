@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android = "http://schemas.android.com/apk/res/android"
-        package = "com.vnoders.spotify_el8alaba">
+    xmlns:tools="http://schemas.android.com/tools"
+    package = "com.vnoders.spotify_el8alaba">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name = "android.permission.INTERNET" />
     <application
@@ -13,17 +16,31 @@
                 android:name = ".MainActivity"
                 android:label = "@string/title_activity_main"
                 android:launchMode = "singleTop"
-                android:parentActivityName = ".SplashActivity">
+                android:screenOrientation="portrait"
+                android:parentActivityName = ".SplashActivity"
+                tools:ignore="LockedOrientationActivity">
             <meta-data
                     android:name = "android.support.PARENT_ACTIVITY"
                     android:value = ".SplashActivity" />
         </activity>
-        <activity android:name = "com.vnoders.spotify_el8alaba.SplashActivity">
+        <activity android:name = "com.vnoders.spotify_el8alaba.SplashActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name = "android.intent.action.MAIN" />
 
                 <category android:name = "android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name = ".ui.trackplayer.TrackPlayerActivity"
+            android:launchMode = "singleInstance"
+            android:parentActivityName = ".MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+            <meta-data
+                android:name = "android.support.PARENT_ACTIVITY"
+                android:value = ".MainActivity" />
         </activity>
     </application>
 
