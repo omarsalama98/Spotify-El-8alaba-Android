@@ -19,7 +19,7 @@ public class TrackPlayerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_track_player);
 
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
