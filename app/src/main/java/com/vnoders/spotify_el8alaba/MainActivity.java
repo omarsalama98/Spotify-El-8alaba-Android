@@ -1,7 +1,5 @@
 package com.vnoders.spotify_el8alaba;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +8,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackPlayerActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        // start service that plays tracks here to get tracks from online and play it
+        Intent intent = new Intent(this, MediaPlaybackService.class);
+        startService(intent);
     }
 
 }
