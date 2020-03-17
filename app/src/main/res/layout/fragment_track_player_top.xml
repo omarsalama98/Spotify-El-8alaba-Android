@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:background="#000000">
+
+    <Button
+        android:id="@+id/top_back_button"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/ic_keyboard_arrow_down_white_18dp" />
+
+    <LinearLayout
+        android:id="@+id/author_select_top"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/playing_from_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="Playing From Artist" />
+
+        <TextView
+            android:id="@+id/author_name_text_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="Eminem" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/top_overflow_menu"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/ic_more_vert_white_24dp" />
+
+
+</LinearLayout>
