@@ -75,6 +75,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     private static final int HANDLER_DELAY = 50;
     // if currently seeking don't update progress
     private boolean mSeeking = false;
+    // know if this is the first init or not
+    private boolean mFirstInit;
 
 
     //______________________________________________________________________________________________
@@ -237,6 +239,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      * @param loc location to seek to
      */
     public void seek(int loc) {
+
+        // set false so handler thread can continue updating value
+        mSeeking = false;
+
         // if no player then don't seek
         if (mMediaPlayer == null) {
             return;
@@ -246,9 +252,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         int seekTo = (loc * mMediaPlayer.getDuration()) / 100;
 
         mMediaPlayer.seekTo(seekTo);
-
-        // set false so handler thread can continue updating value
-        mSeeking = false;
     }
 
 
@@ -380,6 +383,11 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 // update global live data variable
                 TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
 
+                // init media player so play when user wants instantly
+                mFirstInit = true;
+                destroyMediaPlayer();
+                initMediaPlayer();
+
 
                 //Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
             }
@@ -402,14 +410,22 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      */
     @Override
     public void onPrepared(MediaPlayer mp) {
+        // update live data info
+        mCurrentTrack.setDuration(mMediaPlayer.getDuration());
+        TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
+
+        // if first init then don't start song
+        if (mFirstInit) {
+            mFirstInit = false;
+            return;
+        }
+
         // if not playing and there is network connection then play song and update global
         // live data variable
         // start the handler
         if (!mPlaying && isNetworkAvailable()) {
             setIsPlaying(true);
             mMediaPlayer.start();
-            mCurrentTrack.setDuration(mMediaPlayer.getDuration());
-            TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
             startHandler();
         }
     }
