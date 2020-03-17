@@ -17,37 +17,41 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.SearchListAdapter;
+import com.vnoders.spotify_el8alaba.SearchHistoryFragment;
 import com.vnoders.spotify_el8alaba.SearchListItem;
 import java.util.ArrayList;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
-import retrofit2.Retrofit;
 
 
 public class SearchFragment extends Fragment {
 
+    private boolean searchHistoryExists = true;
+
     private SearchViewModel searchViewModel;
-    private EditText search_query;
-    private RecyclerView search_list_recycler_view;
+    private EditText searchQuery;
+    private RecyclerView searchListRecyclerView;
     private LayoutManager layoutManager;
-    private SearchListAdapter searchListAdapter;
-    private BottomNavigationView bot_nav_view;
-    private RelativeLayout search_text_view_layout;
-    private LinearLayout search_edit_text_layout;
-    private ImageView back_arrow;
-    private ImageView camera_in_edit_text;
-    private ImageView camera_in_text_view;
-    private ImageView reset_search;
-    private TextView search_text_view;
-    Retrofit retrofit;
+    private SearchHistoryListAdapter searchListAdapter;
+    private BottomNavigationView botNavView;
+    private RelativeLayout searchTextViewLayout;
+    private LinearLayout searchEditTextLayout;
+    private ImageView backArrow;
+    private ImageView cameraInEditText;
+    private ImageView cameraInTextView;
+    private ImageView resetSearch;
+    private TextView searchTextView;
+    private LinearLayout searchHistoryListLayout;
+    private RelativeLayout searchMainBackground;
 
     private ArrayList<SearchListItem> getMockSearchData() {
         ArrayList<SearchListItem> myList = new ArrayList<>();
@@ -74,28 +78,40 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         searchViewModel =
-                ViewModelProviders.of(this).get(SearchViewModel.class);
+                new ViewModelProvider(this).get(SearchViewModel.class);
         final View root = inflater.inflate(R.layout.fragment_search, container, false);
 
-        camera_in_text_view = root.findViewById(R.id.search_camera_image_in_text_view);
-        camera_in_edit_text = root.findViewById(R.id.search_camera_image_in_edit_text);
+        cameraInTextView = root.findViewById(R.id.search_camera_image_in_text_view);
+        cameraInEditText = root.findViewById(R.id.search_camera_image_in_edit_text);
         //TODO: Add Camera functionality
 
-        search_text_view = root.findViewById(R.id.search_bar_text_view);
-        reset_search = root.findViewById(R.id.reset_search_image);
-        back_arrow = root.findViewById(R.id.search_bar_back_arrow);
-        search_text_view_layout = root.findViewById(R.id.search_text_layout);
-        search_edit_text_layout = root.findViewById(R.id.search_edit_text_layout);
-        search_query = root.findViewById(R.id.search_bar_edit_text);
-        bot_nav_view = getActivity().findViewById(R.id.nav_view);
-        search_list_recycler_view = root.findViewById(R.id.search_list_recycler_view);
+        searchTextView = root.findViewById(R.id.search_bar_text_view);
+        resetSearch = root.findViewById(R.id.reset_search_image);
+        backArrow = root.findViewById(R.id.search_bar_back_arrow);
+        searchTextViewLayout = root.findViewById(R.id.search_text_layout);
+        searchEditTextLayout = root.findViewById(R.id.search_edit_text_layout);
+        searchQuery = root.findViewById(R.id.search_bar_edit_text);
+        botNavView = getActivity().findViewById(R.id.nav_view);
+        searchListRecyclerView = root.findViewById(R.id.search_list_recycler_view);
+        searchMainBackground = root.findViewById(R.id.search_main_background_layout);
         layoutManager = new LinearLayoutManager(getContext());
-        searchListAdapter = new SearchListAdapter(getMockSearchData());
+        searchListAdapter = new SearchHistoryListAdapter(getMockSearchData());
 
-        search_list_recycler_view.setLayoutManager(layoutManager);
-        search_list_recycler_view.setAdapter(searchListAdapter);
+        searchListRecyclerView.setLayoutManager(layoutManager);
+        searchListRecyclerView.setAdapter(searchListAdapter);
+        //TODO: Search history shown if it exists
+        searchHistoryListLayout = root.findViewById(R.id.search_history_list_container);
 
-        back_arrow.setOnClickListener(new OnClickListener() {
+        if (searchHistoryExists) {
+            Fragment searchHistoryFragment = new SearchHistoryFragment();
+            FragmentTransaction fT = getActivity().getSupportFragmentManager().beginTransaction();
+            fT.add(R.id.search_history_list_container, searchHistoryFragment);
+            fT.commit();
+            searchHistoryListLayout.setVisibility(View.VISIBLE);
+            searchMainBackground.setVisibility(View.GONE);
+        }
+
+        backArrow.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getActivity()
@@ -105,21 +121,21 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        search_text_view.setOnClickListener((new OnClickListener() {
+        searchTextView.setOnClickListener((new OnClickListener() {
             @Override
             public void onClick(View v) {
-                search_text_view_layout.setVisibility(View.GONE);
-                search_query.requestFocus();
+                searchTextViewLayout.setVisibility(View.GONE);
+                searchQuery.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         }));
 
-        reset_search.setOnClickListener(new OnClickListener() {
+        resetSearch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                search_query.setText("");
+                searchQuery.setText("");
             }
         });
 
@@ -129,21 +145,21 @@ public class SearchFragment extends Fragment {
                     @Override
                     public void onVisibilityChanged(boolean isOpen) {
                         if (isOpen) {
-                            bot_nav_view.setVisibility(View.GONE);
-                            search_text_view_layout.setVisibility(View.GONE);
-                            search_edit_text_layout.setVisibility(View.VISIBLE);
+                            botNavView.setVisibility(View.GONE);
+                            searchTextViewLayout.setVisibility(View.GONE);
+                            searchEditTextLayout.setVisibility(View.VISIBLE);
                         } else {
-                            bot_nav_view.setVisibility(View.VISIBLE);
-                            if (search_list_recycler_view.getVisibility() != View.VISIBLE) {
-                                search_text_view_layout.setVisibility(View.VISIBLE);
-                                search_edit_text_layout.setVisibility(View.GONE);
+                            botNavView.setVisibility(View.VISIBLE);
+                            if (searchListRecyclerView.getVisibility() != View.VISIBLE) {
+                                searchTextViewLayout.setVisibility(View.VISIBLE);
+                                searchEditTextLayout.setVisibility(View.GONE);
                             }
 
                         }
                     }
                 });
 
-        search_query.addTextChangedListener(new TextWatcher() {
+        searchQuery.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -152,11 +168,19 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    search_list_recycler_view.setVisibility(View.VISIBLE);
-                    reset_search.setVisibility(View.VISIBLE);
+                    searchListRecyclerView.setVisibility(View.VISIBLE);
+                    searchMainBackground.setVisibility(View.GONE);
+                    searchHistoryListLayout.setVisibility(View.GONE);
+                    resetSearch.setVisibility(View.VISIBLE);
                 } else {
-                    search_list_recycler_view.setVisibility(View.GONE);
-                    reset_search.setVisibility(View.GONE);
+                    searchListRecyclerView.setVisibility(View.GONE);
+
+                    if (searchHistoryExists) {
+                        searchMainBackground.setVisibility(View.GONE);
+                    }
+
+                    searchHistoryListLayout.setVisibility(View.VISIBLE);
+                    resetSearch.setVisibility(View.GONE);
                 }
             }
 
@@ -165,12 +189,14 @@ public class SearchFragment extends Fragment {
 
             }
         });
+
         searchViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
 
             }
         });
+
         return root;
     }
 

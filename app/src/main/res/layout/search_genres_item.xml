@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:id = "@+id/search_genres_item_layout"
         android:layout_width = "match_parent"
-        android:layout_height = "150dp"
+        android:layout_height = "@dimen/genre_item_height"
         android:orientation = "horizontal"
         android:paddingTop = "10dp"
         android:background = "@drawable/genres_background"
+        android:layout_margin = "15dp"
         android:weightSum = "100">
 
     <TextView
+            android:id = "@+id/search_genres_item_title_text"
             android:layout_width = "0dp"
             android:layout_weight = "70"
             android:layout_height = "wrap_content"
             android:text = "Title"
-            android:textSize = "25sp"
+            android:textSize = "20sp"
             android:padding = "10dp"
             android:textColor = "@color/white" />
     <ImageView
+            android:id = "@+id/search_genres_item_image"
             android:layout_width = "0dp"
             android:layout_weight = "40"
-            android:layout_height = "wrap_content"
+            android:layout_height = "match_parent"
             android:src = "@drawable/bika"
             android:rotation = "25" />
 </LinearLayout>

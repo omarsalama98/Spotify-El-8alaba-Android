@@ -6,6 +6,7 @@
         android:paddingTop = "25dp">
 
     <FrameLayout
+            android:id = "@+id/search_bar_frame_layout"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content">
         <LinearLayout
@@ -97,13 +98,38 @@
 
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id = "@+id/search_list_recycler_view"
+    <LinearLayout
+            android:id = "@+id/search_history_list_container"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
+            android:layout_below = "@id/search_bar_frame_layout"
+            android:layout_marginTop = "10dp"
             android:visibility = "gone"
-            android:scrollbars = "vertical" />
+            android:orientation = "vertical"></LinearLayout>
+
+    <LinearLayout
+            android:id = "@+id/search_result_list_layout"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:layout_marginTop = "10dp"
+            android:layout_below = "@id/search_bar_frame_layout"
+            android:visibility = "gone"
+            android:orientation = "vertical">
+        <androidx.recyclerview.widget.RecyclerView
+                android:id = "@+id/search_list_recycler_view"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:scrollbars = "vertical" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id = "@+id/search_all_types_recycler_view"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content" />
+
+    </LinearLayout>
+
     <RelativeLayout
+            android:id = "@+id/search_main_background_layout"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
             android:paddingBottom = "56dp"

@@ -11,5 +11,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name = "hello_blank_fragment">Hello blank fragment</string>
+    <string name = "search_artists_songs_or_podcasts">Artists, songs or podcasts</string>
+    <string name = "your_top_genres">Your top genres</string>
+    <string name = "browse_all">Browse all</string>
 
 </resources>
