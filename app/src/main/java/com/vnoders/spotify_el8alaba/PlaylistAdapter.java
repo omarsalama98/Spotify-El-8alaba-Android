@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.PlaylistAdapter.TrackViewHolder;
 import com.vnoders.spotify_el8alaba.models.Track;
@@ -52,7 +53,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<TrackViewHolder> {
 
     static class TrackViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout trackBody;
+        ConstraintLayout trackBody;
 
         ImageView playIcon;
         ImageView trackArt;
@@ -88,7 +89,8 @@ public class PlaylistAdapter extends RecyclerView.Adapter<TrackViewHolder> {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(),
-                            "Song " + trackName.getText().toString() + " plays", Toast.LENGTH_SHORT).show();
+                            "Song " + trackName.getText().toString() + " plays", Toast.LENGTH_SHORT)
+                            .show();
                 }
             });
 

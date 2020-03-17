@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
         xmlns:tools = "http://schemas.android.com/tools"
         android:id = "@+id/library_playlist_track_body"
         android:orientation = "horizontal"
@@ -9,16 +10,19 @@
         android:layout_height = "wrap_content">
 
     <RelativeLayout
+            android:id = "@+id/relativeLayout"
             android:layout_width = "@dimen/track_list_item"
-            android:layout_height = "@dimen/track_list_item">
+            android:layout_height = "@dimen/track_list_item"
+            app:layout_constraintTop_toTopOf = "parent"
+            app:layout_constraintBottom_toBottomOf = "parent"
+            app:layout_constraintStart_toStartOf = "parent">
 
         <ImageView
                 android:id = "@+id/library_playlist_track_art"
-                android:layout_width = "64dp"
-                android:layout_height = "64dp"
+                android:layout_width = "@dimen/track_list_item"
+                android:layout_height = "@dimen/track_list_item"
                 android:src = "@drawable/artist_mock"
                 android:layout_centerInParent = "true" />
-
         <ImageView
                 android:id = "@+id/library_playlist_play_icon"
                 android:layout_width = "@dimen/playlist_icon"
@@ -38,11 +42,14 @@
     </RelativeLayout>
 
     <LinearLayout
+            android:layout_height = "0dp"
             android:layout_width = "0dp"
-            android:layout_height = "match_parent"
-            android:layout_weight = "1"
             android:orientation = "vertical"
-            android:layout_margin = "8dp">
+            android:layout_margin = "8dp"
+            app:layout_constraintStart_toEndOf = "@+id/relativeLayout"
+            app:layout_constraintEnd_toStartOf = "@+id/library_playlist_like_track"
+            app:layout_constraintTop_toTopOf = "parent"
+            app:layout_constraintBottom_toBottomOf = "parent">
 
 
         <TextView
@@ -55,7 +62,6 @@
                 android:textColor = "@color/colorPrimaryText"
                 android:textStyle = "bold"
                 tools:text = "Song Name" />
-
         <TextView
                 android:id = "@+id/library_playlist_artist_name"
                 android:layout_width = "match_parent"
@@ -75,8 +81,10 @@
             android:layout_margin = "@dimen/margin_small"
             android:textOff = ""
             android:textOn = ""
-            android:background = "@drawable/like_track_unliked" />
-
+            android:background = "@drawable/like_track_unliked"
+            app:layout_constraintTop_toTopOf = "parent"
+            app:layout_constraintBottom_toBottomOf = "parent"
+            app:layout_constraintEnd_toStartOf = "@+id/library_playlist_hide_track" />
     <ToggleButton
             android:id = "@+id/library_playlist_hide_track"
             android:layout_width = "@dimen/playlist_icon"
@@ -85,8 +93,10 @@
             android:layout_margin = "@dimen/margin_small"
             android:textOff = ""
             android:textOn = ""
-            android:background = "@drawable/hide_track_visible" />
-
+            android:background = "@drawable/hide_track_visible"
+            app:layout_constraintEnd_toStartOf = "@+id/library_playlist_others_menu"
+            app:layout_constraintTop_toTopOf = "parent"
+            app:layout_constraintBottom_toBottomOf = "parent" />
     <Button
             android:id = "@+id/library_playlist_others_menu"
             android:layout_width = "@dimen/playlist_icon"
@@ -94,7 +104,10 @@
             android:layout_gravity = "center"
             android:layout_margin = "@dimen/margin_small"
             android:background = "@drawable/three_dots_menu"
-            android:backgroundTint = "@color/colorIcons" />
+            android:backgroundTint = "@color/colorIcons"
+            app:layout_constraintTop_toTopOf = "parent"
+            app:layout_constraintBottom_toBottomOf = "parent"
+            app:layout_constraintEnd_toEndOf = "parent" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
