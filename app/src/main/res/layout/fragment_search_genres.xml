@@ -14,6 +14,7 @@
             android:background = "@color/darkGray">
 
         <com.google.android.material.appbar.AppBarLayout
+                android:id = "@+id/genres_app_bar_layout"
                 android:layout_height = "wrap_content"
                 android:layout_width = "match_parent"
                 android:paddingTop = "@dimen/appbar_padding"
@@ -27,6 +28,7 @@
                     app:layout_scrollFlags = "scroll|exitUntilCollapsed">
 
                 <TextView
+                        android:id = "@+id/text"
                         android:layout_width = "match_parent"
                         android:layout_height = "wrap_content"
                         android:background = "@drawable/curved_gradient"

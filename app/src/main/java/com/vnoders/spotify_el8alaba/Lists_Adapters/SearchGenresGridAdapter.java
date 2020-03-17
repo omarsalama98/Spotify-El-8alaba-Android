@@ -3,6 +3,9 @@ package com.vnoders.spotify_el8alaba.Lists_Adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.SweepGradient;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +30,14 @@ public class SearchGenresGridAdapter extends BaseAdapter {
         this.genresList = genresList;
     }
 
-    private int getGenreBackgroundClr(Bitmap bitmap) {
+    private int getGenreDominantClr(Bitmap bitmap) {
 
         return Palette.from(bitmap).generate().getDominantColor(Color.parseColor("#00FFFF"));
+    }
+
+    private int getGenreVibrantClr(Bitmap bitmap) {
+
+        return Palette.from(bitmap).generate().getVibrantColor(Color.parseColor("#00FFFF"));
     }
 
     public int getCount() {
@@ -65,7 +73,19 @@ public class SearchGenresGridAdapter extends BaseAdapter {
         Bitmap genreImageBitmap = genresList.get(position).getImageBitmap();
         genreImage.setImageBitmap(genreImageBitmap);
         genreTitle.setText(genresList.get(position).getTitle());
-        genreLayout.setBackgroundColor(getGenreBackgroundClr(genreImageBitmap));
+
+        //int h = genreLayout.getHeight();      //For other gradient types
+        //int w = genreLayout.getWidth();
+
+        ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
+        mDrawable.getPaint().setShader
+                (new SweepGradient(0, 0,
+                        getGenreDominantClr(genreImageBitmap),
+                        getGenreVibrantClr(genreImageBitmap)));
+
+        genreLayout.setBackground(mDrawable);
+
+        //genreLayout.setBackgroundColor(getGenreDominantClr(genreImageBitmap));
 
         return convertView;
     }
