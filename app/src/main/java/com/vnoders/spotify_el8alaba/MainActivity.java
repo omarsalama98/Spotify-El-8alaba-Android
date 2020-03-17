@@ -11,8 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
+import com.vnoders.spotify_el8alaba.ui.library.LibraryFragment;
 import com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment;
-import com.vnoders.spotify_el8alaba.ui.yourLibrary.YourLibraryFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                         viewFragment(new SearchGenresFragment(), FRAGMENT_OTHER);
                         return true;
                     case R.id.navigation_your_library:
-                        viewFragment(new YourLibraryFragment(), FRAGMENT_OTHER);
+                        viewFragment(new LibraryFragment(), FRAGMENT_OTHER);
                         return true;
                     case R.id.navigation_premium:
                         viewFragment(new PremiumFragment(), FRAGMENT_OTHER);

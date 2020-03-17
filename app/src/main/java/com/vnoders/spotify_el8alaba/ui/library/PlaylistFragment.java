@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.PlaylistAdapter;
+import com.vnoders.spotify_el8alaba.Lists_Adapters.PlaylistAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Track;
 import java.util.ArrayList;

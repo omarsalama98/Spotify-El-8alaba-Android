@@ -35,8 +35,10 @@ public class SearchGenresFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_search_genres, container, false);
         genres_search_text_layout = v.findViewById(R.id.genres_search_bar_text_view);
-        GridView topGenresGridView = v.findViewById(R.id.search_top_genres_gridview);
-        GridView browseAllGenresGridView = v.findViewById(R.id.search_browse_all_genres_gridview);
+        ExpandableHeightGridView topGenresGridView = v
+                .findViewById(R.id.search_top_genres_gridview);
+        ExpandableHeightGridView browseAllGenresGridView = v
+                .findViewById(R.id.search_browse_all_genres_gridview);
 
         ArrayList<Genre> topGenresList = new ArrayList<>();
         Bitmap mbitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bika);
@@ -45,10 +47,23 @@ public class SearchGenresFragment extends Fragment {
         topGenresList.add(new Genre(mbitmap, "Sha3by"));
         topGenresList.add(new Genre(mbitmap, "Sha3by"));
         topGenresGridView.setAdapter(new SearchGenresGridAdapter(getContext(), topGenresList));
+        topGenresGridView.setExpanded(true);
         //setGridViewHeightBasedOnChildren(topGenresGridView, 2);
 
         ArrayList<Genre> browseAllGenresList = new ArrayList<>();
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bika);
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.beach);
+        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.siu);
+        browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
+        browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
+        browseAllGenresList.add(new Genre(bitmap2, "Chill"));
+        browseAllGenresList.add(new Genre(bitmap2, "Chill"));
+        browseAllGenresList.add(new Genre(bitmap2, "Chill"));
+        browseAllGenresList.add(new Genre(bitmap2, "Chill"));
+        browseAllGenresList.add(new Genre(bitmap3, "Football"));
+        browseAllGenresList.add(new Genre(bitmap3, "Football"));
+        browseAllGenresList.add(new Genre(bitmap3, "Football"));
+        browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
         browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
         browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
         browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
@@ -60,6 +75,7 @@ public class SearchGenresFragment extends Fragment {
         browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
         browseAllGenresGridView
                 .setAdapter(new SearchGenresGridAdapter(getContext(), browseAllGenresList));
+        browseAllGenresGridView.setExpanded(true);
         //setGridViewHeightBasedOnChildren(browseAllGenresGridView, 2);
 
         genres_search_text_layout.setOnClickListener(new OnClickListener() {

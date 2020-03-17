@@ -56,6 +56,8 @@ public class SearchGenresGridAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.search_genres_item, null);
         }
 
+        //convertView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, R.dimen.genre_item_height));
+
         genreImage = convertView.findViewById(R.id.search_genres_item_image);
         genreTitle = convertView.findViewById(R.id.search_genres_item_title_text);
         genreLayout = convertView.findViewById(R.id.search_genres_item_layout);

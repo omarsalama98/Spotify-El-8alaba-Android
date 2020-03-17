@@ -4,7 +4,6 @@
         package = "com.vnoders.spotify_el8alaba">
 
     <uses-permission android:name = "android.permission.INTERNET" />
-    <uses-permission android:name = "android.permission.INTERNET" />
 
     <application
             android:allowBackup = "true"
@@ -12,17 +11,9 @@
             android:label = "@string/app_name"
             android:supportsRtl = "true"
             android:theme = "@style/AppTheme">
-        <activity android:name = ".app_mainActivity">
-            <intent-filter>
-                <action android:name = "android.intent.action.MAIN" />
-
-                <category android:name = "android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
         <activity android:name = ".Home">
         </activity>
-        <activity android:name = ".LoginActivit">
+        <activity android:name = ".LoginActivity">
         </activity>
         <activity android:name = ".firstScreen">
         </activity>
@@ -41,6 +32,11 @@
                 android:name = ".SplashActivity"
                 android:screenOrientation = "portrait"
                 tools:ignore = "LockedOrientationActivity">
+            <intent-filter>
+                <action android:name = "android.intent.action.MAIN" />
+
+                <category android:name = "android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity

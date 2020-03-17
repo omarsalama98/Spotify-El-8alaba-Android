@@ -3,7 +3,7 @@
         android:orientation = "horizontal"
         android:weightSum = "100"
         android:padding = "10dp"
-        android:background = "@color/darkGray"
+        android:background = "@color/midGray"
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content">
 
@@ -25,14 +25,14 @@
                 android:layout_height = "wrap_content"
                 android:text = "Title"
                 android:textSize = "20sp"
-                android:textColor = "@color/white" />
+                android:textColor = "@color/colorPrimaryText" />
         <TextView
                 android:id = "@+id/search_history_item_info_text_view"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
                 android:text = "Title"
                 android:textSize = "15sp"
-                android:textColor = "@color/white" />
+                android:textColor = "@color/colorSecondaryText" />
 
     </LinearLayout>
 
