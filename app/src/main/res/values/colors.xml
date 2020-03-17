@@ -16,5 +16,6 @@
     <color name = "midGray">#232228</color>
     <color name = "green">#2DD22D</color>
     <color name = "statusBarColor">#9C000000</color>
+    <color name = "backgroundColor">#181818</color>
 
 </resources>
