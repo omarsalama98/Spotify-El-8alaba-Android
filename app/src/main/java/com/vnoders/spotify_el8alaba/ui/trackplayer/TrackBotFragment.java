@@ -42,9 +42,15 @@ public class TrackBotFragment extends Fragment {
     private TextView mTrackDuration;
     // holds current track being played
     private PlayableTrack mCurrentTrack;
+    // holds skip next button
+    private Button mNextButton;
+    // holds skip previous button
+    private Button mPrevButton;
 
     // if player is currently playing anything
     private boolean isPlaying = false;
+    // to know if user is currently seeking
+    private boolean mIsSeeking = false;
 
     /**
      * inflating layout and return it to system
@@ -77,7 +83,8 @@ public class TrackBotFragment extends Fragment {
         });
 
         // setting skip to next press
-        rootView.findViewById(R.id.skip_next_button).setOnClickListener(new View.OnClickListener() {
+        mNextButton = rootView.findViewById(R.id.skip_next_button);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 skipToNext();
@@ -85,7 +92,8 @@ public class TrackBotFragment extends Fragment {
         });
 
         // setting skip to prev press
-        rootView.findViewById(R.id.skip_previous_button).setOnClickListener(new View.OnClickListener() {
+        mPrevButton = rootView.findViewById(R.id.skip_previous_button);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 skipToPrev();
@@ -120,6 +128,23 @@ public class TrackBotFragment extends Fragment {
 
         // get track
         mCurrentTrack = track;
+
+        // set next and previous buttons
+        if (mCurrentTrack.getHasNext()) {
+            mNextButton.setBackground(getResources().getDrawable(R.drawable.ic_skip_next_white_56dp));
+            mNextButton.setClickable(true);
+        }
+        else {
+            mNextButton.setBackground(getResources().getDrawable(R.drawable.ic_skip_next_grey_56dp));
+            mNextButton.setClickable(false);
+        }
+        if (mCurrentTrack.getHasPrev()) {
+            mPrevButton.setBackground(getResources().getDrawable(R.drawable.ic_skip_previous_white_56dp));
+            mPrevButton.setClickable(true);
+        } else {
+            mPrevButton.setBackground(getResources().getDrawable(R.drawable.ic_skip_previous_grey_56dp));
+            mPrevButton.setClickable(false);
+        }
 
         // set the name of song and name of author and setting the button to display correctly
         songNameTextView.setText(track.getName());
@@ -161,6 +186,10 @@ public class TrackBotFragment extends Fragment {
      * @param progress of current track being played holding info
      */
     private void updateSeekbar(Integer progress) {
+
+        // if user is currently seeking then don't update
+        if (mIsSeeking)
+            return;
 
         // get the duration and scale it to 0-100
         int songTime = mCurrentTrack.getDuration();
@@ -223,17 +252,14 @@ public class TrackBotFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                if (((TrackPlayerActivity) getActivity()).getService() == null)
-                    return;
-
-                // tell service user is currently seeking
-                ((TrackPlayerActivity) getActivity()).getService().startSeeking();
+                // user started seeking to don't update with player
+                mIsSeeking = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if (((TrackPlayerActivity) getActivity()).getService() == null)
-                    return;
+                // user finished seeking so return it to update
+                mIsSeeking = false;
 
                 // tell service where user put seekBar and finished seeking
                 ((TrackPlayerActivity) getActivity()).getService().seek(seekBar.getProgress());

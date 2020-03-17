@@ -20,7 +20,12 @@ public class PlayableTrack {
     @SerializedName("duration_ms")
     private int mDuration;
 
+    // know if currently playing or not
     private boolean isPlaying = false;
+    // know if there is next track or not
+    private boolean mHasNext = true;
+    // know if there is previous track or not
+    private boolean mHasPrev = true;
 
 
     public String getName() {
@@ -50,4 +55,21 @@ public class PlayableTrack {
     public void setDuration(int duration) {
         mDuration = duration;
     }
+
+    public boolean getHasNext() {
+        return mHasNext;
+    }
+
+    public void setHasNext(boolean hasNext) {
+        this.mHasNext = hasNext;
+    }
+
+    public boolean getHasPrev() {
+        return mHasPrev;
+    }
+
+    public void setHasPrev(boolean hasPrev) {
+        this.mHasPrev = hasPrev;
+    }
+
 }

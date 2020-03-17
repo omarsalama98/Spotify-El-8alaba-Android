@@ -62,9 +62,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         public void run() {
             //do something
             if (mMediaPlayer != null) {
-                if (!mSeeking)
-                    // update the progress of track every Handler delay
-                    TrackViewModel.getInstance().updateTrackProgress(mMediaPlayer.getCurrentPosition());
+                TrackViewModel.getInstance().updateTrackProgress(mMediaPlayer.getCurrentPosition());
             }
 
             mHandler.postDelayed(this, HANDLER_DELAY);
@@ -72,9 +70,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     };
     ;
     // constant which dictates time of handler thread
-    private static final int HANDLER_DELAY = 50;
-    // if currently seeking don't update progress
-    private boolean mSeeking = false;
+    private static final int HANDLER_DELAY = 100;
     // know if this is the first init or not
     private boolean mFirstInit;
 
@@ -182,10 +178,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         ++mCurrentTrackIndex;
         if (mCurrentTrackIndex > tracks.size() - 1) {
             mCurrentTrackIndex = tracks.size() - 1;
-            if (mMediaPlayer.getCurrentPosition() < mMediaPlayer.getDuration()) {
-                mMediaPlayer.seekTo(mMediaPlayer.getDuration());
-                TrackViewModel.getInstance().updateTrackProgress(mMediaPlayer.getDuration());
-            }
             return false;
         }
 
@@ -213,7 +205,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         --mCurrentTrackIndex;
         if (mCurrentTrackIndex < 0) {
             mCurrentTrackIndex = 0;
-            mMediaPlayer.seekTo(0);
             return;
         }
 
@@ -227,21 +218,11 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     }
 
     /**
-     * used to indicate that user is moving the seek bar so stop handler from updating progress value
-     */
-    public void startSeeking() {
-        mSeeking = true;
-    }
-
-    /**
      * seek to specified location
      *
      * @param loc location to seek to
      */
     public void seek(int loc) {
-
-        // set false so handler thread can continue updating value
-        mSeeking = false;
 
         // if no player then don't seek
         if (mMediaPlayer == null) {
@@ -410,6 +391,17 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      */
     @Override
     public void onPrepared(MediaPlayer mp) {
+        // know if song has next or previous and set data accordingly
+        if (mCurrentTrackIndex < 1)
+            mCurrentTrack.setHasPrev(false);
+        else
+            mCurrentTrack.setHasPrev(true);
+
+        if (mCurrentTrackIndex >= tracks.size() - 1)
+            mCurrentTrack.setHasNext(false);
+        else
+            mCurrentTrack.setHasNext(true);
+
         // update live data info
         mCurrentTrack.setDuration(mMediaPlayer.getDuration());
         TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
@@ -464,7 +456,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      * stop handler to not leak any resources in the end
      */
     private void stopHandler() {
-        mHandler.removeCallbacks(mRunnable); //stop handler when activity not visible
+        if (mHandler != null)
+            mHandler.removeCallbacks(mRunnable); //stop handler when activity not visible
     }
 
     /**
