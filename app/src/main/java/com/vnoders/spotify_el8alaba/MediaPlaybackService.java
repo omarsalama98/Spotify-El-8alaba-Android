@@ -56,9 +56,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     private boolean mPlaying = false;
 
     // this is for event every .. ms
-    private Handler mHandler;
+    private Handler mHandler = new Handler();
     // runnable for handler
-    private Runnable mRunnable = mRunnable = new Runnable() {
+    private Runnable mRunnable = new Runnable() {
         public void run() {
             //do something
             if (mMediaPlayer != null) {
@@ -119,6 +119,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void onDestroy() {
         super.onDestroy();
         destroyMediaPlayer();
+        mHandler = null;
+        mRunnable = null;
     }
 
 
@@ -447,8 +449,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      * start the handler to watch progress and report it
      */
     private void startHandler() {
-        mHandler = new Handler();
-
         mHandler.postDelayed(mRunnable, HANDLER_DELAY);
     }
 
@@ -456,8 +456,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      * stop handler to not leak any resources in the end
      */
     private void stopHandler() {
-        if (mHandler != null)
-            mHandler.removeCallbacks(mRunnable); //stop handler when activity not visible
+        mHandler.removeCallbacks(mRunnable); //stop handler when activity not visible
     }
 
     /**
