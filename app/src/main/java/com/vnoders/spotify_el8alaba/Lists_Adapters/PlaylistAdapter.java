@@ -1,4 +1,4 @@
-package com.vnoders.spotify_el8alaba;
+package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,7 +17,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.PlaylistAdapter.TrackViewHolder;
+import com.vnoders.spotify_el8alaba.Lists_Adapters.PlaylistAdapter.TrackViewHolder;
+import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Track;
 import java.util.List;
 

@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
         android:orientation = "horizontal"
         android:weightSum = "100"
-        android:paddingVertical = "10dp"
+        android:padding = "10dp"
         android:background = "@color/midGray"
         android:layout_width = "match_parent"
         android:layout_height = "wrap_content">
 
     <ImageView
-            android:id = "@+id/search_item_image_view"
+            android:id = "@+id/search_history_item_image_view"
             android:layout_width = "0dp"
             android:layout_weight = "20"
             android:layout_height = "match_parent"
@@ -20,14 +20,14 @@
             android:layout_weight = "70"
             android:orientation = "vertical">
         <TextView
-                android:id = "@+id/search_item_name_text_view"
+                android:id = "@+id/search_history_item_name_text_view"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
                 android:text = "Title"
-                android:textSize = "@dimen/search_list_item_title"
-                android:textColor = "@color/white" />
+                android:textSize = "20sp"
+                android:textColor = "@color/colorPrimaryText" />
         <TextView
-                android:id = "@+id/search_item_info_text_view"
+                android:id = "@+id/search_history_item_info_text_view"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
                 android:text = "Title"
@@ -37,10 +37,12 @@
     </LinearLayout>
 
     <ImageView
+            android:id = "@+id/search_history_item_remove"
             android:layout_width = "0dp"
             android:layout_weight = "10"
-            android:layout_height = "wrap_content"
-            android:src = "@drawable/ic_right"
+            android:padding = "5dp"
+            android:layout_height = "match_parent"
+            android:src = "@drawable/ic_close_white_24dp"
             android:layout_gravity = "center_vertical" />
 
 </LinearLayout>

@@ -7,7 +7,7 @@
         android:layout_height = "match_parent"
         android:orientation="vertical"
         android:background="@color/black"
-        tools:context = ".LoginActivit">
+        tools:context = ".LoginActivity">
 
 <ImageButton
         android:layout_marginTop="20dp"
