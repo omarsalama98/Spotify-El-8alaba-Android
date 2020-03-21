@@ -17,5 +17,13 @@
     <color name = "green">#2DD22D</color>
     <color name = "statusBarColor">#9C000000</color>
     <color name = "backgroundColor">#FF181818</color>
+    <color name = "green_login">#1DB954</color>
+    <color name = "black_login">#191414</color>
+    <color name = "endColor">#333333</color>
+    <color name = "pressed_green">#17D51F</color>
+    <color name = "pressed_grey">#9B9898</color>
+    <color name = "nonpressed_edit_text">#464646</color>
+    <color name = "pressed_edit_text">#828282</color>
+    <color name = "whitish_gray">#a0a0a0</color>
 
 </resources>
