@@ -28,5 +28,4 @@
             android:name = "com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment"
             android:label = "@string/title_premium"
             tools:layout = "@layout/fragment_premium" />
-
 </navigation>

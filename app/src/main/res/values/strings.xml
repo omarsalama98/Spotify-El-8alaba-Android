@@ -15,12 +15,10 @@
     <string name = "play_button_desc">Play Button</string>
     <string name = "find_the_music_you_love">Find the music you love</string>
     <string name = "search_for_artists_songs">Search for artists, songs, playlists and more.</string>
+    <string name = "search">Search</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name = "hello_blank_fragment">Hello blank fragment</string>
-    <string name = "search_artists_songs_or_albums">Artists, songs or albums</string>
-    <string name = "your_top_genres">Your top genres</string>
-    <string name = "browse_all">Browse all</string>
 
     <string name = "title_library_playlists">Playlists</string>
     <string name = "title_library_artists">Artists</string>
@@ -37,7 +35,38 @@
     <string name = "offline">You\'re offline</string>
     <string name = "check_connection">Check your connection and try again.</string>
     <string name = "OK">OK</string>
-    <string name = "search">Search</string>
+    <string name = "siginup_email_label">Creat account</string>
+    <string name = "email_signup">What\'s your email?</string>
+    <string name = "check_connection_signup">You\'re offline.Check your connection and try again.</string>
+    <string name = "next">next</string>
+    <string name = "confirmation_signup">You\'ll need to confirm this email later.</string>
+    <string name = "invalid_email_signup">This email is invalid.Make sure it\'s written like</string>
+    <string name = "invalid_email_signup2">example@email.com</string>
+    <string name = "signup_password">Create a password</string>
+    <string name = "password_text">Use at least 8 characters.</string>
+    <string name = "password_weak">This password is too weak. Try including numbers, </string>
+    <string name = "password_weak2">symbols or uppercase letters.</string>
+    <string name = "Bdate_signup">What\'s your date of \n birth?</string>
+    <string name = "birthday_text">Sorry, you don\'t meet Spotify\'s age requirements.</string>
+    <string name = "gender_signup">What\'s your gender?</string>
+    <string name = "male">Male</string>
+    <string name = "female">Female</string>
+    <string name = "name">What\'s your name?</string>
+    <string name = "create_account_text1">This appears on your Spotify\'s profile</string>
+    <string name = "create_account_text2">By creating an account ,you agree to Spotify\'s Terms of</string>
+    <string name = "create_account_text3">Service.</string>
+    <string name = "create_account_text4">To learn more about how Spotify collects, uses, shares \n and protects  your personal data pleas read Spotify\'s</string>
+    <string name = "create_account_text5">Privacy Policy</string>
+    <string name = "CREATE">CREATE</string>
+    <string name = "offline_signup">Something went wrong, please try again later.</string>
+    <string name="facebook_app_id">561779244683632</string>
+    <string name="fb_login_protocol_scheme">fb561779244683632</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name = "search_artists_songs_or_albums">Artists, songs or albums</string>
+    <string name = "your_top_genres">Your top genres</string>
+    <string name = "browse_all">Browse all</string>
+
     <string name = "recent_searches">Recent searches</string>
     <string name = "clear_recent_searches">Clear recent searches</string>
     <string name = "see_all_artists">See all artists</string>
