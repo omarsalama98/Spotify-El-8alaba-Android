@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:orientation = "vertical"
+        android:background = "@color/darkGray"
+        android:layout_height = "match_parent"
+        tools:context = ".ui.signup.signup_birthdate">
+    <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:text = "@string/Bdate_signup"
+            android:textColor = "@color/white"
+            android:textSize = "30sp"
+            android:layout_marginTop = "25dp"
+            android:layout_marginLeft = "15dp"
+            android:textStyle = "bold" />
+    <DatePicker
+            android:id = "@+id/user_birthdate"
+            android:layout_marginTop = "40dp"
+            android:layout_gravity = "center"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:datePickerMode = "spinner"
+            android:calendarViewShown = "false" />
+
+    <TextView
+
+            android:id = "@+id/sign_up_Bdate_status"
+            android:layout_width = "wrap_content"
+            android:layout_height = "15dp"
+            android:layout_marginTop = "15dp"
+            android:layout_gravity = "center"
+            android:textColor = "@color/white"
+            android:textSize = "12sp"
+            android:text = "@string/birthday_text" />
+    <Button
+            android:id = "@+id/next_button"
+            android:layout_width = "120dp"
+            android:layout_height = "wrap_content"
+            android:layout_marginTop = "25dp"
+            android:layout_gravity = "center"
+            android:background = "@drawable/custom_login_button"
+            android:text = "@string/next" />
+
+</LinearLayout>

@@ -2,8 +2,12 @@
 <shape xmlns:android = "http://schemas.android.com/apk/res/android"
         android:shape = "rectangle">
 
+
     <corners android:radius = "30dp" />
 
-    <solid android:color = "@color/green_login" />
+    <solid android:color = "@color/green_login"
+
+            />
+
 
 </shape>

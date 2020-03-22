@@ -29,8 +29,7 @@
                 android:layout_width = "16dp"
                 android:layout_height = "16dp"
                 android:src = "@drawable/ic_shuffle"
-                android:background = "@drawable/shuffle_rounded_corner"
-                android:backgroundTint = "@color/whitish_gray"
+
                 android:layout_marginEnd = "5dp"
                 android:layout_gravity = "center_vertical" />
 

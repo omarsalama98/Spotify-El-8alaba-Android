@@ -46,6 +46,7 @@ public class SearchHistoryListAdapter extends
                 mDataset.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, mDataset.size());
+
             }
         });
     }

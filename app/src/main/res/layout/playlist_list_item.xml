@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:id = "@+id/library_playlist_item_body"
+        android:orientation = "horizontal"
+        android:backgroundTint = "@color/backgroundColor"
+        android:background = "@drawable/playlist_item_background_ripple"
+        android:layout_margin = "8dp"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content">
+
+    <ImageView
+            android:id = "@+id/library_playlist_art"
+            android:layout_width = "@dimen/track_list_item"
+            android:layout_height = "@dimen/track_list_item"
+            android:src = "@drawable/artist_mock"
+            android:layout_centerInParent = "true"
+            app:layout_constraintTop_toTopOf = "parent"
+            app:layout_constraintStart_toStartOf = "parent"
+            app:layout_constraintBottom_toBottomOf = "parent" />
+
+    <LinearLayout
+            android:layout_height = "0dp"
+            android:layout_width = "0dp"
+            android:orientation = "vertical"
+            android:layout_margin = "8dp"
+            app:layout_constraintStart_toEndOf = "@+id/library_playlist_art"
+            app:layout_constraintTop_toTopOf = "parent"
+            app:layout_constraintBottom_toBottomOf = "parent"
+            app:layout_constraintEnd_toEndOf = "parent">
+
+
+        <TextView
+                android:id = "@+id/library_playlist_name"
+                android:layout_width = "match_parent"
+                android:layout_height = "0dp"
+                android:layout_weight = "1"
+                android:gravity = "bottom"
+                android:layout_gravity = "center"
+                android:textColor = "@color/colorPrimaryText"
+                android:textStyle = "bold"
+                tools:text = "Playlist Name" />
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "0dp"
+                android:orientation = "horizontal"
+                android:layout_weight = "1">
+
+            <ImageView
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_gravity = "center"
+                    android:layout_marginEnd = "@dimen/margin_small"
+                    android:src = "@drawable/ic_shuffle" />
+
+            <TextView
+                    android:id = "@+id/library_playlist_info"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:textColor = "@color/colorSecondaryText"
+                    tools:text = "by omar" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

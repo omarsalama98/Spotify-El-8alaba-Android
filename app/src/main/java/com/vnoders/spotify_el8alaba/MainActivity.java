@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
@@ -91,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+        // start service that plays tracks here to get tracks from online and play it
+        Intent intent = new Intent(this, MediaPlaybackService.class);
+        startService(intent);
     }
 
     @Override

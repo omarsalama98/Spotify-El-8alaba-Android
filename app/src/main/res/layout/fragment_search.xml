@@ -119,7 +119,8 @@
         <androidx.recyclerview.widget.RecyclerView
                 android:id = "@+id/search_history_list_recycler_view"
                 android:layout_width = "match_parent"
-                android:layout_height = "wrap_content" />
+                android:layout_height = "wrap_content"
+                android:overScrollMode = "never" />
 
         <TextView
                 android:id = "@+id/clear_recent_searches_text_view"
@@ -152,6 +153,7 @@
                 android:id = "@+id/search_list_recycler_view"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
+                android:overScrollMode = "never"
                 android:nestedScrollingEnabled = "false" />
 
         <TextView
