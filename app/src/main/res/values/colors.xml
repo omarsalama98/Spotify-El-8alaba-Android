@@ -24,5 +24,6 @@
     <color name="nonpressed_edit_text">#464646</color>
     <color name="pressed_edit_text">#828282</color>
     <color name = "whitish_gray">#a0a0a0</color>
+    <color name = "translucentDarkGray">#B0151515</color>
 
 </resources>

@@ -4,6 +4,10 @@
 
     <corners android:radius = "30dp" />
 
-    <solid android:color = "@color/green_login" />
+    <solid android:color = "@android:color/transparent" />
+
+    <stroke
+            android:color = "@color/midGray"
+            android:width = "3dp" />
 
 </shape>

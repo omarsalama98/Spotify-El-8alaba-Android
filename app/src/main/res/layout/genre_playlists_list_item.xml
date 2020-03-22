@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:orientation = "vertical"
+        android:foreground = "@drawable/home_playlists_ripple"
+        android:paddingEnd = "10dp"
+        android:focusable = "true"
+        android:layout_width = "175dp"
+        android:layout_height = "240dp">
+
+    <ImageView
+            android:id = "@+id/genre_playlists_item_image"
+            android:layout_width = "175dp"
+            android:layout_height = "175dp" />
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:gravity = "center"
+            android:orientation = "horizontal">
+
+        <ImageView
+                android:layout_width = "16dp"
+                android:layout_height = "16dp"
+                android:src = "@drawable/ic_shuffle"
+                android:background = "@drawable/shuffle_rounded_corner"
+                android:backgroundTint = "@color/whitish_gray"
+                android:layout_marginEnd = "5dp"
+                android:layout_gravity = "center_vertical" />
+        <TextView
+                android:id = "@+id/genre_playlists_item_title"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:text = "Title"
+                android:textColor = "@color/white"
+                android:textSize = "16sp"
+                android:textStyle = "bold"
+                android:layout_marginVertical = "5dp" />
+    </LinearLayout>
+
+    <TextView
+            android:id = "@+id/genre_playlists_item_sub_title"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:layout_marginVertical = "5dp"
+            android:textColor = "@color/whitish_gray"
+            android:textSize = "15sp"
+            android:gravity = "center"
+            android:text = "subTitle"
+            android:layout_gravity = "center_vertical" />
+
+</LinearLayout>

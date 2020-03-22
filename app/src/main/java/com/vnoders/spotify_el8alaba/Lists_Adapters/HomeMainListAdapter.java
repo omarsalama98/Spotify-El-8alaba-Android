@@ -1,43 +1,47 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.DownloadImageTask;
-import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
+import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
 import com.vnoders.spotify_el8alaba.R;
 import java.util.ArrayList;
 
-public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
+public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapter.MyViewHolder> {
 
-    private ArrayList<SearchListItem> mDataset;
+    private ArrayList<HomeMainListItem> mDataset;
+    private Context context;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchListAdapter(ArrayList<SearchListItem> myDataset) {
+    public HomeMainListAdapter(ArrayList<HomeMainListItem> myDataset, Context context) {
         mDataset = myDataset;
+        this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public SearchListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public HomeMainListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
             int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.search_list_item, parent, false);
+                .inflate(R.layout.home_main_list_item, parent, false);
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        holder.name.setText(mDataset.get(position).getName());
-        holder.info.setText(mDataset.get(position).getInfo());
-        new DownloadImageTask(holder.image).execute(mDataset.get(position).getImageURL());
+        holder.title.setText(mDataset.get(position).getTitle());
+        holder.innerList.setAdapter(
+                new HomeInnerListAdapter(mDataset.get(position).getInnerListItems(), context));
+        holder.innerList.setLayoutManager(
+                new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
     }
 
@@ -54,15 +58,14 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
 
         // each data item is just a string in this case
         public View v;
-        public TextView name;
-        public TextView info;
-        public ImageView image;
+        public TextView title;
+        public RecyclerView innerList;
 
         public MyViewHolder(View v) {
             super(v);
-            name = v.findViewById(R.id.search_item_name_text_view);
-            info = v.findViewById(R.id.search_item_info_text_view);
-            image = v.findViewById(R.id.search_item_image_view);
+            title = v.findViewById(R.id.home_main_list_item_title);
+            innerList = v.findViewById(R.id.home_inner_list_recycler_view);
         }
+
     }
 }

@@ -10,4 +10,5 @@
     <dimen name = "appbar_padding_top">8dp</dimen>
     <dimen name = "genre_item_height">100dp</dimen>
     <dimen name = "search_list_item_title">17sp</dimen>
+    <dimen name = "home_list_title_size">23sp</dimen>
 </resources>

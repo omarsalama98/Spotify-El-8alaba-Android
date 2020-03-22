@@ -1,5 +1,6 @@
-package com.vnoders.spotify_el8alaba;
+package com.vnoders.spotify_el8alaba.repositories;
 
+import com.vnoders.spotify_el8alaba.LoginResponse;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;

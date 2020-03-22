@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.palette.graphics.Palette;
-import com.vnoders.spotify_el8alaba.Genre;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Genre;
 import java.util.ArrayList;
 
 public class SearchGenresGridAdapter extends BaseAdapter {

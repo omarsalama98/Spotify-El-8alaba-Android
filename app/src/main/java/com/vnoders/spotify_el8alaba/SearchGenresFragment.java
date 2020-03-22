@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
+import com.vnoders.spotify_el8alaba.models.Genre;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 

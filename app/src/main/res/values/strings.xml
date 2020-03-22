@@ -46,4 +46,12 @@
     <string name = "see_all_albums">See all albums</string>
     <string name = "search_all_genres_and_moods">Search all genres and moods</string>
     <string name = "see_all_profiles">See all profiles</string>
+    <string name = "popular_playlists">Popular playlists</string>
+    <string name = "see_more">See more</string>
+    <string name = "charts">Charts</string>
+    <string name = "featured">Featured</string>
+    <string name = "global_top_50">Global Top 50</string>
+    <string name = "global_viral_50">Global Viral 50</string>
+    <string name = "top_charts_by_country">Top Charts by Country</string>
+    <string name = "viral_50_by_country">Viral 50 by Country</string>
 </resources>
