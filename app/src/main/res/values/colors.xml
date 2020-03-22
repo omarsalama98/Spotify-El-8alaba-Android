@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name = "colorPrimary">#4CAF50</color>
+    <color name = "colorPrimaryDark">#388E3C</color>
+    <color name = "colorPrimaryLight">#C8E6C9</color>
+    <color name = "colorAccent">#03A9F4</color>
+    <color name = "colorPrimaryText">#FFFFFF</color>
+    <color name = "colorSecondaryText">#757575</color>
+    <color name = "colorDivider">#BDBDBD</color>
+    <color name = "colorIcons">#888888</color>
+    <color name = "black">#000000</color>
+    <color name = "spotifyBlue">#017AFF</color>
+    <color name = "white">#FFFFFF</color>
+    <color name = "lightGray">#424244</color>
+    <color name = "darkGray">#151515</color>
+    <color name = "midGray">#232228</color>
+    <color name = "green">#2DD22D</color>
+    <color name = "statusBarColor">#9C000000</color>
+    <color name = "green_login">#1DB954</color>
+    <color name = "black_login">#191414</color>
+    <color name = "endColor">#333333</color>
+    <color name = "pressed_green">#17D51F</color>
+    <color name = "pressed_grey">#9B9898</color>
+    <color name="nonpressed_edit_text">#464646</color>
+    <color name="pressed_edit_text">#828282</color>
+
+</resources>
