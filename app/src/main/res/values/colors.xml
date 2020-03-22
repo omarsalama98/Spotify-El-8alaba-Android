@@ -24,4 +24,9 @@
     <color name="nonpressed_edit_text">#464646</color>
     <color name="pressed_edit_text">#828282</color>
 
+
+    <color name = "backgroundColor">#FF181818</color>
+
+    <color name = "whitish_gray">#a0a0a0</color>
+
 </resources>

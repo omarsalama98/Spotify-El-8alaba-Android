@@ -18,10 +18,10 @@ import com.facebook.login.widget.LoginButton;
 import com.vnoders.spotify_el8alaba.ui.signup.signup_email;
 
 public class firstScreen extends AppCompatActivity {
-private Button Login_button;
-private Button sign_up_button;
-private LoginButton facebook_button;
-private CallbackManager callbackManager;
+    private Button Login_button;
+    private Button sign_up_button;
+    private LoginButton facebook_button;
+    private CallbackManager callbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,12 +56,12 @@ private CallbackManager callbackManager;
         });
         Login_button=(Button) findViewById(R.id.Login_button);
         Login_button.setOnClickListener(new OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Intent Login_intent= new Intent(firstScreen.this,LoginActivit.class);
-        startActivity(Login_intent);
-    }
-});
+            @Override
+            public void onClick(View view) {
+                Intent Login_intent= new Intent(firstScreen.this,LoginActivit.class);
+                startActivity(Login_intent);
+            }
+        });
 
 
     }
@@ -75,7 +75,7 @@ private CallbackManager callbackManager;
     AccessTokenTracker tokenTracker=new AccessTokenTracker() {
         @Override
         protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                AccessToken currentAccessToken) {
+                                                   AccessToken currentAccessToken) {
 
             if(currentAccessToken!=null){
 

@@ -13,7 +13,7 @@
 
     <fragment
             android:id = "@+id/navigation_search"
-            android:name = "com.vnoders.spotify_el8alaba.ui.search.SearchFragment"
+            android:name = "com.vnoders.spotify_el8alaba.SearchGenresFragment"
             android:label = "@string/title_search"
             tools:layout = "@layout/fragment_search_genres" />
 
@@ -28,5 +28,4 @@
             android:name = "com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment"
             android:label = "@string/title_premium"
             tools:layout = "@layout/fragment_premium" />
-
 </navigation>

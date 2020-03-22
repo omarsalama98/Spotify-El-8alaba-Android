@@ -6,11 +6,11 @@
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
         android:orientation="vertical"
-        android:background="@color/darkGray"
-        tools:context = ".LoginActivit">
+        android:background="@color/black"
+        tools:context = ".LoginActivity">
 
 <ImageButton
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:id="@+id/back_button"
         android:layout_width = "wrap_content"
         android:layout_height = "wrap_content"
@@ -94,7 +94,7 @@
 
     <Button
             android:id="@+id/Login_button"
-            android:layout_width = "150dp"
+            android:layout_width = "120dp"
             android:layout_height = "wrap_content"
             android:layout_marginTop="25dp"
             android:layout_gravity="center"

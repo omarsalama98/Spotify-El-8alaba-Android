@@ -1,11 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android = "http://schemas.android.com/apk/res/android"
-        android:id = "@+id/search_genres_gridview"
-        android:layout_width = "fill_parent"
-        android:layout_height = "fill_parent"
-        android:columnWidth = "150dp"
-        android:numColumns = "2"
-        android:verticalSpacing = "10dp"
-        android:horizontalSpacing = "10dp"
-        android:stretchMode = "columnWidth"
-        android:gravity = "center" />
+<FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:id = "@+id/search_fragment_container"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_height = "match_parent"
+            android:layout_width = "match_parent"
+            android:orientation = "vertical"
+            android:padding = "14dp"
+            android:scrollbars = "vertical"
+            android:background = "@color/darkGray">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id = "@+id/genres_app_bar_layout"
+                android:layout_height = "wrap_content"
+                android:layout_width = "match_parent"
+                android:paddingTop = "@dimen/appbar_padding"
+                android:background = "@drawable/curved_gradient"
+                android:theme = "@style/AppTheme.AppBarOverlay">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:background = "@drawable/curved_gradient"
+                    app:layout_scrollFlags = "scroll|exitUntilCollapsed">
+
+                <TextView
+                        android:id = "@+id/text"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "wrap_content"
+                        android:background = "@drawable/curved_gradient"
+                        android:textSize = "50sp"
+                        android:text = "@string/search"
+                        android:minHeight = "?actionBarSize"
+                        android:gravity = "center"
+                        android:textColor = "@color/white"
+                        android:textStyle = "bold"
+                        android:paddingTop = "70dp"
+                        android:layout_marginBottom = "20dp" />
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <TextView
+                    android:id = "@+id/genres_search_bar_text_view"
+                    android:layout_width = "match_parent"
+                    android:paddingVertical = "15dp"
+                    android:paddingHorizontal = "30dp"
+                    android:layout_height = "wrap_content"
+                    android:textSize = "20sp"
+                    android:textStyle = "bold"
+                    android:text = "@string/search_artists_songs_or_albums"
+                    android:gravity = "center_horizontal"
+                    android:textColor = "@color/lightGray"
+                    android:backgroundTint = "@color/white"
+                    android:background = "@drawable/rounded_corner_layout"
+                    android:drawableTint = "@color/darkGray"
+                    android:drawableStart = "@drawable/ic_search_unselected" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                app:layout_behavior = "@string/appbar_scrolling_view_behavior">
+            <LinearLayout
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:orientation = "vertical">
+
+                <TextView
+                        android:layout_width = "match_parent"
+                        android:layout_height = "wrap_content"
+                        android:text = "@string/your_top_genres"
+                        android:textColor = "@color/white"
+                        android:textSize = "20sp"
+                        android:layout_marginVertical = "10dp"
+                        android:textStyle = "bold" />
+                <com.vnoders.spotify_el8alaba.ExpandableHeightGridView
+                        android:id = "@+id/search_top_genres_gridview"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "wrap_content"
+                        android:columnWidth = "150dp"
+                        android:numColumns = "2"
+                        android:layout_marginVertical = "10dp"
+                        android:verticalSpacing = "10dp"
+                        android:horizontalSpacing = "10dp"
+                        android:stretchMode = "columnWidth"
+                        android:gravity = "center" />
+                <TextView
+                        android:layout_width = "match_parent"
+                        android:layout_height = "wrap_content"
+                        android:text = "@string/browse_all"
+                        android:textColor = "@color/white"
+                        android:layout_marginVertical = "10dp"
+                        android:textSize = "20sp"
+                        android:textStyle = "bold" />
+                <com.vnoders.spotify_el8alaba.ExpandableHeightGridView
+                        android:id = "@+id/search_browse_all_genres_gridview"
+                        android:layout_width = "fill_parent"
+                        android:layout_height = "fill_parent"
+                        android:columnWidth = "150dp"
+                        android:numColumns = "2"
+                        android:isScrollContainer = "false"
+                        android:verticalSpacing = "10dp"
+                        android:horizontalSpacing = "10dp"
+                        android:stretchMode = "columnWidth"
+                        android:gravity = "center" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

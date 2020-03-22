@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import com.vnoders.spotify_el8alaba.R;
 
 
@@ -20,7 +20,7 @@ public class PremiumFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         premiumViewModel =
-                ViewModelProviders.of(this).get(PremiumViewModel.class);
+                new ViewModelProvider(this).get(PremiumViewModel.class);
         View root = inflater.inflate(R.layout.fragment_premium, container, false);
         final TextView textView = root.findViewById(R.id.text_premium);
         premiumViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {

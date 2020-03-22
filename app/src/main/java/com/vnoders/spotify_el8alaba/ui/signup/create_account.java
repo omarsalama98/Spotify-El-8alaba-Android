@@ -36,7 +36,7 @@ public class create_account extends Fragment {
     private Button create;
     private EditText name;
     private String name_holder;
-    private TextView first;
+    //private TextView first;
 
 
     @Override
@@ -49,7 +49,7 @@ public class create_account extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_account, container, false);
-        first = view.findViewById(R.id.text1);
+        //first = view.findViewById(R.id.text1);
         name = view.findViewById(R.id.name_create_account);
         create = view.findViewById(R.id.create_button);
         create.setEnabled(false);

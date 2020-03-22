@@ -17,7 +17,8 @@ public class LibraryPagerAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = {R.string.title_library_playlists, R.string.title_library_artists, R.string.title_library_albums};
 //    private static final String[] TAB_TITLES = {"R.string.Playlists", "R.string.Artists"," R.string.Albums"};
 
-    private static final Fragment[] fragments = {new PlaylistFragment() , new ArtistFragment() , new AlbumFragment()};
+    private static final Fragment[] fragments = {new LibraryPlaylistFragment(),
+            new ArtistFragment(), new AlbumFragment()};
 
     private final Context context;
 

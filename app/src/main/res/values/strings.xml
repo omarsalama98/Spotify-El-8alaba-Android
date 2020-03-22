@@ -62,4 +62,17 @@
     <string name="facebook_app_id">561779244683632</string>
     <string name="fb_login_protocol_scheme">fb561779244683632</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name = "search_artists_songs_or_albums">Artists, songs or albums</string>
+    <string name = "your_top_genres">Your top genres</string>
+    <string name = "browse_all">Browse all</string>
+
+    <string name = "recent_searches">Recent searches</string>
+    <string name = "clear_recent_searches">Clear recent searches</string>
+    <string name = "see_all_artists">See all artists</string>
+    <string name = "see_all_songs">Search all songs</string>
+    <string name = "see_all_playlists">See all playlists</string>
+    <string name = "see_all_albums">See all albums</string>
+    <string name = "search_all_genres_and_moods">Search all genres and moods</string>
+    <string name = "see_all_profiles">See all profiles</string>
 </resources>
