@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.Lists_Adapters.PlaylistAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Track;
 import java.util.ArrayList;
@@ -52,11 +51,11 @@ public class PlaylistFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_library_playlist, container, false);
+        View root = inflater.inflate(R.layout.fragment_playlist, container, false);
 
         PlaylistAdapter playlistAdapter = new PlaylistAdapter(playlistViewModel.getTracks().getValue());
 
-        RecyclerView recyclerView = root.findViewById(R.id.library_playlist_recycler_view);
+        RecyclerView recyclerView = root.findViewById(R.id.playlist_recycler_view);
 
         recyclerView.setAdapter(playlistAdapter);
 
