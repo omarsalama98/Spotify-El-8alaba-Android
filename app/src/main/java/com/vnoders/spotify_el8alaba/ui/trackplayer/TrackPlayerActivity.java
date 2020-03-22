@@ -4,16 +4,26 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.palette.graphics.Palette;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
@@ -27,6 +37,9 @@ import com.vnoders.spotify_el8alaba.models.PlayableTrack;
  */
 public class TrackPlayerActivity extends AppCompatActivity {
 
+    // how much to extend gradient of background to get smoother gradient
+    private static final int GRADIENT_SMOOTHNESS = 10;
+
     // connection to service
     private MediaPlaybackService mService;
     // boolean to know if currently bound to service or not
@@ -34,6 +47,9 @@ public class TrackPlayerActivity extends AppCompatActivity {
 
     // holds track image view
     private ImageView mTrackImageView;
+
+    // holds view container of track player
+    private View mTrackPlayerContainer;
 
     /**
      * Just set the layout and get track currently being played
@@ -46,6 +62,8 @@ public class TrackPlayerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_track_player);
 
+        // get reference to container
+        mTrackPlayerContainer = findViewById(R.id.track_player_container);
         // get reference to image
         mTrackImageView = findViewById(R.id.track_image_view);
 
@@ -84,7 +102,7 @@ public class TrackPlayerActivity extends AppCompatActivity {
      * @param track current track being played holding info
      */
     private void updateUI(PlayableTrack track) {
-        Picasso.get().load(track.getAlbum().getImages().get(0).getUrl()).into(mTrackImageView);
+        Picasso.get().load(track.getAlbum().getImages().get(0).getUrl()).into(mTarget);
     }
 
     /**
@@ -145,5 +163,77 @@ public class TrackPlayerActivity extends AppCompatActivity {
      */
     public MediaPlaybackService getService() {
         return mService;
+    }
+
+    /**
+     * Used by picasso to know when image loading finished to get dominant color and set background
+     * as color of image
+     */
+    private Target mTarget = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            // set the image view to image got by picasso
+            mTrackImageView.setImageBitmap(bitmap);
+
+            // create gradient dependent on vibrant color of img
+            ShapeDrawable drawable = new ShapeDrawable(new RectShape());
+            drawable.getPaint().setShader
+                    (new LinearGradient(0, 0,
+                            0, mTrackPlayerContainer.getMeasuredHeight() * GRADIENT_SMOOTHNESS,
+                            getColor(bitmap, 0.2f), getColor(bitmap, 0.1f),
+                            Shader.TileMode.CLAMP));
+
+            // set the background to gradient
+            mTrackPlayerContainer.setBackground(drawable);
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
+
+    /**
+     * helper method to get vibrant color darkened
+     *
+     * @param bitmap image to get color from
+     * @param factor factor to darken color by
+     * @return vibrant color of image darkened by factor
+     */
+    private int getColor(Bitmap bitmap, float factor) {
+        return manipulateColor(getVibrantColor(bitmap), factor);
+    }
+
+    /**
+     * helper method to get vibrant color of image
+     *
+     * @param bitmap image to get color from
+     * @return vibrant color of image
+     */
+    private int getVibrantColor(Bitmap bitmap) {
+        return Palette.from(bitmap).generate().getVibrantColor(Color.parseColor("#00FFFF"));
+    }
+
+    /**
+     * manipulate color to darken it by factor
+     *
+     * @param color  color wanting to manipulate
+     * @param factor factor to darken by
+     * @return color darkened by factor
+     */
+    private int manipulateColor(int color, float factor) {
+        int a = Color.alpha(color);
+        int r = Math.round(Color.red(color) * factor);
+        int g = Math.round(Color.green(color) * factor);
+        int b = Math.round(Color.blue(color) * factor);
+        return Color.argb(a,
+                Math.min(r, 255),
+                Math.min(g, 255),
+                Math.min(b, 255));
     }
 }

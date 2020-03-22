@@ -14,7 +14,7 @@ import retrofit2.http.Query;
  */
 public interface TrackApi {
 
-    @Headers("Authorization: Bearer BQDl6K5IGOlqwnt6zBvpxxXHl-DmS70iL399rp1BTlLbkdQ-py6YLeuCTSrcO0ZFas66wqR3Nw6dDobuHm4TeTy3Bl1y9EZ_HAU2lPuilvOVnv-YcRtV5pky1a82yUh1UXNK_qYbH8FDJRQtmstDkHTPSOxg48Q")
+    @Headers("Authorization: Bearer BQAM6-SmQwUcd7om8f00ceF6uZk5cdsGegy5ZY6aAb7pnXKCWbzE7StRd5kVafbQhNarmY7Cxc9ZFr4_Ao2O9OfutoJMycCf9-KksKGWDrbHZgQ-9MhI8SGvVBe_9BOWFkHA-3o9zPvI9dxt8jPRu_b8Tl6vaCM")
     @GET("tracks")
     Call<TrackList> getTracks(@Query("ids") String ids);
 }

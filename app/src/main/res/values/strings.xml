@@ -46,4 +46,12 @@
     <string name = "see_all_albums">See all albums</string>
     <string name = "search_all_genres_and_moods">Search all genres and moods</string>
     <string name = "see_all_profiles">See all profiles</string>
+    <string name="overflow_like">Like</string>
+    <string name="overflow_hide">Hide this song</string>
+    <string name="overflow_add">Add to Playlist</string>
+    <string name="overflow_view">View Artist</string>
+    <string name="overflow_share">Share</string>
+    <string name="overflow_sleep">Sleep timer</string>
+    <string name="overflow_report">Report Explicit Content</string>
+    <string name="overflow_credits">Show Credits</string>
 </resources>

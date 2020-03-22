@@ -50,6 +50,17 @@
                     android:name = "android.support.PARENT_ACTIVITY"
                     android:value = ".MainActivity" />
         </activity>
+        <activity
+            android:name = ".ui.trackplayer.OverflowActivity"
+            android:theme="@style/Theme.AppCompat.Translucent"
+            android:launchMode = "singleTop"
+            android:parentActivityName = ".ui.trackplayer.TrackPlayerActivity"
+            android:screenOrientation = "portrait"
+            tools:ignore = "LockedOrientationActivity">
+            <meta-data
+                android:name = "android.support.PARENT_ACTIVITY"
+                android:value = ".ui.trackplayer.TrackPlayerActivity" />
+        </activity>
         <service android:name=".MediaPlaybackService" />
     </application>
 
