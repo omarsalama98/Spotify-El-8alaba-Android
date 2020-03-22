@@ -140,6 +140,7 @@
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
             android:layout_below = "@id/search_bar_frame_layout"
+            android:overScrollMode = "never"
             android:fillViewport = "true">
 
     <LinearLayout
@@ -153,7 +154,6 @@
                 android:id = "@+id/search_list_recycler_view"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
-                android:overScrollMode = "never"
                 android:nestedScrollingEnabled = "false" />
 
         <TextView

@@ -1,6 +1,8 @@
 package com.vnoders.spotify_el8alaba;
 
 
+import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
+import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,4 +28,35 @@ public class Mock {
 
         return songIds;
     }
+
+    public static ArrayList<HomeMainListItem> getMainHomeList() {
+
+        ArrayList<HomeInnerListItem> innerListItems;
+        ArrayList<HomeMainListItem> mainListItems;
+
+        mainListItems = new ArrayList<>();
+        innerListItems = new ArrayList<>();
+
+        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
+                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
+                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
+                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
+        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
+                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
+                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
+                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
+        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
+                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
+
+        mainListItems.add(new HomeMainListItem("A7la sho8l", innerListItems));
+        mainListItems.add(new HomeMainListItem("A7la kalam", innerListItems));
+        mainListItems.add(new HomeMainListItem("zeft yaba", innerListItems));
+
+        return mainListItems;
+    }
+
 }
