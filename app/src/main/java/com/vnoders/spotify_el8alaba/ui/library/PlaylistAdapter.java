@@ -1,4 +1,4 @@
-package com.vnoders.spotify_el8alaba.Lists_Adapters;
+package com.vnoders.spotify_el8alaba.ui.library;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,16 +10,16 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.Lists_Adapters.PlaylistAdapter.TrackViewHolder;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Track;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistAdapter.TrackViewHolder;
 import java.util.List;
 
 public class PlaylistAdapter extends RecyclerView.Adapter<TrackViewHolder> {
@@ -53,7 +53,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<TrackViewHolder> {
 
     static class TrackViewHolder extends RecyclerView.ViewHolder {
 
-        LinearLayout trackBody;
+        ConstraintLayout trackBody;
 
         ImageView playIcon;
         ImageView trackArt;
@@ -71,25 +71,26 @@ public class PlaylistAdapter extends RecyclerView.Adapter<TrackViewHolder> {
         TrackViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            trackBody = itemView.findViewById(R.id.library_playlist_track_body);
+            trackBody = itemView.findViewById(R.id.playlist_track_body);
 
-            playIcon = itemView.findViewById(R.id.library_playlist_play_icon);
-            trackArt = itemView.findViewById(R.id.library_playlist_track_art);
+            playIcon = itemView.findViewById(R.id.playlist_play_icon);
+            trackArt = itemView.findViewById(R.id.playlist_track_art);
 
-            previewProgressBar = itemView.findViewById(R.id.library_playlist_progress_bar);
+            previewProgressBar = itemView.findViewById(R.id.playlist_progress_bar);
 
-            trackName = itemView.findViewById(R.id.library_playlist_track_name);
-            artistName = itemView.findViewById(R.id.library_playlist_artist_name);
+            trackName = itemView.findViewById(R.id.playlist_track_name);
+            artistName = itemView.findViewById(R.id.playlist_artist_name);
 
-            likeTrack = itemView.findViewById(R.id.library_playlist_like_track);
-            hideTrack = itemView.findViewById(R.id.library_playlist_hide_track);
-            othersMenu = itemView.findViewById(R.id.library_playlist_others_menu);
+            likeTrack = itemView.findViewById(R.id.playlist_like_track);
+            hideTrack = itemView.findViewById(R.id.playlist_hide_track);
+            othersMenu = itemView.findViewById(R.id.playlist_others_menu);
 
             trackBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(),
-                            "Song " + trackName.getText().toString() + " plays", Toast.LENGTH_SHORT).show();
+                            "Song " + trackName.getText().toString() + " plays", Toast.LENGTH_SHORT)
+                            .show();
                 }
             });
 

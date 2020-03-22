@@ -1,39 +1,29 @@
 package com.vnoders.spotify_el8alaba;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * just a mock class to get a list of track id's that have preview urls to use to play
+ */
 public class Mock {
 
-    public static class mock_track {
-        private String mName;
-        private String mAuthor;
-        private int mImageId;
-        private int mType;  // 0 for playlist, 1 for artist
 
-        public mock_track(String name, String author, int imageId, int type) {
-            mName = name;
-            mAuthor = author;
-            mImageId = imageId;
-            mType = type;
-        }
+    public static List<String> getTracksID() {
+        List<String> songIds = new ArrayList<>();
 
-        public String getName() {
-            return mName;
-        }
+        songIds.add("6f83eZ9DQW3W9M3grPDRmx");
+        songIds.add("6NnaFwRgdbXdPBsgcOXkwA");
+        songIds.add("2DTQ2zskGJJWyAnAppIpzN");
+        songIds.add("3A4FRzgve9BjfKbvVXRIFO");
+        songIds.add("1XnP7VphwaAl9aWRNHAESn");
+        songIds.add("0omCpeIeTfzTS3YXZwMwg6");
+        songIds.add("1lTfD2M6UpJRWi3YLb8qb5");
+        songIds.add("1f6HC5dTviPmopQjYi4uVT");
+        songIds.add("6c6fQ8k4yIUnLJEPy7zj3z");
+        songIds.add("6IVM1YYZq6K6NG6qqC26o4");
 
-        public String getAuthor() {
-            return mAuthor;
-        }
-
-        public int getImageId() {
-            return mImageId;
-        }
-
-        public int getType() {
-            return mType;
-        }
-    }
-
-    public static mock_track getMockTrack() {
-        return new mock_track("This is the song that is being played right now", "Eminem",  R.mipmap.ic_launcher, 0);
+        return songIds;
     }
 }

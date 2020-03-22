@@ -10,7 +10,7 @@
             android:id = "@+id/library_playlist_recycler_view"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
-            android:background = "#181818"
-            tools:listitem = "@layout/track_list_item" />
+            android:background = "@color/backgroundColor"
+            tools:listitem = "@layout/playlist_list_item" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
