@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android = "http://schemas.android.com/apk/res/android"
-    xmlns:tools = "http://schemas.android.com/tools"
-    package = "com.vnoders.spotify_el8alaba">
+        xmlns:tools = "http://schemas.android.com/tools"
+        package = "com.vnoders.spotify_el8alaba">
 
     <uses-permission android:name = "android.permission.INTERNET" />
     <uses-permission android:name = "android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name = "android.permission.CHANGE_NETWORK_STATE" />
 
     <application
-        android:allowBackup = "true"
-        android:icon = "@mipmap/ic_launcher"
-        android:label = "@string/app_name"
-        android:supportsRtl = "true"
-        android:theme = "@style/AppTheme">
+            android:allowBackup = "true"
+            android:icon = "@mipmap/ic_launcher"
+            android:label = "@string/app_name"
+            android:supportsRtl = "true"
+            android:theme = "@style/AppTheme">
         <activity android:name = ".ui.signup.signup_email" />
         <activity android:name = ".app_mainActivity">
             <intent-filter>
@@ -25,49 +25,53 @@
         <activity android:name = ".LoginActivit" />
         <activity android:name = ".firstScreen" />
         <activity
-            android:name = ".MainActivity"
-            android:label = "@string/title_activity_main"
-            android:launchMode = "singleTop"
-            android:parentActivityName = ".SplashActivity"
-            android:screenOrientation = "portrait"
-            tools:ignore = "LockedOrientationActivity">
+                android:name = ".MainActivity"
+                android:label = "@string/title_activity_main"
+                android:launchMode = "singleTop"
+                android:parentActivityName = ".SplashActivity"
+                android:screenOrientation = "portrait"
+                tools:ignore = "LockedOrientationActivity">
             <meta-data
-                android:name = "android.support.PARENT_ACTIVITY"
-                android:value = ".SplashActivity" />
+                    android:name = "android.support.PARENT_ACTIVITY"
+                    android:value = ".SplashActivity" />
         </activity>
+        <activity android:name = ".Charts" />
         <activity
-            android:name = ".SplashActivity"
-            android:screenOrientation = "portrait"
-            tools:ignore = "LockedOrientationActivity" />
+                android:name = ".SplashActivity"
+                android:screenOrientation = "portrait"
+                tools:ignore = "LockedOrientationActivity" />
         <activity
-            android:name = ".ui.trackplayer.TrackPlayerActivity"
-            android:launchMode = "singleInstance"
-            android:parentActivityName = ".MainActivity"
-            android:screenOrientation = "portrait"
-            tools:ignore = "LockedOrientationActivity">
+                android:name = ".ui.trackplayer.TrackPlayerActivity"
+                android:launchMode = "singleInstance"
+                android:parentActivityName = ".MainActivity"
+                android:screenOrientation = "portrait"
+                tools:ignore = "LockedOrientationActivity">
             <meta-data
-                android:name = "android.support.PARENT_ACTIVITY"
-                android:value = ".MainActivity" />
+                    android:name = "android.support.PARENT_ACTIVITY"
+                    android:value = ".MainActivity" />
         </activity>
 
 
+        <meta-data
+                android:name = "com.facebook.sdk.ApplicationId"
+                android:value = "@string/facebook_app_id" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+        <activity
+                android:name = "com.facebook.FacebookActivity"
+                android:configChanges = "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+                android:label = "@string/app_name" />
 
 
         <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
+                android:name = "com.facebook.CustomTabActivity"
+                android:exported = "true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/fb_login_protocol_scheme" />
+                <action android:name = "android.intent.action.VIEW" />
+
+                <category android:name = "android.intent.category.DEFAULT" />
+                <category android:name = "android.intent.category.BROWSABLE" />
+
+                <data android:scheme = "@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 

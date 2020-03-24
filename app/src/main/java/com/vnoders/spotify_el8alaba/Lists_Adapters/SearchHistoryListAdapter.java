@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.DownloadImageTask;
+import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.SearchListItem;
 import java.util.ArrayList;
 
 public class SearchHistoryListAdapter extends
@@ -46,6 +46,7 @@ public class SearchHistoryListAdapter extends
                 mDataset.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, mDataset.size());
+
             }
         });
     }

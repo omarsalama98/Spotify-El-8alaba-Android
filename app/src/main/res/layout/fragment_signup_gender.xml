@@ -4,46 +4,41 @@
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
         tools:context = ".ui.signup.signup_gender"
-        android:background="@color/darkGray"
-        android:orientation="vertical"
-        >
+        android:background = "@color/darkGray"
+        android:orientation = "vertical">
     <TextView
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
-            android:text="@string/gender_signup"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="15dp"
-            android:textStyle="bold"
-            />
+            android:text = "@string/gender_signup"
+            android:textColor = "@color/white"
+            android:textSize = "30sp"
+            android:layout_marginTop = "25dp"
+            android:layout_marginLeft = "15dp"
+            android:textStyle = "bold" />
     <LinearLayout
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
-            android:orientation="horizontal"
-        >
+            android:orientation = "horizontal">
 
-    <Button
-
-            android:layout_marginLeft="15dp"
-            android:layout_width = "wrap_content"
-            android:layout_height = "wrap_content"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/gender_selected"
-            android:text="@string/female"
-            android:textColor="@color/white"
-            android:id="@+id/gender_female"
-            />
         <Button
-                android:id="@+id/gender_male"
-                android:layout_marginLeft="15dp"
+
+                android:id = "@+id/gender_female"
+                android:layout_marginLeft = "15dp"
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/gender_selected"
-                android:text="@string/male"
-                android:textColor="@color/white"
-                />
+                android:layout_marginTop = "25dp"
+                android:background = "@drawable/gender_selected"
+                android:text = "@string/female"
+                android:textColor = "@color/white" />
+        <Button
+                android:id = "@+id/gender_male"
+                android:layout_marginLeft = "15dp"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop = "25dp"
+                android:background = "@drawable/gender_selected"
+                android:text = "@string/male"
+                android:textColor = "@color/white" />
 
 
     </LinearLayout>

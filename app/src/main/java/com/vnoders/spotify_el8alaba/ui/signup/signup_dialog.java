@@ -19,8 +19,8 @@ public class signup_dialog extends DialogFragment {
     @Override
     public View onCreateView(
             LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.dialog_signup,container,false);
-        ok_button=view.findViewById(R.id.oK);
+        View view = inflater.inflate(R.layout.dialog_signup, container, false);
+        ok_button = view.findViewById(R.id.oK);
 
         ok_button.setOnClickListener(new OnClickListener() {
             @Override
@@ -28,7 +28,6 @@ public class signup_dialog extends DialogFragment {
                 getDialog().dismiss();
             }
         });
-
 
         return view;
 

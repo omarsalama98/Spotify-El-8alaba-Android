@@ -29,8 +29,8 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
+import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.SearchListItem;
 import java.util.ArrayList;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -39,7 +39,7 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventList
 public class SearchFragment extends Fragment {
 
 
-    RecyclerView search_history_recycler_view;
+    RecyclerView searchHistoryRecyclerView;
     ArrayList<SearchListItem> mySearchHistory;
     TextView clearRecentSearches;
     private SearchViewModel searchViewModel;
@@ -133,7 +133,7 @@ public class SearchFragment extends Fragment {
         searchListRecyclerView.setAdapter(searchListAdapter);
 
         searchHistoryListLayout = root.findViewById(R.id.search_history_list_container);
-        search_history_recycler_view = root.findViewById(R.id.search_history_list_recycler_view);
+        searchHistoryRecyclerView = root.findViewById(R.id.search_history_list_recycler_view);
         clearRecentSearches = root.findViewById(R.id.clear_recent_searches_text_view);
 
         mySearchHistory = new ArrayList<SearchListItem>();
@@ -142,7 +142,7 @@ public class SearchFragment extends Fragment {
         mySearchHistory.add(new SearchListItem("Zeft", "Ay neela", ""));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        search_history_recycler_view.setLayoutManager(layoutManager);
+        searchHistoryRecyclerView.setLayoutManager(layoutManager);
 
         clearRecentSearches.setOnClickListener(new OnClickListener() {
             @Override
@@ -155,7 +155,7 @@ public class SearchFragment extends Fragment {
 
         SearchHistoryListAdapter searchHistoryListAdapter = new SearchHistoryListAdapter(
                 mySearchHistory);
-        search_history_recycler_view.setAdapter(searchHistoryListAdapter);
+        searchHistoryRecyclerView.setAdapter(searchHistoryListAdapter);
 
         if (!mySearchHistory.isEmpty()) {
             searchHistoryListLayout.setVisibility(View.VISIBLE);

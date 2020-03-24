@@ -15,7 +15,7 @@
         android:layout_marginRight="12dp" />
 
     <RelativeLayout
-        android:id="@+id/track_player_space"
+            android:id = "@+id/track_player_space"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="24dp"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="48dp"
             android:contentDescription="@string/song_picture_desc"
-            android:scaleType="centerCrop" />
+                android:scaleType = "centerCrop" />
 
     </RelativeLayout>
 

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:background = "@drawable/curved_gradient"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:padding = "20dp">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_height = "wrap_content"
+            android:layout_width = "match_parent"
+            android:paddingTop = "@dimen/appbar_padding"
+            android:background = "@drawable/curved_gradient"
+            android:theme = "@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:paddingTop = "40dp"
+                android:paddingBottom = "20dp"
+                app:layout_scrollFlags = "scroll|exitUntilCollapsed">
+
+            <TextView
+                    android:id = "@+id/title"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:minHeight = "?actionBarSize"
+                    android:padding = "@dimen/appbar_padding"
+                    android:textSize = "50sp"
+                    android:text = "Music"
+                    android:textStyle = "bold"
+                    android:layout_gravity = "center"
+                    android:textAppearance = "@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:overScrollMode = "never"
+            app:layout_behavior = "@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+                android:orientation = "vertical"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content">
+
+            <TextView
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/popular_playlists"
+                    android:textColor = "@color/white"
+                    android:textSize = "18sp"
+                    android:textStyle = "bold"
+                    android:layout_marginBottom = "10dp"
+                    android:layout_gravity = "center_horizontal" />
+
+            <com.vnoders.spotify_el8alaba.ExpandableHeightGridView
+                    android:id = "@+id/genre_playlists_grid_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:stretchMode = "columnWidth"
+                    android:horizontalSpacing = "20dp"
+                    android:gravity = "center"
+                    android:paddingStart = "15dp"
+                    android:numColumns = "2"
+                    android:verticalSpacing = "10dp" />
+
+            <Button
+                    android:layout_width = "120dp"
+                    android:layout_height = "30dp"
+                    android:text = "@string/see_more"
+                    android:textSize = "13sp"
+                    android:textStyle = "bold"
+                    android:layout_marginTop = "15dp"
+                    android:background = "@drawable/clear_cornered_button_with_outline"
+                    android:layout_gravity = "center" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

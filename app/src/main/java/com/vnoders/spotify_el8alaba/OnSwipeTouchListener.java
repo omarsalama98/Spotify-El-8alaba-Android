@@ -6,8 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * @author Ali Adel
- * helper custom class to detect swipe gestures and click
+ * @author Ali Adel helper custom class to detect swipe gestures and click
  */
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
@@ -56,11 +55,14 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             float distanceX = e2.getX() - e1.getX();
             float distanceY = e2.getY() - e1.getY();
-            if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                if (distanceX > 0)
+            if (Math.abs(distanceX) > Math.abs(distanceY)
+                    && Math.abs(distanceX) > SWIPE_DISTANCE_THRESHOLD
+                    && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                if (distanceX > 0) {
                     onSwipeRight();
-                else
+                } else {
                     onSwipeLeft();
+                }
                 return true;
             }
             return false;

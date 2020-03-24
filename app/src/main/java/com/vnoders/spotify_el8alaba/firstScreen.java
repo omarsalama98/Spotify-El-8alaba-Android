@@ -1,7 +1,6 @@
 package com.vnoders.spotify_el8alaba;
 
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,16 +17,31 @@ import com.facebook.login.widget.LoginButton;
 import com.vnoders.spotify_el8alaba.ui.signup.signup_email;
 
 public class firstScreen extends AppCompatActivity {
+
     private Button Login_button;
     private Button sign_up_button;
     private LoginButton facebook_button;
     private CallbackManager callbackManager;
+    AccessTokenTracker tokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                AccessToken currentAccessToken) {
+
+            if (currentAccessToken != null) {
+
+                Intent intent = new Intent(firstScreen.this, MainActivity.class);
+                startActivity(intent);
+            }
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_screen);
-        callbackManager=CallbackManager.Factory.create();
-        facebook_button=findViewById(R.id.facebook_button);
+        callbackManager = CallbackManager.Factory.create();
+        facebook_button = findViewById(R.id.facebook_button);
         facebook_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -45,8 +59,7 @@ public class firstScreen extends AppCompatActivity {
             }
         });
 
-
-        sign_up_button=(Button) findViewById(R.id.sign_up_button);
+        sign_up_button = findViewById(R.id.sign_up_button);
         sign_up_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,11 +67,11 @@ public class firstScreen extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Login_button=(Button) findViewById(R.id.Login_button);
+        Login_button = findViewById(R.id.Login_button);
         Login_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent Login_intent= new Intent(firstScreen.this,LoginActivit.class);
+                Intent Login_intent = new Intent(firstScreen.this, LoginActivit.class);
                 startActivity(Login_intent);
             }
         });
@@ -68,22 +81,8 @@ public class firstScreen extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        callbackManager.onActivityResult(requestCode,resultCode,data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    AccessTokenTracker tokenTracker=new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                                                   AccessToken currentAccessToken) {
-
-            if(currentAccessToken!=null){
-
-                Intent intent =new Intent(firstScreen.this,MainActivity.class);
-                startActivity(intent);
-            }
-
-        }
-    };
 
 }

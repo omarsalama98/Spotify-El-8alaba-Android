@@ -10,15 +10,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.signup_info;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
-import com.vnoders.spotify_el8alaba.ui.signup.signup_dialog;
-import com.vnoders.spotify_el8alaba.ui.signup.signup_email;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +34,22 @@ public class create_account extends Fragment {
     private EditText name;
     private String name_holder;
     //private TextView first;
+    private TextWatcher create_account_watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            create.setEnabled(true);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +76,7 @@ public class create_account extends Fragment {
                 gender = ((signup_email) getActivity()).getGender();
 
                 signup_info signup_info = new signup_info(name_holder, email_address, password,
-                        password, gender,"1999-03-25T00:00:00.000Z" , type);
+                        password, gender, "1999-03-25T00:00:00.000Z", type);
 
                 Call<ResponseBody> call = RetrofitClient.getInstance().getAPI().signup(signup_info);
                 call.enqueue(new Callback<ResponseBody>() {
@@ -75,7 +87,8 @@ public class create_account extends Fragment {
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(getActivity(),"Email already Exists!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Email already Exists!",
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -93,21 +106,4 @@ public class create_account extends Fragment {
         name.addTextChangedListener(create_account_watcher);
         return view;
     }
-
-    private TextWatcher create_account_watcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            create.setEnabled(true);
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
 }

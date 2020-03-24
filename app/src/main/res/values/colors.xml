@@ -28,5 +28,6 @@
     <color name = "backgroundColor">#FF181818</color>
 
     <color name = "whitish_gray">#a0a0a0</color>
+    <color name = "translucentDarkGray">#B0151515</color>
 
 </resources>

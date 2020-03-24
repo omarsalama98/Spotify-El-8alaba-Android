@@ -1,4 +1,4 @@
-package com.vnoders.spotify_el8alaba;
+package com.vnoders.spotify_el8alaba.Lists_Items;
 
 public class SearchListItem {
 
