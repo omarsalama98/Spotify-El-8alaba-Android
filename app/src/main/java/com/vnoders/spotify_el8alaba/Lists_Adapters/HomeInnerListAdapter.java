@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.DownloadImageTask;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
 import java.util.ArrayList;
@@ -40,8 +40,7 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
 
         holder.title.setText(mDataset.get(position).getTitle());
         holder.subTitle.setText(mDataset.get(position).getSubTitle());
-        new DownloadImageTask(holder.image).execute(mDataset.get(position).getImageURL());
-
+        Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

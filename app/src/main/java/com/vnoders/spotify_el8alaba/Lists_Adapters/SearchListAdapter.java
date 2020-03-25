@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.DownloadImageTask;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
 
         holder.name.setText(mDataset.get(position).getName());
         holder.info.setText(mDataset.get(position).getInfo());
-        new DownloadImageTask(holder.image).execute(mDataset.get(position).getImageURL());
+        Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
 
     }
 

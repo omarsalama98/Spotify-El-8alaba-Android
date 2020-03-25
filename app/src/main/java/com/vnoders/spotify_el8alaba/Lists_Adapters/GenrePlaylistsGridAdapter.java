@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.vnoders.spotify_el8alaba.DownloadImageTask;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
 import java.util.ArrayList;
@@ -55,7 +55,8 @@ public class GenrePlaylistsGridAdapter extends BaseAdapter {
 
         playlistTitle.setText(mPlaylists.get(position).getTitle());
         playlistSubTitle.setText(mPlaylists.get(position).getSubTitle());
-        new DownloadImageTask(playlistImage).execute(mPlaylists.get(position).getImageURL());
+        //new DownloadImageTask(playlistImage).execute(mPlaylists.get(position).getImageURL());
+        Picasso.get().load(mPlaylists.get(position).getImageURL()).into(playlistImage);
 
         return convertView;
     }
