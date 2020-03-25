@@ -22,29 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView navView;
 
-    private void viewFragment(Fragment fragment, String name) {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fT = fragmentManager.beginTransaction();
-        fT.replace(R.id.nav_host_fragment, fragment);
-        final int count = fragmentManager.getBackStackEntryCount();
-        if (name.equals(FRAGMENT_OTHER)) {
-            fT.addToBackStack(name);
-        }
-        fT.commit();
-
-        fragmentManager.addOnBackStackChangedListener(new OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                if (fragmentManager.getBackStackEntryCount() <= count) {
-                    fragmentManager
-                            .popBackStack(FRAGMENT_OTHER, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.removeOnBackStackChangedListener(this);
-                    navView.getMenu().getItem(0).setChecked(true);
-                }
-            }
-        });
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -97,6 +74,29 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
     }
 
+    private void viewFragment(Fragment fragment, String name) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fT = fragmentManager.beginTransaction();
+        fT.replace(R.id.nav_host_fragment, fragment);
+        final int count = fragmentManager.getBackStackEntryCount();
+        if (name.equals(FRAGMENT_OTHER)) {
+            fT.addToBackStack(name);
+        }
+        fT.commit();
+
+        fragmentManager.addOnBackStackChangedListener(new OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (fragmentManager.getBackStackEntryCount() <= count) {
+                    fragmentManager
+                            .popBackStack(FRAGMENT_OTHER, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    fragmentManager.removeOnBackStackChangedListener(this);
+                    navView.getMenu().getItem(0).setChecked(true);
+                }
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         if (navView.getSelectedItemId() == R.id.navigation_home) {
@@ -104,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
         } else {
-            super.onBackPressed();
+            getSupportFragmentManager().popBackStack();
         }
     }
+
 }

@@ -8,12 +8,16 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.fragment.app.Fragment;
 import androidx.palette.graphics.Palette;
+import com.vnoders.spotify_el8alaba.ChartsFragment;
+import com.vnoders.spotify_el8alaba.GenreFragment;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Genre;
 import java.util.ArrayList;
@@ -23,11 +27,13 @@ public class SearchGenresGridAdapter extends BaseAdapter {
     private Context mContext;
     // Keep all Images in array
     private ArrayList<Genre> genresList;
+    private Fragment mFragment;
 
     // Constructor
-    public SearchGenresGridAdapter(Context c, ArrayList<Genre> genresList) {
+    public SearchGenresGridAdapter(Context c, ArrayList<Genre> genresList, Fragment mFragment) {
         mContext = c;
         this.genresList = genresList;
+        this.mFragment = mFragment;
     }
 
     private int getGenreDominantClr(Bitmap bitmap) {
@@ -72,6 +78,22 @@ public class SearchGenresGridAdapter extends BaseAdapter {
         genreImage.setImageBitmap(genreImageBitmap);
         genreTitle.setText(genresList.get(position).getTitle());
 
+        genreLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment;
+                if (position > 1) {
+                    fragment = new GenreFragment();
+                } else {
+                    fragment = new ChartsFragment();
+                }
+                mFragment.getParentFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.search_fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         //int h = genreLayout.getHeight();      //For other gradient types
         //int w = genreLayout.getWidth();
 

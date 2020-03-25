@@ -9,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
 import com.vnoders.spotify_el8alaba.models.Genre;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
@@ -21,19 +20,16 @@ import java.util.ArrayList;
  */
 public class SearchGenresFragment extends Fragment {
 
-    TextView genresSearchTextLayout;
-
     public SearchGenresFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_search_genres, container, false);
-        genresSearchTextLayout = v.findViewById(R.id.genres_search_bar_text_view);
+        TextView genresSearchTextLayout = v.findViewById(R.id.genres_search_bar_text_view);
 
         ExpandableHeightGridView topGenresGridView = v
                 .findViewById(R.id.search_top_genres_gridview);
@@ -53,7 +49,9 @@ public class SearchGenresFragment extends Fragment {
         topGenresList.add(new Genre(bitmap7, "Sha3by"));
         topGenresList.add(new Genre(bitmap7, "Sha3by"));
         topGenresList.add(new Genre(bitmap6, "Sha3by"));
-        topGenresGridView.setAdapter(new SearchGenresGridAdapter(getContext(), topGenresList));
+
+        topGenresGridView
+                .setAdapter(new SearchGenresGridAdapter(getContext(), topGenresList, this));
         topGenresGridView.setExpanded(true);
         //setGridViewHeightBasedOnChildren(topGenresGridView, 2);
 
@@ -79,19 +77,18 @@ public class SearchGenresFragment extends Fragment {
         browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
         browseAllGenresList.add(new Genre(bitmap, "Sha3by"));
         browseAllGenresGridView
-                .setAdapter(new SearchGenresGridAdapter(getContext(), browseAllGenresList));
+                .setAdapter(new SearchGenresGridAdapter(getContext(), browseAllGenresList, this));
         browseAllGenresGridView.setExpanded(true);
         //setGridViewHeightBasedOnChildren(browseAllGenresGridView, 2);
 
         genresSearchTextLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment search_fragment = new SearchFragment();
-                FragmentTransaction fT = getActivity().getSupportFragmentManager()
-                        .beginTransaction();
-                fT.add(R.id.search_fragment_container, search_fragment);
-                fT.addToBackStack("search");
-                fT.commit();
+                getParentFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.search_fragment_container, new SearchFragment())
+                        .addToBackStack("search")
+                        .commit();
             }
         });
 

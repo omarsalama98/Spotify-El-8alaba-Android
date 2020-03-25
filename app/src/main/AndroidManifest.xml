@@ -36,7 +36,7 @@
                     android:name = "android.support.PARENT_ACTIVITY"
                     android:value = ".SplashActivity" />
         </activity>
-        <activity android:name = ".Charts" />
+        <activity android:name = ".ChartsFragment" />
         <activity
                 android:name = ".SplashActivity"
                 android:screenOrientation = "portrait"

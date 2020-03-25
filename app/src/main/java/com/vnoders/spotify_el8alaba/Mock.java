@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba;
 
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
+import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,5 +59,43 @@ public class Mock {
 
         return mainListItems;
     }
+
+    public static ArrayList<SearchListItem> getMockSearchData() {
+
+        ArrayList<SearchListItem> myList = new ArrayList<>();
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("DD xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+
+        return myList;
+    }
+
 
 }

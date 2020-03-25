@@ -55,7 +55,6 @@ public class GenrePlaylistsGridAdapter extends BaseAdapter {
 
         playlistTitle.setText(mPlaylists.get(position).getTitle());
         playlistSubTitle.setText(mPlaylists.get(position).getSubTitle());
-        //new DownloadImageTask(playlistImage).execute(mPlaylists.get(position).getImageURL());
         Picasso.get().load(mPlaylists.get(position).getImageURL()).into(playlistImage);
 
         return convertView;
