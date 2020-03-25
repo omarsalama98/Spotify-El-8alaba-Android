@@ -17,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                Intent intent = new Intent(SplashActivity.this, firstScreen.class);
                 startActivity(intent);
             }
         };
