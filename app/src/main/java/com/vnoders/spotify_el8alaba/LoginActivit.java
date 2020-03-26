@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.vnoders.spotify_el8alaba.models.Login_info;
+import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -51,7 +52,7 @@ public class LoginActivit extends AppCompatActivity {
 
     private void login() {
         Login_info login_info = new Login_info(email_address_holder, password_holder);
-        Call<ResponseBody> call = RetrofitClient.getInstance().getAPI().userLogin(login_info);
+        Call<ResponseBody> call = RetrofitClient.getInstance().getAPI(API.class).userLogin(login_info);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
