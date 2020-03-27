@@ -31,6 +31,7 @@ public class firstScreen extends AppCompatActivity {
 
                 Intent intent = new Intent(firstScreen.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
 
         }

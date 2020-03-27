@@ -21,6 +21,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = new Intent(SplashActivity.this, firstScreen.class);
                 startActivity(intent);
+                finish();
             }
         };
         Handler handler = new Handler();

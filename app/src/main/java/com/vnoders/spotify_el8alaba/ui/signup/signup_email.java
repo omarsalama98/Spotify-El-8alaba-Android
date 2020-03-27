@@ -65,7 +65,7 @@ public class signup_email extends AppCompatActivity {
         signup_email_fragment fragment = new signup_email_fragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_container, fragment, "SIGNUP_EMAIL_FRAGMENT").commit();
+        transaction.replace(R.id.fragment_container, fragment, "SIGNUP_EMAIL_FRAGMENT").commit();
 
     }
 
