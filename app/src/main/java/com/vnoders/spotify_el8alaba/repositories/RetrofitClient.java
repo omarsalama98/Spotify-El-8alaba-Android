@@ -3,7 +3,7 @@ package com.vnoders.spotify_el8alaba.repositories;
 import android.os.Build;
 import com.vnoders.spotify_el8alaba.BuildConfig;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 import okhttp3.Interceptor;
@@ -111,13 +111,13 @@ public class RetrofitClient {
 
     private static class HeadersInterceptor implements Interceptor {
 
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new Hashtable<>();
 
-        private HeadersInterceptor(@NotNull OkHttpClient.Builder httpClientBuilder) {
+        HeadersInterceptor(@NotNull OkHttpClient.Builder httpClientBuilder) {
             httpClientBuilder.addInterceptor(this);
         }
 
-        private void addHeader(String header, String value) {
+        void addHeader(String header, String value) {
 
             if (header.equals(HEADER_AUTHORIZATION)) {
                 headers.put(header, TOKEN_BEARER + value);
@@ -126,7 +126,7 @@ public class RetrofitClient {
             }
         }
 
-        private void removeHeader(String header) {
+        void removeHeader(String header) {
             headers.remove(header);
         }
 
