@@ -85,6 +85,11 @@ public class LoginActivit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Remove the windows's background color to reduce overdraw because it is already
+        // being drawn by other views
+        getWindow().setBackgroundDrawable(null);
+
         invalid_email = findViewById(R.id.invalid_email);
         login_button = findViewById(R.id.Login_button);
         login_button.setEnabled(false);

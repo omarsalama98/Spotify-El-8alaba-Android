@@ -12,6 +12,10 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        // Remove the windows's background color to reduce overdraw because it is already
+        // being drawn by other views
+        getWindow().setBackgroundDrawable(null);
+
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {

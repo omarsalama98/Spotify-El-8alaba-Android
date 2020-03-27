@@ -40,6 +40,12 @@ public class firstScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_screen);
+
+        // Remove the windows's background color to reduce overdraw because it is already
+        // being drawn by other views
+        getWindow().setBackgroundDrawable(null);
+
+
         callbackManager = CallbackManager.Factory.create();
         facebook_button = findViewById(R.id.facebook_button);
         facebook_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
