@@ -31,7 +31,7 @@ public class HomeFragment extends Fragment {
         mainListRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mainListRecyclerView.setHasFixedSize(true);
-        mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext()));
+        mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
 
         return root;
     }

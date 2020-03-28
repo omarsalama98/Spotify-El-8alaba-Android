@@ -53,19 +53,14 @@
                     android:textColor = "@color/white"
                     android:textSize = "18sp"
                     android:textStyle = "bold"
-                    android:layout_marginBottom = "10dp"
+                    android:layout_marginBottom = "15dp"
                     android:layout_gravity = "center_horizontal" />
 
-            <com.vnoders.spotify_el8alaba.ExpandableHeightGridView
+            <androidx.recyclerview.widget.RecyclerView
                     android:id = "@+id/genre_playlists_grid_view"
                     android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
-                    android:stretchMode = "columnWidth"
-                    android:horizontalSpacing = "20dp"
-                    android:gravity = "center"
-                    android:paddingStart = "15dp"
-                    android:numColumns = "2"
-                    android:verticalSpacing = "10dp" />
+                    android:overScrollMode = "never" />
 
             <Button
                     android:layout_width = "120dp"
