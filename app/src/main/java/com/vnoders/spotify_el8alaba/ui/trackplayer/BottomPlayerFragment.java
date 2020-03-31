@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
@@ -27,7 +29,8 @@ import com.vnoders.spotify_el8alaba.TrackViewModel;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
 
 /**
- * @author Ali Adel Player that is displayed with main activity at bottom which shows all the time
+ * @author Ali Adel
+ * Player that is displayed with main activity at bottom which shows all the time
  */
 public class BottomPlayerFragment extends Fragment {
 
@@ -51,96 +54,6 @@ public class BottomPlayerFragment extends Fragment {
 
     // seek bar reference
     private SeekBar mSeekbar;
-    /**
-     * Connection to bind with media playback service
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MediaPlaybackService.MediaPlaybackBinder binder =
-                    (MediaPlaybackService.MediaPlaybackBinder) service;
-            mService = binder.getService();
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBound = false;
-        }
-    };
-
-    /**
-     * When triggered go to track player activity
-     */
-    private void goToSongPlayer() {
-        startActivity(new Intent(getContext(), TrackPlayerActivity.class));
-
-        getActivity().overridePendingTransition(R.anim.enter_from_bot, R.anim.exit_to_bot);
-    }
-
-    /**
-     * Updates the UI whenever there is a change in data (Livedata)
-     *
-     * @param track current track being played object
-     */
-    private void updateUI(PlayableTrack track) {
-
-        // reads the track
-        mCurrentTrack = track;
-
-        // loads the image and puts it
-        Picasso.get().load(track.getAlbum().getImages().get(
-                track.getAlbum().getImages().size() - 1).getUrl()).into(songImage);
-
-        // concatenating the song info in 1 string
-        String songInfo = track.getName() + " • " + track.getAlbum().getArtists().get(0).getName();
-        // if it equals the text already displayed then don't display it
-        if (!TextUtils.equals(songInfo, songInfoView.getText())) {
-            songInfoView.setText(songInfo);
-        }
-
-        // puts correct icon in case of playing or paused
-        isPlaying = track.getIsPlaying();
-        if (isPlaying) {
-            playPauseButton.setImageResource(R.drawable.ic_pause_white_24dp);
-        } else {
-            playPauseButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
-        }
-    }
-
-    /**
-     * handles click presses on play_pause button whether starts playing or pauses
-     */
-    private void playPausePressed() {
-        if (isPlaying) {
-            mService.pause();
-        } else {
-            mService.start();
-        }
-    }
-
-    /**
-     * updates UI when called with progress
-     *
-     * @param progress of current track being played holding info
-     */
-    private void updateSeekbar(Integer progress) {
-
-        // get duration and progress of 0-100
-        int songTime = mCurrentTrack.getDuration();
-
-        int progressScaled = progress * 100 / songTime;
-
-        // if SDK is above Nougat can call the set progress with animation
-        // if below then just set it without animation
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // Do something for Nougat and above versions
-            mSeekbar.setProgress(progressScaled, true);
-        } else {
-            // do something for phones running an SDK before lollipop
-            mSeekbar.setProgress(progressScaled);
-        }
-    }
 
     /**
      * Inflating the layout and returning it to the system to display
@@ -177,44 +90,92 @@ public class BottomPlayerFragment extends Fragment {
             }
         });
 
+
         // setting the button player for when swiped skips and if clicked goes to player
-        rootView.findViewById(R.id.bottom_player_container)
-                .setOnTouchListener(new OnSwipeTouchListener(getContext()) {
-                    @Override
-                    public void onSwipeLeft() {
-                        mService.skipToNext();
-                    }
+        rootView.findViewById(R.id.bottom_player_container).setOnTouchListener(new OnSwipeTouchListener(getContext()) {
+            @Override
+            public void onSwipeLeft() {
+                mService.skipToNext();
+            }
 
-                    @Override
-                    public void onSwipeRight() {
-                        mService.skipToPrev();
-                    }
+            @Override
+            public void onSwipeRight() {
+                mService.skipToPrev();
+            }
 
-                    @Override
-                    public void onClick() {
-                        goToSongPlayer();
-                    }
-                });
+            @Override
+            public void onClick() {
+                goToSongPlayer();
+            }
+        });
 
         // get instance of current track and set the observer on it to update UI on data change
-        TrackViewModel.getInstance().getCurrentTrack()
-                .observe(getActivity(), new Observer<PlayableTrack>() {
-                    @Override
-                    public void onChanged(PlayableTrack track) {
-                        updateUI(track);
-                    }
-                });
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<PlayableTrack>() {
+            @Override
+            public void onChanged(PlayableTrack track) {
+                updateUI(track);
+            }
+        });
 
         // watches the progress of song to update seek bar
-        TrackViewModel.getInstance().getTrackProgress()
-                .observe(getActivity(), new Observer<Integer>() {
-                    @Override
-                    public void onChanged(Integer integer) {
-                        updateSeekbar(integer);
-                    }
-                });
+        TrackViewModel.getInstance().getTrackProgress().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                updateSeekbar(integer);
+            }
+        });
 
         return rootView;
+    }
+
+    /**
+     * When triggered go to track player activity
+     */
+    private void goToSongPlayer() {
+        startActivity(new Intent(getContext(), TrackPlayerActivity.class));
+
+        getActivity().overridePendingTransition(R.anim.enter_from_bot, R.anim.exit_to_bot);
+    }
+
+    /**
+     * Updates the UI whenever there is a change in data (Livedata)
+     *
+     * @param track current track being played object
+     */
+    private void updateUI(PlayableTrack track) {
+
+        // reads the track
+        mCurrentTrack = track;
+
+        // loads the image and puts it
+        Picasso.get().load(track.getAlbum().getImages().get(
+                track.getAlbum().getImages().size() - 1).getUrl()).into(songImage);
+
+        // concatenating the song info in 1 string
+        String songInfo = track.getName() + " • " + track.getAlbum().getArtists().get(0).getName();
+        // if it equals the text already displayed then don't display it
+        if (!TextUtils.equals(songInfo, songInfoView.getText()))
+            songInfoView.setText(songInfo);
+
+        // puts correct icon in case of playing or paused
+        isPlaying = track.getIsPlaying();
+        if (isPlaying) {
+            playPauseButton.setImageResource(R.drawable.ic_pause_white_24dp);
+        } else {
+            playPauseButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+        }
+    }
+
+    /**
+     * handles click presses on play_pause button
+     * whether starts playing or pauses
+     */
+    private void playPausePressed() {
+        if (isPlaying) {
+            mService.pause();
+        } else {
+            mService.start();
+        }
     }
 
     @Override
@@ -236,4 +197,45 @@ public class BottomPlayerFragment extends Fragment {
             mBound = false;
         }
     }
+
+    /**
+     * updates UI when called with progress
+     *
+     * @param progress of current track being played holding info
+     */
+    private void updateSeekbar(Integer progress) {
+
+        // get duration and progress of 0-100
+        int songTime = mCurrentTrack.getDuration();
+
+        int progressScaled = progress * 100 / songTime;
+
+        // if SDK is above Nougat can call the set progress with animation
+        // if below then just set it without animation
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // Do something for Nougat and above versions
+            mSeekbar.setProgress(progressScaled, true);
+        } else {
+            // do something for phones running an SDK before lollipop
+            mSeekbar.setProgress(progressScaled);
+        }
+    }
+
+    /**
+     * Connection to bind with media playback service
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MediaPlaybackService.MediaPlaybackBinder binder =
+                    (MediaPlaybackService.MediaPlaybackBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
 }
