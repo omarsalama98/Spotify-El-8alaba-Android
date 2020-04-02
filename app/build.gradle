@@ -58,5 +58,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'com.facebook.android:facebook-login:5.15.3'
+    implementation 'org.jetbrains:annotations:15.0'
 
 }

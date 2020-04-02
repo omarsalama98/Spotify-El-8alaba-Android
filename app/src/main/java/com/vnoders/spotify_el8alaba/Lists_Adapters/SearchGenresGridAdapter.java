@@ -80,7 +80,11 @@ public class SearchGenresGridAdapter extends
                 }
                 mFragment.getParentFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.search_fragment_container, fragment)
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left,
+                                R.anim.slide_in_left,
+                                R.anim.slide_out_right)
+                        .replace(R.id.nav_host_fragment, fragment)
                         .addToBackStack(null)
                         .commit();
             }

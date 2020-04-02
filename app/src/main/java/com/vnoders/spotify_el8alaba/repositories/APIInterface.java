@@ -3,7 +3,6 @@ package com.vnoders.spotify_el8alaba.repositories;
 import com.vnoders.spotify_el8alaba.Artist;
 import com.vnoders.spotify_el8alaba.models.Album;
 import com.vnoders.spotify_el8alaba.models.Category;
-import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -56,10 +55,14 @@ public interface APIInterface {
 
 
     @GET("browse/categories?")
-    Call<ArrayList<Category>> getAllCategories(
+    Call<List<Category>> getAllCategories(
             @Query("country") String country,
             @Query("limit") int limit,                      //All of them are optional I guess
             @Query("offset") int offset
     );
+
+    @GET("browse/categories?")
+    Call<List<Category>> getAllCategories();
+
 
 }

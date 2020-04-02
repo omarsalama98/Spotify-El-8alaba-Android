@@ -6,8 +6,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentManager.OnBackStackChangedListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
@@ -20,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private SearchGenresFragment searchGenresFragment;
     private HomeFragment homeFragment;
     private PremiumFragment premiumFragment;
+    String fragmentName = "home";
 
     private BottomNavigationView navView;
 
@@ -32,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         // Remove the windows's background color to reduce overdraw because it is already
         // being drawn by other views
         getWindow().setBackgroundDrawable(null);
-
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -71,12 +69,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // start service that plays tracks here to get tracks from online and play it
         Intent intent = new Intent(this, MediaPlaybackService.class);
         startService(intent);
     }
 
+    /**
+     * @param fragment the fragment we want to load
+     */
     private void startFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()

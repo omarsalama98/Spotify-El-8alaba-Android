@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,7 +15,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
+import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -31,10 +41,26 @@ public class SearchGenresFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        APIInterface apiService =
+                RetrofitClient.getInstance().getAPI(APIInterface.class);
+
+        Call<List<Category>> call = apiService.getAllCategories();
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                Log.d(TAG, "haha" + response.body().get(0).getName());
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+
+            }
+        });
+
         topGenresGridView
                 .setAdapter(new SearchGenresGridAdapter(Mock.getTopGenres(this), this));
         topGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-
         browseAllGenresGridView
                 .setAdapter(new SearchGenresGridAdapter(Mock.getAllGenres(this), this));
         browseAllGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
@@ -44,7 +70,11 @@ public class SearchGenresFragment extends Fragment {
             public void onClick(View v) {
                 getParentFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.search_fragment_container, new SearchFragment())
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left,
+                                R.anim.slide_in_left,
+                                R.anim.slide_out_right)
+                        .replace(R.id.nav_host_fragment, new SearchFragment())
                         .addToBackStack("search")
                         .commit();
             }

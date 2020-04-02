@@ -35,4 +35,8 @@
         <item name = "colorPrimaryDark">@color/black</item>
     </style>
 
+    <style name = "search_gray">
+        <item name = "color">@color/lightGray</item>
+        <item name = "colorPrimary">@color/lightGray</item>
+    </style>
 </resources>

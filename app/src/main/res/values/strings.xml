@@ -82,4 +82,9 @@
     <string name = "global_viral_50">Global Viral 50</string>
     <string name = "top_charts_by_country">Top Charts by Country</string>
     <string name = "viral_50_by_country">Viral 50 by Country</string>
+    <string name = "playlist_image">Playlist Image</string>
+    <string name = "right_arrow">right arrow</string>
+    <string name = "camera_icon_in_search_bar">Camera Icon in Search Bar</string>
+    <string name = "reset_icon_in_search_bar">Reset Icon in Search Bar</string>
+    <string name = "back_arrow_in_search_bar">Back Arrow in Search Bar</string>
 </resources>

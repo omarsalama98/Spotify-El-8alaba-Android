@@ -73,7 +73,9 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
                 public void onClick(View v) {
                     fragment.getParentFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.home_fragment_container, new PlaylistFragment())
+                            .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                                    R.anim.fade_out)
+                            .replace(R.id.nav_host_fragment, new PlaylistFragment())
                             .addToBackStack(null)
                             .commit();
                 }

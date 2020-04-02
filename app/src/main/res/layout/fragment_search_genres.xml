@@ -9,8 +9,7 @@
             android:layout_height = "match_parent"
             android:layout_width = "match_parent"
             android:orientation = "vertical"
-            android:scrollbars = "vertical"
-            android:background = "@color/darkGray">
+            android:scrollbars = "vertical">
 
         <com.google.android.material.appbar.AppBarLayout
                 android:id = "@+id/genres_app_bar_layout"
@@ -23,7 +22,6 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
-                    android:background = "@drawable/curved_gradient"
                     app:layout_scrollFlags = "scroll|exitUntilCollapsed">
 
                 <TextView
@@ -46,15 +44,14 @@
                     android:id = "@+id/genres_search_bar_text_view"
                     android:layout_width = "match_parent"
                     android:paddingVertical = "15dp"
-                    android:paddingHorizontal = "30dp"
+                    android:paddingHorizontal = "40dp"
                     android:layout_height = "wrap_content"
                     android:textSize = "20sp"
                     android:textStyle = "bold"
                     android:text = "@string/search_artists_songs_or_albums"
                     android:gravity = "center_horizontal"
                     android:textColor = "@color/lightGray"
-                    android:backgroundTint = "@color/white"
-                    android:background = "@drawable/rounded_corner_layout"
+                    android:background = "@drawable/rounded_corner_layout_white"
                     android:drawableTint = "@color/darkGray"
                     android:drawableStart = "@drawable/ic_search_unselected" />
 
