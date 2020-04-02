@@ -2,9 +2,6 @@ package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.SweepGradient;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.ChartsFragment;
+import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.GenreFragment;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Genre;
@@ -33,15 +31,6 @@ public class SearchGenresGridAdapter extends
         SearchGenresGridAdapter.mFragment = fragment;
     }
 
-    private int getGenreDominantClr(Bitmap bitmap) {
-
-        return Palette.from(bitmap).generate().getDominantColor(Color.parseColor("#00FFFF"));
-    }
-
-    private int getGenreVibrantClr(Bitmap bitmap) {
-
-        return Palette.from(bitmap).generate().getVibrantColor(Color.parseColor("#00FFFF"));
-    }
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -61,13 +50,7 @@ public class SearchGenresGridAdapter extends
         holder.genreImage.setImageBitmap(genreImageBitmap);
         holder.genreTitle.setText(genresList.get(position).getTitle());
 
-        ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
-        mDrawable.getPaint().setShader
-                (new SweepGradient(0, 0,
-                        getGenreDominantClr(genreImageBitmap),
-                        getGenreVibrantClr(genreImageBitmap)));
-
-        holder.genreLayout.setBackground(mDrawable);
+        GradientUtils.generate(genreImageBitmap , holder.genreLayout);
 
         holder.genreLayout.setOnClickListener(new OnClickListener() {
             @Override
