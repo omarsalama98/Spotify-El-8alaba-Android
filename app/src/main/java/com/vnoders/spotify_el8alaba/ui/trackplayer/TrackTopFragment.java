@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.google.gson.Gson;
+import com.vnoders.spotify_el8alaba.OverflowFragment;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.TrackViewModel;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
@@ -79,19 +81,11 @@ public class TrackTopFragment extends Fragment {
      * gives it the track object it needs to use as intent extra as json string
      */
     private void startOverflowMenu() {
-        // create intent with overflow activity as destination
-        Intent i = new Intent(getContext(), OverflowActivity.class);
-
-        // make the object into json and put it in string extra in intent
-        Gson gson = new Gson();
-        String track = gson.toJson(TrackViewModel.getInstance().getCurrentTrack().getValue());
-        i.putExtra(OverflowActivity.OVERFLOW_RECEIVED_TRACK, track);
-
-        // start activity and make it a sliding from bottom animation
-        startActivity(i);
-        Activity parentActivity = getActivity();
+        // start fragment and make it a sliding from bottom animation
+        AppCompatActivity parentActivity = (AppCompatActivity)getActivity();
         if (parentActivity != null) {
-            parentActivity.overridePendingTransition(R.anim.enter_from_bot, R.anim.exit_to_bot);
+            OverflowFragment bottomSheetFragment = new OverflowFragment(TrackViewModel.getInstance().getCurrentTrack().getValue());
+            bottomSheetFragment.show(parentActivity.getSupportFragmentManager(), bottomSheetFragment.getTag());
         }
     }
 }

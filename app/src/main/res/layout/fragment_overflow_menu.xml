@@ -2,14 +2,16 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="none">
+    android:layout_height="wrap_content"
+    android:background="#FF000000">
 
     <RelativeLayout
         android:id="@+id/overflow_items_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="20dp"
         android:visibility="visible">
+
 
         <ImageView
             android:id="@+id/overflow_img"
@@ -25,8 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/overflow_img"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
+            android:layout_margin="8dp"
             android:background="@android:color/transparent"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -261,7 +264,7 @@
             android:layout_below="@id/overflow_report"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="32dp"
             android:background="@android:color/transparent"
             android:orientation="horizontal">
 
@@ -283,6 +286,7 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
 
     </RelativeLayout>
 

@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 public interface TrackApi {
 
 
-    @Headers("Authorization: Bearer BQB_LaC6LgaSJcNrffdYaS1ewjz5EQUoJtmkMOI33CK5AfzjtTJ6VsKxUSxLGSjA7A3q6gSOo6KJhRrb7n-7htvMFEshsIvSGl2IleOm7xYKurI-jAYy11YAGPwMcf5rZYCvPbjN5cvkRl4HN0XqIOrtEgEBwuQK5Ng")
+    @Headers("Authorization: Bearer BQAMhMNXb3hIeHk6apM22kZRCct9WgNJtfGzzkg5TrkP_O6ra9RcAiiCAMGHBELjy4fE7uoD4T2cVVAAE9T-HcP_AEywvUe_8K6ZGOTBNv93V3_MGIQGZnwItB9nJ1Gz9cd8tr1AkWCL9GUGLv8KWS4wjUo1RQkEEEA")
     @GET("tracks")
     Call<TrackList> getTracks(@Query("ids") String ids);
 }
