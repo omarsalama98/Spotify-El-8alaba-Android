@@ -1,6 +1,10 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
+import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.BuildConfig;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -108,6 +112,17 @@ public class RetrofitClient {
         }
     }
 
+
+    public static boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager)
+                App.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = null;
+        if (cm != null) {
+            activeNetwork = cm.getActiveNetworkInfo();
+        }
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
 
     private static class HeadersInterceptor implements Interceptor {
 
