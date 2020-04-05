@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
 
-public class PlaylistViewModel extends ViewModel {
+public class PlaylistTracksViewModel extends ViewModel {
 
     private MutableLiveData<List<Track>> tracks = new MutableLiveData<>();
 

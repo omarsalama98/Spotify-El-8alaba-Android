@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistFragment;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import java.util.ArrayList;
 
 public class GenrePlaylistsGridAdapter extends
@@ -75,7 +75,7 @@ public class GenrePlaylistsGridAdapter extends
                 public void onClick(View v) {
                     fragment.getParentFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.search_fragment_container, new PlaylistFragment())
+                            .replace(R.id.search_fragment_container, new PlaylistTracksFragment())
                             .addToBackStack(null)
                             .commit();
                 }

@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PlaylistFragment extends Fragment {
+public class PlaylistTracksFragment extends Fragment {
 
-    private PlaylistViewModel playlistViewModel;
+    private PlaylistTracksViewModel playlistViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        playlistViewModel = new ViewModelProvider(this).get(PlaylistViewModel.class);
+        playlistViewModel = new ViewModelProvider(this).get(PlaylistTracksViewModel.class);
 
         ArrayList<Track> tracks = new ArrayList<>();
 
@@ -51,9 +51,9 @@ public class PlaylistFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_playlist, container, false);
+        View root = inflater.inflate(R.layout.fragment_playlist_tracks, container, false);
 
-        PlaylistAdapter playlistAdapter = new PlaylistAdapter(playlistViewModel.getTracks().getValue());
+        PlaylistTracksAdapter playlistAdapter = new PlaylistTracksAdapter(playlistViewModel.getTracks().getValue());
 
         RecyclerView recyclerView = root.findViewById(R.id.playlist_recycler_view);
 
