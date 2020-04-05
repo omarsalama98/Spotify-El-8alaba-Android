@@ -25,6 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * This is a Singleton wrapper class for {@link Retrofit} and all network related functions
+ */
 public class RetrofitClient {
 
     //    private static final String BASE_URL = "https://my-json-server.typicode.com/MohamedSamiMohamed/MOCKING/";
@@ -47,6 +50,10 @@ public class RetrofitClient {
     private HeadersInterceptor headers;
 
 
+    /**
+     * private constructor for the Singleton design pattern it initializes all requests' needed
+     * headers and caching policy
+     */
     private RetrofitClient() {
         httpClientBuilder = new OkHttpClient.Builder();
 
@@ -71,6 +78,10 @@ public class RetrofitClient {
 
     }
 
+
+    /**
+     * @return Singleton instance of {@link RetrofitClient}
+     */
     public static RetrofitClient getInstance() {
         if (mRetrofitClient == null) {
             synchronized (RetrofitClient.class) {
@@ -84,23 +95,50 @@ public class RetrofitClient {
     }
 
 
+    /**
+     * Create an implementation of the API endpoints defined by the {@code API} interface
+     *
+     * @param API The interface to create its implementation
+     *
+     * @return The implemented class
+     */
     public <T> T getAPI(final Class<T> API) {
         return retrofitBuilder.build().create(API);
     }
 
+
+    /**
+     * Add {@code token} to all upcoming network requests
+     *
+     * @param token The authentication access token to be added to all upcoming requests
+     */
     public void setToken(@NotNull String token) {
         headers.addHeader(HEADER_AUTHORIZATION, token);
     }
 
+
+    /**
+     * Remove the authentication access token from all upcoming requests
+     * <p>
+     * e.g The users logs out
+     */
     public void removeToken() {
         headers.removeHeader(HEADER_AUTHORIZATION);
     }
 
+
+    /**
+     * @return new {@link Cache} instance with max size of {@code cacheSize}
+     */
     private static Cache getCache() {
         long cacheSize = 20 * 1024 * 1024; // 20 MegaBytes
         return new Cache(new File(App.getInstance().getCacheDir(), "Requests Cache"), cacheSize);
     }
 
+
+    /**
+     * @return The User-Agent Header info (Information identifies the device making the request)
+     */
     private String getUserAgent() {
 
         return String.format(Locale.US,
@@ -116,6 +154,10 @@ public class RetrofitClient {
     }
 
 
+    /**
+     * Enables Logging for network requests and responses. This MUST be the last added interceptor
+     * to {@link OkHttpClient} object in order to log the other interceptors
+     */
     private void enableLogging() {
         if (BuildConfig.DEBUG) {
             // Add Logging for debugging purposes
@@ -126,6 +168,9 @@ public class RetrofitClient {
     }
 
 
+    /**
+     * @return whether the user is connected to the internet or not
+     */
     public static boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager)
                 App.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -139,8 +184,7 @@ public class RetrofitClient {
 
 
     /**
-     * This interceptor will be called both if the network is available and if the network is not
-     * available
+     * @return Interceptor that uses cache if no network is available
      */
     private static Interceptor useCachedResponsesInterceptor() {
         return new Interceptor() {
@@ -174,7 +218,8 @@ public class RetrofitClient {
     }
 
     /**
-     * This interceptor will be called ONLY if the network is available
+     * @return Interceptor that cache network responses ONLY if the network is available using
+     * {@link OkHttpClient.Builder#addNetworkInterceptor(Interceptor)}
      */
     private static Interceptor cacheResponsesInterceptor() {
         return new Interceptor() {
@@ -206,6 +251,9 @@ public class RetrofitClient {
     }
 
 
+    /**
+     * Class that allows adding/removing headers for all upcoming HTTP requests
+     */
     private static class HeadersInterceptor implements Interceptor {
 
         Map<String, String> headers = new Hashtable<>();
