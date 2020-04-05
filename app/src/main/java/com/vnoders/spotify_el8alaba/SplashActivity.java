@@ -7,21 +7,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 1500;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        // Remove the windows's background color to reduce overdraw because it is already
+        // being drawn by other views
+        getWindow().setBackgroundDrawable(null);
 
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         };
         Handler handler = new Handler();
+        int SPLASH_TIME_OUT = 1500;
         handler.postDelayed(runnable, SPLASH_TIME_OUT);
     }
 }

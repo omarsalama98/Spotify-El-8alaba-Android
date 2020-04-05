@@ -65,7 +65,7 @@ public class signup_email extends AppCompatActivity {
         signup_email_fragment fragment = new signup_email_fragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_container, fragment, "SIGNUP_EMAIL_FRAGMENT").commit();
+        transaction.replace(R.id.fragment_container, fragment, "SIGNUP_EMAIL_FRAGMENT").commit();
 
     }
 
@@ -73,6 +73,11 @@ public class signup_email extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_email);
+
+        // Remove the windows's background color to reduce overdraw because it is already
+        // being drawn by other views
+        getWindow().setBackgroundDrawable(null);
+
         openFragment();
 
         back = findViewById(R.id.back_button);

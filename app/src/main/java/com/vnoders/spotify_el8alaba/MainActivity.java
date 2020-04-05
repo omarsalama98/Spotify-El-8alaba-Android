@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentManager.OnBackStackChangedListener;
-import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
@@ -17,39 +16,24 @@ import com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    String FRAGMENT_HOME = "fragment_home";
-    String FRAGMENT_OTHER = "fragment_other";
+    private LibraryFragment libraryFragment;
+    private SearchGenresFragment searchGenresFragment;
+    private HomeFragment homeFragment;
+    private PremiumFragment premiumFragment;
 
-    BottomNavigationView navView;
-
-    private void viewFragment(Fragment fragment, String name) {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fT = fragmentManager.beginTransaction();
-        fT.replace(R.id.nav_host_fragment, fragment);
-        final int count = fragmentManager.getBackStackEntryCount();
-        if (name.equals(FRAGMENT_OTHER)) {
-            fT.addToBackStack(name);
-        }
-        fT.commit();
-
-        fragmentManager.addOnBackStackChangedListener(new OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                if (fragmentManager.getBackStackEntryCount() <= count) {
-                    fragmentManager
-                            .popBackStack(FRAGMENT_OTHER, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    fragmentManager.removeOnBackStackChangedListener(this);
-                    navView.getMenu().getItem(0).setChecked(true);
-                }
-            }
-        });
-    }
+    private BottomNavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Remove the windows's background color to reduce overdraw because it is already
+        // being drawn by other views
+        getWindow().setBackgroundDrawable(null);
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         navView = findViewById(R.id.nav_view);
@@ -59,52 +43,47 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        viewFragment(new HomeFragment(), FRAGMENT_HOME);
+                        if (homeFragment == null) {
+                            homeFragment = new HomeFragment();
+                        }
+                        startFragment(homeFragment);
                         return true;
                     case R.id.navigation_search:
-                        viewFragment(new SearchGenresFragment(), FRAGMENT_OTHER);
+                        if (searchGenresFragment == null) {
+                            searchGenresFragment = new SearchGenresFragment();
+                        }
+                        startFragment(searchGenresFragment);
                         return true;
                     case R.id.navigation_your_library:
-                        viewFragment(new LibraryFragment(), FRAGMENT_OTHER);
+                        if (libraryFragment == null) {
+                            libraryFragment = new LibraryFragment();
+                        }
+                        startFragment(libraryFragment);
                         return true;
                     case R.id.navigation_premium:
-                        viewFragment(new PremiumFragment(), FRAGMENT_OTHER);
+                        if (premiumFragment == null) {
+                            premiumFragment = new PremiumFragment();
+                        }
+                        startFragment(premiumFragment);
                         return true;
                 }
                 return false;
             }
         });
 
-        /*AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_search, R.id.navigation_your_library,
-                R.id.navigation_premium)
-                .build();
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
-
-        navController.addOnDestinationChangedListener(new OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller,
-                    @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                getSupportFragmentManager().beginTransaction().addToBackStack(null).commit();
-            }
-        });*/
 
         // start service that plays tracks here to get tracks from online and play it
         Intent intent = new Intent(this, MediaPlaybackService.class);
         startService(intent);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (navView.getSelectedItemId() == R.id.navigation_home) {
-            moveTaskToBack(true);
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);
-        } else {
-            super.onBackPressed();
-        }
+    private void startFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.nav_host_fragment, fragment)
+                .addToBackStack(null)
+                .commit();
+
     }
+
 }

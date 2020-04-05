@@ -30,6 +30,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
+import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import java.util.ArrayList;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -59,47 +60,11 @@ public class SearchFragment extends Fragment {
     private RelativeLayout searchMainBackground;
     private ScrollView searchResultListLayout;
 
-    private ArrayList<SearchListItem> getMockSearchData() {
-
-        ArrayList<SearchListItem> myList = new ArrayList<>();
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("DD xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-
-        return myList;
-    }
-
     @Override
     public void onPause() {
         InputMethodManager imm = (InputMethodManager) getActivity()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         super.onPause();
     }
@@ -127,7 +92,7 @@ public class SearchFragment extends Fragment {
         searchResultListLayout = root.findViewById(R.id.search_result_list_layout);
 
         layoutManager = new LinearLayoutManager(getContext());
-        searchListAdapter = new SearchListAdapter(getMockSearchData());
+        searchListAdapter = new SearchListAdapter(Mock.getMockSearchData());
 
         searchListRecyclerView.setLayoutManager(layoutManager);
         searchListRecyclerView.setAdapter(searchListAdapter);
@@ -170,6 +135,7 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
                 imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
                 getActivity().onBackPressed();
             }
@@ -182,6 +148,7 @@ public class SearchFragment extends Fragment {
                 searchQuery.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         }));
@@ -192,6 +159,7 @@ public class SearchFragment extends Fragment {
                     int oldScrollY) {
                 InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert imm != null;
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
         });

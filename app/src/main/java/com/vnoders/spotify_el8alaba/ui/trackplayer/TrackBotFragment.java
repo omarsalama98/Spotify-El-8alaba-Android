@@ -5,22 +5,26 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.TrackViewModel;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
 
 
 /**
- * @author Ali Adel Bottom part of track player to play music from
+ * @author Ali Adel
+ * Bottom part of track player to play music from
  */
 @SuppressWarnings("deprecation")
 public class TrackBotFragment extends Fragment {
@@ -50,6 +54,73 @@ public class TrackBotFragment extends Fragment {
     private boolean mIsSeeking = false;
 
     /**
+     * inflating layout and return it to system
+     */
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_track_player_bot, container, false);
+
+
+        // setting the texts displayed
+        songNameTextView = rootView.findViewById(R.id.song_name_text);
+
+        authorNameText = rootView.findViewById(R.id.author_name_text_bot);
+
+        // get seek bar and textViews of progress and duration and setting progress to 00:00
+        mSeekbar = rootView.findViewById(R.id.seek_bar);
+        setSeekbarListener();
+        mTrackProgress = rootView.findViewById(R.id.trackProgress);
+        mTrackProgress.setText("00:00");
+        mTrackDuration = rootView.findViewById(R.id.trackDuration);
+
+        // set play_pause button
+        playPauseButton = rootView.findViewById(R.id.play_pause_button);
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pausePlayPressed();
+            }
+        });
+
+        // setting skip to next press
+        mNextButton = rootView.findViewById(R.id.skip_next_button);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                skipToNext();
+            }
+        });
+
+        // setting skip to prev press
+        mPrevButton = rootView.findViewById(R.id.skip_previous_button);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                skipToPrev();
+            }
+        });
+
+        // setting to observe change in global song being played
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<PlayableTrack>() {
+            @Override
+            public void onChanged(PlayableTrack track) {
+                updateUI(track);
+            }
+        });
+
+        // setting to observe change in global song progress
+        TrackViewModel.getInstance().getTrackProgress().observe(getActivity(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                updateSeekbar(integer);
+            }
+        });
+
+        return rootView;
+    }
+
+    /**
      * updates UI when called with track
      *
      * @param track current track being played holding info
@@ -61,21 +132,18 @@ public class TrackBotFragment extends Fragment {
 
         // set next and previous buttons
         if (mCurrentTrack.getHasNext()) {
-            mNextButton
-                    .setBackground(getResources().getDrawable(R.drawable.ic_skip_next_white_56dp));
+            mNextButton.setBackground(getResources().getDrawable(R.drawable.ic_skip_next_white_56dp));
             mNextButton.setClickable(true);
-        } else {
-            mNextButton
-                    .setBackground(getResources().getDrawable(R.drawable.ic_skip_next_grey_56dp));
+        }
+        else {
+            mNextButton.setBackground(getResources().getDrawable(R.drawable.ic_skip_next_grey_56dp));
             mNextButton.setClickable(false);
         }
         if (mCurrentTrack.getHasPrev()) {
-            mPrevButton.setBackground(
-                    getResources().getDrawable(R.drawable.ic_skip_previous_white_56dp));
+            mPrevButton.setBackground(getResources().getDrawable(R.drawable.ic_skip_previous_white_56dp));
             mPrevButton.setClickable(true);
         } else {
-            mPrevButton.setBackground(
-                    getResources().getDrawable(R.drawable.ic_skip_previous_grey_56dp));
+            mPrevButton.setBackground(getResources().getDrawable(R.drawable.ic_skip_previous_grey_56dp));
             mPrevButton.setClickable(false);
         }
 
@@ -84,11 +152,9 @@ public class TrackBotFragment extends Fragment {
         authorNameText.setText(track.getAlbum().getArtists().get(0).getName());
         isPlaying = track.getIsPlaying();
         if (isPlaying) {
-            playPauseButton.setBackground(
-                    getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
+            playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
         } else {
-            playPauseButton.setBackground(
-                    getResources().getDrawable(R.drawable.ic_play_circle_filled_white_82dp));
+            playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_filled_white_82dp));
         }
 
         // get the duration and setting the text view corresponding to it
@@ -123,9 +189,8 @@ public class TrackBotFragment extends Fragment {
     private void updateSeekbar(Integer progress) {
 
         // if user is currently seeking then don't update
-        if (mIsSeeking) {
+        if (mIsSeeking)
             return;
-        }
 
         // get the duration and scale it to 0-100
         int songTime = mCurrentTrack.getDuration();
@@ -178,13 +243,22 @@ public class TrackBotFragment extends Fragment {
         // set the color of progress bar
         mSeekbar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
+        mSeekbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mCurrentTrack == null) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
         mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // if seek from user then change text to update with it
-                if (fromUser) {
+                if (fromUser)
                     setProgressText((progress * mCurrentTrack.getDuration()) / 100);
-                }
             }
 
             @Override
@@ -230,73 +304,5 @@ public class TrackBotFragment extends Fragment {
         progressText = minutesString + ":" + secondsString;
 
         mTrackProgress.setText(progressText);
-    }
-
-    /**
-     * inflating layout and return it to system
-     */
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_track_player_bot, container, false);
-
-        // setting the texts displayed
-        songNameTextView = rootView.findViewById(R.id.song_name_text);
-
-        authorNameText = rootView.findViewById(R.id.author_name_text_bot);
-
-        // get seek bar and textViews of progress and duration and setting progress to 00:00
-        mSeekbar = rootView.findViewById(R.id.seek_bar);
-        setSeekbarListener();
-        mTrackProgress = rootView.findViewById(R.id.trackProgress);
-        mTrackProgress.setText("00:00");
-        mTrackDuration = rootView.findViewById(R.id.trackDuration);
-
-        // set play_pause button
-        playPauseButton = rootView.findViewById(R.id.play_pause_button);
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pausePlayPressed();
-            }
-        });
-
-        // setting skip to next press
-        mNextButton = rootView.findViewById(R.id.skip_next_button);
-        mNextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                skipToNext();
-            }
-        });
-
-        // setting skip to prev press
-        mPrevButton = rootView.findViewById(R.id.skip_previous_button);
-        mPrevButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                skipToPrev();
-            }
-        });
-
-        // setting to observe change in global song being played
-        TrackViewModel.getInstance().getCurrentTrack()
-                .observe(getActivity(), new Observer<PlayableTrack>() {
-                    @Override
-                    public void onChanged(PlayableTrack track) {
-                        updateUI(track);
-                    }
-                });
-
-        // setting to observe change in global song progress
-        TrackViewModel.getInstance().getTrackProgress()
-                .observe(getActivity(), new Observer<Integer>() {
-                    @Override
-                    public void onChanged(Integer integer) {
-                        updateSeekbar(integer);
-                    }
-                });
-
-        return rootView;
     }
 }

@@ -147,7 +147,7 @@ public class signup_email_fragment extends Fragment {
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
                         R.anim.enter_from_right, R.anim.exit_to_right);
                 transaction.addToBackStack(null);
-                transaction.add(R.id.fragment_container, fragment, "SIGNUP_PASSWORD").commit();
+                transaction.replace(R.id.fragment_container, fragment, "SIGNUP_PASSWORD").commit();
 
             }
         });

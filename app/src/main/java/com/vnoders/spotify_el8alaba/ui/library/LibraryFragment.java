@@ -11,25 +11,44 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayout.Tab;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy;
 import com.vnoders.spotify_el8alaba.R;
 
 public class LibraryFragment extends Fragment {
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(getContext(),
-                getChildFragmentManager());
-        ViewPager viewPager = view.findViewById(R.id.view_pager);
+//        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(this);
+        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(getActivity() );
+        ViewPager2 viewPager = view.findViewById(R.id.view_pager);
         viewPager.setAdapter(libraryPagerAdapter);
+
+
+
         TabLayout tabs = view.findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
+
+        new TabLayoutMediator(tabs, viewPager, new TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull Tab tab, int position) {
+                tab.setText(LibraryPagerAdapter.TAB_TITLES[position]);
+            }
+        }).attach();
 
     }
 
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_library, container, false);

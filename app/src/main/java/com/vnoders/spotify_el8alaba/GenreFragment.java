@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.GenrePlaylistsGridAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
  */
 public class GenreFragment extends Fragment {
 
-    private ExpandableHeightGridView genrePlaylistsGridView;
+    private RecyclerView genrePlaylistsGridView;
     private ArrayList<HomeInnerListItem> innerListItems;
 
     public GenreFragment() {
@@ -41,8 +43,8 @@ public class GenreFragment extends Fragment {
 
         genrePlaylistsGridView = root.findViewById(R.id.genre_playlists_grid_view);
         genrePlaylistsGridView
-                .setAdapter(new GenrePlaylistsGridAdapter(getContext(), innerListItems));
-        genrePlaylistsGridView.setExpanded(true);
+                .setAdapter(new GenrePlaylistsGridAdapter(innerListItems, this));
+        genrePlaylistsGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         return root;
     }
