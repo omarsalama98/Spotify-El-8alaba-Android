@@ -15,7 +15,7 @@
             android:layout_marginTop = "@dimen/appbar_padding"
             android:background = "@color/midGray">
         <androidx.appcompat.widget.Toolbar
-                android:id = "@+id/charts_activity_toolbar"
+                android:id = "@+id/charts_fragment_toolbar"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
                 app:navigationIcon = "@drawable/ic_left_arrow" />

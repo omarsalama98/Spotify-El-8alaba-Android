@@ -15,6 +15,7 @@ import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import java.util.ArrayList;
 
+
 public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -37,20 +38,5 @@ public class HomeFragment extends Fragment {
 
 //      Testaya bas
 
-/*
-        APIInterface apiService =
-                APIClient.getClient().create(APIInterface.class);
 
-        Call<List<Artist>> call = apiService.getArtistsofSearch("Hamo Bika","artist");
-        call.enqueue(new Callback<List<Artist>>() {
-            @Override
-            public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
-                Log.d(TAG,"haha"+response.body().get(0).getName());
-            }
 
-            @Override
-            public void onFailure(Call<List<Artist>> call, Throwable t) {
-
-            }
-        });
-        */

@@ -20,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private PremiumFragment premiumFragment;
     String fragmentName = "home";
 
-    private BottomNavigationView navView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        navView = findViewById(R.id.nav_view);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override

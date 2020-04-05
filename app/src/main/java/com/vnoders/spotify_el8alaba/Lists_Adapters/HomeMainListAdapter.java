@@ -33,8 +33,7 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.home_main_list_item, parent, false);
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+        return new MyViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -63,9 +62,9 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
         // each data item is just a string in this case
         public View v;
         public TextView title;
-        public RecyclerView innerList;
+        RecyclerView innerList;
 
-        public MyViewHolder(View v) {
+        MyViewHolder(View v) {
             super(v);
             title = v.findViewById(R.id.home_main_list_item_title);
             innerList = v.findViewById(R.id.home_inner_list_recycler_view);

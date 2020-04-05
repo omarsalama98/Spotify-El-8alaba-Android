@@ -17,7 +17,7 @@ public class ChartsFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_charts, container, false);
 
-        Toolbar toolbar = root.findViewById(R.id.charts_activity_toolbar);
+        Toolbar toolbar = root.findViewById(R.id.charts_fragment_toolbar);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

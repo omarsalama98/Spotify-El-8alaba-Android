@@ -54,7 +54,7 @@ public class SearchGenresFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-
+                Log.d(TAG, "hahaLolo");
             }
         });
 

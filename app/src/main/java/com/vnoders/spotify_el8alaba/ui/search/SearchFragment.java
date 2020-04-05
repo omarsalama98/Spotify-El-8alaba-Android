@@ -60,20 +60,6 @@ public class SearchFragment extends Fragment {
         super.onPause();
     }
 
-    private void openKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        assert imm != null;
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-    }
-
-    private void closeKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        assert imm != null;
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
 
@@ -214,5 +200,25 @@ public class SearchFragment extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * Toggles soft keyboard
+     */
+    private void openKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    /**
+     * @param view the current view where the keyboard is open Hides Soft Keyboard
+     */
+    private void closeKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

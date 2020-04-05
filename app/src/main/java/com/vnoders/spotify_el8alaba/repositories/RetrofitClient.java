@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     //    private static final String BASE_URL = "https://my-json-server.typicode.com/MohamedSamiMohamed/MOCKING/";
-    private static final String BASE_URL = "http://192.168.1.10:8000/api/v1/";
+    private static final String BASE_URL = "http://192.168.0.103:8000/api/v1/";
 
     // Used for information in the User-Agent
     private static final String APP_NAME = "Spotify El8alaba";
