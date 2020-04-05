@@ -68,7 +68,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             mHandler.postDelayed(this, HANDLER_DELAY);
         }
     };
-    ;
+
     // constant which dictates time of handler thread
     private static final int HANDLER_DELAY = 100;
     // know if this is the first init or not
@@ -473,4 +473,3 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     }
 
 }
-

@@ -38,11 +38,10 @@
                 app:tabTextColor = "@color/colorSecondaryText"
                 app:tabIndicatorColor = "@color/colorPrimary"
                 app:tabUnboundedRipple = "false"
-                app:tabRippleColor = "@android:color/black"
-                android:background = "@android:color/black" />
+                app:tabRippleColor = "@android:color/black" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
             android:id = "@+id/view_pager"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"

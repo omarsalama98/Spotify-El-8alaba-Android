@@ -15,6 +15,7 @@
     <string name = "play_button_desc">Play Button</string>
     <string name = "find_the_music_you_love">Find the music you love</string>
     <string name = "search_for_artists_songs">Search for artists, songs, playlists and more.</string>
+    <string name = "search">Search</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name = "hello_blank_fragment">Hello blank fragment</string>
@@ -32,12 +33,40 @@
     <string name = "logInButton">LOG IN</string>
     <string name = "LoginFirstText">Email or username</string>
     <string name = "LoginSecondText">Password</string>
-    <string name = "ForgetPassword">FORGOT YOUR PASSWORD?</string>
+    <string name = "ForgetPassword">Forgot your password?</string>
     <string name = "baseURL">https://my-json-server.typicode.com/MohamedSamiMohamed/MOCKING/</string>
     <string name = "offline">You\'re offline</string>
-    <string name = "check_connection">Check your connection and try again.</string>
+    <string name = "check_connection">Check your connection and try \n again.</string>
     <string name = "OK">OK</string>
-    <string name = "search">Search</string>
+    <string name = "siginup_email_label">Creat account</string>
+    <string name = "email_signup">What\'s your email?</string>
+    <string name = "check_connection_signup">You\'re offline.Check your connection and try again.</string>
+    <string name = "next">next</string>
+    <string name = "confirmation_signup">You\'ll need to confirm this email later.</string>
+    <string name = "invalid_email_signup">This email is invalid.Make sure it\'s written like</string>
+    <string name = "invalid_email_signup2">example@email.com</string>
+    <string name = "signup_password">Create a password</string>
+    <string name = "password_text">Use at least 8 characters.</string>
+    <string name = "password_weak">This password is too weak. Try including numbers, </string>
+    <string name = "password_weak2">symbols or uppercase letters.</string>
+    <string name = "Bdate_signup">What\'s your date of \n birth?</string>
+    <string name = "user_type_signup">What\'s your type?</string>
+    <string name = "birthday_text">Sorry, you don\'t meet Spotify\'s age requirements.</string>
+    <string name = "gender_signup">What\'s your gender?</string>
+    <string name = "male">Male</string>
+    <string name = "female">Female</string>
+    <string name = "name">What\'s your name?</string>
+    <string name = "create_account_text1">This appears on your Spotify\'s profile</string>
+    <string name = "create_account_text2">By creating an account ,you agree to Spotify\'s Terms of</string>
+    <string name = "create_account_text3">Service.</string>
+    <string name = "create_account_text4">To learn more about how Spotify collects, uses, shares \n and protects  your personal data pleas read Spotify\'s</string>
+    <string name = "create_account_text5">Privacy Policy</string>
+    <string name = "CREATE">CREATE</string>
+    <string name = "offline_signup">Something went wrong, please try again later.</string>
+    <string name = "facebook_app_id">561779244683632</string>
+    <string name = "fb_login_protocol_scheme">fb561779244683632</string>
+
+
     <string name = "recent_searches">Recent searches</string>
     <string name = "clear_recent_searches">Clear recent searches</string>
     <string name = "see_all_artists">See all artists</string>
@@ -46,4 +75,24 @@
     <string name = "see_all_albums">See all albums</string>
     <string name = "search_all_genres_and_moods">Search all genres and moods</string>
     <string name = "see_all_profiles">See all profiles</string>
+    <string name = "popular_playlists">Popular playlists</string>
+    <string name = "see_more">See more</string>
+    <string name = "charts">Charts</string>
+    <string name = "featured">Featured</string>
+    <string name = "global_top_50">Global Top 50</string>
+    <string name = "global_viral_50">Global Viral 50</string>
+    <string name = "top_charts_by_country">Top Charts by Country</string>
+    <string name = "viral_50_by_country">Viral 50 by Country</string>
+    <string name = "email_username">Email or username</string>
+    <string name = "forget_password_text1">We\'ll send a link to your email that will log you in.</string>
+    <string name = "get_link">get link</string>
+    <string name = "forget_password_text2">No user found with this name.</string>
+    <string name = "forget_password_text3">There was a network problem,please try again.</string>
+    <string name = "check_your_email">Check your email</string>
+    <string name = "check_email_description">We sent you an email with a link that will log you in at</string>
+    <string name = "open_email_app">open email app</string>
+    <string name = "access_token_preference">ACCESS_TOKEN_PREFERENCE</string>
+    <string name = "login_text1">This email and password combination is \n incorrect.</string>
+    <string name = "artist_type">Artist</string>
+    <string name = "user_type">User</string>
 </resources>

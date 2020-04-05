@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.DownloadImageTask;
+import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.SearchListItem;
 import java.util.ArrayList;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
@@ -27,8 +27,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.search_list_item, parent, false);
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+        return new MyViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -37,7 +36,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
 
         holder.name.setText(mDataset.get(position).getName());
         holder.info.setText(mDataset.get(position).getInfo());
-        new DownloadImageTask(holder.image).execute(mDataset.get(position).getImageURL());
+        Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
 
     }
 
@@ -55,10 +54,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
         // each data item is just a string in this case
         public View v;
         public TextView name;
-        public TextView info;
+        TextView info;
         public ImageView image;
 
-        public MyViewHolder(View v) {
+        MyViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.search_item_name_text_view);
             info = v.findViewById(R.id.search_item_info_text_view);

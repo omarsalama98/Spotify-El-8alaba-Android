@@ -3,21 +3,20 @@ package com.vnoders.spotify_el8alaba;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
 
 /**
- * @author Ali Adel
- * TrackViewModel with singleton pattern to have only 1 instance of current song being played globally
+ * @author Ali Adel TrackViewModel with singleton pattern to have only 1 instance of current song
+ * being played globally
  */
 public class TrackViewModel extends ViewModel {
 
+    // instance for singleton
+    private static TrackViewModel mInstance;
     // mutable live data object to get hold current track
     private MutableLiveData<PlayableTrack> mCurrentTrack;
     // mutable live data object to hold progress of bar
     private MutableLiveData<Integer> mTrackProgress;
-    // instance for singleton
-    private static TrackViewModel mInstance;
 
     /**
      * private constructor for singleton

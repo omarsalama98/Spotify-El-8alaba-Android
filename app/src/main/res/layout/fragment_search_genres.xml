@@ -9,7 +9,6 @@
             android:layout_height = "match_parent"
             android:layout_width = "match_parent"
             android:orientation = "vertical"
-            android:padding = "14dp"
             android:scrollbars = "vertical"
             android:background = "@color/darkGray">
 
@@ -17,7 +16,7 @@
                 android:id = "@+id/genres_app_bar_layout"
                 android:layout_height = "wrap_content"
                 android:layout_width = "match_parent"
-                android:paddingTop = "@dimen/appbar_padding"
+                android:padding = "14dp"
                 android:background = "@drawable/curved_gradient"
                 android:theme = "@style/AppTheme.AppBarOverlay">
 
@@ -64,6 +63,7 @@
         <androidx.core.widget.NestedScrollView
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
+                android:overScrollMode = "never"
                 app:layout_behavior = "@string/appbar_scrolling_view_behavior">
             <LinearLayout
                     android:layout_width = "match_parent"
@@ -76,18 +76,16 @@
                         android:text = "@string/your_top_genres"
                         android:textColor = "@color/white"
                         android:textSize = "20sp"
+                        android:paddingHorizontal = "14dp"
                         android:layout_marginVertical = "10dp"
                         android:textStyle = "bold" />
-                <com.vnoders.spotify_el8alaba.ExpandableHeightGridView
+                <androidx.recyclerview.widget.RecyclerView
                         android:id = "@+id/search_top_genres_gridview"
                         android:layout_width = "match_parent"
                         android:layout_height = "wrap_content"
-                        android:columnWidth = "150dp"
-                        android:numColumns = "2"
-                        android:layout_marginVertical = "10dp"
-                        android:verticalSpacing = "10dp"
                         android:horizontalSpacing = "10dp"
-                        android:stretchMode = "columnWidth"
+                        android:overScrollMode = "never"
+                        android:paddingEnd = "14dp"
                         android:gravity = "center" />
                 <TextView
                         android:layout_width = "match_parent"
@@ -95,18 +93,16 @@
                         android:text = "@string/browse_all"
                         android:textColor = "@color/white"
                         android:layout_marginVertical = "10dp"
+                        android:paddingHorizontal = "14dp"
                         android:textSize = "20sp"
                         android:textStyle = "bold" />
-                <com.vnoders.spotify_el8alaba.ExpandableHeightGridView
+                <androidx.recyclerview.widget.RecyclerView
                         android:id = "@+id/search_browse_all_genres_gridview"
-                        android:layout_width = "fill_parent"
-                        android:layout_height = "fill_parent"
-                        android:columnWidth = "150dp"
-                        android:numColumns = "2"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "wrap_content"
                         android:isScrollContainer = "false"
-                        android:verticalSpacing = "10dp"
-                        android:horizontalSpacing = "10dp"
-                        android:stretchMode = "columnWidth"
+                        android:paddingEnd = "14dp"
+                        android:overScrollMode = "never"
                         android:gravity = "center" />
 
             </LinearLayout>

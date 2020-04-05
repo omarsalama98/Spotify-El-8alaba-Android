@@ -12,7 +12,7 @@
         android:name="com.vnoders.spotify_el8alaba.ui.trackplayer.BottomPlayerFragment"
         android:layout_width="match_parent"
         android:background="@color/black"
-        android:layout_height="56dp"
+            android:layout_height = "56dp"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -34,34 +34,34 @@
 
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/music_player_fragment"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            app:layout_constraintBottom_toTopOf = "@+id/music_player_fragment"
+            app:layout_constraintLeft_toLeftOf = "parent"
+            app:layout_constraintRight_toRightOf = "parent"
+            app:layout_constraintTop_toTopOf = "parent">
 
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/mobile_navigation" />
+        <androidx.fragment.app.FragmentContainerView
+                android:id = "@+id/nav_host_fragment"
+                android:name = "androidx.navigation.fragment.NavHostFragment"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                app:defaultNavHost = "true"
+                app:navGraph = "@navigation/mobile_navigation" />
 
         <SeekBar
-            android:id="@+id/seek_bar_bottom_player"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:progressTint="@color/white"
-            android:paddingStart="0dp"
-            android:paddingEnd="0dp"
-            android:splitTrack="false"
-            android:background="@android:color/transparent"
-            android:thumb="@android:color/transparent"
-            android:thumbTint="@android:color/transparent"
-            android:layout_gravity="bottom"
-            app:layout_constraintBottom_toTopOf="@+id/music_player_fragment" />
+                android:id = "@+id/seek_bar_bottom_player"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:progressTint = "@color/white"
+                android:paddingStart = "0dp"
+                android:paddingEnd = "0dp"
+                android:splitTrack = "false"
+                android:background = "@android:color/transparent"
+                android:thumb = "@android:color/transparent"
+                android:thumbTint = "@android:color/transparent"
+                android:layout_gravity = "bottom"
+                app:layout_constraintBottom_toTopOf = "@+id/music_player_fragment" />
 
     </FrameLayout>
 
