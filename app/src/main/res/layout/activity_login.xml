@@ -10,6 +10,7 @@
         tools:context = ".LoginActivity">
 
 <ImageButton
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
         android:id="@+id/back_button"
         android:layout_width = "wrap_content"
@@ -90,8 +91,14 @@
 
 </com.google.android.material.textfield.TextInputLayout>
 
-
-
+<TextView
+        android:textSize="15sp"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/login_status"
+        />
     <Button
             android:id="@+id/Login_button"
             android:layout_width = "120dp"
@@ -103,12 +110,14 @@
     />
 
     <Button
+            android:id="@+id/forget_password"
             android:layout_width = "200dp"
             android:layout_height = "20dp"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:background="@drawable/custom_face"
             android:text="@string/ForgetPassword"
+            android:textAllCaps="true"
             android:textColor="@color/white"
     />
 

@@ -14,6 +14,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.vnoders.spotify_el8alaba.ui.login.LoginActivit;
 import com.vnoders.spotify_el8alaba.ui.signup.signup_email;
 
 public class firstScreen extends AppCompatActivity {
@@ -22,6 +23,7 @@ public class firstScreen extends AppCompatActivity {
     private Button sign_up_button;
     private LoginButton facebook_button;
     private CallbackManager callbackManager;
+
     AccessTokenTracker tokenTracker = new AccessTokenTracker() {
         @Override
         protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,

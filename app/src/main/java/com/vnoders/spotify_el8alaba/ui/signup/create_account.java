@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba.ui.signup;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,12 +13,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.signup_info;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import com.vnoders.spotify_el8alaba.response.signup.signup_response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,11 +35,14 @@ public class create_account extends Fragment {
     private String birth_date;
     private String gender;
     private String type;
-
     private Button create;
     private EditText name;
     private String name_holder;
-    //private TextView first;
+    private ImageButton back;
+    private FragmentManager fragmentManager;
+    SharedPreferences sharedPreferences;
+
+
     private TextWatcher create_account_watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -42,7 +51,8 @@ public class create_account extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            create.setEnabled(true);
+            name_holder=name.getText().toString().trim();
+            create.setEnabled(!name_holder.isEmpty());
         }
 
         @Override
@@ -62,8 +72,10 @@ public class create_account extends Fragment {
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_account, container, false);
         //first = view.findViewById(R.id.text1);
+        sharedPreferences=getActivity().getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
         name = view.findViewById(R.id.name_create_account);
         create = view.findViewById(R.id.create_button);
+        back=getActivity().findViewById(R.id.back_button);
         create.setEnabled(false);
         create.setOnClickListener(new OnClickListener() {
             @Override
@@ -72,18 +84,23 @@ public class create_account extends Fragment {
                 email_address = ((signup_email) getActivity()).getEmail_address();
                 password = ((signup_email) getActivity()).getPassword();
                 birth_date = ((signup_email) getActivity()).getBirth_date();
-                type = "artist";
+                type = ((signup_email)getActivity()).getType();
                 gender = ((signup_email) getActivity()).getGender();
 
                 signup_info signup_info = new signup_info(name_holder, email_address, password,
-                        password, gender, "1999-03-25T00:00:00.000Z", type);
+                        password, gender, birth_date, type);
 
-                Call<ResponseBody> call = RetrofitClient.getInstance().getAPI().signup(signup_info);
-                call.enqueue(new Callback<ResponseBody>() {
+                Call<signup_response> call = RetrofitClient.getInstance().getAPI().signup(signup_info);
+                call.enqueue(new Callback<signup_response>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call,
-                            Response<ResponseBody> response) {
+                    public void onResponse(Call<signup_response> call,
+                            Response<signup_response> response) {
                         if (response.code() == 200) {
+                            signup_response signup_response =response.body();
+                            String token =signup_response.getToken();
+                            SharedPreferences.Editor editor=sharedPreferences.edit();
+                            editor.putString("token",token);
+                            editor.commit();
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             startActivity(intent);
                         } else {
@@ -93,7 +110,7 @@ public class create_account extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<signup_response> call, Throwable t) {
 
                         signup_dialog dialog = new signup_dialog();
                         dialog.show(getFragmentManager(), "signup_dialog");
@@ -103,7 +120,17 @@ public class create_account extends Fragment {
 
             }
         });
-        name.addTextChangedListener(create_account_watcher);
+
+    back.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            fragmentManager=getActivity().getSupportFragmentManager();
+            fragmentManager.popBackStack();
+        }
+    });
+
+          name.addTextChangedListener(create_account_watcher);
+
         return view;
     }
 }

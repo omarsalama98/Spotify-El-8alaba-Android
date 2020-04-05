@@ -31,12 +31,16 @@ public class signup_email_fragment extends Fragment {
     private TextView signup_email_status;
     private TextView signup_email_status2;
     private EditText signup_email;
-    private Button next;
+    private static Button next;
     private ImageButton back;
     private ConnectivityManager connectivityManager;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
     private WifiManager wifiManager;
     String email_address_holder;
     boolean isConnected;
+
+
     private TextWatcher signup_email_watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -45,7 +49,7 @@ public class signup_email_fragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            CheckConnection();
+           CheckConnection();
             if (!isConnected) {
                 signup_email_status
                         .setText(getResources().getString(R.string.check_connection_signup));
@@ -74,7 +78,7 @@ public class signup_email_fragment extends Fragment {
 
         }
     };
-    private BroadcastReceiver network_reciever = new BroadcastReceiver() {
+     private BroadcastReceiver network_reciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             CheckConnection();
@@ -82,10 +86,18 @@ public class signup_email_fragment extends Fragment {
                 signup_email_status
                         .setText(getResources().getString(R.string.check_connection_signup));
                 signup_email_status2.setText("");
+                next.setEnabled(false);
+            }
+            else{
+                signup_email_status.setText(getResources().getString(R.string.confirmation_signup));
             }
 
         }
     };
+
+    /**
+     * This method check if there is internet connection or not via wifi or mobile data
+     */
 
     private void CheckConnection() {
         connectivityManager = (ConnectivityManager) getActivity()
@@ -96,20 +108,23 @@ public class signup_email_fragment extends Fragment {
                 == State.CONNECTED;
     }
 
+    /**
+     * This method checks if the email address matches the format of a right email address or not
+     * @param email_address user's email address
+     * @return true if the email address matches , false otherwise
+     */
     private boolean isvalid(String email_address) {
         return (Patterns.EMAIL_ADDRESS.matcher(email_address).matches());
     }
 
-    private void goback() {
-        Intent intent = new Intent(getActivity(), firstScreen.class);
-        startActivity(intent);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -128,26 +143,29 @@ public class signup_email_fragment extends Fragment {
             signup_email_status.setText(getResources().getString(R.string.confirmation_signup));
             signup_email_status2.setText("");
         } else {
+
             signup_email_status.setText(getResources().getString(R.string.check_connection_signup));
             signup_email_status2.setText("");
         }
 
-        /*    back.setOnClickListener(new OnClickListener() {
+        back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
-        });*/
+          Intent intent=new Intent(getActivity(),firstScreen.class);
+          startActivity(intent);
+            }
+        });
         next.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((signup_email) getActivity()).setEmail_address(email_address_holder);
                 signup_password fragment = new signup_password();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                fragmentManager = getActivity().getSupportFragmentManager();
+                transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
                         R.anim.enter_from_right, R.anim.exit_to_right);
                 transaction.addToBackStack(null);
-                transaction.add(R.id.fragment_container, fragment, "SIGNUP_PASSWORD").commit();
+                transaction.replace(R.id.fragment_container, fragment, "SIGNUP_PASSWORD").commit();
 
             }
         });
@@ -155,8 +173,8 @@ public class signup_email_fragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
+   @Override
+   public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
         getActivity().registerReceiver(network_reciever, intentFilter);
