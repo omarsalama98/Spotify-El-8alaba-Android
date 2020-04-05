@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 
 public class signup_password extends Fragment {
-
+    private FragmentManager fragmentManager;
     private TextView password_status;
     private TextView password_status2;
     private Button next;
@@ -37,6 +37,7 @@ public class signup_password extends Fragment {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             password_holder = password_text.getText().toString().trim();
             if (password_holder.length() < 8) {
+                next.setEnabled(false);
                 password_status.setText(getResources().getString(R.string.password_text));
                 password_status2.setText("");
             } else {
@@ -45,6 +46,7 @@ public class signup_password extends Fragment {
                     password_status2.setText("");
                     next.setEnabled(true);
                 } else {
+                    next.setEnabled(false);
                     password_status.setText(getResources().getString(R.string.password_weak));
                     password_status2.setText(getResources().getString(R.string.password_weak2));
 
@@ -77,8 +79,10 @@ public class signup_password extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        fragmentManager = getActivity().getSupportFragmentManager();
+
         View view = inflater.inflate(R.layout.fragment_signup_password, container, false);
-        back_button = getActivity().findViewById(R.id.back_button);
+        back_button =getActivity().findViewById(R.id.back_button);
         next = view.findViewById(R.id.next_button);
         next.setEnabled(false);
         password_status = view.findViewById(R.id.password_status);
@@ -90,7 +94,6 @@ public class signup_password extends Fragment {
             public void onClick(View v) {
                 ((signup_email) getActivity()).setPassword(password_holder);
                 signup_birthdate fragment = new signup_birthdate();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
                         R.anim.enter_from_right, R.anim.exit_to_right);
@@ -100,16 +103,13 @@ public class signup_password extends Fragment {
         });
 
 
-  /*     back_button.setOnClickListener(new OnClickListener() {
+           back_button.setOnClickListener(new OnClickListener() {
            @Override
+
            public void onClick(View v) {
-               signup_email_fragment fragment= new signup_email_fragment();
-               FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-               FragmentTransaction transaction = fragmentManager.beginTransaction();
-               transaction.setCustomAnimations(R.anim.exit_to_right,R.anim.enter_from_right,R.anim.exit_to_right,R.anim.enter_from_right);
-               transaction.add(R.id.fragment_container, fragment, "SIGNUP_EMAIL_FRAGMENT").commit();
+           fragmentManager.popBackStack();
            }
-       });*/
+       });
         password_text = view.findViewById(R.id.password_edit_text);
 
         password_text.addTextChangedListener(signup_password_watcher);

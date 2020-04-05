@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:background = "@color/darkGray"
+        android:orientation="vertical"
+        tools:context = ".ui.signup.user_type">
+    <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:text = "@string/user_type_signup"
+            android:textColor = "@color/white"
+            android:textSize = "30sp"
+            android:layout_marginTop = "25dp"
+            android:layout_marginLeft = "15dp"
+            android:textStyle = "bold" />
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation = "horizontal">
+
+        <Button
+                android:id = "@+id/artist"
+                android:layout_marginLeft = "15dp"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop = "25dp"
+                android:background = "@drawable/gender_selected"
+                android:text = "@string/artist_type"
+                android:textColor = "@color/white" />
+        <Button
+                android:id = "@+id/user"
+                android:layout_marginLeft = "15dp"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop = "25dp"
+                android:background = "@drawable/gender_selected"
+                android:text = "@string/user_type"
+                android:textColor = "@color/white" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
