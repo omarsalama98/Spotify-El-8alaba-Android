@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.signup_info;
+import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.signup.signup_response;
 import okhttp3.ResponseBody;
@@ -90,8 +91,9 @@ public class create_account extends Fragment {
                 signup_info signup_info = new signup_info(name_holder, email_address, password,
                         password, gender, birth_date, type);
 
-                Call<signup_response> call = RetrofitClient.getInstance().getAPI().signup(signup_info);
+                Call<signup_response> call = RetrofitClient.getInstance().getAPI(API.class).signup(signup_info);
                 call.enqueue(new Callback<signup_response>() {
+
                     @Override
                     public void onResponse(Call<signup_response> call,
                             Response<signup_response> response) {

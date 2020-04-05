@@ -33,7 +33,9 @@ public class signup_gender extends Fragment {
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
                 R.anim.enter_from_right, R.anim.exit_to_right);
         transaction.addToBackStack(null);
+
         transaction.replace(R.id.fragment_container, fragment, "USER_TYPE").commit();
+
 
     }
 

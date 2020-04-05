@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
@@ -15,11 +16,14 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
 
     private ArrayList<HomeMainListItem> mDataset;
     private Context context;
+    private Fragment fragment;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public HomeMainListAdapter(ArrayList<HomeMainListItem> myDataset, Context context) {
+    public HomeMainListAdapter(ArrayList<HomeMainListItem> myDataset, Context context,
+            Fragment fragment) {
         mDataset = myDataset;
         this.context = context;
+        this.fragment = fragment;
     }
 
     // Create new views (invoked by the layout manager)
@@ -39,7 +43,7 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
 
         holder.title.setText(mDataset.get(position).getTitle());
         holder.innerList.setAdapter(
-                new HomeInnerListAdapter(mDataset.get(position).getInnerListItems(), context));
+                new HomeInnerListAdapter(mDataset.get(position).getInnerListItems(), fragment));
         holder.innerList.setLayoutManager(
                 new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 

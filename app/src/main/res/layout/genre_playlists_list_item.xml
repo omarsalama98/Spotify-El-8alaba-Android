@@ -4,12 +4,12 @@
         android:foreground = "@drawable/home_playlists_ripple"
         android:paddingEnd = "10dp"
         android:focusable = "true"
-        android:layout_width = "175dp"
+        android:layout_width = "190dp"
         android:layout_height = "240dp">
 
     <ImageView
             android:id = "@+id/genre_playlists_item_image"
-            android:layout_width = "175dp"
+            android:layout_width = "190dp"
             android:layout_height = "175dp" />
     <LinearLayout
             android:layout_width = "match_parent"

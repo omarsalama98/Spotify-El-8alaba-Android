@@ -71,6 +71,7 @@ public class signup_birthdate extends Fragment {
                 transaction.addToBackStack(null);
                 transaction.replace(R.id.fragment_container, fragment, "SIGNUP_GENDER").commit();
 
+
             }
         });
 

@@ -3,18 +3,17 @@
         xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
-        android:background = "@color/darkGray"
         android:orientation = "vertical"
         tools:context = ".ui.signup.signup_email">
     <RelativeLayout
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:orientation = "horizontal"
-            android:layout_marginTop = "25dp"
-            android:layout_marginVertical = "40dp"
+
 
             >
         <ImageButton
+                android:layout_marginTop = "20dp"
 
                 android:id = "@+id/back_button"
                 android:layout_width = "wrap_content"
@@ -22,10 +21,11 @@
                 android:src = "@drawable/ic_left_arrow"
                 android:background = "@android:color/transparent" />
         <TextView
+                android:layout_marginTop = "40dp"
 
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
-                android:layout_gravity = "center_horizontal"
+                android:gravity = "center_horizontal"
                 android:text = "@string/siginup_email_label"
                 android:textColor = "@color/white"
                 android:textSize = "15sp"
@@ -37,7 +37,6 @@
             android:id = "@+id/fragment_container"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
-
             >
 
     </androidx.fragment.app.FragmentContainerView>

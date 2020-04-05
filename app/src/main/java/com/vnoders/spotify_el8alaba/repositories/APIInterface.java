@@ -46,7 +46,7 @@ public interface APIInterface {
     );
 
 
-    @GET("/search?")
+    @GET("search?")
     Call<List<Artist>> getAllOfSearch(
             @Query("q") String searchQuery,
             @Query("type") String searchType,
@@ -55,7 +55,7 @@ public interface APIInterface {
     );
 
 
-    @GET("/browse/categories?")
+    @GET("browse/categories?")
     Call<ArrayList<Category>> getAllCategories(
             @Query("country") String country,
             @Query("limit") int limit,                      //All of them are optional I guess

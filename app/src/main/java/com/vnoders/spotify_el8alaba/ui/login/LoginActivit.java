@@ -19,6 +19,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.connection_dialog;
 import com.vnoders.spotify_el8alaba.firstScreen;
 import com.vnoders.spotify_el8alaba.models.Login_info;
+import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.signup.signup_response;
 import okhttp3.ResponseBody;
@@ -27,6 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivit extends AppCompatActivity {
+
 
     private TextView login_status;
     private EditText email_edit_text;
@@ -60,7 +62,7 @@ public class LoginActivit extends AppCompatActivity {
 
     private void login() {
         Login_info login_info = new Login_info(email_address_holder, password_holder);
-    Call<signup_response> call=RetrofitClient.getInstance().getAPI().userLogin(login_info);
+    Call<signup_response> call=RetrofitClient.getInstance().getAPI(API.class).userLogin(login_info);
     call.enqueue(new Callback<signup_response>() {
         @Override
         public void onResponse(Call<signup_response> call, Response<signup_response> response) {
@@ -72,6 +74,7 @@ public class LoginActivit extends AppCompatActivity {
                 editor.commit();
                 Intent intent = new Intent(LoginActivit.this, MainActivity.class);
                 startActivity(intent);
+
             }
             else{
                 login_status.setText(getResources().getString(R.string.login_text1));
@@ -101,8 +104,14 @@ public class LoginActivit extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         login_status=(TextView)findViewById(R.id.login_status);
         sharedPreferences=getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
+
+
+        // Remove the windows's background color to reduce overdraw because it is already
+        // being drawn by other views
+        getWindow().setBackgroundDrawable(null);
         invalid_email = findViewById(R.id.invalid_email);
         login_button = findViewById(R.id.Login_button);
         forget_password=findViewById(R.id.forget_password);

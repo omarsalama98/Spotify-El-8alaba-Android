@@ -18,8 +18,6 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
-    private RecyclerView mainListRecyclerView;
-    private ArrayList<HomeMainListItem> mainListItems;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -27,13 +25,13 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mainListItems = Mock.getMainHomeList();
+        ArrayList<HomeMainListItem> mainListItems = Mock.getMainHomeList();
 
-        mainListRecyclerView = root.findViewById(R.id.home_main_list_recycler_view);
+        RecyclerView mainListRecyclerView = root.findViewById(R.id.home_main_list_recycler_view);
         mainListRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mainListRecyclerView.setHasFixedSize(true);
-        mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext()));
+        mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
 
         return root;
     }
