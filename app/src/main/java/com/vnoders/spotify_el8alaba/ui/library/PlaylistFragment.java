@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Track;
+import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -13,20 +13,25 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Playlist;
+import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHolder> {
 
-    private List<Playlist> playlists;
+    private List<UserLibraryPlaylistItem> playlists;
     private Fragment fragment;
 
-    public LibraryPlaylistAdapter(ArrayList<Playlist> playlists, Fragment fragment) {
-        this.playlists = playlists;
+    public LibraryPlaylistAdapter(Fragment fragment) {
+        playlists = new ArrayList<>();
         this.fragment = fragment;
+    }
+
+    public void setUserPlaylists(List<UserLibraryPlaylistItem> playlists) {
+        this.playlists = playlists;
     }
 
     @NonNull
@@ -43,7 +48,9 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
         holder.playlistName.setText(playlists.get(position).getName());
-        holder.playlistInfo.setText(playlists.get(position).getInfo());
+        holder.playlistInfo.setText( "by " + playlists.get(position).getOwner().getName());
+        String imageUrl = playlists.get(position).getImages().get(0).getUrl();
+        Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock).into(holder.playlistArt);
     }
 
     @Override

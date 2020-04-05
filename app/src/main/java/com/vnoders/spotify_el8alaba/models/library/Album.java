@@ -1,4 +1,4 @@
-package com.vnoders.spotify_el8alaba.models;
+package com.vnoders.spotify_el8alaba.models.library;
 
 import android.media.Image;
 import com.google.gson.annotations.SerializedName;

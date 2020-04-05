@@ -1,4 +1,4 @@
-package com.vnoders.spotify_el8alaba.models;
+package com.vnoders.spotify_el8alaba.models.library;
 
 public class Playlist {
 

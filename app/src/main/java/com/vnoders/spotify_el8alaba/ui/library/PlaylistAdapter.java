@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Track;
+import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistAdapter.TrackViewHolder;
 import java.util.List;
 

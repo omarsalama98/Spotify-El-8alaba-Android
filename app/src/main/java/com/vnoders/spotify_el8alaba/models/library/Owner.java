@@ -1,12 +1,15 @@
-package com.vnoders.spotify_el8alaba.models;
+
+package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.annotations.SerializedName;
-import java.util.List;
 
-public class Artist {
+public class Owner {
 
-    @SerializedName("genres")
-    private List<String> genres = null;
+    @SerializedName("external_urls")
+    private ExternalUrls externalUrls;
+
+    @SerializedName("display_name")
+    private String name;
 
     @SerializedName("href")
     private String href;
@@ -14,24 +17,18 @@ public class Artist {
     @SerializedName("id")
     private String id;
 
-    @SerializedName("name")
-    private String name;
-
-    @SerializedName("popularity")
-    private int popularity;
-
     @SerializedName("type")
     private String type;
 
     @SerializedName("uri")
     private String uri;
 
-    public List<String> getGenres() {
-        return genres;
+    public ExternalUrls getExternalUrls() {
+        return externalUrls;
     }
 
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
+    public void setExternalUrls(ExternalUrls externalUrls) {
+        this.externalUrls = externalUrls;
     }
 
     public String getHref() {
@@ -50,22 +47,6 @@ public class Artist {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(int popularity) {
-        this.popularity = popularity;
-    }
-
     public String getType() {
         return type;
     }
@@ -81,6 +62,12 @@ public class Artist {
     public void setUri(String uri) {
         this.uri = uri;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
-
-
