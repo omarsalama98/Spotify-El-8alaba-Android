@@ -12,4 +12,9 @@
     <dimen name = "genre_item_height">100dp</dimen>
     <dimen name = "search_list_item_title">17sp</dimen>
     <dimen name = "home_list_title_size">23sp</dimen>
+
+    <dimen name = "status_bar_height">24dp</dimen>
+    <dimen name = "icon_size">40dp</dimen>
+    <dimen name = "icon_padding">8dp</dimen>
+
 </resources>
