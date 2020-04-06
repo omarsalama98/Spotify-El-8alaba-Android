@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.Target;
 import java.lang.ref.WeakReference;
 
 /**
@@ -93,6 +96,35 @@ public class GradientUtils {
         generate(bitmap, view, gradientType);
     }
 
+    /**
+     * @param imageUrl Url to get the bitmap from it to generate the gradient colors
+     * @param view     The view which we will change its background by the generated gradient
+     */
+    public static void generate(String imageUrl, View view) {
+        generate(imageUrl, view, GRADIENT_SWEEP);
+    }
+
+    /**
+     * @param imageUrl     Url to get the bitmap from it to generate the gradient colors
+     * @param view         The view which we will change its background by the generated gradient
+     * @param gradientType type of the generated gradient
+     */
+    public static void generate(String imageUrl, View view, int gradientType) {
+        Picasso.get().load(imageUrl).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, LoadedFrom from) {
+                generate(bitmap, view, gradientType);
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        });
+    }
 
     /**
      * Generates a gradient from bitmap image and sets this gradient as a background to the passed
