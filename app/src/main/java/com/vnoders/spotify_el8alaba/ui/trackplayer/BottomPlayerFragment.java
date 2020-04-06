@@ -145,6 +145,9 @@ public class BottomPlayerFragment extends Fragment {
      */
     private void updateUI(RealTrack track) {
 
+        if (track == null)
+            return;
+
         // reads the track
         mCurrentTrack = track;
 

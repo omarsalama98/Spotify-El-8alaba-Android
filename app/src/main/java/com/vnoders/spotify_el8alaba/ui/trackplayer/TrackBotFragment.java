@@ -128,6 +128,9 @@ public class TrackBotFragment extends Fragment {
      */
     private void updateUI(RealTrack track) {
 
+        if (track == null)
+            return;
+
         // get track
         mCurrentTrack = track;
 

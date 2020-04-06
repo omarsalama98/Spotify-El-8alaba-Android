@@ -38,10 +38,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MediaPlaybackService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
-    private static final String ACCESS_TOKEN = "20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODc1Y2JlYWM0YzgxNzZhMjZlYTQxZSIsImlhdCI6MTU4NjE3ODE5MywiZXhwIjoxNTkzOTU0MTkzfQ.X50VocndQ0Msg4xgnV_5yvUOM44r4tP-33WTu4-z77U";
+    private static final String ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODc1Y2JlYWM0YzgxNzZhMjZlYTQxZSIsImlhdCI6MTU4NjE4MzI4NiwiZXhwIjoxNTkzOTU5Mjg2fQ.40IcvhR1rEe8feR9lfsaaKbYoN65U9bEJL4wB3c6PzE";
 
     private static final String PLAYER_STREAMING_BASE_URL = RetrofitClient.BASE_URL + "streaming/";
-    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer%";
+    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer%20";
 
     //______________________________________________________________________________________________
     //--------------------------------------Variables-----------------------------------------------
@@ -330,13 +330,15 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         request.enqueue(new Callback<CurrentlyPlayingTrack>() {
             @Override
             public void onResponse(Call<CurrentlyPlayingTrack> call, Response<CurrentlyPlayingTrack> response) {
-                if (!response.isSuccessful()) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
                     Toast.makeText(MediaPlaybackService.this, "Failed to get current track", Toast.LENGTH_SHORT).show();
                     stopSelf();
+                    return;
                 }
                 RealTrack track = response.body().getCurrentTrackWrapper().getCurrentTrack();
                 TrackViewModel.getInstance().updateCurrentTrack(track);
                 mCurrentTrack = track;
+                mFirstInit = true;
                 tracksID = new ArrayList<>();
                 tracksID.add(track.getId());
                 mCurrentTrackIndex = 0;

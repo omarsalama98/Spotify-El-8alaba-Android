@@ -73,6 +73,10 @@ public class TrackTopFragment extends Fragment {
      * @param track current track being played holding info
      */
     private void updateUI(RealTrack track) {
+
+        if (track == null)
+            return;
+
         authorNameText.setText(track.getArtists().get(0).getUserInfo().getName());
     }
 
