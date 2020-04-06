@@ -145,8 +145,12 @@ public class BottomPlayerFragment extends Fragment {
      */
     private void updateUI(RealTrack track) {
 
-        if (track == null)
+        if (track == null) {
+            getActivity().findViewById(R.id.music_player_fragment).setVisibility(View.GONE);
             return;
+        }
+
+        getActivity().findViewById(R.id.music_player_fragment).setVisibility(View.VISIBLE);
 
         // reads the track
         mCurrentTrack = track;

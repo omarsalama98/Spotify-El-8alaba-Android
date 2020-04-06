@@ -53,6 +53,9 @@ public class TrackViewModel extends ViewModel {
      * @param track track object that is changed
      */
     public void updateCurrentTrack(RealTrack track) {
+        if (mCurrentTrack == null) {
+            mCurrentTrack = new MutableLiveData<>();
+        }
         mCurrentTrack.postValue(track);
     }
 
@@ -73,6 +76,9 @@ public class TrackViewModel extends ViewModel {
      * @param progress progress object that is changed
      */
     public void updateTrackProgress(Integer progress) {
+        if (mTrackProgress == null) {
+            mTrackProgress = new MutableLiveData<>();
+        }
         mTrackProgress.postValue(progress);
     }
 
