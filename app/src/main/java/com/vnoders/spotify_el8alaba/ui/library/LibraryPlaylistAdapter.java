@@ -81,7 +81,7 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
                 @Override
                 public void onClick(View v) {
                     fragment.getParentFragmentManager().beginTransaction()
-                            .replace(R.id.nav_host_fragment, new PlaylistTracksFragment())
+                            .replace(R.id.nav_host_fragment, new PlaylistHomeFragment())
                             .addToBackStack(null)
                             .commit();
                 }
