@@ -5,6 +5,7 @@
         android:layout_height = "match_parent"
         android:orientation = "vertical"
         android:background = "@color/darkGray"
+        android:id="@+id/email_signup_fragment"
         tools:context = ".ui.signup.signup_email_fragment">
     <TextView
             android:layout_width = "wrap_content"
