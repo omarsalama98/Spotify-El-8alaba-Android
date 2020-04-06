@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import com.vnoders.spotify_el8alaba.models.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.Login_info;
 import com.vnoders.spotify_el8alaba.models.forgot_password_info;
 import com.vnoders.spotify_el8alaba.models.signup_info;
@@ -7,6 +8,7 @@ import com.vnoders.spotify_el8alaba.response.signup.signup_response;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -60,4 +62,6 @@ public interface API {
     @POST("authentication/forgotPassword")
     Call<ResponseBody> forgot_password(@Body forgot_password_info forgot_password_info);
 
+    @GET("me/player")
+    Call<CurrentlyPlayingTrack> getCurrentlyPlaying();
 }
