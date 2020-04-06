@@ -29,6 +29,7 @@ import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.TrackViewModel;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
+import com.vnoders.spotify_el8alaba.models.RealTrack;
 
 
 /**
@@ -69,8 +70,8 @@ public class TrackPlayerActivity extends AppCompatActivity {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(PlayableTrack track) {
-        Picasso.get().load(track.getAlbum().getImages().get(0).getUrl()).into(mTarget);
+    private void updateUI(RealTrack track) {
+        mTrackImageView.setImageResource(R.drawable.track_image_default);
     }
 
     /**
@@ -130,10 +131,10 @@ public class TrackPlayerActivity extends AppCompatActivity {
                 });
 
         // setting observer to know when data changes
-        TrackViewModel.getInstance().getCurrentTrack().observe(this, new Observer<PlayableTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(this, new Observer<RealTrack>() {
             @Override
-            public void onChanged(PlayableTrack track) {
-                updateUI(track);
+            public void onChanged(RealTrack realTrack) {
+                updateUI(realTrack);
             }
         });
     }

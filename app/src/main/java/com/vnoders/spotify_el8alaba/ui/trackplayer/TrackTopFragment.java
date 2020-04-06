@@ -19,6 +19,7 @@ import com.vnoders.spotify_el8alaba.OverflowFragment;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.TrackViewModel;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
+import com.vnoders.spotify_el8alaba.models.RealTrack;
 
 /**
  * @author Ali Adel Top part of track player fragment
@@ -39,7 +40,7 @@ public class TrackTopFragment extends Fragment {
         // set the overflow menu click listener to start overflow menu
         rootView.findViewById(R.id.top_overflow_menu).setOnClickListener(v -> startOverflowMenu());
 
-        String playingFrom = getString(R.string.playing_from_playlist);
+        String playingFrom = getString(R.string.playing_from_artist);
         // setting the text
         TextView playingFromTextView = rootView.findViewById(R.id.playing_from_text);
         playingFromTextView.setText(playingFrom);
@@ -56,13 +57,12 @@ public class TrackTopFragment extends Fragment {
         });
 
         // setting the observer on the data change then calling updateUI on data change
-        TrackViewModel.getInstance().getCurrentTrack()
-                .observe(getActivity(), new Observer<PlayableTrack>() {
-                    @Override
-                    public void onChanged(PlayableTrack track) {
-                        updateUI(track);
-                    }
-                });
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
+            @Override
+            public void onChanged(RealTrack realTrack) {
+                updateUI(realTrack);
+            }
+        });
 
         return rootView;
     }
@@ -72,8 +72,8 @@ public class TrackTopFragment extends Fragment {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(PlayableTrack track) {
-        authorNameText.setText(track.getAlbum().getArtists().get(0).getName());
+    private void updateUI(RealTrack track) {
+        authorNameText.setText(track.getArtists().get(0).getUserInfo().getName());
     }
 
     /**

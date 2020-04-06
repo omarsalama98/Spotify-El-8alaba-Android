@@ -18,12 +18,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
+import com.vnoders.spotify_el8alaba.models.RealTrack;
 
 import java.lang.reflect.Field;
 
 public class OverflowFragment extends BottomSheetDialogFragment {
 
-    private PlayableTrack mTrack;
+    private RealTrack mTrack;
 
     // references to all the buttons in view
     private View mLikeButton;
@@ -35,7 +36,7 @@ public class OverflowFragment extends BottomSheetDialogFragment {
     private View mReportButton;
     private View mCreditsButton;
 
-    public OverflowFragment(PlayableTrack track) {
+    public OverflowFragment(RealTrack track) {
         mTrack = track;
     }
 
@@ -137,11 +138,10 @@ public class OverflowFragment extends BottomSheetDialogFragment {
 
         // set the author's name
         ((TextView) root.findViewById(R.id.overflow_author_name)).
-                setText(mTrack.getAlbum().getArtists().get(0).getName());
+                setText(mTrack.getArtists().get(0).getUserInfo().getName());
 
         // set the image displayed in middle
-        Picasso.get().load(mTrack.getAlbum().getImages().get(1).getUrl()).
-                into(((ImageView) root.findViewById(R.id.overflow_img)));
+        (((ImageView) root.findViewById(R.id.overflow_img))).setImageResource(R.drawable.track_image_default);
     }
 
     /**

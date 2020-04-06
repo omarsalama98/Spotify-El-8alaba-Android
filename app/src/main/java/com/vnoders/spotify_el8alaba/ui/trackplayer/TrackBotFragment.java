@@ -20,6 +20,7 @@ import androidx.lifecycle.Observer;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.TrackViewModel;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
+import com.vnoders.spotify_el8alaba.models.RealTrack;
 
 
 /**
@@ -42,7 +43,7 @@ public class TrackBotFragment extends Fragment {
     // track progress duration
     private TextView mTrackDuration;
     // holds current track being played
-    private PlayableTrack mCurrentTrack;
+    private RealTrack mCurrentTrack;
     // holds skip next button
     private Button mNextButton;
     // holds skip previous button
@@ -102,10 +103,10 @@ public class TrackBotFragment extends Fragment {
         });
 
         // setting to observe change in global song being played
-        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<PlayableTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
             @Override
-            public void onChanged(PlayableTrack track) {
-                updateUI(track);
+            public void onChanged(RealTrack realTrack) {
+                updateUI(realTrack);
             }
         });
 
@@ -125,7 +126,7 @@ public class TrackBotFragment extends Fragment {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(PlayableTrack track) {
+    private void updateUI(RealTrack track) {
 
         // get track
         mCurrentTrack = track;
@@ -149,7 +150,7 @@ public class TrackBotFragment extends Fragment {
 
         // set the name of song and name of author and setting the button to display correctly
         songNameTextView.setText(track.getName());
-        authorNameText.setText(track.getAlbum().getArtists().get(0).getName());
+        authorNameText.setText(track.getArtists().get(0).getUserInfo().getName());
         isPlaying = track.getIsPlaying();
         if (isPlaying) {
             playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
