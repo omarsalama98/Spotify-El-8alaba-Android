@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:background = "@drawable/curved_gradient"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_height = "wrap_content"
+            android:layout_width = "match_parent"
+            android:background = "@android:color/transparent"
+            app:layout_scrollFlags = "scroll|noScroll"
+            android:theme = "@style/AppTheme.AppBarOverlay">
+
+        <FrameLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop = "@dimen/appbar_padding">
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id = "@+id/genre_fragment_toolbar"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    app:navigationIcon = "@drawable/ic_left_arrow" />
+
+            <TextView
+                    android:id = "@+id/genre_fragment_top_title"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "Music"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    android:textSize = "20sp"
+                    android:alpha = "0"
+                    android:layout_gravity = "center" />
+        </FrameLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+            android:id = "@+id/genre_fragment_scroll_view"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:overScrollMode = "never"
+            android:paddingHorizontal = "20dp"
+            app:layout_behavior = "@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+                android:orientation = "vertical"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content">
+
+            <TextView
+                    android:id = "@+id/genre_fragment_main_title"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:padding = "@dimen/appbar_padding"
+                    android:textSize = "50sp"
+                    android:text = "Music"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    android:layout_gravity = "center"
+                    app:layout_scrollFlags = "scroll|snap" />
+
+            <TextView
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/popular_playlists"
+                    android:textColor = "@color/white"
+                    android:textSize = "18sp"
+                    android:textStyle = "bold"
+                    android:layout_marginBottom = "15dp"
+                    android:layout_gravity = "center_horizontal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id = "@+id/genre_top_playlists_horizontal_recycler_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:overScrollMode = "never" />
+
+            <TextView
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/popular_playlists"
+                    android:textColor = "@color/white"
+                    android:textSize = "18sp"
+                    android:textStyle = "bold"
+                    android:layout_marginBottom = "15dp"
+                    android:layout_gravity = "center_horizontal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id = "@+id/genre_categories_grid_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:overScrollMode = "never" />
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

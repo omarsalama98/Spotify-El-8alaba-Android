@@ -103,6 +103,7 @@ public class CreateAccount extends Fragment {
                             SharedPreferences.Editor editor=sharedPreferences.edit();
                             editor.putString("token",token);
                             editor.commit();
+                            RetrofitClient.getInstance().setToken(token);
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             startActivity(intent);
                             getActivity().finish();

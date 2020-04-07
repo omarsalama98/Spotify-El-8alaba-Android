@@ -29,8 +29,7 @@ public class SearchHistoryListAdapter extends
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.search_history_list_item, parent, false);
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+        return new MyViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -42,13 +41,13 @@ public class SearchHistoryListAdapter extends
         if (!mDataset.get(position).getImageURL().equals("")) {
             Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
         }
+
         holder.removeIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDataset.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, mDataset.size());
-
             }
         });
     }
@@ -67,19 +66,17 @@ public class SearchHistoryListAdapter extends
         // each data item is just a string in this case
         public View v;
         public TextView name;
-        public TextView info;
+        TextView info;
         public ImageView image;
-        public ImageView removeIcon;
+        ImageView removeIcon;
 
-        public MyViewHolder(View v) {
+        MyViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.search_history_item_name_text_view);
             info = v.findViewById(R.id.search_history_item_info_text_view);
             image = v.findViewById(R.id.search_history_item_image_view);
             removeIcon = v.findViewById(R.id.search_history_item_remove);
         }
-
     }
-
 }
 

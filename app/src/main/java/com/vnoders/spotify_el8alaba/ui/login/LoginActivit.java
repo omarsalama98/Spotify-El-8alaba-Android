@@ -70,6 +70,7 @@ public class LoginActivit extends AppCompatActivity {
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("token",token);
                 editor.commit();
+                RetrofitClient.getInstance().setToken(token);
                 Intent intent = new Intent(LoginActivit.this, MainActivity.class);
                 startActivity(intent);
                 finish();

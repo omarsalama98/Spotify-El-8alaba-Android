@@ -32,9 +32,7 @@ public class RetrofitClient {
 
     //    private static final String BASE_URL = "https://my-json-server.typicode.com/MohamedSamiMohamed/MOCKING/";
 
-
-    public static final String BASE_URL = "http://192.168.1.6:8000/api/v1/";
-
+    public static final String BASE_URL = "http://www.spotify-elghalaba.me:8080/api/v1/";
 
 
     private static final String HEADER_AUTHORIZATION = "Authorization";
@@ -62,7 +60,6 @@ public class RetrofitClient {
 
         headers = new HeadersInterceptor(httpClientBuilder);
 
-        setToken("ACCESS_TOKEN");
         headers.addHeader(HEADER_CONTENT_TYPE, TYPE_JSON);
         headers.addHeader(HEADER_USER_AGENT, getUserAgent());
 

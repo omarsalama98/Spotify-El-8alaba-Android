@@ -1,29 +1,33 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistFragment;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import java.util.ArrayList;
 
 public class GenrePlaylistsGridAdapter extends
         RecyclerView.Adapter<GenrePlaylistsGridAdapter.MyViewHolder> {
 
-    private ArrayList<HomeInnerListItem> mPlaylists;
+    private static ArrayList<HomeInnerListItem> mPlaylists;    //TODO: Change to ArrayList<Playlist>
     private static Fragment fragment;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public GenrePlaylistsGridAdapter(ArrayList<HomeInnerListItem> myDataset,
-            Fragment fragment) {
-        mPlaylists = myDataset;
+
+    /**
+     * @param myDataSet List of Playlists to show for the current Genre
+     * @param fragment  The current fragment where this list will be created
+     */
+    public GenrePlaylistsGridAdapter(ArrayList<HomeInnerListItem> myDataSet, Fragment fragment) {
+        mPlaylists = myDataSet;
         GenrePlaylistsGridAdapter.fragment = fragment;
     }
 
@@ -46,7 +50,7 @@ public class GenrePlaylistsGridAdapter extends
         Picasso.get().load(mPlaylists.get(position).getImageURL()).into(holder.playlistImage);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of your data set (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mPlaylists.size();
@@ -70,15 +74,21 @@ public class GenrePlaylistsGridAdapter extends
             playlistTitle = v.findViewById(R.id.genre_playlists_item_title);
             playlistSubTitle = v.findViewById(R.id.genre_playlists_item_sub_title);
 
-            v.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    fragment.getParentFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.search_fragment_container, new PlaylistFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
+            v.setOnClickListener(v1 -> {
+                Bundle arguments = new Bundle();
+                arguments.putString
+                        (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,
+                                mPlaylists.get(getAdapterPosition()).getTitle());
+                //TODO: Replace the Name Key with an ID one and pass the playlist_id retrieved from the server
+                Fragment targetFragment = new PlaylistTracksFragment();
+                targetFragment.setArguments(arguments);
+                fragment.getParentFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                                R.anim.fade_out)
+                        .replace(R.id.nav_host_fragment, targetFragment)
+                        .addToBackStack(null)
+                        .commit();
             });
         }
     }
