@@ -20,58 +20,54 @@
             <FrameLayout
                     android:layout_width = "match_parent"
                     android:layout_height = "350dp"
-                    app:layout_collapseMode = "parallax"
-                        >
+                    app:layout_collapseMode = "parallax">
                 <LinearLayout
                         android:layout_width = "match_parent"
                         android:layout_height = "match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginTop="90dp"
-                    >
-       <de.hdodenhof.circleimageview.CircleImageView
-               android:layout_width = "130dp"
-               android:layout_height = "130dp"
-               android:src="@drawable/unnamed"
-               android:layout_gravity="center"
-               />
-        <TextView
-                android:id="@+id/user_name"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/white"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
-                android:text="@string/user_name"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_gravity="center"
+                        android:orientation = "vertical"
+                        android:layout_marginTop = "90dp">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width = "130dp"
+                            android:layout_height = "130dp"
+                            android:src = "@drawable/unnamed"
+                            android:layout_gravity = "center" />
+                    <TextView
+                            android:id = "@+id/user_name"
+                            android:layout_marginTop = "20dp"
+                            android:textColor = "@color/white"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:text = "@string/user_name"
+                            android:textSize = "18sp"
+                            android:textStyle = "bold"
+                            android:layout_gravity = "center"
 
-                />
-        <Button
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center"
-                android:background="@drawable/custom_face"
-                android:layout_width = "130dp"
-                android:textColor="@color/white"
-                android:layout_height = "20dp"
-                android:textAllCaps="true"
-                android:text="@string/edit_profile"
+                            />
+                    <Button
+                            android:layout_marginTop = "20dp"
+                            android:layout_gravity = "center"
+                            android:background = "@drawable/custom_face"
+                            android:layout_width = "130dp"
+                            android:textColor = "@color/white"
+                            android:layout_height = "20dp"
+                            android:textAllCaps = "true"
+                            android:text = "@string/edit_profile"
 
-                />
+                            />
                 </LinearLayout>
             </FrameLayout>
 
-
             <androidx.appcompat.widget.Toolbar
                     android:id = "@+id/toolbar"
-                    android:layout_width ="match_parent"
-                    android:layout_height ="60dp"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "60dp"
                     android:minHeight = "?attr/actionBarSize"
                     android:theme = "@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:layout_collapseMode = "pin"
                     app:popupTheme = "@style/ThemeOverlay.AppCompat.Light">
 
                 <RelativeLayout
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop = "15dp"
                         android:layout_width = "match_parent"
                         android:layout_height = "50dp"
                         android:orientation = "horizontal"
@@ -85,7 +81,7 @@
                             android:src = "@drawable/ic_left_arrow"
                             android:background = "@android:color/transparent" />
                     <TextView
-                            android:id="@+id/user_name_toobar"
+                            android:id = "@+id/user_name_toobar"
                             android:layout_width = "wrap_content"
                             android:layout_height = "wrap_content"
                             android:layout_gravity = "center_horizontal"
@@ -115,112 +111,100 @@
 
 
     <androidx.core.widget.NestedScrollView
-            android:background="@color/black"
+            android:background = "@color/black"
             android:layout_width = "match_parent"
             android:layout_height = "500dp"
             app:layout_behavior = "@string/appbar_scrolling_view_behavior">
-<LinearLayout
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:orientation="vertical"
-        >
-    <LinearLayout
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:orientation="horizontal"
-            >
-     <LinearLayout
-             android:orientation="vertical"
-             android:layout_width = "0dp"
-             android:layout_weight="1"
-             android:layout_height = "wrap_content"
-         >
-         <TextView
-                 android:id="@+id/playlist_number"
-                 android:layout_gravity="center"
-                 android:layout_width = "wrap_content"
-                 android:layout_height = "wrap_content"
-                 android:text="0"
-                 android:textColor="@color/white"
-             />
-         <TextView
-
-                 android:layout_gravity="center"
-                 android:layout_width = "wrap_content"
-                 android:layout_height = "wrap_content"
-                 android:textAllCaps="true"
-                android:text="@string/playlist"
-                android:textColor="@color/white"
-                 android:textSize="11sp"
-             />
-     </LinearLayout>
-
         <LinearLayout
-                android:orientation="vertical"
-                android:layout_width = "0dp"
-                android:layout_weight="1"
+                android:gravity = "center"
+                android:layout_marginTop = "20dp"
+                android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
-                >
-            <TextView
-                    android:id="@+id/followers_number"
-                    android:layout_gravity="center"
-                    android:layout_width = "wrap_content"
+                android:orientation = "vertical">
+            <LinearLayout
+                    android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    />
+                    android:orientation = "horizontal">
+                <LinearLayout
+                        android:orientation = "vertical"
+                        android:layout_width = "0dp"
+                        android:layout_weight = "1"
+                        android:layout_height = "wrap_content">
+                    <TextView
+                            android:id = "@+id/playlist_number"
+                            android:layout_gravity = "center"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:text = "0"
+                            android:textColor = "@color/white" />
+                    <TextView
+
+                            android:layout_gravity = "center"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:textAllCaps = "true"
+                            android:text = "@string/playlist"
+                            android:textColor = "@color/white"
+                            android:textSize = "11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:orientation = "vertical"
+                        android:layout_width = "0dp"
+                        android:layout_weight = "1"
+                        android:layout_height = "wrap_content">
+                    <TextView
+                            android:id = "@+id/followers_number"
+                            android:layout_gravity = "center"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:text = "0"
+                            android:textColor = "@color/white" />
+                    <TextView
+                            android:textAllCaps = "true"
+                            android:layout_gravity = "center"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:text = "@string/followers"
+                            android:textColor = "@color/white"
+                            android:textSize = "11sp" />
+                </LinearLayout>
+                <LinearLayout
+                        android:orientation = "vertical"
+                        android:layout_width = "0dp"
+                        android:layout_weight = "1"
+                        android:layout_height = "wrap_content">
+                    <TextView
+                            android:id = "@+id/following_numbers"
+                            android:layout_gravity = "center"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:text = "0"
+                            android:textColor = "@color/white" />
+                    <TextView
+                            android:textAllCaps = "true"
+                            android:layout_gravity = "center"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:text = "@string/following"
+                            android:textColor = "@color/white"
+                            android:textSize = "11sp" />
+                </LinearLayout>
+            </LinearLayout>
             <TextView
-                    android:textAllCaps="true"
-                    android:layout_gravity="center"
-                    android:layout_width = "wrap_content"
+                    android:layout_marginTop = "30dp"
+                    android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
-                    android:text="@string/followers"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
+                    android:text = "@string/no_recent_activity"
+                    android:textColor = "@color/white"
+                    android:gravity = "center"
+                    android:textStyle = "bold"
+
                     />
         </LinearLayout>
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width = "0dp"
-                android:layout_weight="1"
-                android:layout_height = "wrap_content"
-                >
-            <TextView
-                    android:id="@+id/following_numbers"
-                    android:layout_gravity="center"
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    />
-            <TextView
-                    android:textAllCaps="true"
-                    android:layout_gravity="center"
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:text="@string/following"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    />
-        </LinearLayout>
-    </LinearLayout>
-    <TextView
-            android:layout_marginTop="30dp"
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:text="@string/no_recent_activity"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:textStyle="bold"
-
-            />
-</LinearLayout>
 
 
     </androidx.core.widget.NestedScrollView>
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

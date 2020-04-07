@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistFragment;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import java.util.ArrayList;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
@@ -78,12 +78,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                                 mDataset.get(getAdapterPosition()).getName());
                 //TODO: Replace the Name Key with an ID one and pass the selected item id
                 //TODO: The fragment to go to depends on the selected item type
-                fragment.setArguments(arguments);
+                Fragment targetFragment = new PlaylistTracksFragment();
+                targetFragment.setArguments(arguments);
                 fragment.getParentFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
                                 R.anim.fade_out)
-                        .replace(R.id.nav_host_fragment, new PlaylistFragment())
+                        .replace(R.id.nav_host_fragment, targetFragment)
                         .addToBackStack(null)
                         .commit();
             });

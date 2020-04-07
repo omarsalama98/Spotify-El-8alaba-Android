@@ -94,12 +94,13 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
                         (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,
                                 mockDataset.get(getAdapterPosition()).getTitle());
                 //TODO: Replace the Name Key with an ID one and pass the playlist id retrieved from server
-                fragment.setArguments(arguments);
+                Fragment targetFragment = new PlaylistTracksFragment();
+                targetFragment.setArguments(arguments);
                 fragment.getParentFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
                                 R.anim.fade_out)
-                        .replace(R.id.nav_host_fragment, new PlaylistTracksFragment())
+                        .replace(R.id.nav_host_fragment, targetFragment)
                         .addToBackStack(null)
                         .commit();
             });

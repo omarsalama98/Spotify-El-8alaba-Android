@@ -1,10 +1,10 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
 import com.vnoders.spotify_el8alaba.Artist;
-import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.models.Playlist;
-import com.vnoders.spotify_el8alaba.models.Track;
+import com.vnoders.spotify_el8alaba.models.library.Album;
+import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;

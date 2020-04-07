@@ -13,6 +13,7 @@ import androidx.core.widget.NestedScrollView.OnScrollChangeListener;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.GenrePlaylistsGridAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
@@ -52,6 +53,11 @@ public class GenreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle arguments = getArguments();
+        String title = arguments.getString(SearchByTypeConstantsHelper.GENRE_NAME_KEY);
+        genreMainTitle.setText(title);
+        genreTopTitle.setText(title);
 
         toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
 

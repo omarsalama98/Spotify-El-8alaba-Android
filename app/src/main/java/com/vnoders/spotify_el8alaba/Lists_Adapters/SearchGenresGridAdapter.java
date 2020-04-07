@@ -2,6 +2,7 @@ package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.ChartsFragment;
+import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
@@ -88,16 +91,19 @@ public class SearchGenresGridAdapter extends
                 Fragment fragment;
                 switch (position) {
                     case 0:
-                        fragment = new GenreFragment();
-                        break;
-                    case 1:
-                        fragment = new GenreFragment();
-                        break;
-                    default:
                         fragment = new SpecialGenresFragment();
                         break;
+                    case 1:
+                        fragment = new ChartsFragment();
+                        break;
+                    default:
+                        fragment = new GenreFragment();
+                        break;
                 }
-
+                Bundle arguments = new Bundle();
+                arguments.putString(SearchByTypeConstantsHelper.GENRE_NAME_KEY,
+                        mockGenresList.get(position).getTitle());
+                fragment.setArguments(arguments);
                 mFragment.getParentFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right,

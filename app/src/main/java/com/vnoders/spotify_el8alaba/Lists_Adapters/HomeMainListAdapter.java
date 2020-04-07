@@ -80,15 +80,12 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 Log.d(TAG, response.body().get(0).getName());
                 categoryPlaylists[0] = (ArrayList<Category>) response.body();
-
             }
-
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 Log.d(TAG, "failed to retrieve Categories");
             }
         });
-
         holder.innerList.setAdapter(
                 new HomeInnerListAdapter(categoryPlaylists[0], fragment));
         holder.innerList.setLayoutManager(

@@ -13,5 +13,6 @@ public class SearchByTypeConstantsHelper {
     public static final String SEARCH_QUERY_KEY = "search query";
 
     public static final String PLAYLIST_NAME_KEY = "Playlist Name";
+    public static final String GENRE_NAME_KEY = "Genre Name";
 
 }

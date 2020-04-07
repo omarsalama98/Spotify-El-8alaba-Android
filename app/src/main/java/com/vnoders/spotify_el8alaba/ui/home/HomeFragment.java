@@ -3,9 +3,7 @@ package com.vnoders.spotify_el8alaba.ui.home;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +33,9 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         settingsButton=root.findViewById(R.id.settings_image_view);
 
@@ -88,22 +88,19 @@ public class HomeFragment extends Fragment {
         mainListRecyclerView.setHasFixedSize(true);
         mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
 
-        settingsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CurrentUserProfileFragment currentUserProfileFragment=new CurrentUserProfileFragment();
-                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment,currentUserProfileFragment,"CURRENT_USER_PROFILE").commit();
-            }
+        settingsButton.setOnClickListener(v -> {
+            CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.nav_host_fragment, currentUserProfileFragment,
+                    "CURRENT_USER_PROFILE")
+                    .addToBackStack(null)
+                    .commit();
         });
         recentlyPlayedRecyclerView
                 .setAdapter(new RecentlyPlayedListAdapter(innerListItems, this));
         recentlyPlayedRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        return root;
-
-
 
     }
 }

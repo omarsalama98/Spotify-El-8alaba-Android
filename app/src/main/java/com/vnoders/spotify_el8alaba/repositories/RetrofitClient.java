@@ -32,7 +32,7 @@ public class RetrofitClient {
 
     //    private static final String BASE_URL = "https://my-json-server.typicode.com/MohamedSamiMohamed/MOCKING/";
 
-    private static final String BASE_URL = "http://www.spotify-elghalaba.me:8080/api/v1/";
+    public static final String BASE_URL = "http://www.spotify-elghalaba.me:8080/api/v1/";
 
 
     private static final String HEADER_AUTHORIZATION = "Authorization";
