@@ -69,10 +69,10 @@ public class LibraryRepository {
                     }
                     stringBuilder.append("and more");
 
-                    viewModel.getTracksSummary().setValue(stringBuilder.toString());
-                    viewModel.getImageUrl().setValue(playlist.getImages().get(0).getUrl());
-                    viewModel.getPlaylistOwnerName().setValue(playlist.getOwner().getName());
-                    viewModel.getPlaylistName().setValue(playlist.getName());
+                    viewModel.setTracksSummary(stringBuilder.toString());
+                    viewModel.setImageUrl(playlist.getImages().get(0).getUrl());
+                    viewModel.setPlaylistOwnerName(playlist.getOwner().getName());
+                    viewModel.setPlaylistName(playlist.getName());
 
                 }
             }
