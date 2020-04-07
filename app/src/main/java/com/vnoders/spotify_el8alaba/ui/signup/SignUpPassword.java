@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class signup_password extends Fragment {
+public class SignUpPassword extends Fragment {
     private FragmentManager fragmentManager;
     private TextView password_status;
     private TextView password_status2;
@@ -92,8 +92,8 @@ public class signup_password extends Fragment {
         next.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((signup_email) getActivity()).setPassword(password_holder);
-                signup_birthdate fragment = new signup_birthdate();
+                ((SignUpEmail) getActivity()).setPassword(password_holder);
+                SignUpBirthDate fragment = new SignUpBirthDate();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
                         R.anim.enter_from_right, R.anim.exit_to_right);

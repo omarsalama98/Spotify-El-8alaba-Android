@@ -6,9 +6,9 @@
      * This class holds the email address of the user who has forgotten his password
      * @author Mohamed Samy
      */
-    public class forgot_password_info {
+    public class ForgotPasswordInfo {
 
-        public forgot_password_info(String email_address) {
+        public ForgotPasswordInfo(String email_address) {
             this.email_address = email_address;
         }
 

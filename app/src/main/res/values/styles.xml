@@ -30,6 +30,7 @@
 
     <style name = "AppTheme.PopupOverlay" parent = "ThemeOverlay.AppCompat.Light" />
 
+
     <style name = "AppTheme.Splash">
         <item name = "android:windowBackground">@drawable/splash</item>
         <item name = "colorPrimaryDark">@color/black</item>
@@ -39,4 +40,23 @@
         <item name = "color">@color/lightGray</item>
         <item name = "colorPrimary">@color/lightGray</item>
     </style>
+    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">#55000000</item> <!-- Or any transparency or color you need -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+
+    </style>
+
+
+    <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

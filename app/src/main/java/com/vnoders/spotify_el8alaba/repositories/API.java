@@ -1,12 +1,14 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
-import com.vnoders.spotify_el8alaba.models.Login_info;
-import com.vnoders.spotify_el8alaba.models.forgot_password_info;
-import com.vnoders.spotify_el8alaba.models.signup_info;
-import com.vnoders.spotify_el8alaba.response.signup.signup_response;
+import com.vnoders.spotify_el8alaba.models.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.LoginInfo;
+import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
+import com.vnoders.spotify_el8alaba.models.SignUpInfo;
+import com.vnoders.spotify_el8alaba.response.signup.SignUpResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -20,7 +22,7 @@ public interface API {
     /**
      * This method handles the login request
      *
-     * @param login_info an object from login_info class which stores the login needed information
+     * @param loginInfo an object from login_info class which stores the login needed information
      *                   {email address, password}
      *
      * @return ResponseBody and it will be changed in the future to a login response
@@ -30,12 +32,12 @@ public interface API {
     })
 
     @POST("authentication/login")
-    Call<signup_response> userLogin(@Body Login_info login_info);
+    Call<SignUpResponse> userLogin(@Body LoginInfo loginInfo);
 
     /**
      * This method handles the registration request
      *
-     * @param signup_info an object from signup_info class which contains all the registration
+     * @param signUpInfo an object from signup_info class which contains all the registration
      *                    needed information {name,email,password,birth date,gender}
      *
      * @return ResponesBody which will be changed in the next sprint to a singup response
@@ -45,11 +47,11 @@ public interface API {
             "Content-Type: application/json"
     })
     @POST("authentication/signup")
-    Call<signup_response> signup(@Body signup_info signup_info);
+    Call<SignUpResponse> signup(@Body SignUpInfo signUpInfo);
 
     /**
      * This method handles forgot password action
-     * @param forgot_password_info an object from forgot password info holds the email address or username of the user
+     * @param forgotPasswordInfo an object from forgot password info holds the email address or username of the user
      * @return ResponseBody that will be changed in future to forgotpassword response body
      */
     @Headers({
@@ -58,6 +60,8 @@ public interface API {
     })
 
     @POST("authentication/forgotPassword")
-    Call<ResponseBody> forgot_password(@Body forgot_password_info forgot_password_info);
+    Call<ResponseBody> forgot_password(@Body ForgotPasswordInfo forgotPasswordInfo);
 
+    @GET("me/player")
+    Call<CurrentlyPlayingTrack> getCurrentlyPlaying();
 }

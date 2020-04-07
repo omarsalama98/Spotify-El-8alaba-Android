@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
@@ -14,11 +15,16 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.vnoders.spotify_el8alaba.models.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
+import com.vnoders.spotify_el8alaba.models.RealTrack;
 import com.vnoders.spotify_el8alaba.models.TrackList;
+import com.vnoders.spotify_el8alaba.repositories.API;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.repositories.TrackApi;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -33,21 +39,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MediaPlaybackService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
+
+    private static final String PLAYER_STREAMING_BASE_URL = RetrofitClient.BASE_URL + "streaming/";
+    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer%";
+
     //______________________________________________________________________________________________
     //--------------------------------------Variables-----------------------------------------------
     //______________________________________________________________________________________________
 
     // bind to give to activities to interact with this service
     private final IBinder mMediaPlaybackBinder = new MediaPlaybackBinder();
-    // list of tracks in queue
-    private List<PlayableTrack> tracks;
     // list of track ids received to play
     private List<String> tracksID;
 
     // index of current track active
     private int mCurrentTrackIndex;
     // current track playing
-    private PlayableTrack mCurrentTrack;
+    private RealTrack mCurrentTrack;
 
     // instance of media player for audio playback
     private MediaPlayer mMediaPlayer;
@@ -95,7 +103,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         // get the list of tracks to play
-        getTracks();
+        getCurrentlyPlaying();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -173,23 +181,23 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public boolean skipToNext() {
 
         // if there are no tracks then return false
-        if (tracks == null || tracks.size() < 1)
+        if (tracksID == null || tracksID.size() < 1)
             return false;
 
         // if last song in list return false
         ++mCurrentTrackIndex;
-        if (mCurrentTrackIndex > tracks.size() - 1) {
-            mCurrentTrackIndex = tracks.size() - 1;
+        if (mCurrentTrackIndex > tracksID.size() - 1) {
+            mCurrentTrackIndex = tracksID.size() - 1;
             return false;
         }
 
         // there is next song so load it and update current track being played
-        mCurrentTrack = tracks.get(mCurrentTrackIndex);
-        TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
+        //mCurrentTrack = tracks.get(mCurrentTrackIndex);
+        //TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
 
         // reload media player instance to set data source to new song
-        destroyMediaPlayer();
-        initMediaPlayer();
+        //destroyMediaPlayer();
+        //initMediaPlayer();
 
         return true;
     }
@@ -200,7 +208,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     public void skipToPrev() {
 
         // if no track in list then do nothing
-        if (tracks == null || tracks.size() < 1)
+        if (tracksID == null || tracksID.size() < 1)
             return;
 
         // if first song in list then just seek to beginning of song
@@ -211,12 +219,12 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         }
 
         // there is previous song so load it and change global song to it
-        mCurrentTrack = tracks.get(mCurrentTrackIndex);
-        TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
+        //mCurrentTrack = tracks.get(mCurrentTrackIndex);
+        //TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
 
         // reload media player instance to set data source to new song
-        destroyMediaPlayer();
-        initMediaPlayer();
+        //destroyMediaPlayer();
+        //initMediaPlayer();
     }
 
     /**
@@ -256,8 +264,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         }
 
         // if song doesn't have preview url to play return (for now cus we don't have real track url)
-        if (mCurrentTrack.getPreview_url() == null)
+        if (mCurrentTrack.getId() == null)
             return;
+
 
         // create new instance of media player and set it to playing music
         mMediaPlayer = new MediaPlayer();
@@ -266,9 +275,13 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build());
 
+
         // set the data source and prepare the data and setting the listener to this class
         try {
-            mMediaPlayer.setDataSource(mCurrentTrack.getPreview_url());
+            SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
+            String access_token = prefs.getString("token", null);
+            String songUrl = PLAYER_STREAMING_BASE_URL + mCurrentTrack.getId() + PLAYER_STREAMING_URL_MIDDLE + access_token;
+            mMediaPlayer.setDataSource(songUrl);
             mMediaPlayer.prepareAsync();
             setIsPlaying(false);
             mMediaPlayer.setOnPreparedListener(this);
@@ -276,6 +289,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     /**
@@ -307,78 +322,42 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     //-------------------------------Getting tracks-------------------------------------------------
     //______________________________________________________________________________________________
 
-    /**
-     * get the tracks from network API to play with IDs that we got
-     */
-    private void getTracks() {
-        // get a retrofit instance
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.spotify.com/v1/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    private void getCurrentlyPlaying() {
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
 
-        // get the API
-        TrackApi api = retrofit.create(TrackApi.class);
+        SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
+        String access_token = prefs.getString("token", null);
+        retrofitClient.setToken(access_token);
 
+        Call<CurrentlyPlayingTrack> request = retrofitClient.getAPI(API.class).getCurrentlyPlaying();
 
-        // get tracks ID from mock class for now
-        tracksID = Mock.getTracksID();
-
-        if (tracksID == null)
-            return;
-
-        // combine tracks for 1 query as required by Spotify API
-        String tracksIdCombined = "";
-        if (tracksID.size() > 0)
-            tracksIdCombined = tracksID.get(0);
-
-        for (int i = 1; i < tracksID.size(); ++i) {
-            tracksIdCombined += "," + tracksID.get(i);
-        }
-
-        // make the network request
-        final Call<TrackList> request = api.getTracks(tracksIdCombined);
-        request.enqueue(new Callback<TrackList>() {
+        request.enqueue(new Callback<CurrentlyPlayingTrack>() {
             @Override
-            public void onResponse(Call<TrackList> call, Response<TrackList> response) {
-
-                if (!response.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "failed, token expired", Toast.LENGTH_LONG).show();
+            public void onResponse(Call<CurrentlyPlayingTrack> call, Response<CurrentlyPlayingTrack> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    Toast.makeText(MediaPlaybackService.this, "Failed to get current track", Toast.LENGTH_SHORT).show();
+                    stopSelf();
                     return;
                 }
-
-                // get the list of tracks and update current song being played
-                TrackList track_list = response.body();
-                tracks = track_list.getTracks();
-                mCurrentTrackIndex = 0;
-
-                // if no tracks then return
-                if (tracks == null)
+                RealTrack track = response.body().getCurrentTrackWrapper().getCurrentTrack();
+                TrackViewModel.getInstance().updateCurrentTrack(track);
+                mCurrentTrack = track;
+                if (track == null) {
+                    stopSelf();
                     return;
-
-                // if empty list return
-                if (tracks.size() < 1)
-                    return;
-
-                // get the track
-                mCurrentTrack = tracks.get(mCurrentTrackIndex);
-
-                // update global live data variable
-                TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
-
-                // init media player so play when user wants instantly
+                }
                 mFirstInit = true;
+                tracksID = new ArrayList<>();
+                tracksID.add(track.getId());
+                mCurrentTrackIndex = 0;
                 destroyMediaPlayer();
                 initMediaPlayer();
-
-
-                //Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
             }
 
-            // probably cus token expired
             @Override
-            public void onFailure(Call<TrackList> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "fail: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            public void onFailure(Call<CurrentlyPlayingTrack> call, Throwable t) {
+                Toast.makeText(MediaPlaybackService.this, "Failed to get current track", Toast.LENGTH_SHORT).show();
+                stopSelf();
             }
         });
     }
@@ -393,13 +372,14 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      */
     @Override
     public void onPrepared(MediaPlayer mp) {
+
         // know if song has next or previous and set data accordingly
         if (mCurrentTrackIndex < 1)
             mCurrentTrack.setHasPrev(false);
         else
             mCurrentTrack.setHasPrev(true);
 
-        if (mCurrentTrackIndex >= tracks.size() - 1)
+        if (mCurrentTrackIndex >= tracksID.size() - 1)
             mCurrentTrack.setHasNext(false);
         else
             mCurrentTrack.setHasNext(true);
@@ -422,6 +402,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             mMediaPlayer.start();
             startHandler();
         }
+
+
     }
 
     /**
