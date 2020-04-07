@@ -97,8 +97,11 @@ public class PlaylistHomeFragment extends Fragment {
         View.OnClickListener openTracksClickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
+                PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment
+                        .newInstance(playlistHomeViewModel.getPlaylistId(),
+                                title.getText().toString());
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.nav_host_fragment, new PlaylistTracksFragment())
+                        .replace(R.id.nav_host_fragment, playlistTracksFragment)
                         .addToBackStack(null)
                         .commit();
             }

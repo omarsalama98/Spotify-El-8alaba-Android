@@ -2,11 +2,16 @@ package com.vnoders.spotify_el8alaba.repositories;
 
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
+import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylist;
 import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
+import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -86,5 +91,59 @@ public class LibraryRepository {
 
     }
 
+
+    public static void updatePlaylistTracks(PlaylistTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> request = libraryApi.getPlaylistTracks(viewModel.getPlaylistId());
+
+        request.enqueue(new Callback<TracksPagingWrapper>() {
+            @Override
+            public void onResponse(@NotNull Call<TracksPagingWrapper> call,
+                    @NotNull Response<TracksPagingWrapper> response) {
+
+                if (response.isSuccessful()) {
+
+                    TracksPagingWrapper tracksWrapper = response.body();
+                    ArrayList<Track> tracks = new ArrayList<>();
+
+                    for (TrackItem trackItem : tracksWrapper.getTrackItems()) {
+                        tracks.add(trackItem.getTrack());
+                    }
+
+                    viewModel.setTracks(tracks);
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<TracksPagingWrapper> call, @NotNull Throwable t) {
+
+            }
+        });
+
+    }
+
+    public static void updatePlaylistCoverImages(PlaylistTracksViewModel viewModel) {
+        Call<List<TrackImage>> request = libraryApi
+                .getPlaylistCoverImages(viewModel.getPlaylistId());
+
+        request.enqueue(new Callback<List<TrackImage>>() {
+            @Override
+            public void onResponse(@NotNull Call<List<TrackImage>> call,
+                    @NotNull Response<List<TrackImage>> response) {
+
+                if (response.isSuccessful()) {
+                    String imageUrl = response.body().get(0).getUrl();
+                    viewModel.setPlaylistImageUrl(imageUrl);
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<List<TrackImage>> call, @NotNull Throwable t) {
+
+            }
+        });
+    }
 
 }
