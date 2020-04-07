@@ -72,6 +72,25 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             image = v.findViewById(R.id.search_item_image_view);
 
             v.setOnClickListener(v1 -> {
+                /*LocalDatabase db = Room.databaseBuilder(fragment.getActivity().getApplicationContext(),
+                        LocalDatabase.class, "database-name").build();
+                RecentSearches recentSearches = new RecentSearches();
+                recentSearches.itemName = mDataset.get(getAdapterPosition()).getName();
+                recentSearches.itemInfo = mDataset.get(getAdapterPosition()).getInfo();
+                recentSearches.itemImageUrl = mDataset.get(getAdapterPosition()).getImageURL();
+                AsyncTask asyncTask = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        if(!db.recentSearchesDao().getAll().contains(recentSearches)){
+                            db.recentSearchesDao().insertAll(recentSearches);
+                            Toast.makeText(fragment.getContext(),"Inserted",Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(fragment.getContext(),"Not Inserted",Toast.LENGTH_LONG).show();
+                        }
+
+                        return null;
+                    }
+                };*/
                 Bundle arguments = new Bundle();
                 arguments.putString
                         (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,

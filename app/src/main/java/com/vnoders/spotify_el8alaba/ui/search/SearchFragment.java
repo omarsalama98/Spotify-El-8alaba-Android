@@ -196,6 +196,17 @@ public class SearchFragment extends Fragment implements OnClickListener {
 
         SearchHistoryListAdapter searchHistoryListAdapter = new SearchHistoryListAdapter(
                 mySearchHistory);
+        /*LocalDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
+                LocalDatabase.class, "database-name").build();
+        AsyncTask asyncTask = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                searchHistoryListAdapter[0] = new SearchHistoryListAdapter(
+                        (ArrayList<RecentSearches>)db.recentSearchesDao().getAll());
+                return null;
+            }
+        };*/
+
         searchHistoryRecyclerView.setAdapter(searchHistoryListAdapter);
 
         if (!mySearchHistory.isEmpty()) {
