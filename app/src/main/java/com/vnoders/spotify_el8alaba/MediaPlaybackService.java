@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
@@ -38,10 +39,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MediaPlaybackService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
-    private static final String ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODc1Y2JlYWM0YzgxNzZhMjZlYTQxZSIsImlhdCI6MTU4NjE4MzI4NiwiZXhwIjoxNTkzOTU5Mjg2fQ.40IcvhR1rEe8feR9lfsaaKbYoN65U9bEJL4wB3c6PzE";
 
     private static final String PLAYER_STREAMING_BASE_URL = RetrofitClient.BASE_URL + "streaming/";
-    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer%20";
+    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer%";
 
     //______________________________________________________________________________________________
     //--------------------------------------Variables-----------------------------------------------
@@ -278,7 +278,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         // set the data source and prepare the data and setting the listener to this class
         try {
-            String songUrl = PLAYER_STREAMING_BASE_URL + mCurrentTrack.getId() + PLAYER_STREAMING_URL_MIDDLE + ACCESS_TOKEN;
+            SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
+            String access_token = prefs.getString("token", null);
+            String songUrl = PLAYER_STREAMING_BASE_URL + mCurrentTrack.getId() + PLAYER_STREAMING_URL_MIDDLE + access_token;
             mMediaPlayer.setDataSource(songUrl);
             mMediaPlayer.prepareAsync();
             setIsPlaying(false);
@@ -323,7 +325,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     private void getCurrentlyPlaying() {
         RetrofitClient retrofitClient = RetrofitClient.getInstance();
 
-        retrofitClient.setToken(ACCESS_TOKEN);
+        SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
+        String access_token = prefs.getString("token", null);
+        retrofitClient.setToken(access_token);
 
         Call<CurrentlyPlayingTrack> request = retrofitClient.getAPI(API.class).getCurrentlyPlaying();
 
@@ -338,6 +342,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 RealTrack track = response.body().getCurrentTrackWrapper().getCurrentTrack();
                 TrackViewModel.getInstance().updateCurrentTrack(track);
                 mCurrentTrack = track;
+                if (track == null) {
+                    stopSelf();
+                    return;
+                }
                 mFirstInit = true;
                 tracksID = new ArrayList<>();
                 tracksID.add(track.getId());

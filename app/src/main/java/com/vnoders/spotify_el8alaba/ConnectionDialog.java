@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import androidx.annotation.Nullable;
 
-public class connection_dialog extends DialogFragment {
+public class ConnectionDialog extends DialogFragment {
 private Button ok_button;
     @Nullable
     @Override

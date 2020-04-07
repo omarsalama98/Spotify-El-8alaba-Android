@@ -97,13 +97,19 @@
     <string name = "artist_type">Artist</string>
     <string name = "user_type">User</string>
 
-    <string name="overflow_like">Like</string>
-    <string name="overflow_hide">Hide this song</string>
-    <string name="overflow_add">Add to Playlist</string>
-    <string name="overflow_view">View Artist</string>
-    <string name="overflow_share">Share</string>
-    <string name="overflow_sleep">Sleep timer</string>
-    <string name="overflow_report">Report Explicit Content</string>
-    <string name="overflow_credits">Show Credits</string>
+    <string name = "overflow_like">Like</string>
+    <string name = "overflow_hide">Hide this song</string>
+    <string name = "overflow_add">Add to Playlist</string>
+    <string name = "overflow_view">View Artist</string>
+    <string name = "overflow_share">Share</string>
+    <string name = "overflow_sleep">Sleep timer</string>
+    <string name = "overflow_report">Report Explicit Content</string>
+    <string name = "overflow_credits">Show Credits</string>
+    <string name = "user_name">UserName</string>
+    <string name = "edit_profile">EDIT PROFILE</string>
+    <string name = "playlist">playlist</string>
+    <string name = "followers">followers</string>
+    <string name = "following">following</string>
+    <string name = "no_recent_activity">No recent activity</string>
 
 </resources>

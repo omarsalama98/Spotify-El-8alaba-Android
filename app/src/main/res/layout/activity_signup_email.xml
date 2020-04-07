@@ -4,8 +4,9 @@
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
         android:orientation = "vertical"
-        tools:context = ".ui.signup.signup_email">
+        tools:context = ".ui.signup.SignUpEmail">
     <RelativeLayout
+            android:background="@color/darkGray"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:orientation = "horizontal"

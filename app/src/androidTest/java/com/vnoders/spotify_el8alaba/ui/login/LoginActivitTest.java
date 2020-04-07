@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.action.ViewActions;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.firstScreen;
+
 import org.junit.Rule;
 import org.junit.Test;
 

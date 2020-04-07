@@ -17,7 +17,7 @@ import com.vnoders.spotify_el8alaba.R;
 import java.util.Calendar;
 
 
-public class signup_birthdate extends Fragment {
+public class SignUpBirthDate extends Fragment {
 
     private DatePicker datePicker;
     private DatePicker.OnDateChangedListener mDateSetListner;
@@ -62,8 +62,8 @@ public class signup_birthdate extends Fragment {
         next.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((signup_email)getActivity()).setBirth_date(date);
-                signup_gender fragment = new signup_gender();
+                ((SignUpEmail)getActivity()).setBirth_date(date);
+                SignUpGender fragment = new SignUpGender();
                  fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
