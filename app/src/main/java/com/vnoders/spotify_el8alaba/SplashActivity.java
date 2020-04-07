@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -19,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, firstScreen.class);
+                Intent intent = new Intent(SplashActivity.this,FirstScreen.class);
                 startActivity(intent);
                 finish();
             }

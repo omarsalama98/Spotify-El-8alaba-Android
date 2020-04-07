@@ -3,7 +3,7 @@ package com.vnoders.spotify_el8alaba.response.signup;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class signup_response {
+public class SignUpResponse {
 
     @SerializedName("status")
     @Expose

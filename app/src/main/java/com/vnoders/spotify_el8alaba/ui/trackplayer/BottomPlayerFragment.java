@@ -27,6 +27,7 @@ import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.TrackViewModel;
 import com.vnoders.spotify_el8alaba.models.PlayableTrack;
+import com.vnoders.spotify_el8alaba.models.RealTrack;
 
 /**
  * @author Ali Adel
@@ -50,7 +51,7 @@ public class BottomPlayerFragment extends Fragment {
     // current state of playing
     private boolean isPlaying = false;
     // current track being played
-    private PlayableTrack mCurrentTrack;
+    private RealTrack mCurrentTrack;
 
     // seek bar reference
     private SeekBar mSeekbar;
@@ -110,10 +111,10 @@ public class BottomPlayerFragment extends Fragment {
         });
 
         // get instance of current track and set the observer on it to update UI on data change
-        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<PlayableTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
             @Override
-            public void onChanged(PlayableTrack track) {
-                updateUI(track);
+            public void onChanged(RealTrack realTrack) {
+                updateUI(realTrack);
             }
         });
 
@@ -142,17 +143,23 @@ public class BottomPlayerFragment extends Fragment {
      *
      * @param track current track being played object
      */
-    private void updateUI(PlayableTrack track) {
+    private void updateUI(RealTrack track) {
+
+        if (track == null) {
+            getActivity().findViewById(R.id.music_player_fragment).setVisibility(View.GONE);
+            return;
+        }
+
+        getActivity().findViewById(R.id.music_player_fragment).setVisibility(View.VISIBLE);
 
         // reads the track
         mCurrentTrack = track;
 
         // loads the image and puts it
-        Picasso.get().load(track.getAlbum().getImages().get(
-                track.getAlbum().getImages().size() - 1).getUrl()).into(songImage);
+        songImage.setImageResource(R.drawable.track_image_default);
 
         // concatenating the song info in 1 string
-        String songInfo = track.getName() + " • " + track.getAlbum().getArtists().get(0).getName();
+        String songInfo = track.getName() + " • " + track.getArtists().get(0).getUserInfo().getName();
         // if it equals the text already displayed then don't display it
         if (!TextUtils.equals(songInfo, songInfoView.getText()))
             songInfoView.setText(songInfo);

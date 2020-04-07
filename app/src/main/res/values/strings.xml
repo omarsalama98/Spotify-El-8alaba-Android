@@ -75,6 +75,7 @@
     <string name = "see_all_albums">See all albums</string>
     <string name = "search_all_genres_and_moods">Search all genres and moods</string>
     <string name = "see_all_profiles">See all profiles</string>
+
     <string name = "popular_playlists">Popular playlists</string>
     <string name = "see_more">See more</string>
     <string name = "charts">Charts</string>
@@ -95,4 +96,20 @@
     <string name = "login_text1">This email and password combination is \n incorrect.</string>
     <string name = "artist_type">Artist</string>
     <string name = "user_type">User</string>
+
+    <string name = "overflow_like">Like</string>
+    <string name = "overflow_hide">Hide this song</string>
+    <string name = "overflow_add">Add to Playlist</string>
+    <string name = "overflow_view">View Artist</string>
+    <string name = "overflow_share">Share</string>
+    <string name = "overflow_sleep">Sleep timer</string>
+    <string name = "overflow_report">Report Explicit Content</string>
+    <string name = "overflow_credits">Show Credits</string>
+    <string name = "user_name">UserName</string>
+    <string name = "edit_profile">EDIT PROFILE</string>
+    <string name = "playlist">playlist</string>
+    <string name = "followers">followers</string>
+    <string name = "following">following</string>
+    <string name = "no_recent_activity">No recent activity</string>
+
 </resources>

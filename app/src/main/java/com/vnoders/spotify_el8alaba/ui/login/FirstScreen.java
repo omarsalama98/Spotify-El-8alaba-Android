@@ -1,4 +1,4 @@
-package com.vnoders.spotify_el8alaba;
+package com.vnoders.spotify_el8alaba.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +14,12 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.vnoders.spotify_el8alaba.ui.login.LoginActivit;
-import com.vnoders.spotify_el8alaba.ui.signup.signup_email;
+import com.vnoders.spotify_el8alaba.MainActivity;
+import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import com.vnoders.spotify_el8alaba.ui.signup.SignUpEmail;
 
-public class firstScreen extends AppCompatActivity {
+public class FirstScreen extends AppCompatActivity {
 
     private Button Login_button;
     private Button sign_up_button;
@@ -31,8 +33,9 @@ public class firstScreen extends AppCompatActivity {
 
             if (currentAccessToken != null) {
 
-                Intent intent = new Intent(firstScreen.this, MainActivity.class);
+                Intent intent = new Intent(FirstScreen.this, MainActivity.class);
                 startActivity(intent);
+                RetrofitClient.getInstance().setToken(currentAccessToken.getToken());
                 finish();
             }
 
@@ -72,7 +75,7 @@ public class firstScreen extends AppCompatActivity {
         sign_up_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(firstScreen.this, signup_email.class);
+                Intent intent = new Intent(FirstScreen.this, SignUpEmail.class);
                 startActivity(intent);
             }
         });
@@ -80,7 +83,7 @@ public class firstScreen extends AppCompatActivity {
         Login_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent Login_intent = new Intent(firstScreen.this, LoginActivit.class);
+                Intent Login_intent = new Intent(FirstScreen.this, LoginActivit.class);
                 startActivity(Login_intent);
             }
         });

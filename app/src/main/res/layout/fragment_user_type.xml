@@ -5,6 +5,7 @@
         android:layout_height = "match_parent"
         android:background = "@color/darkGray"
         android:orientation="vertical"
+        android:id="@+id/usertype_signup_fragment"
         tools:context = ".ui.signup.user_type">
     <TextView
             android:layout_width = "wrap_content"
