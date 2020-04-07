@@ -20,13 +20,13 @@ import static androidx.test.espresso.Espresso.onView;
 public class create_accountTest {
 
     @Rule
-    public ActivityTestRule<signup_email> activityTestRule=new ActivityTestRule<>(signup_email.class);
+    public ActivityTestRule<SignUpEmail> activityTestRule=new ActivityTestRule<>(SignUpEmail.class);
     @Before
     public void yourStetUpFragment(){
         FragmentActivity activity = (FragmentActivity) activityTestRule.getActivity();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        create_account create_account = new create_account();
-        transaction.replace(R.id.fragment_container,create_account, "CREATE_ACCOUNT");
+        CreateAccount createAccount = new CreateAccount();
+        transaction.replace(R.id.fragment_container,createAccount, "CREATE_ACCOUNT");
         transaction.commit();
     }
 

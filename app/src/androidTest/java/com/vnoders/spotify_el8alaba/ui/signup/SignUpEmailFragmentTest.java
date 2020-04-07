@@ -20,10 +20,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class signup_email_fragmentTest {
+public class SignUpEmailFragmentTest {
 
     @Rule
-    public ActivityTestRule<signup_email> activityTestRule=new ActivityTestRule<>(signup_email.class);
+    public ActivityTestRule<SignUpEmail> activityTestRule=new ActivityTestRule<>(SignUpEmail.class);
 
     @Before
     public void yourStetUpFragment(){
@@ -50,3 +50,4 @@ public class signup_email_fragmentTest {
     }
 
 }
+

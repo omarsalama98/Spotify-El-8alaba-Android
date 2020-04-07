@@ -12,14 +12,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.vnoders.spotify_el8alaba.R;
 
-public class user_type extends Fragment {
+public class UserType extends Fragment {
     private Button user;
     private Button artist;
     private ImageButton back;
     private FragmentManager fragmentManager;
     private void open_fragment() {
 
-        create_account fragment = new create_account();
+        CreateAccount fragment = new CreateAccount();
         fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
@@ -48,7 +48,7 @@ public class user_type extends Fragment {
         user.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((signup_email) getActivity()).setType("user");
+                ((SignUpEmail) getActivity()).setType("user");
                 artist.setTextColor(getResources().getColor(R.color.white));
                 artist.setBackground(getResources().getDrawable(R.drawable.gender_selected));
                 artist.setBackground(getResources().getDrawable(R.drawable.gender_not_selected));
@@ -60,7 +60,7 @@ public class user_type extends Fragment {
         artist.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((signup_email) getActivity()).setType("artist");
+                ((SignUpEmail) getActivity()).setType("artist");
                 user.setTextColor(getResources().getColor(R.color.white));
                 user.setBackground(getResources().getDrawable(R.drawable.gender_selected));
                 user.setBackground(getResources().getDrawable(R.drawable.gender_not_selected));

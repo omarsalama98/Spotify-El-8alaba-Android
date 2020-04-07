@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.forgot_password_info;
+import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import okhttp3.ResponseBody;
@@ -49,8 +49,8 @@ public class forget_password extends AppCompatActivity {
         get_link.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                forgot_password_info forgot_password_info=new forgot_password_info(email_address_holder);
-                Call<ResponseBody> call= RetrofitClient.getInstance().getAPI(API.class).forgot_password(forgot_password_info);
+                ForgotPasswordInfo forgotPasswordInfo=new ForgotPasswordInfo(email_address_holder);
+                Call<ResponseBody> call= RetrofitClient.getInstance().getAPI(API.class).forgot_password(forgotPasswordInfo);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call,

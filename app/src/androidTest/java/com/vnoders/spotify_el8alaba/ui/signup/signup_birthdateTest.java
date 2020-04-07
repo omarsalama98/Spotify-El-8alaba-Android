@@ -19,13 +19,13 @@ import static androidx.test.espresso.Espresso.onView;
 public class signup_birthdateTest {
 
     @Rule
-    public ActivityTestRule<signup_email> activityTestRule=new ActivityTestRule<>(signup_email.class);
+    public ActivityTestRule<SignUpEmail> activityTestRule=new ActivityTestRule<>(SignUpEmail.class);
     @Before
     public void yourStetUpFragment(){
         FragmentActivity activity = (FragmentActivity) activityTestRule.getActivity();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        signup_birthdate signup_birthdate = new signup_birthdate();
-        transaction.replace(R.id.fragment_container,signup_birthdate, "SIGNUP_BIRTHDATE");
+        SignUpBirthDate signUpBirthDate = new SignUpBirthDate();
+        transaction.replace(R.id.fragment_container,signUpBirthDate, "SIGNUP_BIRTHDATE");
         transaction.commit();
     }
 

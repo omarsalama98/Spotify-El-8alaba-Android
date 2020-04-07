@@ -19,10 +19,10 @@
         tools:targetApi="m">
         <activity android:name=".ui.login.check_email"></activity>
         <activity android:name=".ui.login.forget_password" />
-        <activity android:name=".ui.signup.signup_email" />
+        <activity android:name=".ui.signup.SignUpEmail" />
         <activity android:name=".Home" />
         <activity android:name=".ui.login.LoginActivit" />
-        <activity android:name=".firstScreen" />
+        <activity android:name=".ui.login.FirstScreen" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -30,7 +30,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             tools:ignore="LockedOrientationActivity">
-
 
 
         </activity>

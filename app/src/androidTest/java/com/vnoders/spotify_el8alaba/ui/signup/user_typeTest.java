@@ -19,13 +19,13 @@ import static androidx.test.espresso.Espresso.onView;
 public class user_typeTest {
 
     @Rule
-    public ActivityTestRule<signup_email> activityTestRule=new ActivityTestRule<>(signup_email.class);
+    public ActivityTestRule<SignUpEmail> activityTestRule=new ActivityTestRule<>(SignUpEmail.class);
     @Before
     public void yourStetUpFragment(){
         FragmentActivity activity = (FragmentActivity) activityTestRule.getActivity();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        user_type user_type = new user_type();
-        transaction.replace(R.id.fragment_container,user_type, "USER_TYPE");
+        UserType userType = new UserType();
+        transaction.replace(R.id.fragment_container,userType, "USER_TYPE");
         transaction.commit();
     }
 
