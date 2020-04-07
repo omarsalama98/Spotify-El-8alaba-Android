@@ -1,11 +1,12 @@
 package com.vnoders.spotify_el8alaba.ui.currentUserProfile;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-
+import android.widget.ImageView;
+import androidx.fragment.app.Fragment;
 import com.vnoders.spotify_el8alaba.R;
 
 /**
@@ -22,6 +23,8 @@ public class CurrentUserProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ImageView backArrowImage;
 
     public CurrentUserProfileFragment() {
         // Required empty public constructor
@@ -59,6 +62,17 @@ public class CurrentUserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_current_user_profile, container, false);
+        View root = inflater.inflate(R.layout.fragment_current_user_profile, container, false);
+
+        backArrowImage = root.findViewById(R.id.back_button);
+        backArrowImage.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        return root;
     }
+
 }

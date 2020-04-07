@@ -1,23 +1,31 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import java.util.ArrayList;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
 
-    private ArrayList<SearchListItem> mDataset;
+    //TODO: SearchListItem Class should be a parent to all types that appear in search
+
+    private static ArrayList<SearchListItem> mDataset;
+    private static Fragment fragment;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchListAdapter(ArrayList<SearchListItem> myDataset) {
+    public SearchListAdapter(ArrayList<SearchListItem> myDataset, Fragment fragment) {
         mDataset = myDataset;
+        SearchListAdapter.fragment = fragment;
     }
 
     // Create new views (invoked by the layout manager)
@@ -62,6 +70,24 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             name = v.findViewById(R.id.search_item_name_text_view);
             info = v.findViewById(R.id.search_item_info_text_view);
             image = v.findViewById(R.id.search_item_image_view);
+
+            v.setOnClickListener(v1 -> {
+                Bundle arguments = new Bundle();
+                arguments.putString
+                        (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,
+                                mDataset.get(getAdapterPosition()).getName());
+                //TODO: Replace the Name Key with an ID one and pass the selected item id
+                //TODO: The fragment to go to depends on the selected item type
+                Fragment targetFragment = new PlaylistTracksFragment();
+                targetFragment.setArguments(arguments);
+                fragment.getParentFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                                R.anim.fade_out)
+                        .replace(R.id.nav_host_fragment, targetFragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
         }
     }
 }
