@@ -1,7 +1,7 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,24 +10,34 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
-import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.ChartsFragment;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
-import com.vnoders.spotify_el8alaba.GenreFragment;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.Genre;
+import com.vnoders.spotify_el8alaba.ui.search.GenreFragment;
+import com.vnoders.spotify_el8alaba.ui.search.SpecialGenresFragment;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchGenresGridAdapter extends
         RecyclerView.Adapter<SearchGenresGridAdapter.MyViewHolder> {
 
-    private ArrayList<Genre> genresList;
+    private ArrayList<Genre> mockGenresList;
+    private ArrayList<Category> backGenresList;
     private static Fragment mFragment;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchGenresGridAdapter(ArrayList<Genre> myDataset, Fragment fragment) {
-        genresList = myDataset;
+    public SearchGenresGridAdapter(Fragment fragment, ArrayList<Genre> myDataset) {
+        mockGenresList = myDataset;
+        backGenresList = new ArrayList<>();
+        SearchGenresGridAdapter.mFragment = fragment;
+    }
+
+    public SearchGenresGridAdapter(ArrayList<Category> myDataset, Fragment fragment) {
+        backGenresList = myDataset;
+        mockGenresList = new ArrayList<>();
         SearchGenresGridAdapter.mFragment = fragment;
     }
 
@@ -46,21 +56,48 @@ public class SearchGenresGridAdapter extends
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        Bitmap genreImageBitmap = genresList.get(position).getImageBitmap();
-        holder.genreImage.setImageBitmap(genreImageBitmap);
-        holder.genreTitle.setText(genresList.get(position).getTitle());
+        final Bitmap[] genreImageBitmap = new Bitmap[1];
 
-        GradientUtils.generate(genreImageBitmap , holder.genreLayout);
+        if (backGenresList.isEmpty()) {
+            genreImageBitmap[0] = mockGenresList.get(position).getImageBitmap();
+            holder.genreImage.setImageBitmap(genreImageBitmap[0]);
+            holder.genreTitle.setText(mockGenresList.get(position).getTitle());
+        } else {
+            AsyncTask asyncTask = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    try {
+                        genreImageBitmap[0] = Picasso.get()
+                                .load(backGenresList.get(position).getIcons().get(0).getUrl())
+                                .get();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            };
+            holder.genreImage.setImageBitmap(genreImageBitmap[0]);
+            holder.genreTitle.setText(backGenresList.get(position).getName());
+        }
+
+        GradientUtils.generate(genreImageBitmap[0], holder.genreLayout);
 
         holder.genreLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment;
-                if (position > 1) {
-                    fragment = new GenreFragment();
-                } else {
-                    fragment = new ChartsFragment();
+                switch (position) {
+                    case 0:
+                        fragment = new GenreFragment();
+                        break;
+                    case 1:
+                        fragment = new GenreFragment();
+                        break;
+                    default:
+                        fragment = new SpecialGenresFragment();
+                        break;
                 }
+
                 mFragment.getParentFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_right,
@@ -77,7 +114,7 @@ public class SearchGenresGridAdapter extends
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return genresList.size();
+        return mockGenresList.isEmpty() ? backGenresList.size() : mockGenresList.size();
     }
 
     // Provide a reference to the views for each data item

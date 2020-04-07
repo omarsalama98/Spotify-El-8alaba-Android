@@ -3,10 +3,13 @@ package com.vnoders.spotify_el8alaba.repositories;
 import com.vnoders.spotify_el8alaba.Artist;
 import com.vnoders.spotify_el8alaba.models.Album;
 import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.models.Playlist;
+import com.vnoders.spotify_el8alaba.models.Track;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface APIInterface {
@@ -16,53 +19,69 @@ public interface APIInterface {
     Call<Album> getAlbum();
 
 
-    @GET("search?")
+    @GET("search?type=artist")
         //+ "header Authorization: Bearer Bearer Token"
-    Call<List<Artist>> getArtistsofSearch(
+    Call<List<Artist>> getArtistsOfSearch(
             @Query("q") String artistName,
             @Query("type") String searchType
     );
 
-    Call<List<Artist>> getalbumsofSearch(
-            @Query("q") String albumName,
-            @Query("type") String searchType,
-            @Query("limit") int limit,
-            @Query("offset") int offset
+    @GET("search?type=album")
+    Call<List<Album>> getAlbumsOfSearch(
+            @Query("q") String albumName
     );
 
-    Call<List<Artist>> getPLaylistsofSearch(
-            @Query("q") String playlistName,
-            @Query("type") String searchType,
-            @Query("limit") int limit,
-            @Query("offset") int offset
+    @GET("search?type=playlist")
+    Call<List<Playlist>> getPlaylistsOfSearch(
+            @Query("q") String playlistName
     );
 
-    Call<List<Artist>> getTracksofSearch(
-            @Query("q") String trackName,
-            @Query("type") String searchType,
-            @Query("limit") int limit,
-            @Query("offset") int offset
+    @GET("search?type=track")
+    Call<List<Track>> getTracksOfSearch(
+            @Query("q") String trackName
     );
 
 
     @GET("search?")
     Call<List<Artist>> getAllOfSearch(
             @Query("q") String searchQuery,
-            @Query("type") String searchType,
-            @Query("limit") int limit,
-            @Query("offset") int offset
+            @Query("type") String searchType
     );
 
 
     @GET("browse/categories?")
-    Call<List<Category>> getAllCategories(
-            @Query("country") String country,
-            @Query("limit") int limit,                      //All of them are optional I guess
-            @Query("offset") int offset
+    Call<List<Category>> getAllCategoriesOfCountry(
+            @Query("country") String country
     );
 
-    @GET("browse/categories?")
+
+    /**
+     * @return Returns a list of Categories to show in Browse all in Search(Browse).
+     */
+    @GET("browse/categories?offset=3")
     Call<List<Category>> getAllCategories();
 
+    /**
+     * @return Returns a number of Categories(0->4) to show in "Your Top Genres" in Search(Browse).
+     */
+    @GET("browse/categories?limit=4")
+    Call<List<Category>> getTopCategories();
+
+
+    /**
+     * @return Returns a list of Categories to show in Home. Not quite what should be shown and will
+     * be changed later.
+     */
+    @GET("browse/categories?limit=10&offset=5")
+    Call<List<Category>> getHomeCategories();
+
+
+    /**
+     * @param categoryId The id of the category we want to retrieve its playlists
+     *
+     * @return A list of the desired category's playlists
+     */
+    @GET("browse/categories/{category_id}/playlists")
+    Call<List<Playlist>> getCategoryPlaylists(@Path("category_id") String categoryId);
 
 }

@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Playlist;
+import com.vnoders.spotify_el8alaba.models.Playlist7afez;
 import java.util.ArrayList;
 
 
 public class LibraryPlaylistFragment extends Fragment {
 
-    private ArrayList<Playlist> playlists;
+    private ArrayList<Playlist7afez> playlists;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,14 +24,14 @@ public class LibraryPlaylistFragment extends Fragment {
 
         playlists = new ArrayList<>();
 
-        playlists.add(new Playlist("Playlist 1 Name", "by user 1"));
-        playlists.add(new Playlist("Playlist 2 Name", "by user 2"));
-        playlists.add(new Playlist("Playlist 3 Name", "by user 3"));
-        playlists.add(new Playlist("Playlist 4 Name", "by user 4"));
-        playlists.add(new Playlist("Playlist 5 Name", "by user 5"));
-        playlists.add(new Playlist("Playlist 6 Name", "by user 6"));
-        playlists.add(new Playlist("Playlist 7 Name", "by user 7"));
-        playlists.add(new Playlist("Playlist 8 Name", "by user 8"));
+        playlists.add(new Playlist7afez("Playlist 1 Name", "by user 1"));
+        playlists.add(new Playlist7afez("Playlist 2 Name", "by user 2"));
+        playlists.add(new Playlist7afez("Playlist 3 Name", "by user 3"));
+        playlists.add(new Playlist7afez("Playlist 4 Name", "by user 4"));
+        playlists.add(new Playlist7afez("Playlist 5 Name", "by user 5"));
+        playlists.add(new Playlist7afez("Playlist 6 Name", "by user 6"));
+        playlists.add(new Playlist7afez("Playlist 7 Name", "by user 7"));
+        playlists.add(new Playlist7afez("Playlist 8 Name", "by user 8"));
 
 //        playlistViewModel.setTracks(tracks);
 

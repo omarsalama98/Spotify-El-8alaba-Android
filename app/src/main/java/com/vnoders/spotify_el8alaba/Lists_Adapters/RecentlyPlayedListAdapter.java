@@ -4,37 +4,40 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
-import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
+import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistFragment;
+import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
 
-public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
+public class RecentlyPlayedListAdapter extends
+        RecyclerView.Adapter<RecentlyPlayedListAdapter.MyViewHolder> {
 
-    //TODO: SearchListItem Class should be a parent to all types that appear in search
-
-    private static ArrayList<SearchListItem> mDataset;
     private static Fragment fragment;
+    private static ArrayList<HomeInnerListItem> mDataset;
 
+    /**
+     * @param myDataset List Of Items in this RecyclerView
+     * @param fragment  The fragment where this list is in (Used to load another fragment)
+     */
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchListAdapter(ArrayList<SearchListItem> myDataset, Fragment fragment) {
+    public RecentlyPlayedListAdapter(ArrayList<HomeInnerListItem> myDataset, Fragment fragment) {
         mDataset = myDataset;
-        SearchListAdapter.fragment = fragment;
+        RecentlyPlayedListAdapter.fragment = fragment;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public SearchListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public RecentlyPlayedListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
             int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.search_list_item, parent, false);
+                .inflate(R.layout.recently_played_list_item, parent, false);
         return new MyViewHolder(v);
     }
 
@@ -42,9 +45,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        holder.name.setText(mDataset.get(position).getName());
-        holder.info.setText(mDataset.get(position).getInfo());
+        holder.title.setText(mDataset.get(position).getTitle());
         Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
+
+        /*TODO: Change The image circularity according to type of list item
+        if(!mDataset.get(position).getType().equals("Artist"))
+            holder.image.setDisableCircularTransformation(true);
+         */
 
     }
 
@@ -61,23 +68,21 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
 
         // each data item is just a string in this case
         public View v;
-        public TextView name;
-        TextView info;
-        public ImageView image;
+        public TextView title;
+        public CircleImageView image;
 
         MyViewHolder(View v) {
             super(v);
-            name = v.findViewById(R.id.search_item_name_text_view);
-            info = v.findViewById(R.id.search_item_info_text_view);
-            image = v.findViewById(R.id.search_item_image_view);
+
+            title = v.findViewById(R.id.home_recently_played_list_item_title);
+            image = v.findViewById(R.id.home_recently_played_list_item_image);
 
             v.setOnClickListener(v1 -> {
                 Bundle arguments = new Bundle();
                 arguments.putString
                         (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,
-                                mDataset.get(getAdapterPosition()).getName());
-                //TODO: Replace the Name Key with an ID one and pass the selected item id
-                //TODO: The fragment to go to depends on the selected item type
+                                mDataset.get(getAdapterPosition()).getTitle());
+                //TODO: Replace the Name Key with an ID one and pass the playlist_id
                 fragment.setArguments(arguments);
                 fragment.getParentFragmentManager()
                         .beginTransaction()
@@ -89,4 +94,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             });
         }
     }
+
 }
+

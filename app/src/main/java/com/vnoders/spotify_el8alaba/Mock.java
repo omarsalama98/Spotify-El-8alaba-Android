@@ -101,7 +101,7 @@ public class Mock {
         return myList;
     }
 
-    static ArrayList<Genre> getTopGenres(Fragment fragment) {
+    public static ArrayList<Genre> getTopGenres(Fragment fragment) {
 
         Bitmap bitmap = BitmapFactory.decodeResource(fragment.getResources(), R.drawable.bika);
         Bitmap bitmap6 = BitmapFactory.decodeResource(fragment.getResources(), R.drawable.bugatti);
@@ -116,7 +116,7 @@ public class Mock {
         return topGenresList;
     }
 
-    static ArrayList<Genre> getAllGenres(Fragment fragment) {
+    public static ArrayList<Genre> getAllGenres(Fragment fragment) {
 
         Bitmap bitmap = BitmapFactory.decodeResource(fragment.getResources(), R.drawable.bika);
         Bitmap bitmap2 = BitmapFactory.decodeResource(fragment.getResources(), R.drawable.beach);
@@ -127,11 +127,32 @@ public class Mock {
 
         ArrayList<Genre> browseAllGenresList = new ArrayList<>();
 
-        browseAllGenresList.add(new Genre(bitmap4, "Sha3by"));
-        browseAllGenresList.add(new Genre(bitmap5, "Sha3by"));
-        browseAllGenresList.add(new Genre(bitmap2, "Chill"));
-        browseAllGenresList.add(new Genre(bitmap2, "Chill"));
-        browseAllGenresList.add(new Genre(bitmap2, "Chill"));
+        /*
+        try {
+        browseAllGenresList.add(new Genre(Picasso.get()
+                .load("https://t.scdn.co/images/acc7b5d7b1264d0593ec05c020d0a689.jpeg").get(),
+                "New Releases"));
+
+        browseAllGenresList.add(new Genre(Picasso.get()
+                .load("https://t.scdn.co/images/4b7472015a274eadbc00119f5141e548.jpeg").get()
+                , "Charts"));
+
+        browseAllGenresList.add(new Genre(Picasso.get()
+                .load("https://t.scdn.co/images/4b7472015a274eadbc00119f5141e548.jpeg").get(),
+                "Concerts"));
+
+        browseAllGenresList.add(new Genre(Picasso.get()
+                .load("https://t.scdn.co/images/4b7472015a274eadbc00119f5141e548.jpeg").get(),
+                "At Home"));
+
+        browseAllGenresList.add(new Genre(Picasso.get()
+                    .load("https://t.scdn.co/images/68433b0ee5b5465b8e926c42b84cbcdb.jpeg").get(),
+                    "Made for You"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
         browseAllGenresList.add(new Genre(bitmap2, "Chill"));
         browseAllGenresList.add(new Genre(bitmap3, "Football"));
         browseAllGenresList.add(new Genre(bitmap3, "Football"));

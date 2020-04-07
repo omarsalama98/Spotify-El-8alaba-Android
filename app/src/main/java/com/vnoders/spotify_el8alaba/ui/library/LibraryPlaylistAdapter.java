@@ -14,17 +14,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Playlist;
+import com.vnoders.spotify_el8alaba.models.Playlist7afez;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHolder> {
 
-    private List<Playlist> playlists;
+    private List<Playlist7afez> playlists;
     private Fragment fragment;
 
-    public LibraryPlaylistAdapter(ArrayList<Playlist> playlists, Fragment fragment) {
+    public LibraryPlaylistAdapter(ArrayList<Playlist7afez> playlists, Fragment fragment) {
         this.playlists = playlists;
         this.fragment = fragment;
     }
