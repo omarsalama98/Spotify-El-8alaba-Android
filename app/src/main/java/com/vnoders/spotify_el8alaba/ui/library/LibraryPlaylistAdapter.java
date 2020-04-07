@@ -13,20 +13,25 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Playlist7afez;
+import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHolder> {
 
-    private List<Playlist7afez> playlists;
+    private List<UserLibraryPlaylistItem> playlists;
     private Fragment fragment;
 
-    public LibraryPlaylistAdapter(ArrayList<Playlist7afez> playlists, Fragment fragment) {
-        this.playlists = playlists;
+    public LibraryPlaylistAdapter(Fragment fragment) {
+        playlists = new ArrayList<>();
         this.fragment = fragment;
+    }
+
+    public void setUserPlaylists(List<UserLibraryPlaylistItem> playlists) {
+        this.playlists = playlists;
     }
 
     @NonNull
@@ -43,7 +48,10 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
         holder.playlistName.setText(playlists.get(position).getName());
-        holder.playlistInfo.setText(playlists.get(position).getInfo());
+        holder.playlistInfo.setText( "by " + playlists.get(position).getOwner().getName());
+        holder.playlistId = playlists.get(position).getId();
+        String imageUrl = playlists.get(position).getImages().get(0).getUrl();
+        Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock).into(holder.playlistArt);
     }
 
     @Override
@@ -60,6 +68,8 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
         TextView playlistName;
         TextView playlistInfo;
 
+        String playlistId;
+
         PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -74,7 +84,8 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
                 @Override
                 public void onClick(View v) {
                     fragment.getParentFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_library, new PlaylistFragment())
+                            .replace(R.id.nav_host_fragment,
+                                    PlaylistHomeFragment.newInstance(playlistId))
                             .addToBackStack(null)
                             .commit();
                 }

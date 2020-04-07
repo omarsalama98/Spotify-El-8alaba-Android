@@ -18,15 +18,15 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Track;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistAdapter.TrackViewHolder;
+import com.vnoders.spotify_el8alaba.models.library.Track;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHolder;
 import java.util.List;
 
-public class PlaylistAdapter extends RecyclerView.Adapter<TrackViewHolder> {
+public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
 
     private List<Track> tracks;
 
-    public PlaylistAdapter(List<Track> tracks) {
+    public PlaylistTracksAdapter(List<Track> tracks) {
         this.tracks = tracks;
     }
 

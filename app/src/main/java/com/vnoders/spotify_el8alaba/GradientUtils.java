@@ -2,6 +2,10 @@ package com.vnoders.spotify_el8alaba;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.Shader.TileMode;
 import android.graphics.SweepGradient;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,6 +17,9 @@ import android.widget.ImageView;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.Target;
 import java.lang.ref.WeakReference;
 
 /**
@@ -25,12 +32,27 @@ import java.lang.ref.WeakReference;
 public class GradientUtils {
 
 
+    // Types of Gradients to generate
+    public static final int GRADIENT_SWEEP = 0;
+    public static final int GRADIENT_LINEAR = 1;
+    // Take dominant color from the image and the other is always black
+    public static final int GRADIENT_LINEAR_BLACK = 2;
+
     /**
      * @param bitmap Bitmap image to generate the gradient colors from
      * @param view   The view which we will change its background by the generated gradient
      */
     public static void generate(Bitmap bitmap, View view) {
-        GradientAsyncTask task = new GradientAsyncTask(view);
+        generate(bitmap, view, GRADIENT_SWEEP);
+    }
+
+    /**
+     * @param bitmap       Bitmap image to generate the gradient colors from
+     * @param view         The view which we will change its background by the generated gradient
+     * @param gradientType type of the generated gradient
+     */
+    public static void generate(Bitmap bitmap, View view, int gradientType) {
+        GradientAsyncTask task = new GradientAsyncTask(view, gradientType);
         task.execute(bitmap);
     }
 
@@ -41,8 +63,18 @@ public class GradientUtils {
      * @param view  The view which we will change its background by the generated gradient
      */
     public static void generate(@DrawableRes int resId, View view) {
+        generate(resId, view, GRADIENT_SWEEP);
+    }
+
+    /**
+     * @param resId        Drawable image resource id to get the bitmap from it to generate the
+     *                     gradient colors from
+     * @param view         The view which we will change its background by the generated gradient
+     * @param gradientType type of the generated gradient
+     */
+    public static void generate(@DrawableRes int resId, View view, int gradientType) {
         Bitmap bitmap = BitmapFactory.decodeResource(view.getResources(), resId);
-        generate(bitmap, view);
+        generate(bitmap, view, gradientType);
     }
 
 
@@ -51,10 +83,48 @@ public class GradientUtils {
      * @param view  The view which we will change its background by the generated gradient
      */
     public static void generate(ImageView image, View view) {
-        Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
-        generate(bitmap, view);
+        generate(image, view, GRADIENT_SWEEP);
     }
 
+    /**
+     * @param image        ImageView to get the bitmap from it to generate the gradient colors from
+     * @param view         The view which we will change its background by the generated gradient
+     * @param gradientType type of the generated gradient
+     */
+    public static void generate(ImageView image, View view, int gradientType) {
+        Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+        generate(bitmap, view, gradientType);
+    }
+
+    /**
+     * @param imageUrl Url to get the bitmap from it to generate the gradient colors
+     * @param view     The view which we will change its background by the generated gradient
+     */
+    public static void generate(String imageUrl, View view) {
+        generate(imageUrl, view, GRADIENT_SWEEP);
+    }
+
+    /**
+     * @param imageUrl     Url to get the bitmap from it to generate the gradient colors
+     * @param view         The view which we will change its background by the generated gradient
+     * @param gradientType type of the generated gradient
+     */
+    public static void generate(String imageUrl, View view, int gradientType) {
+        Picasso.get().load(imageUrl).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, LoadedFrom from) {
+                generate(bitmap, view, gradientType);
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        });
+    }
 
     /**
      * Generates a gradient from bitmap image and sets this gradient as a background to the passed
@@ -68,14 +138,26 @@ public class GradientUtils {
          */
         private WeakReference<View> view;
 
+        int gradientType;
+
+        int viewHeight;
 
         /**
          * @param view The view which we sets its background by the generated gradient
          */
-        GradientAsyncTask(View view) {
+        GradientAsyncTask(View view, int gradientType) {
             this.view = new WeakReference<>(view);
+            this.gradientType = gradientType;
         }
 
+        @Override
+        protected void onPreExecute() {
+            // Calculate the view's height
+            // using this method instead of getHeight because view may be not fully instantiated
+            // therefore the returned height is always zero
+            view.get().measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            viewHeight = view.get().getMeasuredHeight();
+        }
 
         @Override
         @Nullable
@@ -83,11 +165,31 @@ public class GradientUtils {
             Palette palette = Palette.from(bitmaps[0]).generate();
 
             ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
-            mDrawable.getPaint().setShader
-                    (new SweepGradient(0, 0,
-                            palette.getDominantColor(0),
-                            palette.getVibrantColor(0)));
+            Shader shader;
 
+            switch (gradientType) {
+                case GRADIENT_LINEAR_BLACK:
+                    shader = new LinearGradient(0, 0, 0, viewHeight,
+                            palette.getLightMutedColor(Color.MAGENTA), Color.BLACK,
+                            TileMode.CLAMP);
+                    break;
+
+                case GRADIENT_LINEAR:
+                    shader = new LinearGradient(0, 0, 0, viewHeight,
+                            palette.getDominantColor(0),
+                            palette.getVibrantColor(0), TileMode.CLAMP);
+                    break;
+
+                default:
+                case GRADIENT_SWEEP:
+                    shader = new SweepGradient(0, 0,
+                            palette.getDominantColor(0),
+                            palette.getVibrantColor(0));
+                    break;
+
+            }
+
+            mDrawable.getPaint().setShader(shader);
             return mDrawable;
         }
 

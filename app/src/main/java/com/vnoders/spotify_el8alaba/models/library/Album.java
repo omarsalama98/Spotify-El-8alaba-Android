@@ -1,7 +1,7 @@
-package com.vnoders.spotify_el8alaba.models;
+package com.vnoders.spotify_el8alaba.models.library;
 
-import android.media.Image;
 import com.google.gson.annotations.SerializedName;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +24,7 @@ public class Album {
     private String id;
 
     @SerializedName("images")
-    private List<Image> images = null;
+    private List<TrackImage> images = null;
 
     @SerializedName("name")
     private String name;
@@ -87,11 +87,11 @@ public class Album {
         this.id = id;
     }
 
-    public List<Image> getImages() {
+    public List<TrackImage> getImages() {
         return images;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<TrackImage> images) {
         this.images = images;
     }
 

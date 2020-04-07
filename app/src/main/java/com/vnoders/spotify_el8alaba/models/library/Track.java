@@ -1,4 +1,4 @@
-package com.vnoders.spotify_el8alaba.models;
+package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
@@ -13,8 +13,8 @@ public class Track {
     @SerializedName("artists")
     private List<Artist> artists = null;
 
-    @SerializedName("available_markets")
-    private List<String> availableMarkets = null;
+    @SerializedName("external_urls")
+    private List<ExternalUrls> externalUrls = null;
 
     @SerializedName("disc_number")
     private int discNumber;
@@ -66,14 +66,6 @@ public class Track {
 
     public void setArtists(List<Artist> artists) {
         this.artists = artists;
-    }
-
-    public List<String> getAvailableMarkets() {
-        return availableMarkets;
-    }
-
-    public void setAvailableMarkets(List<String> availableMarkets) {
-        this.availableMarkets = availableMarkets;
     }
 
     public int getDiscNumber() {

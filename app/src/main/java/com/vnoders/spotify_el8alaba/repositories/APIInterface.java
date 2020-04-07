@@ -1,7 +1,7 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
 import com.vnoders.spotify_el8alaba.Artist;
-import com.vnoders.spotify_el8alaba.models.Album;
+import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.Playlist;
 import com.vnoders.spotify_el8alaba.models.Track;

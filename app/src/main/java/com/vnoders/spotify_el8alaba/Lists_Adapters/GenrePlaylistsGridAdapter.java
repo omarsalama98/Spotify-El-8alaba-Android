@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistFragment;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import java.util.ArrayList;
 
 public class GenrePlaylistsGridAdapter extends
@@ -85,7 +85,7 @@ public class GenrePlaylistsGridAdapter extends
                         .beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
                                 R.anim.fade_out)
-                        .replace(R.id.nav_host_fragment, new PlaylistFragment())
+                        .replace(R.id.nav_host_fragment, new PlaylistTracksFragment())
                         .addToBackStack(null)
                         .commit();
             });
