@@ -16,6 +16,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.signup.SignUpEmail;
 
 public class FirstScreen extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class FirstScreen extends AppCompatActivity {
 
                 Intent intent = new Intent(FirstScreen.this, MainActivity.class);
                 startActivity(intent);
+                RetrofitClient.getInstance().setToken(currentAccessToken.getToken());
                 finish();
             }
 
