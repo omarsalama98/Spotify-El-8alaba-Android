@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.firstScreen;
+import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 
 
 public class SignUpEmailFragment extends Fragment {
@@ -151,7 +151,7 @@ public class SignUpEmailFragment extends Fragment {
         back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-          Intent intent=new Intent(getActivity(),firstScreen.class);
+          Intent intent=new Intent(getActivity(), FirstScreen.class);
           startActivity(intent);
             }
         });

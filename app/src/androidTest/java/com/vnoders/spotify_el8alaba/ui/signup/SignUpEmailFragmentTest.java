@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class signup_email_fragmentTest {
+public class SignUpEmailFragmentTest {
 
     @Rule
     public ActivityTestRule<SignUpEmail> activityTestRule=new ActivityTestRule<>(SignUpEmail.class);
@@ -50,3 +50,4 @@ public class signup_email_fragmentTest {
     }
 
 }
+

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 
 public class app_mainActivity extends AppCompatActivity {
 
@@ -17,7 +18,7 @@ public class app_mainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent first_screen = new Intent(app_mainActivity.this, firstScreen.class);
+                Intent first_screen = new Intent(app_mainActivity.this, FirstScreen.class);
                 startActivity(first_screen);
                 finish();
             }

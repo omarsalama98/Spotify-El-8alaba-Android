@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vnoders.spotify_el8alaba.ConnectionDialog;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.firstScreen;
 import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -92,7 +91,7 @@ public class LoginActivit extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(LoginActivit.this, firstScreen.class);
+        Intent intent = new Intent(LoginActivit.this, FirstScreen.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
@@ -147,7 +146,7 @@ public class LoginActivit extends AppCompatActivity {
         back_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent first_screen_intent = new Intent(LoginActivit.this, firstScreen.class);
+                Intent first_screen_intent = new Intent(LoginActivit.this, FirstScreen.class);
                 startActivity(first_screen_intent);
             }
         });
