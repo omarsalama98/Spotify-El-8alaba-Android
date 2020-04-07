@@ -49,6 +49,7 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
         holder.playlistName.setText(playlists.get(position).getName());
         holder.playlistInfo.setText( "by " + playlists.get(position).getOwner().getName());
+        holder.playlistId = playlists.get(position).getId();
         String imageUrl = playlists.get(position).getImages().get(0).getUrl();
         Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock).into(holder.playlistArt);
     }
@@ -67,6 +68,8 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
         TextView playlistName;
         TextView playlistInfo;
 
+        String playlistId;
+
         PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -81,7 +84,8 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
                 @Override
                 public void onClick(View v) {
                     fragment.getParentFragmentManager().beginTransaction()
-                            .replace(R.id.nav_host_fragment, new PlaylistHomeFragment())
+                            .replace(R.id.nav_host_fragment,
+                                    PlaylistHomeFragment.newInstance(playlistId))
                             .addToBackStack(null)
                             .commit();
                 }

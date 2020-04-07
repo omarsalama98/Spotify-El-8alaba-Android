@@ -18,6 +18,7 @@ import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
+import org.jetbrains.annotations.NotNull;
 
 public class PlaylistHomeFragment extends Fragment {
 
@@ -33,6 +34,31 @@ public class PlaylistHomeFragment extends Fragment {
     private Button shuffle;
     private Button editOrPreviewPlaylist;
     private TextView tracksSummary;
+
+
+    // the fragment initialization parameters
+    private static final String ARGUMENT_PLAYLIST_ID = "id";
+
+    public PlaylistHomeFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of this fragment using the provided
+     * parameters.
+     *
+     * @param playlistId The id of the current playlist
+     *
+     * @return A new instance of fragment RemoveQuickly.
+     */
+    @NotNull
+    public static PlaylistHomeFragment newInstance(String playlistId) {
+        PlaylistHomeFragment fragment = new PlaylistHomeFragment();
+        Bundle args = new Bundle();
+        args.putString(ARGUMENT_PLAYLIST_ID, playlistId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -60,7 +86,13 @@ public class PlaylistHomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         playlistHomeViewModel = new ViewModelProvider(this).get(PlaylistHomeViewModel.class);
+
+        if (getArguments() != null) {
+            String playlistId = getArguments().getString(ARGUMENT_PLAYLIST_ID);
+            playlistHomeViewModel.setPlaylistId(playlistId);
+        }
 
         View.OnClickListener openTracksClickListener = new OnClickListener() {
             @Override
