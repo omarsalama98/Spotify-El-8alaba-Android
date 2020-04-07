@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.vnoders.spotify_el8alaba.R;
 
 
-public class signup_gender extends Fragment {
+public class SignUpGender extends Fragment {
 
     private Button male;
     private Button female;
@@ -27,7 +27,7 @@ public class signup_gender extends Fragment {
      */
     private void open_fragment() {
 
-        user_type fragment = new user_type();
+        UserType fragment = new UserType();
          fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
@@ -60,7 +60,7 @@ public class signup_gender extends Fragment {
         male.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((signup_email) getActivity()).setGender("m");
+                ((SignUpEmail) getActivity()).setGender("m");
                 male.setTextColor(getResources().getColor(R.color.white));
                 male.setBackground(getResources().getDrawable(R.drawable.gender_selected));
                 female.setBackground(getResources().getDrawable(R.drawable.gender_not_selected));
@@ -77,7 +77,7 @@ public class signup_gender extends Fragment {
         female.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((signup_email) getActivity()).setGender("f");
+                ((SignUpEmail) getActivity()).setGender("f");
                 female.setTextColor(getResources().getColor(R.color.white));
                 female.setBackground(getResources().getDrawable(R.drawable.gender_selected));
                 male.setBackground(getResources().getDrawable(R.drawable.gender_not_selected));

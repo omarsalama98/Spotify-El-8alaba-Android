@@ -12,17 +12,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.vnoders.spotify_el8alaba.ConnectionDialog;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.connection_dialog;
 import com.vnoders.spotify_el8alaba.firstScreen;
-import com.vnoders.spotify_el8alaba.models.Login_info;
+import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
-import com.vnoders.spotify_el8alaba.response.signup.signup_response;
-import okhttp3.ResponseBody;
+import com.vnoders.spotify_el8alaba.response.signup.SignUpResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,14 +59,14 @@ public class LoginActivit extends AppCompatActivity {
 
 
     private void login() {
-        Login_info login_info = new Login_info(email_address_holder, password_holder);
-    Call<signup_response> call=RetrofitClient.getInstance().getAPI(API.class).userLogin(login_info);
-    call.enqueue(new Callback<signup_response>() {
+        LoginInfo loginInfo = new LoginInfo(email_address_holder, password_holder);
+    Call<SignUpResponse> call=RetrofitClient.getInstance().getAPI(API.class).userLogin(loginInfo);
+    call.enqueue(new Callback<SignUpResponse>() {
         @Override
-        public void onResponse(Call<signup_response> call, Response<signup_response> response) {
+        public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
             if(response.code()==200){
-                signup_response signup_response=response.body();
-                String token=signup_response.getToken();
+                SignUpResponse signUpResponse =response.body();
+                String token= signUpResponse.getToken();
                 SharedPreferences.Editor editor=sharedPreferences.edit();
                 editor.putString("token",token);
                 editor.commit();
@@ -82,8 +80,8 @@ public class LoginActivit extends AppCompatActivity {
         }
 
         @Override
-        public void onFailure(Call<signup_response> call, Throwable t) {
-            connection_dialog dialog = new connection_dialog();
+        public void onFailure(Call<SignUpResponse> call, Throwable t) {
+            ConnectionDialog dialog = new ConnectionDialog();
             dialog.show(getFragmentManager(), "connection_dialog");
             login_status.setText("");
 

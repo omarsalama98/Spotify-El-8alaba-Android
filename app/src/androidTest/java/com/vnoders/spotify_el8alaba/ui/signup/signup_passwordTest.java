@@ -24,13 +24,13 @@ import org.junit.Test;
 public class signup_passwordTest {
 
     @Rule
-    public ActivityTestRule<signup_email> activityTestRule=new ActivityTestRule<>(signup_email.class);
+    public ActivityTestRule<SignUpEmail> activityTestRule=new ActivityTestRule<>(SignUpEmail.class);
     @Before
     public void yourStetUpFragment(){
         FragmentActivity activity = (FragmentActivity) activityTestRule.getActivity();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        signup_password signup_password_fragment = new signup_password();
-        transaction.replace(R.id.fragment_container,signup_password_fragment, "SIGNUP_PASSWORD_FRAGMENT");
+        SignUpPassword signUpPassword = new SignUpPassword();
+        transaction.replace(R.id.fragment_container,signUpPassword, "SIGNUP_PASSWORD_FRAGMENT");
         transaction.commit();
     }
     @Test

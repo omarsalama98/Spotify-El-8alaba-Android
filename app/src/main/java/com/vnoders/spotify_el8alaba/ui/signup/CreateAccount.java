@@ -19,17 +19,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.signup_info;
+import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
-import com.vnoders.spotify_el8alaba.response.signup.signup_response;
-import okhttp3.ResponseBody;
+import com.vnoders.spotify_el8alaba.response.signup.SignUpResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class create_account extends Fragment {
+public class CreateAccount extends Fragment {
 
     private String email_address;
     private String password;
@@ -82,24 +81,25 @@ public class create_account extends Fragment {
             @Override
             public void onClick(View v) {
                 name_holder = name.getText().toString().trim();
-                email_address = ((signup_email) getActivity()).getEmail_address();
-                password = ((signup_email) getActivity()).getPassword();
-                birth_date = ((signup_email) getActivity()).getBirth_date();
-                type = ((signup_email)getActivity()).getType();
-                gender = ((signup_email) getActivity()).getGender();
+                email_address = ((SignUpEmail) getActivity()).getEmail_address();
+                password = ((SignUpEmail) getActivity()).getPassword();
+                birth_date = ((SignUpEmail) getActivity()).getBirth_date();
+                type = ((SignUpEmail)getActivity()).getType();
+                gender = ((SignUpEmail) getActivity()).getGender();
 
-                signup_info signup_info = new signup_info(name_holder, email_address, password,
+                SignUpInfo SignUpInfo = new SignUpInfo(name_holder, email_address, password,
                         password, gender, birth_date, type);
 
-                Call<signup_response> call = RetrofitClient.getInstance().getAPI(API.class).signup(signup_info);
-                call.enqueue(new Callback<signup_response>() {
+                Call<SignUpResponse> call = RetrofitClient.getInstance().getAPI(API.class).signup(
+                        SignUpInfo);
+                call.enqueue(new Callback<SignUpResponse>() {
 
                     @Override
-                    public void onResponse(Call<signup_response> call,
-                            Response<signup_response> response) {
+                    public void onResponse(Call<SignUpResponse> call,
+                            Response<SignUpResponse> response) {
                         if (response.code() == 200) {
-                            signup_response signup_response =response.body();
-                            String token =signup_response.getToken();
+                            SignUpResponse signUpResponse =response.body();
+                            String token = signUpResponse.getToken();
                             SharedPreferences.Editor editor=sharedPreferences.edit();
                             editor.putString("token",token);
                             editor.commit();
@@ -112,9 +112,9 @@ public class create_account extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<signup_response> call, Throwable t) {
+                    public void onFailure(Call<SignUpResponse> call, Throwable t) {
 
-                        signup_dialog dialog = new signup_dialog();
+                        SignUpDialog dialog = new SignUpDialog();
                         dialog.show(getFragmentManager(), "signup_dialog");
                     }
                 });

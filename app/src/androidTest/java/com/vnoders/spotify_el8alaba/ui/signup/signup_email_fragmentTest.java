@@ -23,7 +23,7 @@ import org.junit.Test;
 public class signup_email_fragmentTest {
 
     @Rule
-    public ActivityTestRule<signup_email> activityTestRule=new ActivityTestRule<>(signup_email.class);
+    public ActivityTestRule<SignUpEmail> activityTestRule=new ActivityTestRule<>(SignUpEmail.class);
 
     @Before
     public void yourStetUpFragment(){

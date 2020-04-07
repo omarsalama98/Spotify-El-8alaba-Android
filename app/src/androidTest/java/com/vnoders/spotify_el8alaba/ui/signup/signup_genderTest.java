@@ -20,13 +20,13 @@ import static androidx.test.espresso.Espresso.onView;
 public class signup_genderTest {
 
     @Rule
-    public ActivityTestRule<signup_email> activityTestRule=new ActivityTestRule<>(signup_email.class);
+    public ActivityTestRule<SignUpEmail> activityTestRule=new ActivityTestRule<>(SignUpEmail.class);
     @Before
     public void yourStetUpFragment(){
         FragmentActivity activity = (FragmentActivity) activityTestRule.getActivity();
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        signup_gender signup_gender = new signup_gender();
-        transaction.replace(R.id.fragment_container,signup_gender, "GENDER_FRAGMENT");
+        SignUpGender signUpGender = new SignUpGender();
+        transaction.replace(R.id.fragment_container,signUpGender, "GENDER_FRAGMENT");
         transaction.commit();
     }
 

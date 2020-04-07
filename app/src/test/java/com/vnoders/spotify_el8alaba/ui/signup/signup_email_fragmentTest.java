@@ -11,7 +11,7 @@ public class signup_email_fragmentTest {
     String input_email="example";
     boolean output;
     boolean expected_output=false;
-    signup_email_fragment signup_email_fragment=new signup_email_fragment();
+    SignUpEmailFragment signUpEmailFragment=new SignUpEmailFragment();
 //    output=signup_email_fragment.isvalid("kjjkbjkbjk");
   //  assertEquals(expected_output,output);
 

@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import com.vnoders.spotify_el8alaba.R;
 
-public class signup_dialog extends DialogFragment {
+public class SignUpDialog extends DialogFragment {
 
     private Button ok_button;
 

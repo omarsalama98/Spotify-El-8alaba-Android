@@ -12,7 +12,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.firstScreen;
 
 
-public class signup_email extends AppCompatActivity {
+public class SignUpEmail extends AppCompatActivity {
 
     private String email_address;
     private String password;
@@ -92,7 +92,7 @@ public class signup_email extends AppCompatActivity {
      * this method opens the first fragment which is signup_email fragment
      */
     public void openFragment() {
-        signup_email_fragment fragment = new signup_email_fragment();
+        SignUpEmailFragment fragment = new SignUpEmailFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment, "SIGNUP_EMAIL_FRAGMENT").commit();

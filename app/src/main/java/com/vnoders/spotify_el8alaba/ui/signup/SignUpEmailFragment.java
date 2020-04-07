@@ -26,7 +26,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.firstScreen;
 
 
-public class signup_email_fragment extends Fragment {
+public class SignUpEmailFragment extends Fragment {
 
     private TextView signup_email_status;
     private TextView signup_email_status2;
@@ -158,8 +158,8 @@ public class signup_email_fragment extends Fragment {
         next.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((signup_email) getActivity()).setEmail_address(email_address_holder);
-                signup_password fragment = new signup_password();
+                ((SignUpEmail) getActivity()).setEmail_address(email_address_holder);
+                SignUpPassword fragment = new SignUpPassword();
                 fragmentManager = getActivity().getSupportFragmentManager();
                 transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,

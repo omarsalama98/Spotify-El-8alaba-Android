@@ -15,7 +15,7 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.vnoders.spotify_el8alaba.ui.login.LoginActivit;
-import com.vnoders.spotify_el8alaba.ui.signup.signup_email;
+import com.vnoders.spotify_el8alaba.ui.signup.SignUpEmail;
 
 public class firstScreen extends AppCompatActivity {
 
@@ -72,7 +72,7 @@ public class firstScreen extends AppCompatActivity {
         sign_up_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(firstScreen.this, signup_email.class);
+                Intent intent = new Intent(firstScreen.this, SignUpEmail.class);
                 startActivity(intent);
             }
         });
