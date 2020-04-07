@@ -60,7 +60,6 @@ public class RetrofitClient {
 
         headers = new HeadersInterceptor(httpClientBuilder);
 
-        setToken("ACCESS_TOKEN");
         headers.addHeader(HEADER_CONTENT_TYPE, TYPE_JSON);
         headers.addHeader(HEADER_USER_AGENT, getUserAgent());
 

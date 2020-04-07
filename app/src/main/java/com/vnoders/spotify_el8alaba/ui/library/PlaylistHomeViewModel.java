@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
@@ -11,6 +12,22 @@ public class PlaylistHomeViewModel extends ViewModel {
     private MutableLiveData<String> tracksSummary;
     private MutableLiveData<String> imageUrl;
 
+    public void setPlaylistName(String playlistName) {
+        this.playlistName.setValue(playlistName);
+    }
+
+    public void setPlaylistOwnerName(String playlistOwnerName) {
+        this.playlistOwnerName.setValue(playlistOwnerName);
+    }
+
+    public void setTracksSummary(String tracksSummary) {
+        this.tracksSummary.setValue(tracksSummary);
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl.setValue(imageUrl);
+    }
+
     private String playlistId;
 
     public PlaylistHomeViewModel() {
@@ -20,19 +37,19 @@ public class PlaylistHomeViewModel extends ViewModel {
         imageUrl = new MutableLiveData<>();
     }
 
-    public MutableLiveData<String> getPlaylistName() {
+    public LiveData<String> getPlaylistName() {
         return playlistName;
     }
 
-    public MutableLiveData<String> getTracksSummary() {
+    public LiveData<String> getTracksSummary() {
         return tracksSummary;
     }
 
-    public MutableLiveData<String> getImageUrl() {
+    public LiveData<String> getImageUrl() {
         return imageUrl;
     }
 
-    public MutableLiveData<String> getPlaylistOwnerName() {
+    public LiveData<String> getPlaylistOwnerName() {
         return playlistOwnerName;
     }
 

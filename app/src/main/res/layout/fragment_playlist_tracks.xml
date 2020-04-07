@@ -7,59 +7,75 @@
         android:layout_height = "match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+            android:id = "@+id/app_bar"
             android:layout_width = "match_parent"
-            android:layout_height = "250dp"
+            android:layout_height = "wrap_content"
+            android:paddingBottom="@dimen/appbar_padding"
             android:background = "@drawable/toolbar_gradient">
 
-        <!--        <com.google.android.material.appbar.CollapsingToolbarLayout-->
-        <!--                android:id = "@+id/collapsing_toolbar"-->
-        <!--                android:layout_width = "match_parent"-->
-        <!--                android:layout_height = "match_parent"-->
-        <!--                android:fitsSystemWindows = "true"-->
-        <!--                android:minHeight="150dp"-->
-        <!--                android:layout_marginBottom="@dimen/appbar_padding"-->
-        <!--                app:expandedTitleMarginEnd = "64dp"-->
-        <!--                app:expandedTitleMarginStart = "48dp"-->
-        <!--                app:layout_scrollFlags = "scroll|exitUntilCollapsed">-->
-
-        <!--            <androidx.appcompat.widget.Toolbar-->
-        <!--                    android:id = "@+id/toolbar"-->
-        <!--                    android:layout_width = "match_parent"-->
-        <!--                    android:layout_height = "100dp"-->
-        <!--                    app:layout_scrollFlags = "scroll|enterAlways" />-->
-
-        <!--            <TextView-->
-        <!--                    android:layout_width = "wrap_content"-->
-        <!--                    android:layout_height = "wrap_content"-->
-        <!--                    android:textSize = "34dp"-->
-        <!--                    android:text = "Liked Songs"-->
-        <!--                    android:textStyle="bold"-->
-        <!--                    android:textColor="@color/white"-->
-        <!--                    android:layout_gravity = "center"-->
-        <!--                    app:layout_collapseMode = "parallax" />-->
-
-        <!--        </com.google.android.material.appbar.CollapsingToolbarLayout>-->
-
-
-        <androidx.appcompat.widget.Toolbar
-                android:id = "@+id/toolbar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id = "@+id/collapsing_toolbar"
                 android:layout_width = "match_parent"
-                android:layout_height = "match_parent"
-                android:minHeight = "100dp"
-                android:layout_marginBottom = "@dimen/appbar_padding"
+                android:layout_height = "250dp"
+                app:contentScrim = "@color/backgroundColor"
                 app:layout_scrollFlags = "scroll|exitUntilCollapsed">
 
+            <androidx.appcompat.widget.Toolbar
+                    android:layout_width = "match_parent"
+                    android:layout_height = "50dp"
+                    android:gravity="top"
+                    android:layout_marginTop = "@dimen/status_bar_height"
+                    app:layout_scrollFlags = "noScroll"
+                    app:layout_collapseMode = "pin">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width = "match_parent"
+                        android:layout_height = "match_parent">
+
+                    <ImageView
+                            android:id = "@+id/playlist_tracks_up"
+                            android:layout_width = "@dimen/icon_size"
+                            android:layout_height = "@dimen/icon_size"
+                            android:padding = "@dimen/icon_padding"
+                            android:src = "@drawable/ic_left_arrow"
+                            app:layout_constraintTop_toTopOf = "parent"
+                            app:layout_constraintStart_toStartOf = "parent"
+                            app:layout_constraintBottom_toBottomOf = "parent" />
+
+                    <TextView
+                            android:id = "@+id/playlist_tracks_title"
+                            android:layout_width = "wrap_content"
+                            android:layout_height = "wrap_content"
+                            android:textAlignment = "center"
+                            android:textSize = "20sp"
+                            android:textStyle = "bold"
+                            android:textColor = "@color/white"
+                            android:text = "Playlist Name"
+                            app:layout_constraintTop_toTopOf = "parent"
+                            android:layout_centerVertical = "true"
+                            android:layout_centerHorizontal = "true"
+                            app:layout_constraintBottom_toBottomOf = "parent"
+                            app:layout_constraintLeft_toLeftOf = "parent"
+                            app:layout_constraintRight_toRightOf = "parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+
             <TextView
+                    android:id = "@+id/playlist_tracks_name"
                     android:layout_width = "wrap_content"
                     android:layout_height = "wrap_content"
+                    android:text = "Playlist Name"
                     android:textColor = "@color/white"
-                    android:layout_gravity = "center"
-                    android:textSize = "24sp"
+                    android:textSize = "28sp"
                     android:textStyle = "bold"
-                    android:text = "Liked Songs" />
+                    app:layout_collapseMode = "parallax"
+                    app:layout_collapseParallaxMultiplier = "1.1"
+                    android:layout_gravity = "center" />
 
-
-        </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -69,14 +85,15 @@
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:text = "Shuffle"
-            app:layout_anchor = "@id/toolbar"
+            app:layout_anchor = "@id/collapsing_toolbar"
             app:layout_anchorGravity = "bottom"
 
             android:gravity = "center"
             android:layout_gravity = "clip_horizontal"
-            android:layout_margin = "@dimen/track_list_item"
+            android:layout_marginVertical = "@dimen/library_list_item"
+            android:layout_marginHorizontal = "100dp"
             app:textAllCaps = "true"
-            android:textSize = "24sp"
+            android:textSize = "20sp"
             android:textColor = "@android:color/white"
             app:backgroundTint = "@color/green" />
 

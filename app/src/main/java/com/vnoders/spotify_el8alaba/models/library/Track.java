@@ -5,8 +5,6 @@ import java.util.List;
 
 public class Track {
 
-    private String artistName ;
-
     @SerializedName("album")
     private Album album;
 
@@ -164,13 +162,5 @@ public class Track {
         this.uri = uri;
     }
 
-    public String getArtistName() {
-        return artistName;
-    }
-
-    public Track(String artistName, String name) {
-        this.artistName = artistName;
-        this.name = name;
-    }
 }
 
