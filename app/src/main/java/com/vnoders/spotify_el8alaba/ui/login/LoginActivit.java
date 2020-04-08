@@ -36,6 +36,7 @@ public class LoginActivit extends AppCompatActivity {
     String email_address_holder;
     String password_holder;
     SharedPreferences sharedPreferences;
+
     private TextWatcher loginTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

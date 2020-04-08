@@ -58,6 +58,7 @@
             </FrameLayout>
 
             <androidx.appcompat.widget.Toolbar
+                    android:background="@color/black"
                     android:id = "@+id/toolbar"
                     android:layout_width = "match_parent"
                     android:layout_height = "60dp"
@@ -69,7 +70,7 @@
                 <RelativeLayout
                         android:layout_marginTop = "15dp"
                         android:layout_width = "match_parent"
-                        android:layout_height = "50dp"
+                        android:layout_height = "match_parent"
                         android:orientation = "horizontal"
 
                         >
