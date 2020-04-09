@@ -18,12 +18,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+/**
+ * This class contains static functions to connect to the network backend to the endpoints found at
+ * {@link LibraryApi}
+ */
 public class LibraryRepository {
 
     private static RetrofitClient retrofitClient = RetrofitClient.getInstance();
 
     private static LibraryApi libraryApi = retrofitClient.getAPI(LibraryApi.class);
 
+
+    /**
+     * Make a request to the network to the endpoint used at {@link LibraryApi#getUserPlaylists} and
+     * update the corresponding data in the {@link MutableLiveData}
+     *
+     * @param userPlaylists The {@link MutableLiveData} object which wraps the list of playlist of
+     *                      the user
+     */
     public static void updateLibraryPlaylists(
             MutableLiveData<List<UserLibraryPlaylistItem>> userPlaylists) {
 
@@ -49,6 +62,14 @@ public class LibraryRepository {
 
     }
 
+
+    /**
+     * Make a request to the network to the endpoint used at {@link LibraryApi#getPlaylist} and
+     * update the corresponding data in the {@link PlaylistHomeViewModel}
+     *
+     * @param viewModel The view model which contains all the data to be updated after the network
+     *                  request
+     */
     public static void updatePlaylist(PlaylistHomeViewModel viewModel) {
 
         Call<Playlist> request = libraryApi.getPlaylist(viewModel.getPlaylistId());
@@ -92,6 +113,13 @@ public class LibraryRepository {
     }
 
 
+    /**
+     * Make a request to the network to the endpoint used at {@link LibraryApi#getPlaylistTracks}
+     * and update the corresponding data in the {@link PlaylistHomeViewModel}
+     *
+     * @param viewModel The view model which contains all the data to be updated after the network
+     *                  request
+     */
     public static void updatePlaylistTracks(PlaylistTracksViewModel viewModel) {
 
         Call<TracksPagingWrapper> request = libraryApi.getPlaylistTracks(viewModel.getPlaylistId());
@@ -123,6 +151,14 @@ public class LibraryRepository {
 
     }
 
+
+    /**
+     * Make a request to the network to the endpoint used at {@link LibraryApi#getPlaylistCoverImages} and
+     * update the corresponding data in the {@link PlaylistHomeViewModel}
+     *
+     * @param viewModel The view model which contains all the data to be updated after the network
+     *                  request
+     */
     public static void updatePlaylistCoverImages(PlaylistTracksViewModel viewModel) {
         Call<List<TrackImage>> request = libraryApi
                 .getPlaylistCoverImages(viewModel.getPlaylistId());

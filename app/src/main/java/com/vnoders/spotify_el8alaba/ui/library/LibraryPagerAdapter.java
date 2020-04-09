@@ -1,20 +1,17 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
-import android.content.Context;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 import com.vnoders.spotify_el8alaba.R;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * A [LibraryPagerAdapter] that returns a fragment corresponding to one of the
- * sections/tabs/pages.
+ * This class that returns a fragment corresponding to one of the tabs in the user library {@link
+ * LibraryFragment}
+ * The returned fragments' names are saved in the array {@link #TAB_TITLES}
+ * The returned fragments are saved in the array {@link #fragments}
  */
 public class LibraryPagerAdapter extends FragmentStateAdapter {
 
@@ -23,26 +20,33 @@ public class LibraryPagerAdapter extends FragmentStateAdapter {
     private static final Fragment[] fragments = {new LibraryPlaylistFragment(),
             new ArtistFragment(), new AlbumFragment()};
 
+    /**
+     * @param fragmentActivity The {@link FragmentActivity} which contains the {@link Fragment} in
+     *                         which the {@link ViewPager2} lives directly in. In our case the
+     *                         Fragment is {@link LibraryFragment} and the FragmentActivity is
+     *                         {@link LibraryFragment#getActivity()}
+     */
     public LibraryPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
-//
-//    LibraryPagerAdapter(@NonNull Fragment fragment) {
-//        super(fragment);
-//    }
 
-
+    /**
+     * @param position the position of the required fragment. i.e. the tab number
+     *
+     * @return Fragment associated with the specified position
+     */
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         return fragments[position];
     }
 
+    /**
+     * @return The total number of items in this adapter. i.e the number of tabs
+     */
     @Override
     public int getItemCount() {
         return fragments.length;
     }
-
-
 
 }

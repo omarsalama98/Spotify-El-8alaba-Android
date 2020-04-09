@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.library.Track;
@@ -21,6 +20,9 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 
+/**
+ * This is the fragment which contains the list of tracks of a specific playlist.
+ */
 public class PlaylistTracksFragment extends Fragment {
 
     private PlaylistTracksViewModel playlistViewModel;
@@ -35,6 +37,13 @@ public class PlaylistTracksFragment extends Fragment {
     private static final String ARGUMENT_PLAYLIST_ID = "id";
     private static final String ARGUMENT_PLAYLIST_NAME = "name";
 
+    /**
+     * This is a required public constructor used by android framework but should NOT be used to
+     * initialize a new instance of {@link PlaylistTracksFragment}.
+     * <p>
+     * Use {@link #newInstance} instead to create a new {@link PlaylistTracksFragment} with
+     * parameters.
+     */
     public PlaylistTracksFragment() {
         // Required empty public constructor
     }

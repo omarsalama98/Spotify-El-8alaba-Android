@@ -1,11 +1,15 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * This class is used to model data parsed from json network response using {@link Gson} library
+ */
 public class Album {
 
     @SerializedName("album_type")

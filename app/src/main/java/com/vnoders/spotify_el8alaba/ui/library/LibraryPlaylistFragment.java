@@ -14,6 +14,10 @@ import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
 import java.util.List;
 
 
+/**
+ * This is the fragment which appears inside the library (Playlist Tab) that displays the list of
+ * the user's playlists
+ */
 public class LibraryPlaylistFragment extends Fragment {
 
     private LibraryPlaylistViewModel playlistViewModel;

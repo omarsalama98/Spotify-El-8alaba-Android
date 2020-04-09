@@ -20,6 +20,11 @@ import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import org.jetbrains.annotations.NotNull;
 
+
+/**
+ * This is the fragment which appears when the user clicks on a playlist which contains the
+ * playlist's cover photo and the playlist info.
+ */
 public class PlaylistHomeFragment extends Fragment {
 
     private PlaylistHomeViewModel playlistHomeViewModel;
@@ -39,6 +44,13 @@ public class PlaylistHomeFragment extends Fragment {
     // the fragment initialization parameters
     private static final String ARGUMENT_PLAYLIST_ID = "id";
 
+    /**
+     * This is a required public constructor used by android framework but should NOT be used to
+     * initialize a new instance of {@link PlaylistHomeFragment}.
+     * <p>
+     * Use {@link #newInstance} instead to create a new {@link PlaylistHomeFragment} with
+     * parameters.
+     */
     public PlaylistHomeFragment() {
         // Required empty public constructor
     }

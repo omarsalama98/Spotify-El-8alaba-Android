@@ -1,41 +1,45 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
-import com.google.gson.annotations.SerializedName;
 
+/**
+ * This class is used to model data parsed from json network response using {@link Gson} library
+ */
 public class UserLibraryPlaylistItem {
-    
+
     @SerializedName("collaborative")
     private boolean collaborative;
-    
+
     @SerializedName("external_urls")
     private ExternalUrls externalUrls;
-    
+
     @SerializedName("href")
     private String href;
-    
+
     @SerializedName("id")
     private String id;
-    
+
     @SerializedName("images")
     private List<TrackImage> images = null;
-    
+
     @SerializedName("name")
     private String name;
-    
+
     @SerializedName("owner")
     private Owner owner;
-    
+
     @SerializedName("public")
     private boolean isPublic;
-    
+
     @SerializedName("snapshot_id")
     private String snapshotId;
 
     @SerializedName("type")
     private String type;
-    
+
     @SerializedName("uri")
     private String uri;
 
