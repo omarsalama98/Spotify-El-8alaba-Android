@@ -27,12 +27,11 @@ public interface API {
      *
      * @return ResponseBody and it will be changed in the future to a login response
      */
-   /* @Headers({"X-Forwarded-For: 197.52.255.130",
-            "Content-Type: application/json"
-    }*/
-
+    @Headers({"X-Forwarded-For: 197.52.255.130",
+        //  "Content-Type: application/json"
+    })
     @POST("authentication/login")
-    Call<SignUpResponse> userLogin(@Body LoginInfo loginInfo);
+    Call<ResponseBody>userLogin(@Body LoginInfo loginInfo);
 
     /**
      * This method handles the registration request
@@ -43,21 +42,21 @@ public interface API {
      * @return singup response which contains the user's info
      */
 
-  /*  @Headers({"X-Forwarded-For: 197.52.255.130",
-            "Content-Type: application/json"
-    })*/
+    @Headers({"X-Forwarded-For: 197.52.255.130",
+  //          "Content-Type: application/json"
+    })
     @POST("authentication/signup")
-    Call<SignUpResponse> signup(@Body SignUpInfo signUpInfo);
+    Call<ResponseBody> signup(@Body SignUpInfo signUpInfo);
 
     /**
      * This method handles forgot password action
      * @param forgotPasswordInfo an object from forgot password info holds the email address or username of the user
      * @return ResponseBody that will be changed in future to forgotpassword response body
      */
- /*   @Headers({
+    @Headers({
             "X-Forwarded-For: 197.52.255.130",
-            "Content-Type: application/json"
-    })*/
+ //           "Content-Type: application/json"
+    })
 
     @POST("authentication/forgotPassword")
     Call<ResponseBody> forgot_password(@Body ForgotPasswordInfo forgotPasswordInfo);

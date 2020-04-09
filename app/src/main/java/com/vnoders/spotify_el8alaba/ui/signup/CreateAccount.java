@@ -23,6 +23,10 @@ import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.signup.SignUpResponse;
+import java.io.IOException;
+import okhttp3.ResponseBody;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,30 +94,44 @@ public class CreateAccount extends Fragment {
                 SignUpInfo SignUpInfo = new SignUpInfo(name_holder, email_address, password,
                         password, gender, birth_date, type);
 
-                Call<SignUpResponse> call = RetrofitClient.getInstance().getAPI(API.class).signup(
+                Call<ResponseBody> call = RetrofitClient.getInstance().getAPI(API.class).signup(
                         SignUpInfo);
-                call.enqueue(new Callback<SignUpResponse>() {
+                call.enqueue(new Callback<ResponseBody>() {
 
                     @Override
-                    public void onResponse(Call<SignUpResponse> call,
-                            Response<SignUpResponse> response) {
+                    public void onResponse(Call<ResponseBody> call,
+                            Response<ResponseBody> response) {
+                        String jsonResponse=null;
+                        try {
                         if (response.code() == 200) {
-                            SignUpResponse signUpResponse =response.body();
-                            String token = signUpResponse.getToken();
+                            try {
+                                jsonResponse=response.body().string();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                                JSONObject jsonObject=new JSONObject(jsonResponse);
+                            String token = jsonObject.getString("token");
                             SharedPreferences.Editor editor=sharedPreferences.edit();
                             editor.putString("token",token);
                             editor.commit();
+
                             Intent intent = new Intent(getActivity(), MainActivity.class);
                             startActivity(intent);
                             getActivity().finish();
-                        } else {
+                        }
+                        else {
                             Toast.makeText(getActivity(), "Email already Exists!",
                                     Toast.LENGTH_LONG).show();
+                        }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<SignUpResponse> call, Throwable t) {
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                         SignUpDialog dialog = new SignUpDialog();
                         dialog.show(getFragmentManager(), "signup_dialog");
