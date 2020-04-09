@@ -1,29 +1,44 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistFragment;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import java.util.ArrayList;
 
 public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private ArrayList<HomeInnerListItem> mDataset;
+    private static ArrayList<HomeInnerListItem> mockDataset;
+    //private static ArrayList<Playlist> backDataset;
 
+    //               The difference between these two constructors is that one uses mock data and the other
+    //                  uses data retrieved from the server and the mock data one will be removed later on.
+
+    /**
+     * @param myDataset List Of Playlists in the home Category lists
+     * @param fragment  The fragment where this list is in (Used to load another fragment)
+     */
     // Provide a suitable constructor (depends on the kind of dataset)
-    HomeInnerListAdapter(ArrayList<HomeInnerListItem> myDataset, Fragment fragment) {
-        mDataset = myDataset;
+    public HomeInnerListAdapter(ArrayList<HomeInnerListItem> myDataset, Fragment fragment) {
+        mockDataset = myDataset;
         HomeInnerListAdapter.fragment = fragment;
     }
+    /*
+    public HomeInnerListAdapter(Fragment fragment, ArrayList<Playlist> backDataset) {
+        mockDataset = new ArrayList<>();
+        this.backDataset = backDataset;
+        HomeInnerListAdapter.fragment = fragment;
+    }*/
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -32,23 +47,28 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.home_inner_list_item, parent, false);
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+        return new MyViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        holder.title.setText(mDataset.get(position).getTitle());
-        holder.subTitle.setText(mDataset.get(position).getSubTitle());
-        Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
+        holder.title.setText(mockDataset.get(position).getTitle());
+        holder.subTitle.setText(mockDataset.get(position).getSubTitle());
+        Picasso.get().load(mockDataset.get(position).getImageURL()).into(holder.image);
+
+       /*TODO: Replace the former with the latter code when backend is completed
+        holder.title.setText(backDataset.get(position).getName());
+        holder.subTitle.setText(backDataset.get(position).getDescription());
+        Picasso.get().load(backDataset.get(position).getImages().get(0).getUrl()).into(holder.image);
+        */
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return mockDataset.size();
     }
 
     // Provide a reference to the views for each data item
@@ -68,15 +88,21 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
             subTitle = v.findViewById(R.id.home_inner_list_item_sub_title);
             image = v.findViewById(R.id.home_inner_list_item_image);
 
-            v.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    fragment.getParentFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.home_fragment_container, new PlaylistFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
+            v.setOnClickListener(v1 -> {
+                Bundle arguments = new Bundle();
+                arguments.putString
+                        (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,
+                                mockDataset.get(getAdapterPosition()).getTitle());
+                //TODO: Replace the Name Key with an ID one and pass the playlist id retrieved from server
+                Fragment targetFragment = new PlaylistTracksFragment();
+                targetFragment.setArguments(arguments);
+                fragment.getParentFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                                R.anim.fade_out)
+                        .replace(R.id.nav_host_fragment, targetFragment)
+                        .addToBackStack(null)
+                        .commit();
             });
         }
     }

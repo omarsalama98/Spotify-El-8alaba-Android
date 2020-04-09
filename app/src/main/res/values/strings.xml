@@ -73,7 +73,7 @@
     <string name = "see_all_songs">Search all songs</string>
     <string name = "see_all_playlists">See all playlists</string>
     <string name = "see_all_albums">See all albums</string>
-    <string name = "search_all_genres_and_moods">Search all genres and moods</string>
+    <string name = "search_all_genres_and_moods">Search all genres &amp; moods</string>
     <string name = "see_all_profiles">See all profiles</string>
 
     <string name = "popular_playlists">Popular playlists</string>
@@ -112,4 +112,12 @@
     <string name = "following">following</string>
     <string name = "no_recent_activity">No recent activity</string>
 
+    <string name = "playlist_image">Playlist Image</string>
+    <string name = "right_arrow">right arrow</string>
+    <string name = "camera_icon_in_search_bar">Camera Icon in Search Bar</string>
+    <string name = "reset_icon_in_search_bar">Reset Icon in Search Bar</string>
+    <string name = "back_arrow_in_search_bar">Back Arrow in Search Bar</string>
+    <string name = "settings_icon">Settings Icon</string>
+    <string name = "recently_played">Recently Played</string>
+    <string name = "categories">Categories</string>
 </resources>

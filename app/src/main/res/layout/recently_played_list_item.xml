@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:orientation = "vertical"
+        android:foreground = "@drawable/home_playlists_ripple"
+        android:paddingEnd = "10dp"
+        android:focusable = "true"
+        android:layout_width = "150dp"
+        android:layout_height = "170dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id = "@+id/home_recently_played_list_item_image"
+            android:layout_width = "150dp"
+            android:layout_height = "140dp"
+            android:contentDescription = "@string/playlist_image" />
+    <LinearLayout
+            android:layout_below = "@id/home_recently_played_list_item_image"
+            android:layout_alignStart = "@id/home_recently_played_list_item_image"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:orientation = "horizontal">
+
+        <ImageView
+                android:id = "@+id/home_recently_played_list_item_shuffle_icon"
+                android:layout_width = "16dp"
+                android:layout_height = "16dp"
+                android:src = "@drawable/ic_shuffle"
+                android:backgroundTint = "@color/white"
+                android:layout_marginEnd = "5dp"
+                android:layout_gravity = "center_vertical" />
+
+        <TextView
+                android:id = "@+id/home_recently_played_list_item_title"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginVertical = "5dp"
+                android:textColor = "@color/white"
+                android:textSize = "16sp"
+                android:text = "subTitle"
+                android:layout_gravity = "center_vertical" />
+    </LinearLayout>
+
+
+</RelativeLayout>

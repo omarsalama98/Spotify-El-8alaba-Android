@@ -1,21 +1,17 @@
 package com.vnoders.spotify_el8alaba;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentManager.OnBackStackChangedListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryFragment;
 import com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment;
+import com.vnoders.spotify_el8alaba.ui.search.SearchGenresFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,8 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private SearchGenresFragment searchGenresFragment;
     private HomeFragment homeFragment;
     private PremiumFragment premiumFragment;
-
-    private BottomNavigationView navView;
+    String fragmentName = "home";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +31,9 @@ public class MainActivity extends AppCompatActivity {
         // being drawn by other views
         getWindow().setBackgroundDrawable(null);
 
-
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        navView = findViewById(R.id.nav_view);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override
@@ -74,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // start service that plays tracks here to get tracks from online and play it
         Intent intent = new Intent(this, MediaPlaybackService.class);
         startService(intent);
     }
 
+    /**
+     * @param fragment the fragment we want to load
+     */
     private void startFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
