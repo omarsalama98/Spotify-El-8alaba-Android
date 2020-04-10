@@ -120,4 +120,5 @@
     <string name = "settings_icon">Settings Icon</string>
     <string name = "recently_played">Recently Played</string>
     <string name = "categories">Categories</string>
+    <string name = "navigate_up">Navigate up</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
 import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
@@ -47,6 +48,11 @@ public class SearchGenresFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+        if (navView.getSelectedItemId() != R.id.navigation_search) {
+            navView.setSelectedItemId(R.id.navigation_search);
+        }
 
         /*TODO: UnComment and use it instead of mock data when backend is populated.
         APIInterface apiService =
@@ -114,6 +120,5 @@ public class SearchGenresFragment extends Fragment {
             }
         });
     }
-
 
 }

@@ -3,6 +3,7 @@
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:background = "@drawable/curved_gradient"
         android:layout_width = "match_parent"
+        android:id = "@+id/special_genre_layout"
         android:layout_height = "match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -62,6 +63,7 @@
                     app:layout_scrollFlags = "scroll|snap" />
 
             <TextView
+                    android:id = "@+id/special_genre_popular_playlists_text_view"
                     android:layout_width = "wrap_content"
                     android:layout_height = "wrap_content"
                     android:text = "@string/popular_playlists"
@@ -80,6 +82,7 @@
                     android:overScrollMode = "never" />
 
             <TextView
+                    android:id = "@+id/special_genre_categories_text_view"
                     android:layout_width = "wrap_content"
                     android:layout_height = "wrap_content"
                     android:text = "@string/categories"

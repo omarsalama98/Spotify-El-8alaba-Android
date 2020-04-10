@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.HomeMainListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
@@ -48,6 +49,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+        if (navView.getSelectedItemId() != R.id.navigation_home) {
+            navView.setSelectedItemId(R.id.navigation_home);
+        }
 
         ArrayList<HomeInnerListItem> innerListItems = new ArrayList<>();
         innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
@@ -103,4 +109,5 @@ public class HomeFragment extends Fragment {
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
     }
+
 }

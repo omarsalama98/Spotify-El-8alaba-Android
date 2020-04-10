@@ -1,4 +1,4 @@
-package com.vnoders.spotify_el8alaba;
+package com.vnoders.spotify_el8alaba.ui.search;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import com.vnoders.spotify_el8alaba.R;
 
 public class ChartsFragment extends Fragment {
 

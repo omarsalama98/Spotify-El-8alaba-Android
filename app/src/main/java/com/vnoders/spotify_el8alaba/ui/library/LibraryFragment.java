@@ -4,14 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayout.Tab;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -29,6 +26,10 @@ public class LibraryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+        if (navView.getSelectedItemId() != R.id.navigation_your_library) {
+            navView.setSelectedItemId(R.id.navigation_your_library);
+        }
 //        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(this);
         LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(getActivity() );
         ViewPager2 viewPager = view.findViewById(R.id.view_pager);

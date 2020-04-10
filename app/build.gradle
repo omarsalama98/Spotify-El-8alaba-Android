@@ -20,6 +20,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug{
+            testCoverageEnabled true
+        }
     }
 
     compileOptions {
@@ -59,6 +62,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     testImplementation 'org.mockito:mockito-core:3.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
 
     implementation 'com.facebook.android:facebook-login:5.15.3'
     implementation 'org.jetbrains:annotations:15.0'

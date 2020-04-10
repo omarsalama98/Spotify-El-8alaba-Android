@@ -34,6 +34,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+            android:id = "@+id/home_scroll_view"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:overScrollMode = "never"
@@ -46,6 +47,7 @@
                 android:layout_height = "wrap_content">
 
             <TextView
+                    android:id = "@+id/home_recently_played_title"
                     android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
                     android:text = "@string/recently_played"

@@ -47,8 +47,8 @@ public class SearchFragment extends Fragment implements OnClickListener {
     private RelativeLayout searchMainBackground;
     private LinearLayout searchEditTextLayout;
     private ImageView resetSearch;
-    private LinearLayout searchHistoryListLayout;
-    private RelativeLayout searchEmptyBackground;
+    private static LinearLayout searchHistoryListLayout;
+    private static RelativeLayout searchEmptyBackground;
     private RecyclerView searchListRecyclerView;
     private ImageView backArrow;
     private ImageView cameraInTextView;
@@ -190,8 +190,7 @@ public class SearchFragment extends Fragment implements OnClickListener {
 
         clearRecentSearches.setOnClickListener(v -> {
             mySearchHistory.clear();
-            searchEmptyBackground.setVisibility(View.VISIBLE);
-            searchHistoryListLayout.setVisibility(View.GONE);
+            removeSearchHistoryList();
         });
 
         SearchHistoryListAdapter searchHistoryListAdapter = new SearchHistoryListAdapter(
@@ -213,8 +212,7 @@ public class SearchFragment extends Fragment implements OnClickListener {
             searchHistoryListLayout.setVisibility(View.VISIBLE);
             searchEmptyBackground.setVisibility(View.GONE);
         } else {
-            searchHistoryListLayout.setVisibility(View.GONE);
-            searchEmptyBackground.setVisibility(View.VISIBLE);
+            removeSearchHistoryList();
         }
 
         backArrow.setOnClickListener(v -> {
@@ -311,6 +309,11 @@ public class SearchFragment extends Fragment implements OnClickListener {
 
             }
         });
+    }
+
+    public static void removeSearchHistoryList() {
+        searchHistoryListLayout.setVisibility(View.GONE);
+        searchEmptyBackground.setVisibility(View.VISIBLE);
     }
 
     @Override

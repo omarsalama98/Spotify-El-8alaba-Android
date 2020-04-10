@@ -7,7 +7,8 @@
         android:orientation = "vertical"
         android:paddingTop = "@dimen/appbar_padding_top"
         android:background = "@color/darkGray"
-        tools:context = ".ChartsFragment">
+        android:id = "@+id/charts_fragment_layout"
+        tools:context = ".ui.search.ChartsFragment">
 
     <FrameLayout
             android:layout_width = "match_parent"
@@ -64,6 +65,7 @@
                     android:layout_height = "wrap_content"
                     android:orientation = "horizontal"
                     android:layout_gravity = "center_horizontal">
+
                 <ImageView
                         android:layout_width = "16dp"
                         android:layout_height = "16dp"
@@ -73,6 +75,7 @@
                         android:layout_marginEnd = "5dp"
                         android:layout_gravity = "center_vertical" />
                 <TextView
+                        android:id = "@+id/global_top_50_sub_title"
                         android:layout_width = "wrap_content"
                         android:layout_height = "wrap_content"
                         android:layout_marginVertical = "5dp"
@@ -92,6 +95,7 @@
                 android:layout_height = "wrap_content">
 
             <ImageView
+                    android:id = "@+id/global_viral_50_image"
                     android:layout_width = "match_parent"
                     android:layout_height = "175dp"
                     android:src = "@drawable/viral_top_50" />
@@ -125,6 +129,7 @@
     </LinearLayout>
 
     <TextView
+            android:id = "@+id/top_charts_by_country_text_view"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:textColor = "@color/white"
@@ -136,6 +141,7 @@
             android:drawablePadding = "10dp" />
 
     <TextView
+            android:id = "@+id/viral_50_by_country_text_view"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:textColor = "@color/white"

@@ -5,6 +5,7 @@
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
         android:background = "@color/darkGray"
+        android:id = "@+id/search_by_type_fragment_layout"
         tools:context = ".ui.search.SearchByTypeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
