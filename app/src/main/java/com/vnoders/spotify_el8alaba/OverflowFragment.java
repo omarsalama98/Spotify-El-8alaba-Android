@@ -22,8 +22,13 @@ import com.vnoders.spotify_el8alaba.models.RealTrack;
 
 import java.lang.reflect.Field;
 
+/**
+ * @author Ali Adel
+ * Fragment to show info about a track and options to change it
+ */
 public class OverflowFragment extends BottomSheetDialogFragment {
 
+    // holds track displayed info about (NOT NULL)
     private RealTrack mTrack;
 
     // references to all the buttons in view
@@ -36,11 +41,18 @@ public class OverflowFragment extends BottomSheetDialogFragment {
     private View mReportButton;
     private View mCreditsButton;
 
+    /**
+     * Make new fragment instance
+     * @param track to display info about (MUST BE NOT NULL)
+     */
     public OverflowFragment(RealTrack track) {
         mTrack = track;
     }
 
 
+    /**
+     * Instantiate the style of bottom sheet
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +60,10 @@ public class OverflowFragment extends BottomSheetDialogFragment {
         setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
     }
 
+    /**
+     * Instantiate view to be displayed and set up listeners and set data on items
+     * @return view to show on screen
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,6 +87,9 @@ public class OverflowFragment extends BottomSheetDialogFragment {
         return root;
     }
 
+    /**
+     * used to make fragment take whole screen and not get swiped down off screen
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
