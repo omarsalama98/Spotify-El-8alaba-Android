@@ -10,6 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
         GenreFragmentTest.class,
         SpecialGenresFragmentTest.class,
         ChartsFragmentTest.class,
+        SearchByTypeFragmentTest.class,
         NavigationThroughSearchTest.class
 })
 

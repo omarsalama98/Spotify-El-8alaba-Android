@@ -1,4 +1,19 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
+
+task codeCoverageReport(type: JacocoReport) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+task getCoverage(type: Exec, dependsOn: 'codeCoverageReport') {
+    group = "Reporting"
+    commandLine "open", "$buildDir/reports/jacoco/codeCoverageReport/html/index.html"
+}
 
 android {
     compileSdkVersion 29
@@ -19,6 +34,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            testCoverageEnabled true
         }
         debug{
             testCoverageEnabled true
@@ -35,6 +51,7 @@ android {
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
 
     implementation "androidx.room:room-runtime:2.2.5"
     annotationProcessor "androidx.room:room-compiler:2.2.5"
