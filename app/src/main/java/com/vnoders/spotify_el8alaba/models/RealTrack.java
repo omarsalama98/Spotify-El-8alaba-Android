@@ -6,14 +6,14 @@ import java.util.List;
 
 public class RealTrack {
 
-    @SerializedName("_id")
+    @SerializedName("id")
     private String mId;
 
     @SerializedName("name")
     private String mName;
 
     @SerializedName("duration_ms")
-    private int mDuration;
+    private double mDuration;
 
     @SerializedName("artists")
     private List<RealArtist> mArtists;
@@ -30,7 +30,7 @@ public class RealTrack {
         return this.mName;
     }
 
-    public int getDuration() {
+    public double getDuration() {
         return this.mDuration;
     }
 

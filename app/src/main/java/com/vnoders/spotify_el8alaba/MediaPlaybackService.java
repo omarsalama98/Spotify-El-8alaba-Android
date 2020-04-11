@@ -41,7 +41,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
 
     private static final String PLAYER_STREAMING_BASE_URL = RetrofitClient.BASE_URL + "streaming/";
-    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer%";
+    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer ";
 
     //______________________________________________________________________________________________
     //--------------------------------------Variables-----------------------------------------------
