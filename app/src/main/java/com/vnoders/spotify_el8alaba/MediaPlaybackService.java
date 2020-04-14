@@ -11,17 +11,23 @@ import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.vnoders.spotify_el8alaba.models.CurrentlyPlayingTrack;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
-import com.vnoders.spotify_el8alaba.models.TrackList;
-import com.vnoders.spotify_el8alaba.repositories.API;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostTrackId;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
-import com.vnoders.spotify_el8alaba.repositories.TrackApi;
+import com.vnoders.spotify_el8alaba.repositories.TrackPlayerApi;
+import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackViewModel;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,8 +36,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * @author Ali Adel
@@ -55,7 +59,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     // index of current track active
     private int mCurrentTrackIndex;
     // current track playing
-    private RealTrack mCurrentTrack;
+    private Track mCurrentTrack;
 
     // instance of media player for audio playback
     private MediaPlayer mMediaPlayer;
@@ -141,8 +145,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      */
     public void start() {
         // if no instance then init media player and let on prepared listener play the song
-        if (mMediaPlayer == null) {
-            initMediaPlayer();
+        if (mMediaPlayer == null && mCurrentTrack != null && !TextUtils.isEmpty(mCurrentTrack.getId())) {
+            initMediaPlayer(mCurrentTrack.getId());
             return;
         }
 
@@ -253,20 +257,15 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     /**
      * init media player
      */
-    private void initMediaPlayer() {
+    private void initMediaPlayer(String trackId) {
         // if there is instance of media player then it has already been initialized so return
         if (mMediaPlayer != null)
             return;
 
-        // if no current track to play return nothing to do
-        if (mCurrentTrack == null) {
+        // if no track to play return nothing to do
+        if (TextUtils.isEmpty(trackId)) {
             return;
         }
-
-        // if song doesn't have preview url to play return (for now cus we don't have real track url)
-        if (mCurrentTrack.getId() == null)
-            return;
-
 
         // create new instance of media player and set it to playing music
         mMediaPlayer = new MediaPlayer();
@@ -280,7 +279,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         try {
             SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
             String access_token = prefs.getString("token", null);
-            String songUrl = PLAYER_STREAMING_BASE_URL + mCurrentTrack.getId() + PLAYER_STREAMING_URL_MIDDLE + access_token;
+            String songUrl = PLAYER_STREAMING_BASE_URL + trackId + PLAYER_STREAMING_URL_MIDDLE + access_token;
             mMediaPlayer.setDataSource(songUrl);
             mMediaPlayer.prepareAsync();
             setIsPlaying(false);
@@ -329,21 +328,18 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         String access_token = prefs.getString("token", null);
         retrofitClient.setToken(access_token);
 
-        Call<CurrentlyPlayingTrack> request = retrofitClient.getAPI(API.class).getCurrentlyPlaying();
+        Call<CurrentlyPlayingTrackResponse> request = retrofitClient.getAPI(TrackPlayerApi.class).getCurrentlyPlaying();
 
-        request.enqueue(new Callback<CurrentlyPlayingTrack>() {
+        request.enqueue(new Callback<CurrentlyPlayingTrackResponse>() {
             @Override
-            public void onResponse(Call<CurrentlyPlayingTrack> call, Response<CurrentlyPlayingTrack> response) {
+            public void onResponse(Call<CurrentlyPlayingTrackResponse> call, Response<CurrentlyPlayingTrackResponse> response) {
                 if ((!response.isSuccessful()) || (response.code() != 200)) {
-                    Toast.makeText(MediaPlaybackService.this, "Failed to get current track", Toast.LENGTH_SHORT).show();
-                    stopSelf();
                     return;
                 }
-                RealTrack track = response.body().getCurrentTrackWrapper().getCurrentTrack();
-                TrackViewModel.getInstance().updateCurrentTrack(track);
-                mCurrentTrack = track;
+                CurrentlyPlayingTrack track = response.body().getCurrentTrackWrapper().getCurrentTrack();
+                mCurrentTrack = new Track(track.getId(), track.getName(), track.getDuration(), track.getArtists().get(0).getUserInfo().getName());
+                TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
                 if (track == null) {
-                    stopSelf();
                     return;
                 }
                 mFirstInit = true;
@@ -351,17 +347,106 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 tracksID.add(track.getId());
                 mCurrentTrackIndex = 0;
                 destroyMediaPlayer();
-                initMediaPlayer();
+                initMediaPlayer(mCurrentTrack.getId());
             }
 
             @Override
-            public void onFailure(Call<CurrentlyPlayingTrack> call, Throwable t) {
-                Toast.makeText(MediaPlaybackService.this, "Failed to get current track", Toast.LENGTH_SHORT).show();
-                stopSelf();
+            public void onFailure(Call<CurrentlyPlayingTrackResponse> call, Throwable t) {
             }
         });
     }
 
+    public void playTrack(String trackId) {
+
+        if (TextUtils.isEmpty(trackId)) {
+            return;
+        }
+
+        PostTrackId trackIdObj = new PostTrackId(trackId);
+
+        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).postTrack(trackIdObj);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
+
+        getTrack(trackId);
+    }
+
+    private void getTrack(String trackId) {
+        Call<GetTrack> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getTrack(trackId);
+
+        request.enqueue(new Callback<GetTrack>() {
+            @Override
+            public void onResponse(Call<GetTrack> call, Response<GetTrack> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                GetTrack track = response.body();
+
+                mCurrentTrack = new Track(track.getId(), track.getName(), track.getDuration(), " ");
+
+                TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
+
+                tracksID = new ArrayList<>();
+                tracksID.add(mCurrentTrack.getId());
+                mCurrentTrackIndex = 0;
+                destroyMediaPlayer();
+                initMediaPlayer(mCurrentTrack.getId());
+
+                getArtistInfo(track.getArtists().get(0));
+            }
+
+            @Override
+            public void onFailure(Call<GetTrack> call, Throwable t) {
+            }
+        });
+    }
+
+    private void getArtistInfo(String artistId) {
+
+        if (TextUtils.isEmpty(artistId)) {
+            return;
+        }
+
+        Call<GetArtist> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getArtist(artistId);
+
+        request.enqueue(new Callback<GetArtist>() {
+            @Override
+            public void onResponse(Call<GetArtist> call, Response<GetArtist> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                String name = response.body().getName();
+
+                if (!TextUtils.isEmpty(name)) {
+                    mCurrentTrack.setArtistName(name);
+                    TrackViewModel.getInstance().updateCurrentTrack(mCurrentTrack);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetArtist> call, Throwable t) {
+
+            }
+        });
+    }
 
     // _____________________________________________________________________________________________
     // --------------------------------Media player callbacks---------------------------------------

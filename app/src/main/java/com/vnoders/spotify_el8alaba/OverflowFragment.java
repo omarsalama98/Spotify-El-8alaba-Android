@@ -13,18 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.squareup.picasso.Picasso;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
-
-import java.lang.reflect.Field;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 public class OverflowFragment extends BottomSheetDialogFragment {
 
-    private RealTrack mTrack;
+    private Track mTrack;
 
     // references to all the buttons in view
     private View mLikeButton;
@@ -36,7 +31,7 @@ public class OverflowFragment extends BottomSheetDialogFragment {
     private View mReportButton;
     private View mCreditsButton;
 
-    public OverflowFragment(RealTrack track) {
+    public OverflowFragment(Track track) {
         mTrack = track;
     }
 
@@ -138,7 +133,7 @@ public class OverflowFragment extends BottomSheetDialogFragment {
 
         // set the author's name
         ((TextView) root.findViewById(R.id.overflow_author_name)).
-                setText(mTrack.getArtists().get(0).getUserInfo().getName());
+                setText(mTrack.getArtistName());
 
         // set the image displayed in middle
         (((ImageView) root.findViewById(R.id.overflow_img))).setImageResource(R.drawable.track_image_default);

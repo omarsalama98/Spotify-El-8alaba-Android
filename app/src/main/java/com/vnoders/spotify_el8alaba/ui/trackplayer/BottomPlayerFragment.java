@@ -21,13 +21,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
-import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
  * @author Ali Adel
@@ -51,7 +49,7 @@ public class BottomPlayerFragment extends Fragment {
     // current state of playing
     private boolean isPlaying = false;
     // current track being played
-    private RealTrack mCurrentTrack;
+    private Track mCurrentTrack;
 
     // seek bar reference
     private SeekBar mSeekbar;
@@ -111,9 +109,9 @@ public class BottomPlayerFragment extends Fragment {
         });
 
         // get instance of current track and set the observer on it to update UI on data change
-        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<Track>() {
             @Override
-            public void onChanged(RealTrack realTrack) {
+            public void onChanged(Track realTrack) {
                 updateUI(realTrack);
             }
         });
@@ -143,7 +141,7 @@ public class BottomPlayerFragment extends Fragment {
      *
      * @param track current track being played object
      */
-    private void updateUI(RealTrack track) {
+    private void updateUI(Track track) {
 
         if (track == null) {
             getActivity().findViewById(R.id.music_player_fragment).setVisibility(View.GONE);
@@ -159,10 +157,17 @@ public class BottomPlayerFragment extends Fragment {
         songImage.setImageResource(R.drawable.track_image_default);
 
         // concatenating the song info in 1 string
-        String songInfo = track.getName() + " • " + track.getArtists().get(0).getUserInfo().getName();
-        // if it equals the text already displayed then don't display it
-        if (!TextUtils.equals(songInfo, songInfoView.getText()))
-            songInfoView.setText(songInfo);
+        if (track.getArtistName() == null || track.getArtistName().equals("") || track.getArtistName().equals(" ")) {
+            String songInfo = track.getName();
+            // if it equals the text already displayed then don't display it
+            if (!TextUtils.equals(songInfo, songInfoView.getText()))
+                songInfoView.setText(songInfo);
+        } else {
+            String songInfo = track.getName() + " • " + track.getArtistName();
+            // if it equals the text already displayed then don't display it
+            if (!TextUtils.equals(songInfo, songInfoView.getText()))
+                songInfoView.setText(songInfo);
+        }
 
         // puts correct icon in case of playing or paused
         isPlaying = track.getIsPlaying();
@@ -213,7 +218,7 @@ public class BottomPlayerFragment extends Fragment {
     private void updateSeekbar(Integer progress) {
 
         // get duration and progress of 0-100
-        int songTime = (int)mCurrentTrack.getDuration();
+        int songTime = mCurrentTrack.getDuration();
 
         int progressScaled = progress * 100 / songTime;
 

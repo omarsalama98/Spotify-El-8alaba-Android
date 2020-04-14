@@ -1,7 +1,5 @@
 package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
-import com.google.gson.Gson;
 import com.vnoders.spotify_el8alaba.OverflowFragment;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
  * @author Ali Adel Top part of track player fragment
@@ -28,6 +24,7 @@ public class TrackTopFragment extends Fragment {
 
     // holds author name text view
     private TextView authorNameText;
+    private TextView playingFromTextView;
 
     /**
      * inflate layout and return it to system to display
@@ -42,7 +39,7 @@ public class TrackTopFragment extends Fragment {
 
         String playingFrom = getString(R.string.playing_from_artist);
         // setting the text
-        TextView playingFromTextView = rootView.findViewById(R.id.playing_from_text);
+        playingFromTextView = rootView.findViewById(R.id.playing_from_text);
         playingFromTextView.setText(playingFrom);
 
         authorNameText = rootView.findViewById(R.id.author_name_text_top);
@@ -57,9 +54,9 @@ public class TrackTopFragment extends Fragment {
         });
 
         // setting the observer on the data change then calling updateUI on data change
-        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<Track>() {
             @Override
-            public void onChanged(RealTrack realTrack) {
+            public void onChanged(Track realTrack) {
                 updateUI(realTrack);
             }
         });
@@ -72,12 +69,21 @@ public class TrackTopFragment extends Fragment {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(RealTrack track) {
+    private void updateUI(Track track) {
 
         if (track == null)
             return;
 
-        authorNameText.setText(track.getArtists().get(0).getUserInfo().getName());
+        String name = track.getArtistName();
+
+        if (name == null || name.equals("") || name.equals(" ")) {
+            authorNameText.setVisibility(View.GONE);
+            playingFromTextView.setVisibility(View.GONE);
+        } else {
+            authorNameText.setVisibility(View.VISIBLE);
+            playingFromTextView.setVisibility(View.VISIBLE);
+            authorNameText.setText(name);
+        }
     }
 
     /**

@@ -1,26 +1,26 @@
-package com.vnoders.spotify_el8alaba.models;
+package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
-import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+public class Track {
 
-public class RealTrack {
-
-    @SerializedName("id")
     private String mId;
 
-    @SerializedName("name")
     private String mName;
 
-    @SerializedName("duration_ms")
-    private double mDuration;
+    private int mDuration;
 
-    @SerializedName("artists")
-    private List<RealArtist> mArtists;
+    private String mArtistName;
 
     private boolean mHasNext = false;
     private boolean mHasPrev = false;
     private boolean mIsPlaying = false;
+
+    public Track(String id, String name, int duration, String artistName) {
+        this.setId(id);
+        this.setName(name);
+        this.setDuration(duration);
+        this.setArtistName(artistName);
+    }
 
     public String getId() {
         return this.mId;
@@ -30,12 +30,28 @@ public class RealTrack {
         return this.mName;
     }
 
-    public double getDuration() {
+    public int getDuration() {
         return this.mDuration;
     }
 
-    public List<RealArtist> getArtists() {
-        return this.mArtists;
+    public String getArtistName() {
+        return this.mArtistName;
+    }
+
+    public void setId(String id) {
+        this.mId = id;
+    }
+
+    public void setName(String name) {
+        this.mName = name;
+    }
+
+    public void setDuration(int duration) {
+        this.mDuration = duration;
+    }
+
+    public void setArtistName(String artistName) {
+        this.mArtistName = artistName;
     }
 
     public boolean getHasNext() {
@@ -62,7 +78,5 @@ public class RealTrack {
         this.mIsPlaying = isPlaying;
     }
 
-    public void setDuration(int duration) {
-        this.mDuration = duration;
-    }
+
 }

@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,9 +28,8 @@ import com.squareup.picasso.Target;
 import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 
 /**
@@ -70,7 +70,7 @@ public class TrackPlayerActivity extends AppCompatActivity {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(RealTrack track) {
+    private void updateUI(Track track) {
         mTrackImageView.setImageResource(R.drawable.track_image_default);
     }
 
@@ -131,10 +131,17 @@ public class TrackPlayerActivity extends AppCompatActivity {
                 });
 
         // setting observer to know when data changes
-        TrackViewModel.getInstance().getCurrentTrack().observe(this, new Observer<RealTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(this, new Observer<Track>() {
             @Override
-            public void onChanged(RealTrack realTrack) {
+            public void onChanged(Track realTrack) {
                 updateUI(realTrack);
+            }
+        });
+
+        findViewById(R.id.testing_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mService.playTrack("5e8f39c45c504a25a711cd44");
             }
         });
     }

@@ -18,9 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 
 /**
@@ -43,7 +42,7 @@ public class TrackBotFragment extends Fragment {
     // track progress duration
     private TextView mTrackDuration;
     // holds current track being played
-    private RealTrack mCurrentTrack;
+    private Track mCurrentTrack;
     // holds skip next button
     private Button mNextButton;
     // holds skip previous button
@@ -103,9 +102,9 @@ public class TrackBotFragment extends Fragment {
         });
 
         // setting to observe change in global song being played
-        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<Track>() {
             @Override
-            public void onChanged(RealTrack realTrack) {
+            public void onChanged(Track realTrack) {
                 updateUI(realTrack);
             }
         });
@@ -126,7 +125,7 @@ public class TrackBotFragment extends Fragment {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(RealTrack track) {
+    private void updateUI(Track track) {
 
         if (track == null)
             return;
@@ -153,7 +152,7 @@ public class TrackBotFragment extends Fragment {
 
         // set the name of song and name of author and setting the button to display correctly
         songNameTextView.setText(track.getName());
-        authorNameText.setText(track.getArtists().get(0).getUserInfo().getName());
+        authorNameText.setText(track.getArtistName());
         isPlaying = track.getIsPlaying();
         if (isPlaying) {
             playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
@@ -197,7 +196,7 @@ public class TrackBotFragment extends Fragment {
             return;
 
         // get the duration and scale it to 0-100
-        int songTime = (int)mCurrentTrack.getDuration();
+        int songTime = mCurrentTrack.getDuration();
 
         int progressScaled = progress * 100 / songTime;
 
