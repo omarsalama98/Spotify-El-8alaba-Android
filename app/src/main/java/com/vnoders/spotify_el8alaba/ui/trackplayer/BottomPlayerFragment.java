@@ -145,10 +145,12 @@ public class BottomPlayerFragment extends Fragment {
 
         if (track == null) {
             getActivity().findViewById(R.id.music_player_fragment).setVisibility(View.GONE);
+            getActivity().findViewById(R.id.seek_bar_bottom_player).setVisibility(View.GONE);
             return;
         }
 
         getActivity().findViewById(R.id.music_player_fragment).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.seek_bar_bottom_player).setVisibility(View.VISIBLE);
 
         // reads the track
         mCurrentTrack = track;

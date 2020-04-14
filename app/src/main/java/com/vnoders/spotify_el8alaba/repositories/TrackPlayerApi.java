@@ -2,15 +2,19 @@ package com.vnoders.spotify_el8alaba.repositories;
 
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostTrackId;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface TrackPlayerApi {
 
@@ -25,4 +29,7 @@ public interface TrackPlayerApi {
 
     @GET("artists/{artistId}")
     Call<GetArtist> getArtist(@Path("artistId") String artistId);
+
+    @GET("tracks")
+    Call<GetSeveralTracks> getSeveralTracks(@Query("ids") String tracksIds);
 }
