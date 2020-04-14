@@ -392,6 +392,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             @Override
             public void onResponse(Call<CurrentlyPlayingTrackResponse> call, Response<CurrentlyPlayingTrackResponse> response) {
                 if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    TrackViewModel.getInstance().updateCurrentTrack(null);
                     return;
                 }
                 CurrentlyPlayingTrack track = response.body().getCurrentTrackWrapper().getCurrentTrack();
@@ -409,6 +410,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
             @Override
             public void onFailure(Call<CurrentlyPlayingTrackResponse> call, Throwable t) {
+                TrackViewModel.getInstance().updateCurrentTrack(null);
             }
         });
     }

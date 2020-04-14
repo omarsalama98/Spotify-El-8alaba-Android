@@ -44,6 +44,7 @@ public class TrackViewModel extends ViewModel {
     public MutableLiveData<Track> getCurrentTrack() {
         if (mCurrentTrack == null) {
             mCurrentTrack = new MutableLiveData<>();
+            mCurrentTrack.postValue(null);
         }
         return mCurrentTrack;
     }
