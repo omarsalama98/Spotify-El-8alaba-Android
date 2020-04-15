@@ -2,8 +2,10 @@ package com.vnoders.spotify_el8alaba.ui.search;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vnoders.spotify_el8alaba.GridSpacingItemDecoration;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
 import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
@@ -56,6 +59,17 @@ public class SearchGenresFragment extends Fragment {
         return v;
     }
 
+    /**
+     * @return Spacing between grid items based on current mobile screen
+     */
+    private int getGridSpacing() {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        return width / 25;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -86,10 +100,12 @@ public class SearchGenresFragment extends Fragment {
             }
         });
 
-
+        int spacingInPixels = getGridSpacing();
         topGenresGridView
                 .setAdapter(new SearchGenresGridAdapter(this, topCategories[0]));
         topGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        topGenresGridView
+                .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
 
         /*TODO: UnComment and use it instead of mock data when backend is populated.
         APIInterface apiService =
@@ -115,6 +131,8 @@ public class SearchGenresFragment extends Fragment {
         browseAllGenresGridView
                 .setAdapter(new SearchGenresGridAdapter(this, Mock.getAllGenres(this)));
         browseAllGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        browseAllGenresGridView
+                .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
 
         genresSearchTextLayout.setOnClickListener(new OnClickListener() {
             @Override

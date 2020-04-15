@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         if (searchGenresFragment == null) {
                             searchGenresFragment = new SearchGenresFragment();
                         }
-                        if (prevFragment != R.id.navigation_search && prevFragment != 0) {
+                        if (prevFragment != R.id.navigation_search) {
                             startFragment(searchGenresFragment);
                             prevFragment = R.id.navigation_search;
                         } else {

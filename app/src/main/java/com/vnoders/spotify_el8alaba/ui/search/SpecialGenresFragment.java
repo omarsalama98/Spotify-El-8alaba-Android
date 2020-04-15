@@ -1,6 +1,8 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
+import com.vnoders.spotify_el8alaba.GridSpacingItemDecoration;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
@@ -56,6 +59,14 @@ public class SpecialGenresFragment extends Fragment {
         return root;
     }
 
+    private int getGridSpacing() {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        return width / 25;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -82,16 +93,21 @@ public class SpecialGenresFragment extends Fragment {
         topPlaylistsRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
+        int spacingInPixels = getGridSpacing();
+
         categoriesGridRecyclerView
                 .setAdapter(new SearchGenresGridAdapter(this, Mock.getTopGenres(this)));
         categoriesGridRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        categoriesGridRecyclerView
+                .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
 
         final float[] alpha = {0.0f};
         final float[] newAlpha = {0.0f};
         final int[] overallXScroll = {0};
 
         scrollView.setOnScrollChangeListener(
-                (OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+                (OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
+                {
                     overallXScroll[0] = -scrollY + oldScrollY;
 
                     if (overallXScroll[0] > 0) {
@@ -112,6 +128,5 @@ public class SpecialGenresFragment extends Fragment {
                         }
                     }
                 });
-
     }
 }
