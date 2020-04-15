@@ -2,6 +2,7 @@ package com.vnoders.spotify_el8alaba.repositories;
 
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
+import com.vnoders.spotify_el8alaba.models.Item;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
@@ -63,10 +64,10 @@ public class LibraryRepository {
 
                     StringBuilder stringBuilder = new StringBuilder();
 
-                    for (TrackItem trackItem : playlist.getTracks().getTrackItems()) {
-                        stringBuilder.append(trackItem.getTrack().getName())
+                    for (Item trackItem : playlist.getTracks().getItems()) {
+                        stringBuilder.append(trackItem.getTrack())
                                 .append(" ")
-                                .append(trackItem.getTrack().getArtists().get(0).getName())
+                                .append(trackItem.getAddedBy())
                                 .append(" • ");
                         if (stringBuilder.length() > 200) {
                             break;
@@ -76,7 +77,7 @@ public class LibraryRepository {
 
                     viewModel.setTracksSummary(stringBuilder.toString());
                     viewModel.setImageUrl(playlist.getImages().get(0).getUrl());
-                    viewModel.setPlaylistOwnerName(playlist.getOwner().getName());
+                    viewModel.setPlaylistOwnerName(playlist.getOwner());
                     viewModel.setPlaylistName(playlist.getName());
 
                 }

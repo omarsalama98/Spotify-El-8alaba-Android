@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavig
 import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryFragment;
 import com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment;
+import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchGenresFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private SearchGenresFragment searchGenresFragment;
     private HomeFragment homeFragment;
     private PremiumFragment premiumFragment;
+    private static int prevFragment = R.id.navigation_home;
+    private SearchFragment searchFragment;
     String fragmentName = "home";
 
     @Override
@@ -40,28 +43,53 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
+
                         if (homeFragment == null) {
                             homeFragment = new HomeFragment();
                         }
-                        startFragment(homeFragment);
+                        if (prevFragment != R.id.navigation_home) {
+                            startFragment(homeFragment);
+                            prevFragment = R.id.navigation_home;
+                        }
                         return true;
+
                     case R.id.navigation_search:
+
                         if (searchGenresFragment == null) {
                             searchGenresFragment = new SearchGenresFragment();
                         }
-                        startFragment(searchGenresFragment);
+                        if (prevFragment != R.id.navigation_search && prevFragment != 0) {
+                            startFragment(searchGenresFragment);
+                            prevFragment = R.id.navigation_search;
+                        } else {
+                            if (searchFragment == null) {
+                                searchFragment = new SearchFragment();
+                            }
+                            startFragment(searchFragment);
+                            prevFragment = 0;
+                        }
                         return true;
+
                     case R.id.navigation_your_library:
+
                         if (libraryFragment == null) {
                             libraryFragment = new LibraryFragment();
                         }
-                        startFragment(libraryFragment);
+                        if (prevFragment != R.id.navigation_your_library) {
+                            startFragment(libraryFragment);
+                            prevFragment = R.id.navigation_your_library;
+                        }
                         return true;
+
                     case R.id.navigation_premium:
+
                         if (premiumFragment == null) {
                             premiumFragment = new PremiumFragment();
                         }
-                        startFragment(premiumFragment);
+                        if (prevFragment != R.id.navigation_premium) {
+                            startFragment(premiumFragment);
+                            prevFragment = R.id.navigation_premium;
+                        }
                         return true;
                 }
                 return false;
@@ -82,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.nav_host_fragment, fragment)
                 .addToBackStack(null)
                 .commit();
-
     }
 
 }

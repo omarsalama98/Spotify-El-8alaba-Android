@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import java.util.ArrayList;
 
@@ -19,7 +21,7 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
 
     private static Fragment fragment;
     private static ArrayList<HomeInnerListItem> mockDataset;
-    //private static ArrayList<Playlist> backDataset;
+    private static ArrayList<Playlist> backDataset;
 
     //               The difference between these two constructors is that one uses mock data and the other
     //                  uses data retrieved from the server and the mock data one will be removed later on.
@@ -33,12 +35,12 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
         mockDataset = myDataset;
         HomeInnerListAdapter.fragment = fragment;
     }
-    /*
+
     public HomeInnerListAdapter(Fragment fragment, ArrayList<Playlist> backDataset) {
         mockDataset = new ArrayList<>();
-        this.backDataset = backDataset;
+        HomeInnerListAdapter.backDataset = backDataset;
         HomeInnerListAdapter.fragment = fragment;
-    }*/
+    }
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -54,15 +56,16 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        holder.title.setText(mockDataset.get(position).getTitle());
+        /*holder.title.setText(mockDataset.get(position).getTitle());
         holder.subTitle.setText(mockDataset.get(position).getSubTitle());
         Picasso.get().load(mockDataset.get(position).getImageURL()).into(holder.image);
-
-       /*TODO: Replace the former with the latter code when backend is completed
+        */
+        //TODO: Replace the former with the latter code when backend is completed
         holder.title.setText(backDataset.get(position).getName());
         holder.subTitle.setText(backDataset.get(position).getDescription());
         Picasso.get().load(backDataset.get(position).getImages().get(0).getUrl()).into(holder.image);
-        */
+        Log.i("fhdibleqbfqerjlfren", backDataset.get(position).getName());
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

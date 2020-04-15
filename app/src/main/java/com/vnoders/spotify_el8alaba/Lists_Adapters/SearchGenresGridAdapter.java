@@ -1,7 +1,6 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
@@ -21,7 +19,6 @@ import com.vnoders.spotify_el8alaba.models.Genre;
 import com.vnoders.spotify_el8alaba.ui.search.ChartsFragment;
 import com.vnoders.spotify_el8alaba.ui.search.GenreFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SpecialGenresFragment;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchGenresGridAdapter extends
@@ -66,20 +63,8 @@ public class SearchGenresGridAdapter extends
             holder.genreImage.setImageBitmap(genreImageBitmap[0]);
             holder.genreTitle.setText(mockGenresList.get(position).getTitle());
         } else {
-            AsyncTask asyncTask = new AsyncTask() {
-                @Override
-                protected Object doInBackground(Object[] objects) {
-                    try {
-                        genreImageBitmap[0] = Picasso.get()
-                                .load(backGenresList.get(position).getIcons().get(0).getUrl())
-                                .get();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            };
-            holder.genreImage.setImageBitmap(genreImageBitmap[0]);
+            //Picasso.get().load(backGenresList.get(position).ge).into(holder.genreImage);
+            //holder.genreImage.setImageBitmap(genreImageBitmap[0]);
             holder.genreTitle.setText(backGenresList.get(position).getName());
         }
 

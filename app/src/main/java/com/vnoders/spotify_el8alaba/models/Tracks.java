@@ -6,26 +6,12 @@ import java.util.List;
 
 public class Tracks {
 
-    @SerializedName("href")
-    @Expose
-    private String href;
     @SerializedName("items")
     @Expose
     private List<Item> items = null;
-    @SerializedName("limit")
+    @SerializedName("href")
     @Expose
-    private Integer limit;
-    @SerializedName("offset")
-    @Expose
-    private Integer offset;
-
-    public String getHref() {
-        return href;
-    }
-
-    public void setHref(String href) {
-        this.href = href;
-    }
+    private String href;
 
     public List<Item> getItems() {
         return items;
@@ -35,20 +21,12 @@ public class Tracks {
         this.items = items;
     }
 
-    public Integer getLimit() {
-        return limit;
+    public String getHref() {
+        return href;
     }
 
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
-
-    public Integer getOffset() {
-        return offset;
-    }
-
-    public void setOffset(Integer offset) {
-        this.offset = offset;
+    public void setHref(String href) {
+        this.href = href;
     }
 
 }

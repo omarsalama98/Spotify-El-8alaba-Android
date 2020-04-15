@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapter.MyViewHolder> {
 
@@ -60,37 +70,39 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        holder.title.setText(mockDataset.get(position).getTitle());
+        /*holder.title.setText(mockDataset.get(position).getTitle());
         holder.innerList.setAdapter(
                 new HomeInnerListAdapter(mockDataset.get(position).getInnerListItems(), fragment));
         holder.innerList.setLayoutManager(
                 new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        */
 
-
-        /* TODO: Replace the former with the latter code when backend is completed
+        // TODO: Replace the former with the latter code when backend is completed
         holder.title.setText(backDataset.get(position).getName());
 
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        final ArrayList[] categoryPlaylists = new ArrayList[]{new ArrayList<>()};
+        Call<List<Playlist>> call = apiService
+                .getCategoryPlaylists(backDataset.get(position).getId());
+        Log.d(TAG, backDataset.get(position).getId());
 
-        Call<List<Category>> call = apiService.getCategoryPlaylists(backDataset.get(position).getId());
-        call.enqueue(new Callback<List<Category>>() {
+        call.enqueue(new Callback<List<Playlist>>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                Log.d(TAG, response.body().get(0).getName());
-                categoryPlaylists[0] = (ArrayList<Category>) response.body();
+            public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+                Log.d(TAG, response.body().get(0).getDescription());
+                holder.innerList.setAdapter(
+                        new HomeInnerListAdapter(fragment, (ArrayList<Playlist>) response.body()));
             }
+
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve Categories");
+            public void onFailure(Call<List<Playlist>> call, Throwable t) {
+                Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
             }
         });
-        holder.innerList.setAdapter(
-                new HomeInnerListAdapter(categoryPlaylists[0], fragment));
+
         holder.innerList.setLayoutManager(
                  new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        */
+
 
     }
 

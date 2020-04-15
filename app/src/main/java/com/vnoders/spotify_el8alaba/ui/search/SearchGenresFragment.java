@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +18,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
 import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -54,7 +65,7 @@ public class SearchGenresFragment extends Fragment {
             navView.setSelectedItemId(R.id.navigation_search);
         }
 
-        /*TODO: UnComment and use it instead of mock data when backend is populated.
+        //TODO: UnComment and use it instead of mock data when backend is populated.
         APIInterface apiService =
                 RetrofitClient.getInstance().getAPI(APIInterface.class);
 
@@ -74,10 +85,10 @@ public class SearchGenresFragment extends Fragment {
                 Log.d(TAG, "failed to retrieve Categories");
             }
         });
-        */
+
 
         topGenresGridView
-                .setAdapter(new SearchGenresGridAdapter(this, Mock.getTopGenres(this)));
+                .setAdapter(new SearchGenresGridAdapter(this, topCategories[0]));
         topGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         /*TODO: UnComment and use it instead of mock data when backend is populated.

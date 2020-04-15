@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba.ui.home;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +23,15 @@ import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
 import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileFragment;
 import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
@@ -67,32 +77,34 @@ public class HomeFragment extends Fragment {
 
         ArrayList<HomeMainListItem> mainListItems = Mock.getMainHomeList();
 
-        /*  TODO: Will be used when backend is populated
+        //  TODO: Will be used when backend is populated
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        final ArrayList[] homeCategories = new ArrayList[]{new ArrayList<>()};
+        final ArrayList homeCategories = new ArrayList<>();
 
         Call<List<Category>> call = apiService.getHomeCategories();
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 Log.d(TAG, response.body().get(0).getName());
-                homeCategories[0] = (ArrayList<Category>) response.body();
+                mainListRecyclerView.setAdapter(new HomeMainListAdapter(getContext()
+                        , HomeFragment.this, (ArrayList<Category>) response.body()));
+                //Toast.makeText(getContext(),response.body().get(0).getName(),Toast.LENGTH_LONG).show();
                 // homeCategories[0] will be put in the adapter
             }
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve Categories");
+                Log.d(TAG, "failed to retrieve Categories" + t.getMessage());
             }
         });
-        */
-        //mainListRecyclerView.setAdapter(new HomeMainListAdapter(getContext(), this, homeCategories[0]));
+
+        //mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
 
         mainListRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mainListRecyclerView.setHasFixedSize(true);
-        mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
+        //mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
 
         settingsButton.setOnClickListener(v -> {
             CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
