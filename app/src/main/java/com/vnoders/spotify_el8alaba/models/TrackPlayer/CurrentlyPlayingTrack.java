@@ -16,6 +16,9 @@ public class CurrentlyPlayingTrack {
     @SerializedName("duration_ms")
     private double mDuration;
 
+    @SerializedName("album")
+    private CurrentlyPlayingAlbum mAlbum;
+
     @SerializedName("artists")
     private List<CurrentlyPlayingTrackArtist> mArtists;
 
@@ -29,6 +32,10 @@ public class CurrentlyPlayingTrack {
 
     public int getDuration() {
         return ((int)this.mDuration);
+    }
+
+    public CurrentlyPlayingAlbum getAlbum() {
+        return this.mAlbum;
     }
 
     public List<CurrentlyPlayingTrackArtist> getArtists() {

@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
@@ -135,8 +137,15 @@ public class OverflowFragment extends BottomSheetDialogFragment {
         ((TextView) root.findViewById(R.id.overflow_author_name)).
                 setText(mTrack.getArtistName());
 
-        // set the image displayed in middle
-        (((ImageView) root.findViewById(R.id.overflow_img))).setImageResource(R.drawable.track_image_default);
+        ImageView imageView = root.findViewById(R.id.overflow_img);
+
+        // loads the image and puts it
+        if (TextUtils.isEmpty(mTrack.getImage())) {
+            imageView.setImageResource(R.drawable.track_image_default);
+        } else {
+            Picasso.get().load(mTrack.getImage()).into(imageView);
+        }
+
     }
 
     /**

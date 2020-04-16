@@ -1,7 +1,9 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostTrackId;
@@ -32,4 +34,10 @@ public interface TrackPlayerApi {
 
     @GET("tracks")
     Call<GetSeveralTracks> getSeveralTracks(@Query("ids") String tracksIds);
+
+    @GET("albums/{albumId}")
+    Call<GetAlbum> getAlbum(@Path("albumId") String albumId);
+
+    @GET("playlists/{playlistId}")
+    Call<GetPlaylist> getPlaylist(@Path("playlistId") String playlistId);
 }

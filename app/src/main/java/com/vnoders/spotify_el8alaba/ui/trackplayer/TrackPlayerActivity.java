@@ -13,6 +13,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -74,8 +75,17 @@ public class TrackPlayerActivity extends AppCompatActivity {
      * @param track current track being played holding info
      */
     private void updateUI(Track track) {
-        mTrackImageView.setImageResource(R.drawable.track_image_default);
+        if (track == null) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(track.getImage())) {
+            mTrackImageView.setImageResource(R.drawable.track_image_default);
+        } else {
+            Picasso.get().load(track.getImage()).into(mTarget);
+        }
     }
+
 
     /**
      * override back pressed to show sliding down animation when quitting
@@ -138,27 +148,6 @@ public class TrackPlayerActivity extends AppCompatActivity {
             @Override
             public void onChanged(Track realTrack) {
                 updateUI(realTrack);
-            }
-        });
-
-        findViewById(R.id.testing_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                List<String> tracksIds = new ArrayList<>();
-
-                tracksIds.add("5e8f39bb5c504a25a711cd3f");
-                tracksIds.add("5e8f39bf5c504a25a711cd40");
-                tracksIds.add("5e8f39c05c504a25a711cd41");
-                tracksIds.add("5e8f39c15c504a25a711cd42");
-                tracksIds.add("5e8f39c25c504a25a711cd43");
-                tracksIds.add("5e8f39c45c504a25a711cd44");
-                tracksIds.add("5e8f39c55c504a25a711cd45");
-                tracksIds.add("5e8f39c75c504a25a711cd46");
-                tracksIds.add("5e8f39c85c504a25a711cd47");
-                tracksIds.add("5e8f39ca5c504a25a711cd48");
-
-                mService.playList(tracksIds);
             }
         });
     }

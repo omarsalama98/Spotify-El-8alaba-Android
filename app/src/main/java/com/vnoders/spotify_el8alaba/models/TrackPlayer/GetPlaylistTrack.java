@@ -2,11 +2,9 @@ package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class GetTrack {
-
+public class GetPlaylistTrack {
 
     @SerializedName("id")
     private String mId;
@@ -18,10 +16,10 @@ public class GetTrack {
     private double mDuration;
 
     @SerializedName("artists")
-    private List<String> mArtists;
+    private List<GetPlaylistArtist> mArtists;
 
     @SerializedName("album")
-    private String mAlbumId;
+    private GetPlaylistAlbum mAlbum;
 
     public String getId() {
         return this.mId;
@@ -35,15 +33,11 @@ public class GetTrack {
         return ((int)this.mDuration);
     }
 
-    public List<String> getArtists() {
+    public List<GetPlaylistArtist> getArtists() {
         return this.mArtists;
     }
 
-    public void setDuration(int duration) {
-        this.mDuration = duration;
-    }
-
-    public String getAlbumId() {
-        return this.mAlbumId;
+    public GetPlaylistAlbum getAlbum() {
+        return this.mAlbum;
     }
 }

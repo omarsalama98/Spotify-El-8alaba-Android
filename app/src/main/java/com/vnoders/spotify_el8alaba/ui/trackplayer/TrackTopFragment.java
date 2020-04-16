@@ -23,7 +23,7 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 public class TrackTopFragment extends Fragment {
 
     // holds author name text view
-    private TextView authorNameText;
+    private TextView typeNameText;
     private TextView playingFromTextView;
 
     /**
@@ -37,12 +37,10 @@ public class TrackTopFragment extends Fragment {
         // set the overflow menu click listener to start overflow menu
         rootView.findViewById(R.id.top_overflow_menu).setOnClickListener(v -> startOverflowMenu());
 
-        String playingFrom = getString(R.string.playing_from_artist);
         // setting the text
         playingFromTextView = rootView.findViewById(R.id.playing_from_text);
-        playingFromTextView.setText(playingFrom);
 
-        authorNameText = rootView.findViewById(R.id.author_name_text_top);
+        typeNameText = rootView.findViewById(R.id.author_name_text_top);
 
         // setting the top button to behave like the back button
         Button button = rootView.findViewById(R.id.top_back_button);
@@ -74,15 +72,25 @@ public class TrackTopFragment extends Fragment {
         if (track == null)
             return;
 
-        String name = track.getArtistName();
+        String name = track.getTypeName();
 
         if (name == null || name.equals("") || name.equals(" ")) {
-            authorNameText.setVisibility(View.GONE);
+            typeNameText.setVisibility(View.GONE);
             playingFromTextView.setVisibility(View.GONE);
         } else {
-            authorNameText.setVisibility(View.VISIBLE);
+            typeNameText.setVisibility(View.VISIBLE);
             playingFromTextView.setVisibility(View.VISIBLE);
-            authorNameText.setText(name);
+            typeNameText.setText(name);
+
+            String type = track.getType();
+
+            if (type.equals(Track.TYPE_ALBUM)) {
+                playingFromTextView.setText(getString(R.string.playing_from_album));
+            } else if (type.equals(Track.TYPE_PLAYLIST)) {
+                playingFromTextView.setText(getString(R.string.playing_from_playlist));
+            } else {
+                playingFromTextView.setText(getString(R.string.playing_from_artist));
+            }
         }
     }
 

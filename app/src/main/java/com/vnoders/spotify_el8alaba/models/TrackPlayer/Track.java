@@ -3,6 +3,10 @@ package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
 public class Track {
 
+    public static final String TYPE_ALBUM = "PLAYING_ALBUM";
+    public static final String TYPE_PLAYLIST = "PLAYING_PLAYLIST";
+    public static final String TYPE_ARTIST = "PLAYING_ARTIST";
+
     private String mId;
 
     private String mName;
@@ -11,15 +15,24 @@ public class Track {
 
     private String mArtistName;
 
+    private String mType;
+
+    private String mTypeName;
+
+    private String mImage;
+
     private boolean mHasNext = false;
     private boolean mHasPrev = false;
     private boolean mIsPlaying = false;
 
-    public Track(String id, String name, int duration, String artistName) {
+    public Track(String id, String name, int duration, String artistName, String type, String typeName, String image) {
         this.setId(id);
         this.setName(name);
         this.setDuration(duration);
         this.setArtistName(artistName);
+        this.setType(type);
+        this.setTypeName(typeName);
+        this.setImage(image);
     }
 
     public String getId() {
@@ -38,6 +51,18 @@ public class Track {
         return this.mArtistName;
     }
 
+    public String getType() {
+        return this.mType;
+    }
+
+    public String getTypeName() {
+        return this.mTypeName;
+    }
+
+    public String getImage() {
+        return this.mImage;
+    }
+
     public void setId(String id) {
         this.mId = id;
     }
@@ -52,6 +77,18 @@ public class Track {
 
     public void setArtistName(String artistName) {
         this.mArtistName = artistName;
+    }
+
+    public void setType(String type) {
+        this.mType = type;
+    }
+
+    public void setTypeName(String typeName) {
+        this.mTypeName = typeName;
+    }
+
+    public void setImage(String image) {
+        this.mImage = image;
     }
 
     public boolean getHasNext() {

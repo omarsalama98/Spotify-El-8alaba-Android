@@ -16,8 +16,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.AlbumImage;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostTrackId;
@@ -144,8 +149,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             return;
         }
 
-        postCurrentlyPlaying(trackId);
-
         getTrack(trackId);
     }
 
@@ -154,9 +157,23 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             return;
         }
 
-        postCurrentlyPlaying(trackIds.get(0));
-
         getSeveralTracks(trackIds);
+    }
+
+    public void playAlbum(String albumId) {
+        if (TextUtils.isEmpty(albumId)) {
+            return;
+        }
+
+        getAlbum(albumId);
+    }
+
+    public void playPlaylist(String playlistId) {
+        if (TextUtils.isEmpty(playlistId)) {
+            return;
+        }
+
+        getPlaylist(playlistId);
     }
 
     //______________________________________________________________________________________________
@@ -218,8 +235,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             return false;
         }
 
-        postCurrentlyPlaying(mTracksList.get(mCurrentTrackIndex).getId());
-
         // there is next song so load it and update current track being played
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
 
@@ -245,8 +260,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             mCurrentTrackIndex = 0;
             return;
         }
-
-        postCurrentlyPlaying(mTracksList.get(mCurrentTrackIndex).getId());
 
         // there is previous song so load it and change global song to it
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
@@ -302,6 +315,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             mTracksList.get(mCurrentTrackIndex).setHasNext(false);
         else
             mTracksList.get(mCurrentTrackIndex).setHasNext(true);
+
+        postCurrentlyPlaying(trackId);
 
 
         // create new instance of media player and set it to playing music
@@ -396,7 +411,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     return;
                 }
                 CurrentlyPlayingTrack track = response.body().getCurrentTrackWrapper().getCurrentTrack();
-                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), track.getArtists().get(0).getUserInfo().getName());
+                String artistName = track.getArtists().get(0).getUserInfo().getName();
+                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), artistName, Track.TYPE_ARTIST, artistName, track.getAlbum().getImages().get(0).getUrl());
 
                 TrackViewModel.getInstance().updateCurrentTrack(currentTrack);
 
@@ -431,7 +447,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
                 GetTrack track = response.body();
 
-                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), " ");
+                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), "", Track.TYPE_ARTIST, "", "");
 
                 TrackViewModel.getInstance().updateCurrentTrack(currentTrack);
 
@@ -439,6 +455,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 mTracksList.add(currentTrack);
                 mCurrentTrackIndex = 0;
                 getArtistInfo(track.getArtists().get(mCurrentTrackIndex), mCurrentTrackIndex);
+                getAlbumImage(track.getAlbumId(), mCurrentTrackIndex);
                 destroyMediaPlayer();
                 initMediaPlayer(currentTrack.getId());
             }
@@ -475,9 +492,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
                 for (int i = 0; i < tracks.size(); ++i) {
                     GetTrack currentLoop = tracks.get(i);
-                    Track nowTrack = new Track(currentLoop.getId(), currentLoop.getName(), currentLoop.getDuration(), " ");
+                    Track nowTrack = new Track(currentLoop.getId(), currentLoop.getName(), currentLoop.getDuration(), "", Track.TYPE_ARTIST, "", "");
                     mTracksList.add(nowTrack);
                     getArtistInfo(currentLoop.getArtists().get(0), i);
+                    getAlbumImage(currentLoop.getAlbumId(), i);
                 }
 
                 mCurrentTrackIndex = 0;
@@ -493,9 +511,93 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         });
     }
 
+    private void getAlbum(String albumId) {
+        Call<GetAlbum> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getAlbum(albumId);
+
+        request.enqueue(new Callback<GetAlbum>() {
+            @Override
+            public void onResponse(Call<GetAlbum> call, Response<GetAlbum> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                GetAlbum album = response.body();
+
+                AlbumImage image = album.getImages().get(0);
+
+                List<GetTrack> tracks = album.getTracks();
+                String albumName = album.getName();
+
+                mTracksList = new ArrayList<>();
+
+                for (int i = 0; i < tracks.size(); ++i) {
+                    GetTrack track = tracks.get(i);
+                    Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(), "", Track.TYPE_ALBUM, albumName, image.getUrl());
+                    mTracksList.add(addTrack);
+
+                    getArtistInfo(track.getArtists().get(0), i);
+                }
+
+                mCurrentTrackIndex = 0;
+
+                destroyMediaPlayer();
+                initMediaPlayer(mTracksList.get(mCurrentTrackIndex).getId());
+            }
+
+            @Override
+            public void onFailure(Call<GetAlbum> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getPlaylist(String playlistId) {
+        Call<GetPlaylist> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getPlaylist(playlistId);
+
+        request.enqueue(new Callback<GetPlaylist>() {
+            @Override
+            public void onResponse(Call<GetPlaylist> call, Response<GetPlaylist> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                List<GetPlaylistItem> items = response.body().getTracks().getItems();
+
+                mTracksList = new ArrayList<>();
+
+                for (int i = 0; i < items.size(); ++i) {
+                    GetPlaylistTrack track = items.get(i).getTrack();
+
+                    Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(), "", Track.TYPE_PLAYLIST, response.body().getName(), "");
+                    mTracksList.add(addTrack);
+
+                    getArtistInfo(track.getArtists().get(0).getId(), i);
+                    getAlbumImage(track.getAlbum().getId(), i);
+                }
+
+                mCurrentTrackIndex = 0;
+
+                destroyMediaPlayer();
+                initMediaPlayer(mTracksList.get(mCurrentTrackIndex).getId());
+            }
+
+            @Override
+            public void onFailure(Call<GetPlaylist> call, Throwable t) {
+            }
+        });
+    }
+
     private void getArtistInfo(String artistId, int arrayIndex) {
 
-        if (TextUtils.isEmpty(artistId)) {
+        if (TextUtils.isEmpty(artistId) || arrayIndex < 0) {
             return;
         }
 
@@ -517,6 +619,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 if (!TextUtils.isEmpty(name)) {
                     if (arrayIndex < mTracksList.size()) {
                         mTracksList.get(arrayIndex).setArtistName(name);
+                        if (mTracksList.get(arrayIndex).getType().equals(Track.TYPE_ARTIST)) {
+                            mTracksList.get(arrayIndex).setTypeName(name);
+                        }
                         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
                     }
                 }
@@ -524,6 +629,41 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
             @Override
             public void onFailure(Call<GetArtist> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getAlbumImage(String albumId, int arrayIndex) {
+        if (TextUtils.isEmpty(albumId) || arrayIndex < 0) {
+            return;
+        }
+
+        Call<GetAlbum> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getAlbum(albumId);
+
+        request.enqueue(new Callback<GetAlbum>() {
+            @Override
+            public void onResponse(Call<GetAlbum> call, Response<GetAlbum> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                String imageUrl = response.body().getImages().get(0).getUrl();
+
+                if (!TextUtils.isEmpty(imageUrl)) {
+                    if (arrayIndex < mTracksList.size()) {
+                        mTracksList.get(arrayIndex).setImage(imageUrl);
+                        TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetAlbum> call, Throwable t) {
 
             }
         });

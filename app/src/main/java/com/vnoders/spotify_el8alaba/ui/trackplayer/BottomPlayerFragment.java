@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
@@ -156,7 +157,11 @@ public class BottomPlayerFragment extends Fragment {
         mCurrentTrack = track;
 
         // loads the image and puts it
-        songImage.setImageResource(R.drawable.track_image_default);
+        if (TextUtils.isEmpty(track.getImage())) {
+            songImage.setImageResource(R.drawable.track_image_default);
+        } else {
+            Picasso.get().load(track.getImage()).into(songImage);
+        }
 
         // concatenating the song info in 1 string
         if (track.getArtistName() == null || track.getArtistName().equals("") || track.getArtistName().equals(" ")) {

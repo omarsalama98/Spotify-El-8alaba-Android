@@ -33,12 +33,6 @@
             android:contentDescription="@string/song_picture_desc"
             android:scaleType="centerCrop" />
 
-        <Button
-            android:id="@+id/testing_button"
-            android:text="click here"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
     </RelativeLayout>
 
     <androidx.fragment.app.FragmentContainerView
