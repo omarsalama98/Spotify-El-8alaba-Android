@@ -61,7 +61,7 @@ public class PlaylistHomeFragment extends Fragment {
      *
      * @param playlistId The id of the current playlist
      *
-     * @return A new instance of fragment RemoveQuickly.
+     * @return A new instance of fragment {@link PlaylistHomeFragment}.
      */
     @NotNull
     public static PlaylistHomeFragment newInstance(String playlistId) {

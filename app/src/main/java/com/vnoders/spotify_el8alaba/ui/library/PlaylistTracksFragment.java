@@ -54,7 +54,7 @@ public class PlaylistTracksFragment extends Fragment {
      *
      * @param playlistId The id of the current playlist
      *
-     * @return A new instance of fragment RemoveQuickly.
+     * @return A new instance of fragment {@link PlaylistTracksFragment}.
      */
     @NotNull
     public static PlaylistTracksFragment newInstance(String playlistId, String playlistName) {
