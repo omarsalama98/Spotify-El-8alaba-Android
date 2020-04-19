@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
 import android.os.Bundle;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -170,9 +171,9 @@ public class PlaylistHomeFragment extends Fragment {
                 });
 
         playlistHomeViewModel.getTracksSummary().observe(getViewLifecycleOwner(),
-                new Observer<String>() {
+                new Observer<Spanned>() {
                     @Override
-                    public void onChanged(String summary) {
+                    public void onChanged(Spanned summary) {
                         tracksSummary.setText(summary);
                     }
                 });

@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import android.text.Spanned;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -20,7 +21,7 @@ public class PlaylistHomeViewModel extends ViewModel {
 
     private MutableLiveData<String> playlistName;
     private MutableLiveData<String> playlistOwnerName;
-    private MutableLiveData<String> tracksSummary;
+    private MutableLiveData<Spanned> tracksSummary;
     private MutableLiveData<String> imageUrl;
     private String playlistId;
 
@@ -49,7 +50,7 @@ public class PlaylistHomeViewModel extends ViewModel {
      * @param tracksSummary The summary of the tracks in this playlist (e.g. Song_Name1 Artist_Name1
      *                      • Song_Name2 Artist_Name2 • ...)
      */
-    public void setTracksSummary(String tracksSummary) {
+    public void setTracksSummary(Spanned tracksSummary) {
         this.tracksSummary.setValue(tracksSummary);
     }
 
@@ -71,7 +72,7 @@ public class PlaylistHomeViewModel extends ViewModel {
      * @return The summary of the tracks in this playlist (e.g. Song_Name Artist_Name •  ... ),
      * wrapped in a {@link LiveData} object.
      */
-    public LiveData<String> getTracksSummary() {
+    public LiveData<Spanned> getTracksSummary() {
         return tracksSummary;
     }
 
