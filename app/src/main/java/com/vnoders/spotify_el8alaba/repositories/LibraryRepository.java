@@ -1,5 +1,9 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -82,20 +86,8 @@ public class LibraryRepository {
                 if (response.isSuccessful()) {
                     Playlist playlist = response.body();
 
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    for (TrackItem trackItem : playlist.getTracks().getTrackItems()) {
-                        stringBuilder.append(trackItem.getTrack().getName())
-                                .append(" ")
-                                .append(trackItem.getTrack().getArtists().get(0).getName())
-                                .append(" • ");
-                        if (stringBuilder.length() > 200) {
-                            break;
-                        }
-                    }
-                    stringBuilder.append("and more");
-
-                    viewModel.setTracksSummary(stringBuilder.toString());
+                    viewModel.setTracksSummary(
+                            buildTracksInfo(playlist.getTracks().getTrackItems()));
                     viewModel.setImageUrl(playlist.getImages().get(0).getUrl());
                     viewModel.setPlaylistOwnerName(playlist.getOwner().getName());
                     viewModel.setPlaylistName(playlist.getName());
@@ -110,6 +102,44 @@ public class LibraryRepository {
             }
         });
 
+    }
+
+    private static Spanned buildTracksInfo(List<TrackItem> trackItems) {
+
+        final String WHITE_COLOR = "#FFFFFF";
+        final int MAX_INFO_SIZE = 300;
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (TrackItem trackItem : trackItems) {
+            stringBuilder
+                    .append("<font color=\'")
+                    .append(WHITE_COLOR)
+                    .append("\'>")
+                    .append(trackItem.getTrack().getArtists().get(0).getName())
+                    .append("</font>")
+                    .append(" ")
+                    .append(trackItem.getTrack().getName())
+                    .append("  •  ");
+            if (stringBuilder.length() > MAX_INFO_SIZE) {
+                break;
+            }
+        }
+
+        // in case there are no tracks we do not display it
+        if (stringBuilder.length() > 0) {
+            stringBuilder.append("<font color=\'")
+                    .append(WHITE_COLOR)
+                    .append("\'>")
+                    .append("and more")
+                    .append("</font>");
+        }
+
+        if (VERSION.SDK_INT >= VERSION_CODES.N) {
+            return Html.fromHtml(stringBuilder.toString(), Html.FROM_HTML_MODE_COMPACT);
+        } else {
+            return Html.fromHtml(stringBuilder.toString());
+        }
     }
 
 
