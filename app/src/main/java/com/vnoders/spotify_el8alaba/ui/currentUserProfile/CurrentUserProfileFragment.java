@@ -6,14 +6,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 
 /**
  * A simple {@link Fragment} subclass. Use the {@link CurrentUserProfileFragment#newInstance}
  * factory method to create an instance of this fragment.
  */
 public class CurrentUserProfileFragment extends Fragment {
+    private CurrentUserProfile mCurrentUserProfile;
+    private TextView mUserName;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +58,7 @@ public class CurrentUserProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mCurrentUserProfile=(CurrentUserProfile) getArguments().getSerializable("CURRENT_USER_PROFILE");
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
@@ -63,11 +69,13 @@ public class CurrentUserProfileFragment extends Fragment {
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_current_user_profile, container, false);
-
+        mUserName=root.findViewById(R.id.user_name_toobar);
         backArrowImage = root.findViewById(R.id.back_button);
         backArrowImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+              //  String name=mCurrentUserProfile.getName();
+              //  mUserName.setText(name);
                 getActivity().onBackPressed();
             }
         });

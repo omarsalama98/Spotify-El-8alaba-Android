@@ -19,6 +19,7 @@ import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
 import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileFragment;
 import java.util.ArrayList;
 
@@ -89,13 +90,11 @@ public class HomeFragment extends Fragment {
         mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
 
         settingsButton.setOnClickListener(v -> {
-            CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, currentUserProfileFragment,
-                    "CURRENT_USER_PROFILE")
-                    .addToBackStack(null)
-                    .commit();
+
+            SettingsList settingsList =new SettingsList();
+            FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.nav_host_fragment,settingsList,"SETTINGS_LIST").addToBackStack(null).commit();
         });
         recentlyPlayedRecyclerView
                 .setAdapter(new RecentlyPlayedListAdapter(innerListItems, this));

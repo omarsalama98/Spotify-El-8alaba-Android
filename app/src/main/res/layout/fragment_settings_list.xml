@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        tools:context = ".SettingsList"
+        android:weightSum="10"
+        android:orientation="vertical"
+        >
+    <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:background="@color/endColor"
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight="0.8"
+>
+
+        <ImageButton
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:id = "@+id/back_button"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:src = "@drawable/ic_left_arrow"
+                android:background = "@android:color/transparent" />
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:gravity = "center_horizontal"
+                android:text = "@string/settings"
+                android:textColor = "@color/white"
+                android:textSize = "15sp"
+                android:layout_centerInParent = "true" />
+
+    </RelativeLayout>
+<ScrollView
+        android:layout_width = "match_parent"
+        android:layout_height = "0dp"
+        android:layout_weight="9.2"
+    >
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:orientation="vertical"
+>
+
+    <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/account_type"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            />
+        <Button
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width = "150dp"
+                android:layout_height = "wrap_content"
+                android:background="@drawable/login_button"
+                android:text="@string/go_premium"
+                />
+<TextView
+        android:id="@+id/current_user_profile"
+        android:layout_marginTop="20dp"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="@string/edit_profile"
+        />
+    </LinearLayout>
+</ScrollView>
+
+</LinearLayout>
