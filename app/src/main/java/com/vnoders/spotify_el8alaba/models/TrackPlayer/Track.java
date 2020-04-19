@@ -21,11 +21,14 @@ public class Track {
 
     private String mImage;
 
+    private String mArtistId;
+    private String mAlbumId;
+
     private boolean mHasNext = false;
     private boolean mHasPrev = false;
     private boolean mIsPlaying = false;
 
-    public Track(String id, String name, int duration, String artistName, String type, String typeName, String image) {
+    public Track(String id, String name, int duration, String artistName, String type, String typeName, String image, String artistId, String albumId) {
         this.setId(id);
         this.setName(name);
         this.setDuration(duration);
@@ -33,6 +36,8 @@ public class Track {
         this.setType(type);
         this.setTypeName(typeName);
         this.setImage(image);
+        this.setArtistId(artistId);
+        this.setAlbumId(albumId);
     }
 
     public String getId() {
@@ -115,5 +120,20 @@ public class Track {
         this.mIsPlaying = isPlaying;
     }
 
+    public void setArtistId(String artistId) {
+        this.mArtistId = artistId;
+    }
+
+    public String getArtistId() {
+        return this.mArtistId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.mAlbumId = albumId;
+    }
+
+    public String getAlbumId() {
+        return this.mAlbumId;
+    }
 
 }
