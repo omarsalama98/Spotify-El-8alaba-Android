@@ -10,11 +10,18 @@ public class CurrentlyPlayingTrackWrapper {
     @SerializedName("progress_ms")
     private double mTrackProgress;
 
+    @SerializedName("context")
+    private TrackContext mContext;
+
     public CurrentlyPlayingTrack getCurrentTrack() {
         return this.mCurrentTrack;
     }
 
     public int getTrackProgress() {
         return ((int)this.mTrackProgress);
+    }
+
+    public TrackContext getTrackContext() {
+        return this.mContext;
     }
 }

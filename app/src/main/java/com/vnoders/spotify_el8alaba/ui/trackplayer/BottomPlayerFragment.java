@@ -224,6 +224,9 @@ public class BottomPlayerFragment extends Fragment {
      */
     private void updateSeekbar(Integer progress) {
 
+        if (mCurrentTrack == null)
+            return;
+
         // get duration and progress of 0-100
         int songTime = mCurrentTrack.getDuration();
 

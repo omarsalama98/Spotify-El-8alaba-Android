@@ -9,7 +9,14 @@ public class CurrentlyPlayingAlbum {
     @SerializedName("images")
     private List<CurrentlyPlayingImage> mImages;
 
+    @SerializedName("_id")
+    private String mId;
+
     public List<CurrentlyPlayingImage> getImages() {
         return this.mImages;
+    }
+
+    public String getId() {
+        return this.mId;
     }
 }

@@ -12,7 +12,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -25,15 +24,12 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
-import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostTrackId;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostPlayTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.repositories.TrackPlayerApi;
-import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
 import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackViewModel;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +49,12 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
     private static final String PLAYER_STREAMING_BASE_URL = RetrofitClient.BASE_URL + "streaming/";
     private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer ";
+    private static final String CONTEXT_ARTIST_PREFIX = "spotify:artist:";
+    private static final String CONTEXT_ALBUM_PREFIX = "spotify:album:";
+    private static final String CONTEXT_PLAYLIST_PREFIX = "spotify:playlist:";
+    private static final String CONTEXT_RESPONSE_TYPE_ALBUM = "album";
+    private static final String CONTEXT_RESPONSE_TYPE_PLAYLIST = "playlist";
+    private static final String CONTEXT_RESPONSE_TYPE_ARTIST = "artist";
 
     //______________________________________________________________________________________________
     //--------------------------------------Variables-----------------------------------------------
@@ -68,6 +70,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
     // instance of media player for audio playback
     private MediaPlayer mMediaPlayer;
+    private boolean mPlayerReady = false;
+    private int mLastProgress = 0;
 
     // know if playing right now
     private boolean mPlaying = false;
@@ -79,7 +83,20 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         public void run() {
             //do something
             if (mMediaPlayer != null) {
-                TrackViewModel.getInstance().updateTrackProgress(mMediaPlayer.getCurrentPosition());
+                if (mPlayerReady) {
+                    int progress = mMediaPlayer.getCurrentPosition();
+                    TrackViewModel.getInstance().updateTrackProgress(progress);
+
+                    if ((progress - mLastProgress) >= (POST_UPDATE_PROGRESS_SECONDS * 1000)) {
+                        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).updateTrackProgress(progress);
+                        request.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {}
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {}});
+                        mLastProgress = progress;
+                    }
+                }
             }
 
             mHandler.postDelayed(this, HANDLER_DELAY);
@@ -87,7 +104,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     };
 
     // constant which dictates time of handler thread
-    private static final int HANDLER_DELAY = 100;
+    private static final int HANDLER_DELAY = 1000;
+    private static final int POST_UPDATE_PROGRESS_SECONDS = 10;
     // know if this is the first init or not
     private boolean mFirstInit = false;
     private int mFirstProgress = 0;
@@ -115,6 +133,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         // get the list of tracks to play
         getCurrentlyPlaying();
+
+        //playPlaylist("5e8f3a025c504a25a711cdc4", false, false);
+        //playAlbum("5e8f39b95c504a25a711cd2c", false, false);
+        //playTrack("5e8f39d15c504a25a711cd4e", false);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -174,7 +196,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         mRepeat = repeat;
 
-        getAlbum(albumId, shuffle);
+        getAlbum(albumId, shuffle, false, null);
     }
 
     public void playPlaylist(String playlistId, boolean shuffle, boolean repeat) {
@@ -184,7 +206,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         mRepeat = repeat;
 
-        getPlaylist(playlistId, shuffle);
+        getPlaylist(playlistId, shuffle, false, null);
     }
 
     public void shuffle() {
@@ -255,7 +277,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         // if media player is already active and there is network connection then play song
         // and start handler to update user about progress
-        if (!mPlaying && isNetworkAvailable()) {
+        if (!mPlaying && isNetworkAvailable() && mPlayerReady) {
             setIsPlaying(true);
             mMediaPlayer.start();
             startHandler();
@@ -270,7 +292,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         //Toast.makeText(getApplicationContext(), "Pause enter", Toast.LENGTH_SHORT).show();
 
         // if song is already playing then pause it and stop the handler from updating
-        if (mPlaying) {
+        if (mPlaying && mPlayerReady) {
             setIsPlaying(false);
             mMediaPlayer.pause();
             stopHandler();
@@ -285,6 +307,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      */
     public boolean skipToNext() {
 
+        mFirstInit = false;
+
         // if there are no tracks then return false
         if (mTracksList == null || mTracksList.isEmpty())
             return false;
@@ -296,8 +320,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 mCurrentTrackIndex = 0;
             } else {
                 mCurrentTrackIndex = mTracksList.size() - 1;
-                mMediaPlayer.seekTo(mMediaPlayer.getDuration());
-                mMediaPlayer.pause();
+                if (mPlayerReady) {
+                    mMediaPlayer.seekTo(mMediaPlayer.getDuration());
+                    mMediaPlayer.pause();
+                }
                 setIsPlaying(false);
                 return false;
             }
@@ -317,6 +343,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      * called to skip to previous song
      */
     public void skipToPrev() {
+
+        mFirstInit = false;
 
         // if no track in list then do nothing
         if (mTracksList == null || mTracksList.isEmpty())
@@ -347,8 +375,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      */
     public void seek(int loc) {
 
+        mFirstInit = false;
+
         // if no player then don't seek
-        if (mMediaPlayer == null) {
+        if (mMediaPlayer == null || !mPlayerReady) {
             return;
         }
 
@@ -356,6 +386,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         int seekTo = (loc * mMediaPlayer.getDuration()) / 100;
 
         mMediaPlayer.seekTo(seekTo);
+        mLastProgress = -100000;
     }
 
 
@@ -406,8 +437,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
         }
 
-        postCurrentlyPlaying(track.getId());
-
+        postCurrentlyPlaying(track);
+        TrackViewModel.getInstance().updateTrackProgress(0);
 
         // create new instance of media player and set it to playing music
         mMediaPlayer = new MediaPlayer();
@@ -427,6 +458,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             setIsPlaying(false);
             mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.setOnCompletionListener(this);
+            mPlayerReady = false;
+            mLastProgress = -100000;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -464,12 +497,12 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     //______________________________________________________________________________________________
 
 
-    private void postCurrentlyPlaying(String trackId) {
-        if (TextUtils.isEmpty(trackId)) {
+    private void postCurrentlyPlaying(Track track) {
+        if (track == null || TextUtils.isEmpty(track.getId()) || TextUtils.isEmpty(track.getContextUri())) {
             return;
         }
 
-        PostTrackId trackIdObj = new PostTrackId(trackId);
+        PostPlayTrack trackIdObj = new PostPlayTrack(track.getId(), track.getContextUri());
 
         Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).postTrack(trackIdObj);
 
@@ -501,18 +534,36 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     return;
                 }
                 CurrentlyPlayingTrack track = response.body().getCurrentTrackWrapper().getCurrentTrack();
+                String type = response.body().getCurrentTrackWrapper().getTrackContext().getType();
                 String artistName = track.getArtists().get(0).getUserInfo().getName();
-                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), artistName, Track.TYPE_ARTIST, artistName, track.getAlbum().getImages().get(0).getUrl(), null, null);
-
-                TrackViewModel.getInstance().updateCurrentTrack(currentTrack);
+                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), artistName, Track.TYPE_ARTIST, artistName, track.getAlbum().getImages().get(0).getUrl(), null, null, response.body().getCurrentTrackWrapper().getTrackContext().getUri());
 
                 mFirstInit = true;
                 mFirstProgress = response.body().getCurrentTrackWrapper().getTrackProgress();
                 mTracksList = new ArrayList<>();
                 mTracksList.add(currentTrack);
-                mCurrentTrackIndex = 0;
-                destroyMediaPlayer();
-                initMediaPlayer(currentTrack);
+
+                String uri = currentTrack.getContextUri();
+                String id = null;
+
+                for (int i = uri.length() - 1; i >= 0; --i) {
+                    if (uri.charAt(i) == ':') {
+                        id = uri.substring(i + 1);
+                        break;
+                    }
+                }
+
+                if (type.equals(CONTEXT_RESPONSE_TYPE_ALBUM)) {
+                    getAlbum(id, false, true, currentTrack.getId());
+                }
+                else if (type.equals(CONTEXT_RESPONSE_TYPE_PLAYLIST)) {
+                    getPlaylist(id, false, true, currentTrack.getId());
+                }
+                else {
+                    mCurrentTrackIndex = 0;
+                    destroyMediaPlayer();
+                    initMediaPlayer(currentTrack);
+                }
             }
 
             @Override
@@ -538,9 +589,13 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
                 GetTrack track = response.body();
 
-                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), null, Track.TYPE_ARTIST, null, null, track.getArtists().get(mCurrentTrackIndex), track.getAlbumId());
+                if (track.getArtists() == null || track.getArtists().size() < 1) {
+                    return;
+                }
 
-                TrackViewModel.getInstance().updateCurrentTrack(currentTrack);
+                String uri = CONTEXT_ARTIST_PREFIX + track.getArtists().get(0);
+
+                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), null, Track.TYPE_ARTIST, null, null, track.getArtists().get(0), track.getAlbumId(), uri);
 
                 mTracksList = new ArrayList<>();
                 mTracksList.add(currentTrack);
@@ -579,9 +634,18 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 List<GetTrack> tracks = response.body().getTracks();
                 mTracksList = new ArrayList<>();
 
+                if (tracks == null || tracks.size() < 1) {
+                    return;
+                }
+
+                if (tracks.get(0).getArtists() == null || tracks.get(0).getArtists().size() < 1) {
+                    return;
+                }
+
                 for (int i = 0; i < tracks.size(); ++i) {
                     GetTrack currentLoop = tracks.get(i);
-                    Track addTrack = new Track(currentLoop.getId(), currentLoop.getName(), currentLoop.getDuration(), null, Track.TYPE_ARTIST, null, null, currentLoop.getArtists().get(0), currentLoop.getAlbumId());
+                    String uri = CONTEXT_ARTIST_PREFIX + currentLoop.getArtists().get(0);
+                    Track addTrack = new Track(currentLoop.getId(), currentLoop.getName(), currentLoop.getDuration(), null, Track.TYPE_ARTIST, null, null, currentLoop.getArtists().get(0), currentLoop.getAlbumId(), uri);
                     mTracksList.add(addTrack);
                 }
 
@@ -602,7 +666,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         });
     }
 
-    private void getAlbum(String albumId, boolean shuffle) {
+    private void getAlbum(String albumId, boolean shuffle, boolean firstTime, String trackId) {
         Call<GetAlbum> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getAlbum(albumId);
 
         request.enqueue(new Callback<GetAlbum>() {
@@ -625,9 +689,11 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
                 mTracksList = new ArrayList<>();
 
+                String uri = CONTEXT_ALBUM_PREFIX + albumId;
+
                 for (int i = 0; i < tracks.size(); ++i) {
                     GetTrack track = tracks.get(i);
-                    Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(), null, Track.TYPE_ALBUM, albumName, image.getUrl(), track.getArtists().get(0), null);
+                    Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(), null, Track.TYPE_ALBUM, albumName, image.getUrl(), track.getArtists().get(0), null, uri);
                     mTracksList.add(addTrack);
                 }
 
@@ -635,7 +701,16 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     Collections.shuffle(mTracksList);
                 }
 
-                mCurrentTrackIndex = 0;
+                if (firstTime && trackId != null) {
+                    for (int i = 0; i < mTracksList.size(); ++i) {
+                        if (mTracksList.get(i).getId().equals(trackId)) {
+                            mCurrentTrackIndex = i;
+                            break;
+                        }
+                    }
+                } else {
+                    mCurrentTrackIndex = 0;
+                }
 
                 destroyMediaPlayer();
                 initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
@@ -648,7 +723,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         });
     }
 
-    private void getPlaylist(String playlistId, boolean shuffle) {
+    private void getPlaylist(String playlistId, boolean shuffle, boolean firstTime, String trackId) {
         Call<GetPlaylist> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getPlaylist(playlistId);
 
         request.enqueue(new Callback<GetPlaylist>() {
@@ -665,11 +740,12 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 List<GetPlaylistItem> items = response.body().getTracks().getItems();
 
                 mTracksList = new ArrayList<>();
+                String uri = CONTEXT_PLAYLIST_PREFIX + playlistId;
 
                 for (int i = 0; i < items.size(); ++i) {
                     GetPlaylistTrack track = items.get(i).getTrack();
 
-                    Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(), null, Track.TYPE_PLAYLIST, response.body().getName(), null, track.getArtists().get(0).getId(), track.getAlbum().getId());
+                    Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(), null, Track.TYPE_PLAYLIST, response.body().getName(), null, track.getArtists().get(0).getId(), track.getAlbum().getId(), uri);
                     mTracksList.add(addTrack);
                 }
 
@@ -677,7 +753,17 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     Collections.shuffle(mTracksList);
                 }
 
-                mCurrentTrackIndex = 0;
+                if (firstTime && trackId != null) {
+                    for (int i = 0; i < mTracksList.size(); ++i) {
+                        if (mTracksList.get(i).getId().equals(trackId)) {
+                            mCurrentTrackIndex = i;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    mCurrentTrackIndex = 0;
+                }
 
                 destroyMediaPlayer();
                 initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
@@ -695,11 +781,11 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             return;
         }
 
-        Call<GetArtist> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getArtist(track.getArtistId());
+        Call<List<GetArtist>> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getArtist(track.getArtistId());
 
-        request.enqueue(new Callback<GetArtist>() {
+        request.enqueue(new Callback<List<GetArtist>>() {
             @Override
-            public void onResponse(Call<GetArtist> call, Response<GetArtist> response) {
+            public void onResponse(Call<List<GetArtist>> call, Response<List<GetArtist>> response) {
                 if ((!response.isSuccessful()) || (response.code() != 200)) {
                     return;
                 }
@@ -708,7 +794,12 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     return;
                 }
 
-                String name = response.body().getName();
+                List<GetArtist> artists = response.body();
+
+                if (artists.size() < 1)
+                    return;
+
+                String name = artists.get(0).getName();
 
                 if (!TextUtils.isEmpty(name)) {
                     track.setArtistName(name);
@@ -722,7 +813,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             }
 
             @Override
-            public void onFailure(Call<GetArtist> call, Throwable t) {
+            public void onFailure(Call<List<GetArtist>> call, Throwable t) {
 
             }
         });
@@ -773,6 +864,8 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     @Override
     public void onPrepared(MediaPlayer mp) {
 
+        mPlayerReady = true;
+
         // update live data info
         mTracksList.get(mCurrentTrackIndex).setDuration(mMediaPlayer.getDuration());
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
@@ -781,8 +874,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         if (mFirstInit) {
             mFirstInit = false;
             mMediaPlayer.seekTo(mFirstProgress);
+            TrackViewModel.getInstance().updateTrackProgress(mFirstProgress);
+            mLastProgress = mFirstProgress;
             mFirstProgress = 0;
-            mMediaPlayer.pause();
             setIsPlaying(false);
             return;
         }

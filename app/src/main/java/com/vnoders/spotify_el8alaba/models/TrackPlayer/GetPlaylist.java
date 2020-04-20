@@ -12,11 +12,18 @@ public class GetPlaylist {
     @SerializedName("tracks")
     private GetPlaylistTracksWrapper mTracks;
 
+    @SerializedName("uri")
+    private String mUri;
+
     public String getName() {
         return this.mName;
     }
 
     public GetPlaylistTracksWrapper getTracks() {
         return this.mTracks;
+    }
+
+    public String getUri() {
+        return this.mUri;
     }
 }

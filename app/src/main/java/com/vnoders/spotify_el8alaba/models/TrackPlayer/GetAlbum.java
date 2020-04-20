@@ -15,6 +15,9 @@ public class GetAlbum {
     @SerializedName("images")
     private List<AlbumImage> mImages;
 
+    @SerializedName("uri")
+    private String mUri;
+
 
     public String getName() {
         return this.mName;
@@ -28,4 +31,7 @@ public class GetAlbum {
         return this.mImages;
     }
 
+    public String getUri() {
+        return this.mUri;
+    }
 }

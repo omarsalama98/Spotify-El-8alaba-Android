@@ -23,6 +23,9 @@ public class GetTrack {
     @SerializedName("album")
     private String mAlbumId;
 
+    @SerializedName("uri")
+    private String mUri;
+
     public String getId() {
         return this.mId;
     }
@@ -45,5 +48,9 @@ public class GetTrack {
 
     public String getAlbumId() {
         return this.mAlbumId;
+    }
+
+    public String getUri() {
+        return this.mUri;
     }
 }

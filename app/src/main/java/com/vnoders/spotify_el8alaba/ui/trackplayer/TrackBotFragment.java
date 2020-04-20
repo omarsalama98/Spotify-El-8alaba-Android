@@ -192,7 +192,7 @@ public class TrackBotFragment extends Fragment {
     private void updateSeekbar(Integer progress) {
 
         // if user is currently seeking then don't update
-        if (mIsSeeking)
+        if (mIsSeeking || mCurrentTrack == null)
             return;
 
         // get the duration and scale it to 0-100

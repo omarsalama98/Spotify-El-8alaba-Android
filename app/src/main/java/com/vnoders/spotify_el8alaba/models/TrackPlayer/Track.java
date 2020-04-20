@@ -24,11 +24,13 @@ public class Track {
     private String mArtistId;
     private String mAlbumId;
 
+    private String mContextUri;
+
     private boolean mHasNext = false;
     private boolean mHasPrev = false;
     private boolean mIsPlaying = false;
 
-    public Track(String id, String name, int duration, String artistName, String type, String typeName, String image, String artistId, String albumId) {
+    public Track(String id, String name, int duration, String artistName, String type, String typeName, String image, String artistId, String albumId, String contextUri) {
         this.setId(id);
         this.setName(name);
         this.setDuration(duration);
@@ -38,6 +40,7 @@ public class Track {
         this.setImage(image);
         this.setArtistId(artistId);
         this.setAlbumId(albumId);
+        this.setContextUri(contextUri);
     }
 
     public String getId() {
@@ -66,6 +69,10 @@ public class Track {
 
     public String getImage() {
         return this.mImage;
+    }
+
+    public void setContextUri(String contextUri) {
+        this.mContextUri = contextUri;
     }
 
     public void setId(String id) {
@@ -136,4 +143,7 @@ public class Track {
         return this.mAlbumId;
     }
 
+    public String getContextUri() {
+        return this.mContextUri;
+    }
 }
