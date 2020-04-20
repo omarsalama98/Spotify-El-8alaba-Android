@@ -43,6 +43,8 @@ public class GradientUtils {
     public static final int GRADIENT_LINEAR = 1;
     // Take dominant color from the image and the other is always black
     public static final int GRADIENT_LINEAR_BLACK = 2;
+    // does not create a gradient it just return solid color only
+    public static final int SOLID_DOMINANT_COLOR = 4;
 
     /**
      * @param bitmap Bitmap image to generate the gradient colors from
@@ -194,6 +196,11 @@ public class GradientUtils {
                 case GRADIENT_LINEAR:
                     shader = new LinearGradient(0, 0, 0, viewHeight,
                             dominantColor, secondaryColor, TileMode.CLAMP);
+                    break;
+
+                case SOLID_DOMINANT_COLOR:
+                    shader = new LinearGradient(0, 0, 0, viewHeight,
+                            dominantColor, dominantColor, TileMode.CLAMP);
                     break;
 
                 default:
