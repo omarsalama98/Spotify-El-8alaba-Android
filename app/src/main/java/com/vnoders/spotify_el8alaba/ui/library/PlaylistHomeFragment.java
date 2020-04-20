@@ -137,12 +137,25 @@ public class PlaylistHomeFragment extends Fragment {
             public void onClick(View view) {
                 isChecked = !isChecked;
                 if (isChecked) {
-                    ((ImageView) view).setImageResource(R.drawable.like_track_liked);
+                    playlistHomeViewModel.followPlaylist();
                 } else {
-                    ((ImageView) view).setImageResource(R.drawable.like_track_unliked_white);
+                    playlistHomeViewModel.unfollowPlaylist();
                 }
             }
         });
+
+        playlistHomeViewModel.getFollowedState()
+                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean isFollowed) {
+                        if (isFollowed) {
+                            follow.setImageResource(R.drawable.like_track_liked);
+                        } else {
+                            follow.setImageResource(R.drawable.like_track_unliked_white);
+                        }
+                    }
+                });
+
 
         playlistHomeViewModel.getImageUrl().observe(getViewLifecycleOwner(),
                 new Observer<String>() {

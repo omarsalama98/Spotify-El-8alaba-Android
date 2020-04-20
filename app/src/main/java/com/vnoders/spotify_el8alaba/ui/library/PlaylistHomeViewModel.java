@@ -24,12 +24,14 @@ public class PlaylistHomeViewModel extends ViewModel {
     private MutableLiveData<Spanned> tracksSummary;
     private MutableLiveData<String> imageUrl;
     private String playlistId;
+    private MutableLiveData<Boolean> isFollowed;
 
     public PlaylistHomeViewModel() {
         playlistName = new MutableLiveData<>();
         playlistOwnerName = new MutableLiveData<>();
         tracksSummary = new MutableLiveData<>();
         imageUrl = new MutableLiveData<>();
+        isFollowed = new MutableLiveData<>();
     }
 
     /**
@@ -105,11 +107,29 @@ public class PlaylistHomeViewModel extends ViewModel {
         this.playlistId = playlistId;
     }
 
+
+    public LiveData<Boolean> getFollowedState() {
+        return isFollowed;
+    }
+
+    public void setFollowedState(boolean isFollowed) {
+        this.isFollowed.setValue(isFollowed);
+    }
+
+    public void followPlaylist() {
+        LibraryRepository.followPlaylist(this);
+    }
+
+    public void unfollowPlaylist() {
+        LibraryRepository.unfollowPlaylist(this);
+    }
+
     /**
      * Make a call to {@link LibraryRepository#updatePlaylist} to update the info of this playlist
      * which apply a level of abstraction between UI and business logic and data.
      */
     public void updateData() {
+        LibraryRepository.updatePlaylistFollowState(this);
         LibraryRepository.updatePlaylist(this);
     }
 
