@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
 import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
@@ -15,11 +16,7 @@ import com.vnoders.spotify_el8alaba.ui.search.SearchGenresFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private LibraryFragment libraryFragment;
-    private SearchGenresFragment searchGenresFragment;
-    private HomeFragment homeFragment;
-    private PremiumFragment premiumFragment;
-    String fragmentName = "home";
+    private BottomNavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,35 +30,23 @@ public class MainActivity extends AppCompatActivity {
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        if (homeFragment == null) {
-                            homeFragment = new HomeFragment();
-                        }
-                        startFragment(homeFragment);
+                        startFragment(new HomeFragment(), item.getItemId());
                         return true;
                     case R.id.navigation_search:
-                        if (searchGenresFragment == null) {
-                            searchGenresFragment = new SearchGenresFragment();
-                        }
-                        startFragment(searchGenresFragment);
+                        startFragment(new SearchGenresFragment(), item.getItemId());
                         return true;
                     case R.id.navigation_your_library:
-                        if (libraryFragment == null) {
-                            libraryFragment = new LibraryFragment();
-                        }
-                        startFragment(libraryFragment);
+                        startFragment(new LibraryFragment(), item.getItemId());
                         return true;
                     case R.id.navigation_premium:
-                        if (premiumFragment == null) {
-                            premiumFragment = new PremiumFragment();
-                        }
-                        startFragment(premiumFragment);
+                        startFragment(new PremiumFragment(), item.getItemId());
                         return true;
                 }
                 return false;
@@ -74,14 +59,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * @param fragment the fragment we want to load
+     * @param fragment The fragment we want to load
+     * @param id The id of the fragment to load
      */
-    private void startFragment(Fragment fragment) {
-        getSupportFragmentManager()
+    private void startFragment(Fragment fragment, int id) {
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.nav_host_fragment, fragment)
-                .addToBackStack(null)
-                .commit();
+                .replace(R.id.nav_host_fragment, fragment);
+
+        // Do not add to back stack if the user clicks the same item again
+        int selectedItemId = navView.getSelectedItemId();
+        if (id != selectedItemId) {
+            fragmentTransaction.addToBackStack(null);
+        }
+
+        fragmentTransaction.commit();
 
     }
 

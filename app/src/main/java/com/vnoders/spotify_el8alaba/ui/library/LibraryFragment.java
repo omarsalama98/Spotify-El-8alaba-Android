@@ -18,8 +18,7 @@ import com.vnoders.spotify_el8alaba.R;
  * This is the fragment which appears when the user clicks on library in the navigation bar.
  * <p>
  * It contains 3 tabs for viewing user library. Tab display names are saved in the array {@link
- * LibraryPagerAdapter#TAB_TITLES}. The 3 tabs are saved in the array {@link
- * LibraryPagerAdapter#fragments}
+ * LibraryPagerAdapter#TAB_TITLES}. The 3 tabs return from {@link LibraryPagerAdapter#createFragment}
  */
 public class LibraryFragment extends Fragment {
 
@@ -32,7 +31,7 @@ public class LibraryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(getActivity() );
+        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(this);
         ViewPager2 viewPager = view.findViewById(R.id.view_pager);
         viewPager.setAdapter(libraryPagerAdapter);
 

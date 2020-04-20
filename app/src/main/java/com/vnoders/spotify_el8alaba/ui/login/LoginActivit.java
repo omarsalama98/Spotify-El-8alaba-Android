@@ -103,6 +103,7 @@ public class LoginActivit extends AppCompatActivity {
                         }
                         RetrofitClient.getInstance().setToken(token);
                         Intent intent = new Intent(LoginActivit.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
                     } else {

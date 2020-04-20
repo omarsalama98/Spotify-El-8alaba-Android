@@ -125,7 +125,7 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
             playlistBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.getParentFragmentManager().beginTransaction()
+                    fragment.getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.nav_host_fragment,
                                     PlaylistHomeFragment.newInstance(playlistId))
                             .addToBackStack(null)
