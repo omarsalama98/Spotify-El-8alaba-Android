@@ -14,13 +14,19 @@ import android.graphics.drawable.shapes.RectShape;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ImageView;
+import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.palette.graphics.Palette;
+import androidx.palette.graphics.Palette.Swatch;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Picasso.LoadedFrom;
 import com.squareup.picasso.Target;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * This class contains utility methods related to gradient generation from bitmaps asynchronously
@@ -167,24 +173,32 @@ public class GradientUtils {
             ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
             Shader shader;
 
+            List<Swatch> swatches = new ArrayList<>(palette.getSwatches());
+
+            Collections.sort(swatches, new Comparator<Swatch>() {
+                @Override
+                public int compare(Swatch s1, Swatch s2) {
+                    return Integer.compare(s2.getPopulation(), s1.getPopulation());
+                }
+            });
+
+            @ColorInt int dominantColor = palette.getDominantColor(Color.MAGENTA);
+            @ColorInt int secondaryColor = swatches.get(swatches.size() / 4).getRgb();
+
             switch (gradientType) {
                 case GRADIENT_LINEAR_BLACK:
                     shader = new LinearGradient(0, 0, 0, viewHeight,
-                            palette.getLightMutedColor(Color.MAGENTA), Color.BLACK,
-                            TileMode.CLAMP);
+                            secondaryColor, Color.BLACK, TileMode.CLAMP);
                     break;
 
                 case GRADIENT_LINEAR:
                     shader = new LinearGradient(0, 0, 0, viewHeight,
-                            palette.getDominantColor(0),
-                            palette.getVibrantColor(0), TileMode.CLAMP);
+                            dominantColor, secondaryColor, TileMode.CLAMP);
                     break;
 
                 default:
                 case GRADIENT_SWEEP:
-                    shader = new SweepGradient(0, 0,
-                            palette.getDominantColor(0),
-                            palette.getVibrantColor(0));
+                    shader = new SweepGradient(0, 0, dominantColor, secondaryColor);
                     break;
 
             }

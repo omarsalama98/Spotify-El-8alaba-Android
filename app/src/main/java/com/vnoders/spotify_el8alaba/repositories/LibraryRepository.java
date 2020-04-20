@@ -212,4 +212,63 @@ public class LibraryRepository {
         });
     }
 
+    public static void updatePlaylistFollowState(PlaylistHomeViewModel viewModel) {
+        Call<List<Boolean>> request = libraryApi
+                .doesCurrentUserFollowPlaylist(viewModel.getPlaylistId());
+
+        request.enqueue(new Callback<List<Boolean>>() {
+            @Override
+            public void onResponse(@NotNull Call<List<Boolean>> call,
+                    @NotNull Response<List<Boolean>> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+                    viewModel.setFollowedState(response.body().get(0));
+                } else {
+                    request.clone().enqueue(this);
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<List<Boolean>> call, @NotNull Throwable t) {
+                //TODO:
+                t.printStackTrace();
+            }
+        });
+    }
+
+    public static void followPlaylist(PlaylistHomeViewModel viewModel) {
+        Call<Void> request = libraryApi.followPlaylist(viewModel.getPlaylistId());
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    viewModel.setFollowedState(true);
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
+
+            }
+        });
+    }
+
+    public static void unfollowPlaylist(PlaylistHomeViewModel viewModel) {
+        Call<Void> request = libraryApi.unfollowPlaylist(viewModel.getPlaylistId());
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    viewModel.setFollowedState(false);
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<Void> call, @NotNull Throwable t) {
+
+            }
+        });
+    }
 }
