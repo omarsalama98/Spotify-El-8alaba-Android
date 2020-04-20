@@ -3,10 +3,19 @@ package com.vnoders.spotify_el8alaba.response.CurrentUserProfile;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.Image;
+import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
 import java.io.Serializable;
+import java.util.List;
 
 public class CurrentUserProfile implements Serializable {
+
+    @SerializedName("following")
+    @Expose
+    private List<Object> following = null;
+    @SerializedName("followedPlaylists")
+    @Expose
+    private List<Playlist> followedPlaylists = null;
     @SerializedName("type")
     @Expose
     private String type;
@@ -98,4 +107,19 @@ public class CurrentUserProfile implements Serializable {
         this.image = image;
     }
 
+    public List<Playlist> getFollowedPlaylists() {
+        return followedPlaylists;
+    }
+
+    public void setFollowedPlaylists(
+            List<Playlist> followedPlaylists) {
+        this.followedPlaylists = followedPlaylists;
+    }
+    public List<Object> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<Object> following) {
+        this.following = following;
+    }
 }

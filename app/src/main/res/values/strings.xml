@@ -123,4 +123,11 @@
     <string name = "settings">Settings</string>
     <string name = "account_type">Free Account</string>
     <string name = "go_premium">go premium</string>
+    <string name = "find_friends">Find friends</string>
+    <string name = "share">Share</string>
+    <string name = "whatsapp">WhatsApp</string>
+    <string name = "facebook">Facebook News Feed</string>
+    <string name = "sms">SMS</string>
+    <string name = "copy_link">Copy Link</string>
+    <string name = "more">More</string>
 </resources>

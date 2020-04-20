@@ -93,11 +93,15 @@ public class LoginActivit extends AppCompatActivity {
                             JSONObject userInfo = user.getJSONObject("userInfo");
                             JSONObject jsonCurrentlyPlayed = userInfo
                                     .getJSONObject("currentlyPlaying");
+                            String id=userInfo.getString("id");
+                            editor.putString("id",id).commit();
                             CurrentlyPlaying currentlyPlaying = gson.fromJson(
                                     jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
                         } else {
                             JSONObject jsonCurrentlyPlayed = user
                                     .getJSONObject("currentlyPlaying");
+                            String id=user.getString("id");
+                            editor.putString("id",id).commit();
                             CurrentlyPlaying currentlyPlaying = gson.fromJson(
                                     jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
                         }

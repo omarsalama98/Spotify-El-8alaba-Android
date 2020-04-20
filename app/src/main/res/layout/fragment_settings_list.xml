@@ -6,6 +6,7 @@
         tools:context = ".SettingsList"
         android:weightSum="10"
         android:orientation="vertical"
+        android:background="@color/endColor"
         >
     <RelativeLayout
             android:layout_marginTop="20dp"
@@ -34,6 +35,7 @@
 
     </RelativeLayout>
 <ScrollView
+        android:background="@color/black"
         android:layout_width = "match_parent"
         android:layout_height = "0dp"
         android:layout_weight="9.2"
