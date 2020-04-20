@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:id = "@+id/overflow_menu_item_body"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:gravity="center_vertical"
+        android:orientation = "horizontal">
+
+    <ImageView
+            android:id="@+id/overflow_menu_item_icon"
+            android:layout_width = "32dp"
+            android:layout_height = "32dp"
+            tools:src = "@drawable/hide_track_visible"
+            android:layout_margin="16dp"
+            android:drawablePadding = "32dp"/>
+
+    <TextView
+            android:id = "@+id/overflow_menu_item_title"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:gravity = "center_vertical"
+            android:textColor = "@color/white"
+            android:textSize = "18sp"
+            android:textStyle = "bold"
+            tools:text = "@string/overflow_hide" />
+
+</LinearLayout>
