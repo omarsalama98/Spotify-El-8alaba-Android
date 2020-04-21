@@ -29,6 +29,12 @@ public interface TrackPlayerApi {
     @PUT("me/player/seek")
     Call<Void> updateTrackProgress(@Query("position_ms") int progress);
 
+    @PUT("me/player/shuffle")
+    Call<Void> setShuffleState(@Query("state") boolean shuffleState);
+
+    @PUT("me/player/repeat")
+    Call<Void> setRepeatState(@Query("state") boolean repeatState);
+
     @GET("tracks/{trackId}")
     Call<GetTrack> getTrack(@Path("trackId") String trackId);
 

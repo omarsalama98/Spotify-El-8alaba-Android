@@ -13,6 +13,12 @@ public class CurrentlyPlayingTrackWrapper {
     @SerializedName("context")
     private TrackContext mContext;
 
+    @SerializedName("repeat_state")
+    private boolean mRepeat;
+
+    @SerializedName("shuffle_state")
+    private boolean mShuffle;
+
     public CurrentlyPlayingTrack getCurrentTrack() {
         return this.mCurrentTrack;
     }
@@ -23,5 +29,13 @@ public class CurrentlyPlayingTrackWrapper {
 
     public TrackContext getTrackContext() {
         return this.mContext;
+    }
+
+    public boolean getRepeat() {
+        return this.mRepeat;
+    }
+
+    public boolean getShuffle() {
+        return this.mShuffle;
     }
 }

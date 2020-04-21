@@ -12,6 +12,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -175,38 +176,42 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         }
 
         mRepeat = repeat;
+        setRepeatState(mRepeat);
 
         getTrack(trackId);
     }
 
-    public void playList(List<String> trackIds, boolean shuffle, boolean repeat) {
+    public void playList(List<String> trackIds, boolean shuffle, boolean repeat, String trackId) {
         if (trackIds == null || trackIds.isEmpty()) {
             return;
         }
 
         mRepeat = repeat;
+        setRepeatState(mRepeat);
 
-        getSeveralTracks(trackIds, shuffle);
+        getSeveralTracks(trackIds, shuffle, trackId);
     }
 
-    public void playAlbum(String albumId, boolean shuffle, boolean repeat) {
+    public void playAlbum(String albumId, boolean shuffle, boolean repeat, String trackId) {
         if (TextUtils.isEmpty(albumId)) {
             return;
         }
 
         mRepeat = repeat;
+        setRepeatState(mRepeat);
 
-        getAlbum(albumId, shuffle, false, null);
+        getAlbum(albumId, shuffle, trackId);
     }
 
-    public void playPlaylist(String playlistId, boolean shuffle, boolean repeat) {
+    public void playPlaylist(String playlistId, boolean shuffle, boolean repeat, String trackId) {
         if (TextUtils.isEmpty(playlistId)) {
             return;
         }
 
         mRepeat = repeat;
+        setRepeatState(mRepeat);
 
-        getPlaylist(playlistId, shuffle, false, null);
+        getPlaylist(playlistId, shuffle, trackId);
     }
 
     public void shuffle() {
@@ -221,6 +226,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         Collections.shuffle(mTracksList);
 
         mTracksList.add(mCurrentTrackIndex, currentTrack);
+        setShuffleState(true);
     }
 
     public void repeatAllToggle() {
@@ -257,6 +263,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         }
 
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+        setRepeatState(mRepeat);
     }
 
     //______________________________________________________________________________________________
@@ -553,11 +560,15 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     }
                 }
 
+                mRepeat = response.body().getCurrentTrackWrapper().getRepeat();
+
+                boolean shuffleState = response.body().getCurrentTrackWrapper().getShuffle();
+
                 if (type.equals(CONTEXT_RESPONSE_TYPE_ALBUM)) {
-                    getAlbum(id, false, true, currentTrack.getId());
+                    getAlbum(id, shuffleState, currentTrack.getId());
                 }
                 else if (type.equals(CONTEXT_RESPONSE_TYPE_PLAYLIST)) {
-                    getPlaylist(id, false, true, currentTrack.getId());
+                    getPlaylist(id, shuffleState, currentTrack.getId());
                 }
                 else {
                     mCurrentTrackIndex = 0;
@@ -597,6 +608,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
                 Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(), null, Track.TYPE_ARTIST, null, null, track.getArtists().get(0), track.getAlbumId(), uri);
 
+                setShuffleState(false);
                 mTracksList = new ArrayList<>();
                 mTracksList.add(currentTrack);
                 mCurrentTrackIndex = 0;
@@ -610,7 +622,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         });
     }
 
-    private void getSeveralTracks(List<String> tracksIds, boolean shuffle) {
+    private void getSeveralTracks(List<String> tracksIds, boolean shuffle, String trackId) {
 
         String tracksIdsReadyString = tracksIds.get(0);
 
@@ -653,7 +665,18 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     Collections.shuffle(mTracksList);
                 }
 
+                setShuffleState(shuffle);
+
                 mCurrentTrackIndex = 0;
+
+                if (!TextUtils.isEmpty(trackId)) {
+                    for (int i = 0; i < mTracksList.size(); ++i) {
+                        if (mTracksList.get(i).getId().equals(trackId)) {
+                            mCurrentTrackIndex = i;
+                            break;
+                        }
+                    }
+                }
 
                 destroyMediaPlayer();
                 initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
@@ -666,7 +689,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         });
     }
 
-    private void getAlbum(String albumId, boolean shuffle, boolean firstTime, String trackId) {
+    private void getAlbum(String albumId, boolean shuffle, String trackId) {
         Call<GetAlbum> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getAlbum(albumId);
 
         request.enqueue(new Callback<GetAlbum>() {
@@ -701,15 +724,17 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     Collections.shuffle(mTracksList);
                 }
 
-                if (firstTime && trackId != null) {
+                setShuffleState(shuffle);
+
+                mCurrentTrackIndex = 0;
+
+                if (!TextUtils.isEmpty(trackId)) {
                     for (int i = 0; i < mTracksList.size(); ++i) {
                         if (mTracksList.get(i).getId().equals(trackId)) {
                             mCurrentTrackIndex = i;
                             break;
                         }
                     }
-                } else {
-                    mCurrentTrackIndex = 0;
                 }
 
                 destroyMediaPlayer();
@@ -723,7 +748,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         });
     }
 
-    private void getPlaylist(String playlistId, boolean shuffle, boolean firstTime, String trackId) {
+    private void getPlaylist(String playlistId, boolean shuffle, String trackId) {
         Call<GetPlaylist> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getPlaylist(playlistId);
 
         request.enqueue(new Callback<GetPlaylist>() {
@@ -753,16 +778,17 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                     Collections.shuffle(mTracksList);
                 }
 
-                if (firstTime && trackId != null) {
+                setShuffleState(shuffle);
+
+                mCurrentTrackIndex = 0;
+
+                if (!TextUtils.isEmpty(trackId)) {
                     for (int i = 0; i < mTracksList.size(); ++i) {
                         if (mTracksList.get(i).getId().equals(trackId)) {
                             mCurrentTrackIndex = i;
                             break;
                         }
                     }
-                }
-                else {
-                    mCurrentTrackIndex = 0;
                 }
 
                 destroyMediaPlayer();
@@ -851,6 +877,25 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             public void onFailure(Call<GetAlbum> call, Throwable t) {
 
             }
+        });
+    }
+
+    private void setShuffleState(boolean shuffleState) {
+        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).setShuffleState(shuffleState);
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {}
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {}});
+    }
+
+    private void setRepeatState(boolean repeatState) {
+        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).setRepeatState(repeatState);
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {}
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {}
         });
     }
 

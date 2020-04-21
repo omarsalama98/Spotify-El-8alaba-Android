@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
@@ -33,11 +34,6 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
  * Player that is displayed with main activity at bottom which shows all the time
  */
 public class BottomPlayerFragment extends Fragment {
-
-    // connection to service
-    private MediaPlaybackService mService;
-    // boolean to know if currently bound to service or not
-    private boolean mBound = false;
 
     // text view that scrolls at bottom with name of song and author
     private TextView songInfoView;
@@ -95,12 +91,12 @@ public class BottomPlayerFragment extends Fragment {
         rootView.findViewById(R.id.bottom_player_container).setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             @Override
             public void onSwipeLeft() {
-                mService.skipToNext();
+                ((MainActivity)getActivity()).getService().skipToNext();
             }
 
             @Override
             public void onSwipeRight() {
-                mService.skipToPrev();
+                ((MainActivity)getActivity()).getService().skipToPrev();
             }
 
             @Override
@@ -191,29 +187,9 @@ public class BottomPlayerFragment extends Fragment {
      */
     private void playPausePressed() {
         if (isPlaying) {
-            mService.pause();
+            ((MainActivity)getActivity()).getService().pause();
         } else {
-            mService.start();
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // bind the activity to service
-        Intent intent = new Intent(getActivity(), MediaPlaybackService.class);
-        getActivity().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // if bound then unbind to release service
-        if (mBound) {
-            getActivity().unbindService(mConnection);
-            mBound = false;
+            ((MainActivity)getActivity()).getService().start();
         }
     }
 
@@ -242,22 +218,4 @@ public class BottomPlayerFragment extends Fragment {
             mSeekbar.setProgress(progressScaled);
         }
     }
-
-    /**
-     * Connection to bind with media playback service
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MediaPlaybackService.MediaPlaybackBinder binder =
-                    (MediaPlaybackService.MediaPlaybackBinder) service;
-            mService = binder.getService();
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBound = false;
-        }
-    };
 }
