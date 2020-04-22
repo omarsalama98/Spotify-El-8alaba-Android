@@ -47,11 +47,8 @@ public class LibraryPlaylistFragment extends Fragment {
         playlistViewModel.getUserPlaylists().observe(getViewLifecycleOwner(),
                 new Observer<List<LibraryPlaylistItem>>() {
                     @Override
-                    public void onChanged(List<LibraryPlaylistItem> LibraryPlaylistItems) {
-                        playlistAdapter.setUserPlaylists(LibraryPlaylistItems);
-                        playlistAdapter.notifyDataSetChanged();
-                        //TODO : Use DiffUtil to generate smaller changes instead of notifyDataSetChanged
-                        // for better performance
+                    public void onChanged(List<LibraryPlaylistItem> libraryPlaylistItems) {
+                        playlistAdapter.submitList(libraryPlaylistItems);
                     }
                 });
         return root;

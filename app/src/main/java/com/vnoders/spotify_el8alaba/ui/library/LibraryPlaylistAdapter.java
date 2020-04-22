@@ -8,14 +8,17 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil.ItemCallback;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenu;
+import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenuItem;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,25 +28,31 @@ import java.util.List;
  * list of playlists to be displayed and how to recycle them. This adapter currently can ONLY exist
  * inside a fragment
  */
-public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHolder> {
+public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, PlaylistViewHolder> {
 
-    private List<LibraryPlaylistItem> playlists;
     private Fragment fragment;
+
+    private static final ItemCallback<LibraryPlaylistItem> DIFF_COMPARE_CALLBACK = new ItemCallback<LibraryPlaylistItem>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull LibraryPlaylistItem oldItem,
+                @NonNull LibraryPlaylistItem newItem) {
+            return oldItem.getId().equals(newItem.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull LibraryPlaylistItem oldItem,
+                @NonNull LibraryPlaylistItem newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 
     /**
      * @param fragment The fragment which the recycler view of this adapter lives in. This is needed
      *                 in order to be able to open another fragments.
      */
     public LibraryPlaylistAdapter(Fragment fragment) {
-        playlists = new ArrayList<>();
+        super(DIFF_COMPARE_CALLBACK);
         this.fragment = fragment;
-    }
-
-    /**
-     * @param playlists Sets the list of playlists to be displayed.
-     */
-    public void setUserPlaylists(List<LibraryPlaylistItem> playlists) {
-        this.playlists = playlists;
     }
 
     /**
@@ -74,24 +83,17 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
      *
      * @param holder   The ViewHolder which should be updated to represent the contents of the item
      *                 at the given position in the data set.
-     * @param position The position of the item within the adapter's data set ({@link #playlists}).
+     * @param position The position of the item within the adapter's data set ({@link #getCurrentList()}).
      */
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
-        holder.playlistName.setText(playlists.get(position).getName());
-        holder.playlistInfo.setText( "by " + playlists.get(position).getOwner().getName());
-        holder.playlistId = playlists.get(position).getId();
-        String imageUrl = playlists.get(position).getImages().get(0).getUrl();
+        holder.playlistName.setText(getItem(position).getName());
+        holder.playlistInfo.setText( "by " + getItem(position).getOwner().getName());
+        holder.playlistId = getItem(position).getId();
+        String imageUrl = getItem(position).getImages().get(0).getUrl();
         Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock).into(holder.playlistArt);
     }
 
-    /**
-     * @return The total number of items in this adapter. i.e. the number of playlists.
-     */
-    @Override
-    public int getItemCount() {
-        return playlists.size();
-    }
 
 
     /**
