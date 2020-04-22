@@ -11,21 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import java.util.ArrayList;
 
 public class GenrePlaylistsGridAdapter extends
         RecyclerView.Adapter<GenrePlaylistsGridAdapter.MyViewHolder> {
 
-    private static ArrayList<Playlist> mPlaylists;    //TODO: Change to ArrayList<Playlist>
+    private static ArrayList<HomePlaylist> mPlaylists;    //TODO: Change to ArrayList<Playlist>
     private static Fragment fragment;
 
     /**
      * @param myDataSet List of Playlists to show for the current Genre
      * @param fragment  The current fragment where this list will be created
      */
-    public GenrePlaylistsGridAdapter(ArrayList<Playlist> myDataSet, Fragment fragment) {
+    public GenrePlaylistsGridAdapter(ArrayList<HomePlaylist> myDataSet, Fragment fragment) {
         mPlaylists = myDataSet;
         GenrePlaylistsGridAdapter.fragment = fragment;
     }

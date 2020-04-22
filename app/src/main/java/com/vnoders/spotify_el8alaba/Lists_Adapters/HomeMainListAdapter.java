@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
@@ -59,27 +59,28 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
 
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        Call<List<Playlist>> call = apiService
+        Call<List<HomePlaylist>> call = apiService
                 .getCategoryPlaylists(backDataset.get(position).getId());
 
         holder.innerList.setLayoutManager(
                 new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-        ArrayList<Playlist> myDataList = new ArrayList<>();
+        ArrayList<HomePlaylist> myDataList = new ArrayList<>();
         HomeInnerListAdapter adapter = new HomeInnerListAdapter(fragment, myDataList);
         holder.innerList.setAdapter(adapter);
         holder.innerList.addItemDecoration(
                 new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
 
-        call.enqueue(new Callback<List<Playlist>>() {
+        call.enqueue(new Callback<List<HomePlaylist>>() {
             @Override
-            public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+            public void onResponse(Call<List<HomePlaylist>> call,
+                    Response<List<HomePlaylist>> response) {
                 myDataList.addAll(response.body());
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<List<Playlist>> call, Throwable t) {
+            public void onFailure(Call<List<HomePlaylist>> call, Throwable t) {
                 Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
             }
         });

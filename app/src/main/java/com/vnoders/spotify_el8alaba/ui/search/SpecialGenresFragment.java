@@ -25,7 +25,7 @@ import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
@@ -93,25 +93,26 @@ public class SpecialGenresFragment extends Fragment {
 
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        Call<List<Playlist>> call2 = apiService
+        Call<List<HomePlaylist>> call2 = apiService
                 .getCategoryPlaylists(id);
 
-        ArrayList<Playlist> recentlyPlayedList = new ArrayList<>();
+        ArrayList<HomePlaylist> recentlyPlayedList = new ArrayList<>();
 
         RecentlyPlayedListAdapter recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
                 SpecialGenresFragment.this, recentlyPlayedList);
 
         topPlaylistsRecyclerView.setAdapter(recentlyPlayedListAdapter);
 
-        call2.enqueue(new Callback<List<Playlist>>() {
+        call2.enqueue(new Callback<List<HomePlaylist>>() {
             @Override
-            public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+            public void onResponse(Call<List<HomePlaylist>> call,
+                    Response<List<HomePlaylist>> response) {
                 recentlyPlayedList.addAll(response.body());
                 recentlyPlayedListAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<List<Playlist>> call, Throwable t) {
+            public void onFailure(Call<List<HomePlaylist>> call, Throwable t) {
                 Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
             }
         });

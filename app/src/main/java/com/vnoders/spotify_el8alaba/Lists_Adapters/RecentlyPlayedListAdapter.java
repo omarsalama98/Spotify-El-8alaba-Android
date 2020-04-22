@@ -1,6 +1,5 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +7,9 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
 
@@ -19,14 +17,14 @@ public class RecentlyPlayedListAdapter extends
         RecyclerView.Adapter<RecentlyPlayedListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private static ArrayList<Playlist> backDataset;
+    private static ArrayList<HomePlaylist> backDataset;
 
     /**
      * @param myDataset List Of Items in this RecyclerView
      * @param fragment  The fragment where this list is in (Used to load another fragment)
      */
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecentlyPlayedListAdapter(Fragment fragment, ArrayList<Playlist> myDataset) {
+    public RecentlyPlayedListAdapter(Fragment fragment, ArrayList<HomePlaylist> myDataset) {
         backDataset = myDataset;
         RecentlyPlayedListAdapter.fragment = fragment;
     }
@@ -78,13 +76,8 @@ public class RecentlyPlayedListAdapter extends
             image = v.findViewById(R.id.home_recently_played_list_item_image);
 
             v.setOnClickListener(v1 -> {
-                Bundle arguments = new Bundle();
-                arguments.putString
-                        (SearchByTypeConstantsHelper.PLAYLIST_ID_KEY,
-                                backDataset.get(getAdapterPosition()).getId());
-                //TODO: Replace the Name Key with an ID one and pass the playlist_id
-                Fragment targetFragment = new PlaylistTracksFragment();
-                targetFragment.setArguments(arguments);
+                Fragment targetFragment = PlaylistHomeFragment
+                        .newInstance(backDataset.get(getAdapterPosition()).getId());
                 fragment.getParentFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,

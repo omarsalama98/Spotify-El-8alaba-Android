@@ -2,8 +2,8 @@ package com.vnoders.spotify_el8alaba.repositories;
 
 import com.vnoders.spotify_el8alaba.Artist;
 import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.models.library.Album;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
 import retrofit2.Call;
@@ -32,7 +32,7 @@ public interface APIInterface {
     );
 
     @GET("search?type=playlist")
-    Call<List<Playlist>> getPlaylistsOfSearch(
+    Call<List<HomePlaylist>> getPlaylistsOfSearch(
             @Query("q") String playlistName
     );
 
@@ -82,6 +82,6 @@ public interface APIInterface {
      * @return A list of the desired category's playlists
      */
     @GET("browse/categories/{category_id}/playlists")
-    Call<List<Playlist>> getCategoryPlaylists(@Path("category_id") String categoryId);
+    Call<List<HomePlaylist>> getCategoryPlaylists(@Path("category_id") String categoryId);
 
 }

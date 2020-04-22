@@ -22,10 +22,9 @@ import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
-import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileFragment;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
@@ -97,26 +96,27 @@ public class HomeFragment extends Fragment {
             fragmentTransaction.replace(R.id.nav_host_fragment,settingsList,"SETTINGS_LIST").addToBackStack(null).commit();
         });
 
-        Call<List<Playlist>> call2 = apiService
+        Call<List<HomePlaylist>> call2 = apiService
                 .getCategoryPlaylists("5e8f3a325c504a25a711ce25");
 
         recentlyPlayedRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        ArrayList<Playlist> recentlyPlayedList = new ArrayList<>();
+        ArrayList<HomePlaylist> recentlyPlayedList = new ArrayList<>();
         RecentlyPlayedListAdapter recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
                 HomeFragment.this, recentlyPlayedList);
         recentlyPlayedRecyclerView.setAdapter(recentlyPlayedListAdapter);
 
-        call2.enqueue(new Callback<List<Playlist>>() {
+        call2.enqueue(new Callback<List<HomePlaylist>>() {
             @Override
-            public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+            public void onResponse(Call<List<HomePlaylist>> call,
+                    Response<List<HomePlaylist>> response) {
                 recentlyPlayedList.addAll(response.body());
                 recentlyPlayedListAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<List<Playlist>> call, Throwable t) {
+            public void onFailure(Call<List<HomePlaylist>> call, Throwable t) {
                 Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
             }
         });

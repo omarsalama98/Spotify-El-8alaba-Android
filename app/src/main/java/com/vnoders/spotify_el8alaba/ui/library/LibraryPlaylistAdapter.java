@@ -15,14 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DiffUtil.ItemCallback;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
-import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenu;
-import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenuItem;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is the recycler view adapter in the {@link LibraryPlaylistFragment} which holds the
@@ -91,8 +86,8 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
         holder.playlistName.setText(getItem(position).getName());
         holder.playlistInfo.setText( "by " + getItem(position).getOwner().getName());
         holder.playlistId = getItem(position).getId();
-        String imageUrl = getItem(position).getImages().get(0).getUrl();
-        Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock).into(holder.playlistArt);
+        //String imageUrl = getItem(position).getImages().get(0).getUrl();
+        //Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock).into(holder.playlistArt);
     }
 
 

@@ -1,6 +1,5 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +8,17 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
 import java.util.ArrayList;
 
 public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
     private static ArrayList<HomeInnerListItem> mockDataset;
-    private static ArrayList<Playlist> backDataset;
+    private static ArrayList<HomePlaylist> backDataset;
 
     //               The difference between these two constructors is that one uses mock data and the other
     //                  uses data retrieved from the server and the mock data one will be removed later on.
@@ -36,7 +34,7 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
         HomeInnerListAdapter.fragment = fragment;
     }
 
-    HomeInnerListAdapter(Fragment fragment, ArrayList<Playlist> backDataset) {
+    HomeInnerListAdapter(Fragment fragment, ArrayList<HomePlaylist> backDataset) {
         mockDataset = new ArrayList<>();
         HomeInnerListAdapter.backDataset = backDataset;
         HomeInnerListAdapter.fragment = fragment;
@@ -87,13 +85,9 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
             image = v.findViewById(R.id.home_inner_list_item_image);
 
             v.setOnClickListener(v1 -> {
-                Bundle arguments = new Bundle();
-                arguments.putString
-                        (SearchByTypeConstantsHelper.PLAYLIST_ID_KEY,
-                                backDataset.get(getAdapterPosition()).getId());
-                //TODO: Replace the Name Key with an ID one and pass the playlist id retrieved from server
-                Fragment targetFragment = new PlaylistTracksFragment();
-                targetFragment.setArguments(arguments);
+
+                Fragment targetFragment = PlaylistHomeFragment
+                        .newInstance(backDataset.get(getAdapterPosition()).getId());
                 fragment.getParentFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,

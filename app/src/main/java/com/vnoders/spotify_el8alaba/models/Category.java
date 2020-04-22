@@ -2,14 +2,13 @@ package com.vnoders.spotify_el8alaba.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import java.util.List;
 
 public class Category {
 
     @SerializedName("playlists")
     @Expose
-    private List<Playlist> playlists = null;
+    private List<HomePlaylist> playlists = null;
     @SerializedName("_id")
     @Expose
     private String id;
@@ -23,11 +22,11 @@ public class Category {
     @Expose
     private Integer v;
 
-    public List<Playlist> getPlaylists() {
+    public List<HomePlaylist> getPlaylists() {
         return playlists;
     }
 
-    public void setPlaylists(List<Playlist> playlists) {
+    public void setPlaylists(List<HomePlaylist> playlists) {
         this.playlists = playlists;
     }
 

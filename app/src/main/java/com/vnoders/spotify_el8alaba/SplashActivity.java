@@ -1,5 +1,5 @@
 package com.vnoders.spotify_el8alaba;
-import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,13 +16,10 @@ public class SplashActivity extends AppCompatActivity {
         // being drawn by other views
         getWindow().setBackgroundDrawable(null);
 
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, FirstScreen.class);
-                startActivity(intent);
-                finish();
-            }
+        final Runnable runnable = () -> {
+            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         };
         Handler handler = new Handler();
         int SPLASH_TIME_OUT = 1500;
