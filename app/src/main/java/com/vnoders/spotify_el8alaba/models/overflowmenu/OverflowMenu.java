@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
 import java.util.List;
 
@@ -44,8 +45,8 @@ public class OverflowMenu extends BottomSheetDialogFragment {
             @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_overflow_menu, container, false);
 
-        LinearLayout linearLayout = root.findViewById(R.id.overflow_items_container);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
+        LinearLayout overflowMenu = root.findViewById(R.id.overflow_menu);
+        overflowMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -55,7 +56,9 @@ public class OverflowMenu extends BottomSheetDialogFragment {
         // set the data displayed on screen with object
         updateBasicInfo(root);
 
-        addActions(linearLayout);
+        addActions(overflowMenu);
+
+        fixLayoutPosition(overflowMenu);
 
         return root;
     }
@@ -119,5 +122,38 @@ public class OverflowMenu extends BottomSheetDialogFragment {
             parent.addView(root);
         }
     }
+
+    /**
+     * Get the View's height because {@link View#getHeight()} returns zero as the view is not fully
+     * instantiated yet.
+     *
+     * @param view The view to calculate its height
+     *
+     * @return The real view's height
+     */
+    private int getViewHeight(View view) {
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        return view.getMeasuredHeight();
+    }
+
+
+    /**
+     * The menu was centered in the screen. This fixes to be at the bottom by adding padding based
+     * on its size.
+     *
+     * @param overflowMenu The view to fix
+     */
+    private void fixLayoutPosition(View overflowMenu) {
+        int displayHeight = App.getDisplayHeight();
+        int overflowMenuHeight = getViewHeight(overflowMenu);
+
+        if (displayHeight > overflowMenuHeight) {
+            int topPadding = displayHeight - overflowMenuHeight;
+            int bottomPadding = getResources()
+                    .getDimensionPixelSize(R.dimen.overflow_bottom_padding);
+            overflowMenu.setPadding(0, topPadding, 0, bottomPadding);
+        }
+    }
+
 
 }
