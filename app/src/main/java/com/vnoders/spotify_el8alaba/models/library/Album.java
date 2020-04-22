@@ -6,6 +6,7 @@ import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is used to model data parsed from json network response using {@link Gson} library
@@ -166,6 +167,7 @@ public class Album {
     public static final Comparator<Album> SORT_BY_RELEASE_DATE = new Comparator<Album>() {
         @Override
         public int compare(Album album1, Album album2) {
+            //TODO: update it to compare real date instead of just string
             return album1.releaseDate.compareTo(album2.releaseDate);
         }
     };
@@ -176,5 +178,27 @@ public class Album {
             return Integer.compare(album1.popularity, album2.popularity);
         }
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Album album = (Album) obj;
+        return Objects.equals(albumType, album.albumType) &&
+                Objects.equals(artists, album.artists) &&
+                Objects.equals(genres, album.genres) &&
+                Objects.equals(href, album.href) &&
+                Objects.equals(id, album.id) &&
+                Objects.equals(images, album.images) &&
+                Objects.equals(name, album.name) &&
+                Objects.equals(releaseDate, album.releaseDate) &&
+                Objects.equals(tracks, album.tracks) &&
+                Objects.equals(type, album.type) &&
+                Objects.equals(uri, album.uri);
+    }
 
 }

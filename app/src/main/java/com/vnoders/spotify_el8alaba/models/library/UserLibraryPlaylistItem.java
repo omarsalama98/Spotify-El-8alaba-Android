@@ -1,9 +1,11 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
+import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is used to model data parsed from json network response using {@link Gson} library
@@ -33,9 +35,6 @@ public class UserLibraryPlaylistItem {
 
     @SerializedName("public")
     private boolean isPublic;
-
-    @SerializedName("snapshot_id")
-    private String snapshotId;
 
     @SerializedName("type")
     private String type;
@@ -107,14 +106,6 @@ public class UserLibraryPlaylistItem {
         this.isPublic = _public;
     }
 
-    public String getSnapshotId() {
-        return snapshotId;
-    }
-
-    public void setSnapshotId(String snapshotId) {
-        this.snapshotId = snapshotId;
-    }
-
     public String getType() {
         return type;
     }
@@ -129,6 +120,25 @@ public class UserLibraryPlaylistItem {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof UserLibraryPlaylistItem)) {
+            return false;
+        }
+        UserLibraryPlaylistItem that = (UserLibraryPlaylistItem) obj;
+
+        return collaborative == that.collaborative &&
+                isPublic == that.isPublic &&
+                externalUrls.equals(that.externalUrls) &&
+                href.equals(that.href) &&
+                id.equals(that.id) &&
+                images.equals(that.images) &&
+                name.equals(that.name) &&
+                owner.equals(that.owner) &&
+                type.equals(that.type) &&
+                uri.equals(that.uri);
     }
 
 }

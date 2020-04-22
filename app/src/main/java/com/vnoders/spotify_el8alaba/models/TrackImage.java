@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.Objects;
 
 
 /**
@@ -28,4 +29,18 @@ public class TrackImage {
     public String getUrl() {
         return url;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        TrackImage that = (TrackImage) obj;
+        return Objects.equals(url, that.url);
+    }
+
 }

@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is used to model data parsed from json network response using {@link Gson} library
@@ -30,8 +31,8 @@ public class Playlist {
     private String description;
 
     @SerializedName("owner")
-    @Expose
     private Owner owner;
+
     @SerializedName("images")
     private List<TrackImage> images = null;
 
@@ -152,6 +153,30 @@ public class Playlist {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Playlist playlist = (Playlist) obj;
+        return collaborative == playlist.collaborative &&
+                isPublic == playlist.isPublic &&
+                Objects.equals(tracks, playlist.tracks) &&
+                Objects.equals(name, playlist.name) &&
+                Objects.equals(description, playlist.description) &&
+                Objects.equals(owner, playlist.owner) &&
+                Objects.equals(images, playlist.images) &&
+                Objects.equals(type, playlist.type) &&
+                Objects.equals(uri, playlist.uri) &&
+                Objects.equals(href, playlist.href) &&
+                Objects.equals(externalUrls, playlist.externalUrls) &&
+                Objects.equals(id, playlist.id);
     }
 
 }

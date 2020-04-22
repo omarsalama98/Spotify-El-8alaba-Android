@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba.models.library;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is used to model data parsed from json network response using {@link Gson} library
@@ -164,6 +165,31 @@ public class Track {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Track track = (Track) obj;
+        return discNumber == track.discNumber &&
+                durationInMilliseconds == track.durationInMilliseconds &&
+                explicit == track.explicit &&
+                isLocal == track.isLocal &&
+                trackNumber == track.trackNumber &&
+                Objects.equals(album, track.album) &&
+                Objects.equals(artists, track.artists) &&
+                Objects.equals(externalUrls, track.externalUrls) &&
+                Objects.equals(href, track.href) &&
+                Objects.equals(id, track.id) &&
+                Objects.equals(name, track.name) &&
+                Objects.equals(previewUrl, track.previewUrl) &&
+                Objects.equals(type, track.type) &&
+                Objects.equals(uri, track.uri);
     }
 
 }
