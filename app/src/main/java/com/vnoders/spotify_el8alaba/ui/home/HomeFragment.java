@@ -19,11 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.HomeMainListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
-import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileFragment;
@@ -65,32 +63,23 @@ public class HomeFragment extends Fragment {
             navView.setSelectedItemId(R.id.navigation_home);
         }
 
-        ArrayList<HomeInnerListItem> innerListItems = new ArrayList<>();
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-
-        ArrayList<HomeMainListItem> mainListItems = Mock.getMainHomeList();
-
-        //  TODO: Will be used when backend is populated
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        final ArrayList homeCategories = new ArrayList<>();
+        ArrayList<Category> myDataList = new ArrayList<>();
+        HomeMainListAdapter adapter = new HomeMainListAdapter(getContext(), HomeFragment.this,
+                myDataList);
+
+        mainListRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        mainListRecyclerView.setHasFixedSize(true);
+        mainListRecyclerView.setAdapter(adapter);
 
         Call<List<Category>> call = apiService.getHomeCategories();
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                Log.d(TAG, response.body().get(0).getName());
-                mainListRecyclerView.setAdapter(new HomeMainListAdapter(getContext()
-                        , HomeFragment.this, (ArrayList<Category>) response.body()));
-                //Toast.makeText(getContext(),response.body().get(0).getName(),Toast.LENGTH_LONG).show();
-                // homeCategories[0] will be put in the adapter
+                myDataList.addAll(response.body());
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -98,13 +87,6 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "failed to retrieve Categories" + t.getMessage());
             }
         });
-
-        //mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
-
-        mainListRecyclerView.setLayoutManager(
-                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        mainListRecyclerView.setHasFixedSize(true);
-        //mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
 
         settingsButton.setOnClickListener(v -> {
             CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
@@ -115,10 +97,30 @@ public class HomeFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
-        recentlyPlayedRecyclerView
-                .setAdapter(new RecentlyPlayedListAdapter(innerListItems, this));
+
+        Call<List<Playlist>> call2 = apiService
+                .getCategoryPlaylists("5e8f3a325c504a25a711ce25");
+
         recentlyPlayedRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        ArrayList<Playlist> recentlyPlayedList = new ArrayList<>();
+        RecentlyPlayedListAdapter recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
+                HomeFragment.this, recentlyPlayedList);
+        recentlyPlayedRecyclerView.setAdapter(recentlyPlayedListAdapter);
+
+        call2.enqueue(new Callback<List<Playlist>>() {
+            @Override
+            public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+                recentlyPlayedList.addAll(response.body());
+                recentlyPlayedListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Playlist>> call, Throwable t) {
+                Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
+            }
+        });
 
     }
 

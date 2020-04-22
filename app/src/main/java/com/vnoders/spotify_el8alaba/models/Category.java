@@ -18,7 +18,7 @@ public class Category {
     private String name;
     @SerializedName("icons")
     @Expose
-    private List<Object> icons = null;
+    private List<Icon> icons = null;
     @SerializedName("__v")
     @Expose
     private Integer v;
@@ -47,11 +47,11 @@ public class Category {
         this.name = name;
     }
 
-    public List<Object> getIcons() {
+    public List<Icon> getIcons() {
         return icons;
     }
 
-    public void setIcons(List<Object> icons) {
+    public void setIcons(List<Icon> icons) {
         this.icons = icons;
     }
 

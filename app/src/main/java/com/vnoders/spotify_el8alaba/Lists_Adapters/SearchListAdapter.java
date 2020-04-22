@@ -93,7 +93,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                 };*/
                 Bundle arguments = new Bundle();
                 arguments.putString
-                        (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,
+                        (SearchByTypeConstantsHelper.PLAYLIST_ID_KEY,
                                 mDataset.get(getAdapterPosition()).getName());
                 //TODO: Replace the Name Key with an ID one and pass the selected item id
                 //TODO: The fragment to go to depends on the selected item type

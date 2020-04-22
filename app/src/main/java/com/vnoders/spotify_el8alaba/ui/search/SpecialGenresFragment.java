@@ -1,7 +1,10 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +23,16 @@ import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.GridSpacingItemDecoration;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
-import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -76,31 +85,60 @@ public class SpecialGenresFragment extends Fragment {
         specialGenreMainTitle.setText(title);
         specialGenreTopTitle.setText(title);
 
+        String id = arguments.getString(SearchByTypeConstantsHelper.GENRE_ID_KEY);
         toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
 
-        ArrayList<HomeInnerListItem> innerListItems = new ArrayList<>();
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-
-        topPlaylistsRecyclerView
-                .setAdapter(new RecentlyPlayedListAdapter(innerListItems, this));
         topPlaylistsRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
+        APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
+
+        Call<List<Playlist>> call2 = apiService
+                .getCategoryPlaylists(id);
+
+        ArrayList<Playlist> recentlyPlayedList = new ArrayList<>();
+
+        RecentlyPlayedListAdapter recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
+                SpecialGenresFragment.this, recentlyPlayedList);
+
+        topPlaylistsRecyclerView.setAdapter(recentlyPlayedListAdapter);
+
+        call2.enqueue(new Callback<List<Playlist>>() {
+            @Override
+            public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+                recentlyPlayedList.addAll(response.body());
+                recentlyPlayedListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Playlist>> call, Throwable t) {
+                Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
+            }
+        });
+
         int spacingInPixels = getGridSpacing();
 
-        categoriesGridRecyclerView
-                .setAdapter(new SearchGenresGridAdapter(this, Mock.getTopGenres(this)));
         categoriesGridRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         categoriesGridRecyclerView
                 .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
 
+        Call<List<Category>> call = apiService.getTopCategories();
+        call.enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                Log.d(TAG, response.body().get(0).getName());
+                categoriesGridRecyclerView
+                        .setAdapter(
+                                new SearchGenresGridAdapter((ArrayList<Category>) response.body(),
+                                        SpecialGenresFragment.this));
+                // topCategories[0] will be put in the adapter
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.d(TAG, "failed to retrieve Categories");
+            }
+        });
         final float[] alpha = {0.0f};
         final float[] newAlpha = {0.0f};
         final int[] overallXScroll = {0};

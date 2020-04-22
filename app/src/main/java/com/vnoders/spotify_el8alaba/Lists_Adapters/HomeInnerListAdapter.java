@@ -1,7 +1,6 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +31,12 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
      */
     // Provide a suitable constructor (depends on the kind of dataset)
     public HomeInnerListAdapter(ArrayList<HomeInnerListItem> myDataset, Fragment fragment) {
+        backDataset = new ArrayList<>();
         mockDataset = myDataset;
         HomeInnerListAdapter.fragment = fragment;
     }
 
-    public HomeInnerListAdapter(Fragment fragment, ArrayList<Playlist> backDataset) {
+    HomeInnerListAdapter(Fragment fragment, ArrayList<Playlist> backDataset) {
         mockDataset = new ArrayList<>();
         HomeInnerListAdapter.backDataset = backDataset;
         HomeInnerListAdapter.fragment = fragment;
@@ -56,22 +56,17 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        /*holder.title.setText(mockDataset.get(position).getTitle());
-        holder.subTitle.setText(mockDataset.get(position).getSubTitle());
-        Picasso.get().load(mockDataset.get(position).getImageURL()).into(holder.image);
-        */
         //TODO: Replace the former with the latter code when backend is completed
         holder.title.setText(backDataset.get(position).getName());
         holder.subTitle.setText(backDataset.get(position).getDescription());
         Picasso.get().load(backDataset.get(position).getImages().get(0).getUrl()).into(holder.image);
-        Log.i("fhdibleqbfqerjlfren", backDataset.get(position).getName());
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mockDataset.size();
+        return backDataset.size();
     }
 
     // Provide a reference to the views for each data item
@@ -94,8 +89,8 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
             v.setOnClickListener(v1 -> {
                 Bundle arguments = new Bundle();
                 arguments.putString
-                        (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,
-                                mockDataset.get(getAdapterPosition()).getTitle());
+                        (SearchByTypeConstantsHelper.PLAYLIST_ID_KEY,
+                                backDataset.get(getAdapterPosition()).getId());
                 //TODO: Replace the Name Key with an ID one and pass the playlist id retrieved from server
                 Fragment targetFragment = new PlaylistTracksFragment();
                 targetFragment.setArguments(arguments);

@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
@@ -19,15 +19,15 @@ public class RecentlyPlayedListAdapter extends
         RecyclerView.Adapter<RecentlyPlayedListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private static ArrayList<HomeInnerListItem> mDataset;
+    private static ArrayList<Playlist> backDataset;
 
     /**
      * @param myDataset List Of Items in this RecyclerView
      * @param fragment  The fragment where this list is in (Used to load another fragment)
      */
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecentlyPlayedListAdapter(ArrayList<HomeInnerListItem> myDataset, Fragment fragment) {
-        mDataset = myDataset;
+    public RecentlyPlayedListAdapter(Fragment fragment, ArrayList<Playlist> myDataset) {
+        backDataset = myDataset;
         RecentlyPlayedListAdapter.fragment = fragment;
     }
 
@@ -45,9 +45,9 @@ public class RecentlyPlayedListAdapter extends
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        holder.title.setText(mDataset.get(position).getTitle());
-        Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
-
+        holder.title.setText(backDataset.get(position).getName());
+        Picasso.get().load(backDataset.get(position).getImages().get(0).getUrl())
+                .into(holder.image);
         /*TODO: Change The image circularity according to type of list item
         if(!mDataset.get(position).getType().equals("Artist"))
             holder.image.setDisableCircularTransformation(true);
@@ -58,7 +58,7 @@ public class RecentlyPlayedListAdapter extends
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return backDataset.size();
     }
 
     // Provide a reference to the views for each data item
@@ -80,8 +80,8 @@ public class RecentlyPlayedListAdapter extends
             v.setOnClickListener(v1 -> {
                 Bundle arguments = new Bundle();
                 arguments.putString
-                        (SearchByTypeConstantsHelper.PLAYLIST_NAME_KEY,
-                                mDataset.get(getAdapterPosition()).getTitle());
+                        (SearchByTypeConstantsHelper.PLAYLIST_ID_KEY,
+                                backDataset.get(getAdapterPosition()).getId());
                 //TODO: Replace the Name Key with an ID one and pass the playlist_id
                 Fragment targetFragment = new PlaylistTracksFragment();
                 targetFragment.setArguments(arguments);

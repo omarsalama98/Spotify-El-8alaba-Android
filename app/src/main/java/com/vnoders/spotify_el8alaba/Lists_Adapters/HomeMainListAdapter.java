@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
@@ -25,32 +25,17 @@ import retrofit2.Response;
 
 public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapter.MyViewHolder> {
 
-    private ArrayList<HomeMainListItem> mockDataset;
     private ArrayList<Category> backDataset;
     private Context context;
     private Fragment fragment;
 
-
     /**
-     * @param myDataset List of Categories to show in Home
+     * @param backDataset List of Categories to show in Home
      * @param context   The context where this list will exist
      * @param fragment  The fragment where the list will be created
      */
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public HomeMainListAdapter(ArrayList<HomeMainListItem> myDataset, Context context,
-            Fragment fragment) {
-        mockDataset = myDataset;
-        backDataset = new ArrayList<>();
-        this.context = context;
-        this.fragment = fragment;
-    }
-
-    //       **    The difference between these two constructors is that one uses mock data and the other    **
-    //       **      uses data retrieved from the server and the mock data one will be removed later on.     **
-
     public HomeMainListAdapter(Context context, Fragment fragment,
             ArrayList<Category> backDataset) {
-        mockDataset = new ArrayList<>();
         this.backDataset = backDataset;
         this.context = context;
         this.fragment = fragment;
@@ -70,28 +55,27 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        /*holder.title.setText(mockDataset.get(position).getTitle());
-        holder.innerList.setAdapter(
-                new HomeInnerListAdapter(mockDataset.get(position).getInnerListItems(), fragment));
-        holder.innerList.setLayoutManager(
-                new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        */
-
-        // TODO: Replace the former with the latter code when backend is completed
         holder.title.setText(backDataset.get(position).getName());
 
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
         Call<List<Playlist>> call = apiService
                 .getCategoryPlaylists(backDataset.get(position).getId());
-        Log.d(TAG, backDataset.get(position).getId());
+
+        holder.innerList.setLayoutManager(
+                new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+
+        ArrayList<Playlist> myDataList = new ArrayList<>();
+        HomeInnerListAdapter adapter = new HomeInnerListAdapter(fragment, myDataList);
+        holder.innerList.setAdapter(adapter);
+        holder.innerList.addItemDecoration(
+                new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
 
         call.enqueue(new Callback<List<Playlist>>() {
             @Override
             public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
-                Log.d(TAG, response.body().get(0).getDescription());
-                holder.innerList.setAdapter(
-                        new HomeInnerListAdapter(fragment, (ArrayList<Playlist>) response.body()));
+                myDataList.addAll(response.body());
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -100,16 +84,12 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
             }
         });
 
-        holder.innerList.setLayoutManager(
-                 new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mockDataset.size();
+        return backDataset.size();
     }
 
     // Provide a reference to the views for each data item
@@ -127,6 +107,5 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
             title = v.findViewById(R.id.home_main_list_item_title);
             innerList = v.findViewById(R.id.home_inner_list_recycler_view);
         }
-
     }
 }

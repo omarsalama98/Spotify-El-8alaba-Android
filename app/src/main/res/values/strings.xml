@@ -121,4 +121,5 @@
     <string name = "recently_played">Recently Played</string>
     <string name = "categories">Categories</string>
     <string name = "navigate_up">Navigate up</string>
+    <string name = "shuffle_icon">shuffle icon</string>
 </resources>

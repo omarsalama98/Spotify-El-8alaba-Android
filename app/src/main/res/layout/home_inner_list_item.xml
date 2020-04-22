@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:orientation = "vertical"
         android:foreground = "@drawable/home_playlists_ripple"
         android:paddingEnd = "10dp"
         android:focusable = "true"
-        android:layout_width = "175dp"
-        android:layout_height = "240dp">
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content">
 
     <ImageView
             android:id = "@+id/home_inner_list_item_image"
-            android:layout_width = "175dp"
-            android:layout_height = "175dp"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
             android:contentDescription = "@string/playlist_image" />
     <TextView
             android:id = "@+id/home_inner_list_item_title"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
             android:text = "Title"
+            android:layout_alignStart = "@id/home_inner_list_item_image"
+            android:layout_alignEnd = "@id/home_inner_list_item_image"
+            android:maxLines = "1"
+            android:layout_below = "@id/home_inner_list_item_image"
             android:textColor = "@color/white"
             android:textSize = "16sp"
             android:textStyle = "bold"
             android:layout_marginVertical = "5dp" />
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
-            android:orientation = "horizontal">
+            android:layout_below = "@id/home_inner_list_item_title"
+            android:layout_alignEnd = "@id/home_inner_list_item_image"
+            android:layout_alignStart = "@id/home_inner_list_item_image">
 
         <ImageView
-                android:layout_width = "16dp"
-                android:layout_height = "16dp"
+                android:id = "@+id/home_inner_list_item_shuffle_icon"
+                android:contentDescription = "@string/shuffle_icon"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
                 android:src = "@drawable/ic_shuffle"
-
-                android:layout_marginEnd = "5dp"
-                android:layout_gravity = "center_vertical" />
+                android:baselineAlignBottom = "true"
+                app:layout_constraintBaseline_toBaselineOf = "@id/home_inner_list_item_sub_title"
+                app:layout_constraintBottom_toBottomOf = "parent"
+                app:layout_constraintStart_toStartOf = "parent"
+                app:layout_constraintEnd_toStartOf = "@id/home_inner_list_item_sub_title"
+                android:layout_marginHorizontal = "5dp" />
 
         <TextView
                 android:id = "@+id/home_inner_list_item_sub_title"
@@ -42,8 +54,11 @@
                 android:textColor = "@color/whitish_gray"
                 android:textSize = "15sp"
                 android:text = "subTitle"
-                android:layout_gravity = "center_vertical" />
-    </LinearLayout>
+                android:ellipsize = "end"
+                android:maxLines = "2"
+                app:layout_constraintStart_toEndOf = "@id/home_inner_list_item_shuffle_icon"
+                app:layout_constraintTop_toTopOf = "parent"
+                app:layout_constraintEnd_toEndOf = "parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

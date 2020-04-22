@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.GridSpacingItemDecoration;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
-import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
@@ -79,18 +78,24 @@ public class SearchGenresFragment extends Fragment {
             navView.setSelectedItemId(R.id.navigation_search);
         }
 
-        //TODO: UnComment and use it instead of mock data when backend is populated.
         APIInterface apiService =
                 RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        final ArrayList[] topCategories = new ArrayList[]{new ArrayList<>()};
+        int spacingInPixels = getGridSpacing();
+
+        topGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        topGenresGridView
+                .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
 
         Call<List<Category>> call = apiService.getTopCategories();
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 Log.d(TAG, response.body().get(0).getName());
-                topCategories[0] = (ArrayList<Category>) response.body();
+                topGenresGridView
+                        .setAdapter(
+                                new SearchGenresGridAdapter((ArrayList<Category>) response.body(),
+                                        SearchGenresFragment.this));
                     // topCategories[0] will be put in the adapter
             }
 
@@ -100,25 +105,19 @@ public class SearchGenresFragment extends Fragment {
             }
         });
 
-        int spacingInPixels = getGridSpacing();
-        topGenresGridView
-                .setAdapter(new SearchGenresGridAdapter(this, topCategories[0]));
-        topGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        topGenresGridView
+        browseAllGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        browseAllGenresGridView
                 .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
 
-        /*TODO: UnComment and use it instead of mock data when backend is populated.
-        APIInterface apiService =
-                RetrofitClient.getInstance().getAPI(APIInterface.class);
-
-        final ArrayList[] allCategories = new ArrayList[]{new ArrayList<>()};
-
-        Call<List<Category>> call = apiService.getAllCategories();
-        call.enqueue(new Callback<List<Category>>() {
+        Call<List<Category>> call2 = apiService.getAllCategories();
+        call2.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 Log.d(TAG, response.body().get(0).getName());
-                allCategories[0] = (ArrayList<Category>) response.body();
+                browseAllGenresGridView
+                        .setAdapter(
+                                new SearchGenresGridAdapter((ArrayList<Category>) response.body(),
+                                        SearchGenresFragment.this));
                     // allCategories[0] will be put in the adapter
             }
 
@@ -126,13 +125,7 @@ public class SearchGenresFragment extends Fragment {
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 Log.d(TAG, "failed to retrieve Categories");
             }
-        });*/
-
-        browseAllGenresGridView
-                .setAdapter(new SearchGenresGridAdapter(this, Mock.getAllGenres(this)));
-        browseAllGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        browseAllGenresGridView
-                .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
+        });
 
         genresSearchTextLayout.setOnClickListener(new OnClickListener() {
             @Override
