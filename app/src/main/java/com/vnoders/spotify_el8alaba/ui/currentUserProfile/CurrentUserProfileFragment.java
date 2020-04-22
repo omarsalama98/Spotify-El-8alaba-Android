@@ -5,11 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import com.vnoders.spotify_el8alaba.EditProfile;
 import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileBottomSheet;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
@@ -34,11 +38,13 @@ public class CurrentUserProfileFragment extends Fragment {
     private TextView followingNumber;
     private TextView followerNumber;
     private ImageView bottomSheetButton;
+    private Button editProfileButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String IMAGE_URL ="https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -94,10 +100,11 @@ public class CurrentUserProfileFragment extends Fragment {
         followerNumber=root.findViewById(R.id.followers_number);
         followingNumber=root.findViewById(R.id.following_numbers);
         playlistNumber=root.findViewById(R.id.playlist_number);
+        editProfileButton=root.findViewById(R.id.edit_profile_button);
         //this will be replaced by a user image from currentUserProfile later
-        Picasso.get().load("https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg").into(userImage);
-        GradientUtils.generate("https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg",appBarLayout,GradientUtils.GRADIENT_LINEAR_BLACK);
-        GradientUtils.generate("https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg",toolbar,GradientUtils.SOLID_DOMINANT_COLOR);
+        Picasso.get().load(IMAGE_URL).into(userImage);
+        GradientUtils.generate(IMAGE_URL,appBarLayout,GradientUtils.GRADIENT_LINEAR_BLACK);
+        GradientUtils.generate(IMAGE_URL,toolbar,GradientUtils.SOLID_DOMINANT_COLOR);
         followerNumber.setText(currentUserProfile.getFollowers().toString());
         userName.setText(currentUserProfile.getName());
         userNameToolbar.setText(currentUserProfile.getName());
@@ -109,6 +116,15 @@ public class CurrentUserProfileFragment extends Fragment {
                 userNameToolbar.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
 
 
+            }
+        });
+        editProfileButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditProfile editProfile=new EditProfile();
+                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment,editProfile,"EDIT_PROFILE").addToBackStack(null).commit();
             }
         });
         bottomSheetButton.setOnClickListener(new OnClickListener() {

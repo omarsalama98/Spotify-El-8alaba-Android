@@ -130,4 +130,8 @@
     <string name = "sms">SMS</string>
     <string name = "copy_link">Copy Link</string>
     <string name = "more">More</string>
+    <string name = "edit_profile_title">Edit profile</string>
+    <string name = "save">SAVE</string>
+    <string name = "change_photo">change photo</string>
+    <string name = "edit_your_name">This could be your first name or a nickname.\nIt\'s how you\'ll appear on Spotify.</string>
 </resources>

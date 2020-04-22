@@ -46,6 +46,7 @@
 
                             />
                     <Button
+                            android:id="@+id/edit_profile_button"
                             android:layout_marginTop = "20dp"
                             android:layout_gravity = "center"
                             android:background = "@drawable/custom_face"
