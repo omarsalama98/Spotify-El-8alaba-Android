@@ -23,6 +23,10 @@ import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHo
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is the recycler view adapter in the {@link PlaylistTracksFragment} which holds the
+ * list of tracks in the playlist to be displayed and how to recycle them.
+ */
 public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
 
     private List<Track> tracks;
@@ -31,10 +35,26 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         this.tracks = new ArrayList<>();
     }
 
+
+    /**
+     * @param tracks Sets the list of tracks in the playlist to be displayed.
+     */
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
     }
 
+
+    /**
+     * Create a new view and fill its data by {@link TrackViewHolder}
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to an
+     *                 specific position.
+     * @param viewType The type of the created view holder in case the list has multiple types of
+     *                 views. In our case it is not used because we have only one type of views
+     *                 (Track Item)
+     *
+     * @return A new {@link TrackViewHolder} that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public TrackViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,17 +65,35 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         return new TrackViewHolder(view);
     }
 
+
+    /**
+     * Instead of creating a new {@link TrackViewHolder} we use an existing one that does not appear
+     * on the screen but update its displaying data.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the item
+     *                 at the given position in the data set.
+     * @param position The position of the item within the adapter's data set ({@link #tracks}).
+     */
     @Override
     public void onBindViewHolder(@NonNull TrackViewHolder holder, int position) {
         holder.trackName.setText(tracks.get(position).getName());
         holder.artistName.setText(tracks.get(position).getArtists().get(0).getName());
     }
 
+
+    /**
+     * @return The total number of items in this adapter. i.e. the number of tracks in the playlist.
+     */
     @Override
     public int getItemCount() {
         return tracks.size();
     }
 
+
+    /**
+     * A ViewHolder describes an item in the list of the adapter and metadata about its place within
+     * the RecyclerView.
+     */
     static class TrackViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout trackBody;
@@ -73,6 +111,9 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         Button othersMenu;
 
 
+        /**
+         * @param itemView The view of the new created item
+         */
         TrackViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -153,6 +194,11 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
             });
         }
 
+        /**
+         * TODO: Update it to reflect its true function
+         * <p>
+         * Creates the slide up menu of more options
+         */
         private void openTrackMenu(View view) {
             Toast.makeText(view.getContext(),
                     "Song " + trackName.getText().toString() + " long click menu",

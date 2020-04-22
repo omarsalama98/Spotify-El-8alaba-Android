@@ -12,28 +12,61 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil.ItemCallback;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenu;
+import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenuItem;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHolder> {
+/**
+ * This class is the recycler view adapter in the {@link LibraryPlaylistFragment} which holds the
+ * list of playlists to be displayed and how to recycle them. This adapter currently can ONLY exist
+ * inside a fragment
+ */
+public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, PlaylistViewHolder> {
 
-    private List<UserLibraryPlaylistItem> playlists;
     private Fragment fragment;
 
+    private static final ItemCallback<LibraryPlaylistItem> DIFF_COMPARE_CALLBACK = new ItemCallback<LibraryPlaylistItem>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull LibraryPlaylistItem oldItem,
+                @NonNull LibraryPlaylistItem newItem) {
+            return oldItem.getId().equals(newItem.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull LibraryPlaylistItem oldItem,
+                @NonNull LibraryPlaylistItem newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
+    /**
+     * @param fragment The fragment which the recycler view of this adapter lives in. This is needed
+     *                 in order to be able to open another fragments.
+     */
     public LibraryPlaylistAdapter(Fragment fragment) {
-        playlists = new ArrayList<>();
+        super(DIFF_COMPARE_CALLBACK);
         this.fragment = fragment;
     }
 
-    public void setUserPlaylists(List<UserLibraryPlaylistItem> playlists) {
-        this.playlists = playlists;
-    }
-
+    /**
+     * Create a new view and fill its data by {@link PlaylistViewHolder}
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to an
+     *                 specific position.
+     * @param viewType The type of the created view holder in case the list has multiple types of
+     *                 views. In our case it is not used because we have only one type of views
+     *                 (Playlist Item)
+     *
+     * @return A new {@link PlaylistViewHolder} that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,20 +78,29 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
         return new PlaylistViewHolder(view);
     }
 
+    /**
+     * Instead of creating a new {@link PlaylistViewHolder} we use an existing one that does not
+     * appear on the screen but update its displaying data.
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the item
+     *                 at the given position in the data set.
+     * @param position The position of the item within the adapter's data set ({@link #getCurrentList()}).
+     */
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
-        holder.playlistName.setText(playlists.get(position).getName());
-        holder.playlistInfo.setText( "by " + playlists.get(position).getOwner().getName());
-        holder.playlistId = playlists.get(position).getId();
-        String imageUrl = playlists.get(position).getImages().get(0).getUrl();
+        holder.playlistName.setText(getItem(position).getName());
+        holder.playlistInfo.setText( "by " + getItem(position).getOwner().getName());
+        holder.playlistId = getItem(position).getId();
+        String imageUrl = getItem(position).getImages().get(0).getUrl();
         Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock).into(holder.playlistArt);
     }
 
-    @Override
-    public int getItemCount() {
-        return playlists.size();
-    }
 
+
+    /**
+     * A ViewHolder describes an item in the list of the adapter and metadata about its place within
+     * the RecyclerView.
+     */
     class PlaylistViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout playlistBody;
@@ -70,6 +112,9 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
 
         String playlistId;
 
+        /**
+         * @param itemView The view of the new created item
+         */
         PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -83,7 +128,7 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
             playlistBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.getParentFragmentManager().beginTransaction()
+                    fragment.getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.nav_host_fragment,
                                     PlaylistHomeFragment.newInstance(playlistId))
                             .addToBackStack(null)

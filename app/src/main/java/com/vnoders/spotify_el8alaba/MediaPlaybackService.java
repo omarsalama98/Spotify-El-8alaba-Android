@@ -42,7 +42,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
     // used to format string used to stream music from backend
     private static final String PLAYER_STREAMING_BASE_URL = RetrofitClient.BASE_URL + "streaming/";
-    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer%";
+    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer ";
 
     //______________________________________________________________________________________________
     //--------------------------------------Variables-----------------------------------------------

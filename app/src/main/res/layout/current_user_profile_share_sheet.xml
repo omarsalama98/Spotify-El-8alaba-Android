@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:orientation = "vertical"
+        android:layout_width = "match_parent"
+        android:background="@color/black"
+        android:id="@+id/current_user_profile_share_sheet"
+        android:layout_height = "match_parent">
+    <LinearLayout
+            android:background="@android:color/transparent"
+            android:orientation="vertical"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+        >
+<ImageView
+        android:layout_width = "140dp"
+        android:layout_height = "140dp"
+        android:layout_gravity="center"
+        android:src = "@drawable/unnamed"
+        />
+    <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:text = "@string/user_name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
+        >
+    <LinearLayout
+            android:id="@+id/whatsapp"
+            android:layout_marginTop="40dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation="horizontal"
+            >
+        <ImageView
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width = "40dp"
+                android:layout_height = "40dp"
+                android:background="@drawable/whatsapp"
+                />
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:text="@string/whatsapp"
+                android:textSize="15sp"
+                />
+    </LinearLayout>
+    <LinearLayout
+            android:id="@+id/facebook"
+            android:layout_marginTop="30dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation="horizontal"
+            >
+        <ImageView
+
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width = "30dp"
+                android:layout_height = "30dp"
+                android:background="@drawable/facebook"
+                />
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:text="@string/facebook"
+                />
+    </LinearLayout>
+    <LinearLayout
+            android:id="@+id/SMS"
+            android:layout_marginTop="30dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation="horizontal"
+            >
+        <ImageView
+
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width = "30dp"
+                android:layout_height = "30dp"
+                android:background="@drawable/ic_sms_black_24dp"
+                />
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:text="@string/sms"
+                />
+    </LinearLayout>
+    <LinearLayout
+            android:id="@+id/copy_link"
+            android:layout_marginTop="30dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation="horizontal"
+            >
+        <ImageView
+
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width = "30dp"
+                android:layout_height = "30dp"
+                android:background="@drawable/ic_link_black_24dp"
+                />
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:text="@string/copy_link"
+                />
+    </LinearLayout>
+    <LinearLayout
+            android:id="@+id/more"
+            android:layout_marginTop="30dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="30dp"
+            >
+        <ImageView
+
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width = "30dp"
+                android:layout_height = "30dp"
+                android:background="@drawable/ic_more_horiz_black_24dp"
+                />
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:text="@string/more"
+                />
+    </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

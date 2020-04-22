@@ -1,41 +1,42 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
-import com.google.gson.annotations.SerializedName;
 
-public class UserLibraryPlaylistItem {
-    
+/**
+ * This class is used to model data parsed from json network response using {@link Gson} library
+ */
+public class LibraryPlaylistItem {
+
     @SerializedName("collaborative")
     private boolean collaborative;
-    
+
     @SerializedName("external_urls")
     private ExternalUrls externalUrls;
-    
+
     @SerializedName("href")
     private String href;
-    
+
     @SerializedName("id")
     private String id;
-    
+
     @SerializedName("images")
     private List<TrackImage> images = null;
-    
+
     @SerializedName("name")
     private String name;
-    
+
     @SerializedName("owner")
     private Owner owner;
-    
+
     @SerializedName("public")
     private boolean isPublic;
-    
-    @SerializedName("snapshot_id")
-    private String snapshotId;
 
     @SerializedName("type")
     private String type;
-    
+
     @SerializedName("uri")
     private String uri;
 
@@ -103,14 +104,6 @@ public class UserLibraryPlaylistItem {
         this.isPublic = _public;
     }
 
-    public String getSnapshotId() {
-        return snapshotId;
-    }
-
-    public void setSnapshotId(String snapshotId) {
-        this.snapshotId = snapshotId;
-    }
-
     public String getType() {
         return type;
     }
@@ -125,6 +118,25 @@ public class UserLibraryPlaylistItem {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof LibraryPlaylistItem)) {
+            return false;
+        }
+        LibraryPlaylistItem that = (LibraryPlaylistItem) obj;
+
+        return collaborative == that.collaborative &&
+                isPublic == that.isPublic &&
+                externalUrls.equals(that.externalUrls) &&
+                href.equals(that.href) &&
+                id.equals(that.id) &&
+                images.equals(that.images) &&
+                name.equals(that.name) &&
+                owner.equals(that.owner) &&
+                type.equals(that.type) &&
+                uri.equals(that.uri);
     }
 
 }

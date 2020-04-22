@@ -1,293 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_height = "match_parent"
+        android:layout_width = "match_parent">
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#FF000000">
-
-    <RelativeLayout
-        android:id="@+id/overflow_items_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:visibility="visible">
+    <LinearLayout
+            android:id = "@+id/overflow_menu"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:gravity = "center_horizontal"
+            android:orientation = "vertical"
+            android:paddingBottom = "@dimen/overflow_bottom_padding"
+            android:background = "@drawable/overflow_menu_gradient_background">
 
 
         <ImageView
-            android:id="@+id/overflow_img"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="56dp"
-            android:contentDescription="@string/song_picture_desc" />
+                android:id = "@+id/overflow_image"
+                android:layout_width = "150dp"
+                android:layout_height = "150dp"
+                android:layout_marginTop = "56dp"
+                tools:src = "@drawable/artist_mock"
+                android:contentDescription = "@string/song_picture_desc" />
+
 
         <TextView
-            android:id="@+id/overflow_song_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_img"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="8dp"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+                android:id = "@+id/overflow_song_name"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "8dp"
+                android:gravity = "center"
+                tools:text = "Song Name"
+                android:textColor = "@color/white"
+                android:textSize = "18sp"
+                android:textStyle = "bold" />
+
 
         <TextView
-            android:id="@+id/overflow_author_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_song_name"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:textColor="@color/colorSecondaryText" />
-
-        <LinearLayout
-            android:id="@+id/overflow_like"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_author_name"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/like_track_unliked" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:text="@string/overflow_like"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/overflow_hide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_like"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/hide_track_visible" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:text="@string/overflow_hide"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/overflow_hide"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
-            android:alpha="0.5"
-            android:background="@color/colorSecondaryText" />
-
-        <LinearLayout
-            android:id="@+id/overflow_add_to_playlist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_hide"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="25dp"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/add_song" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:text="@string/overflow_add"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/overflow_view_artist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_add_to_playlist"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/artist" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:text="@string/overflow_view"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/overflow_share"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_view_artist"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/share" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:text="@string/overflow_share"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/overflow_sleep_timer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_share"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/sleep" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:text="@string/overflow_sleep"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/overflow_report"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_sleep_timer"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/report" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:text="@string/overflow_report"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/overflow_credits"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/overflow_report"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="32dp"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal">
-
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/credits" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"
-                android:background="@android:color/transparent"
-                android:gravity="center_vertical"
-                android:text="@string/overflow_credits"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+                android:id = "@+id/overflow_author_name"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_marginVertical = "8dp"
+                tools:text = "Author Name"
+                android:textColor = "@color/colorSecondaryText" />
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>

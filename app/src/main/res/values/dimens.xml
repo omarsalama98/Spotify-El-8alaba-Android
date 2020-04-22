@@ -17,5 +17,6 @@
     <dimen name = "status_bar_height">24dp</dimen>
     <dimen name = "icon_size">40dp</dimen>
     <dimen name = "icon_padding">8dp</dimen>
+    <dimen name = "overflow_bottom_padding">32dp</dimen>
 
 </resources>

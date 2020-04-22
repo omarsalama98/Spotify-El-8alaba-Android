@@ -1,7 +1,5 @@
 package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-
-import com.google.gson.Gson;
-import com.vnoders.spotify_el8alaba.OverflowFragment;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
 import com.vnoders.spotify_el8alaba.models.RealTrack;
+import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenu;
+import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenuItem;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Ali Adel Top part of track player fragment
@@ -88,8 +86,47 @@ public class TrackTopFragment extends Fragment {
         // start fragment and make it a sliding from bottom animation
         AppCompatActivity parentActivity = (AppCompatActivity)getActivity();
         if (parentActivity != null) {
-            OverflowFragment bottomSheetFragment = new OverflowFragment(TrackViewModel.getInstance().getCurrentTrack().getValue());
-            bottomSheetFragment.show(parentActivity.getSupportFragmentManager(), bottomSheetFragment.getTag());
+
+            RealTrack track = TrackViewModel.getInstance().getCurrentTrack().getValue();
+
+            String songName = " Temp Track Name";
+            if (track != null) {
+                songName = track.getName();
+            }
+            
+            String authorName = "Temp Author Name";
+            if (track != null) {
+                authorName = track.getArtists().get(0).getUserInfo().getName();
+            }
+
+            List<OverflowMenuItem> actionItems = new ArrayList<>();
+
+            actionItems.add(new OverflowMenuItem(R.drawable.like_track_unliked,
+                    getString(R.string.overflow_like), null));
+
+            actionItems.add(new OverflowMenuItem(R.drawable.hide_track_visible,
+                    getString(R.string.overflow_hide), null));
+
+            actionItems.add(new OverflowMenuItem(R.drawable.add_song,
+                    getString(R.string.overflow_add), null));
+
+            actionItems.add(new OverflowMenuItem(R.drawable.artist,
+                    getString(R.string.overflow_view), null));
+
+            actionItems.add(new OverflowMenuItem(R.drawable.share,
+                    getString(R.string.overflow_share), null));
+
+            actionItems.add(new OverflowMenuItem(R.drawable.sleep,
+                    getString(R.string.overflow_sleep), null));
+
+            actionItems.add(new OverflowMenuItem(R.drawable.report,
+                    getString(R.string.overflow_report), null));
+
+            actionItems.add(new OverflowMenuItem(R.drawable.credits,
+                    getString(R.string.overflow_credits), null));
+
+            OverflowMenu overflowMenu = new OverflowMenu(songName, authorName, null, actionItems);
+            overflowMenu.show(parentActivity.getSupportFragmentManager(), overflowMenu.getTag());
         }
     }
 }

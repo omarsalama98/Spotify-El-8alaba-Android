@@ -120,6 +120,20 @@
     <string name = "settings_icon">Settings Icon</string>
     <string name = "recently_played">Recently Played</string>
     <string name = "categories">Categories</string>
+    <string name = "settings">Settings</string>
+    <string name = "account_type">Free Account</string>
+    <string name = "go_premium">go premium</string>
+    <string name = "find_friends">Find friends</string>
+    <string name = "share">Share</string>
+    <string name = "whatsapp">WhatsApp</string>
+    <string name = "facebook">Facebook News Feed</string>
+    <string name = "sms">SMS</string>
+    <string name = "copy_link">Copy Link</string>
+    <string name = "more">More</string>
+    <string name = "edit_profile_title">Edit profile</string>
+    <string name = "save">SAVE</string>
+    <string name = "change_photo">change photo</string>
+    <string name = "edit_your_name">This could be your first name or a nickname.\nIt\'s how you\'ll appear on Spotify.</string>
     <string name = "navigate_up">Navigate up</string>
     <string name = "shuffle_icon">shuffle icon</string>
 </resources>

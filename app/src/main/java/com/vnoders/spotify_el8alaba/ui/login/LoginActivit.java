@@ -12,14 +12,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.gson.Gson;
 import com.vnoders.spotify_el8alaba.ConnectionDialog;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
 import com.vnoders.spotify_el8alaba.response.signup.SignUpResponse;
+import java.io.IOException;
+import okhttp3.ResponseBody;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,34 +67,65 @@ public class LoginActivit extends AppCompatActivity {
 
     private void login() {
         LoginInfo loginInfo = new LoginInfo(email_address_holder, password_holder);
-    Call<SignUpResponse> call=RetrofitClient.getInstance().getAPI(API.class).userLogin(loginInfo);
-    call.enqueue(new Callback<SignUpResponse>() {
-        @Override
-        public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
-            if(response.code()==200){
-                SignUpResponse signUpResponse =response.body();
-                String token= signUpResponse.getToken();
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString("token",token);
-                editor.commit();
-                RetrofitClient.getInstance().setToken(token);
-                Intent intent = new Intent(LoginActivit.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            else{
-                login_status.setText(getResources().getString(R.string.login_text1));
-            }
-        }
+        Call<ResponseBody> call = RetrofitClient.getInstance().getAPI(API.class)
+                .userLogin(loginInfo);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                String jsonRespone = null;
+                try {
+                    if (response.code() == 200) {
+                        Gson gson = new Gson();
+                        try {
+                            jsonRespone = response.body().string();
 
-        @Override
-        public void onFailure(Call<SignUpResponse> call, Throwable t) {
-            ConnectionDialog dialog = new ConnectionDialog();
-            dialog.show(getFragmentManager(), "connection_dialog");
-            login_status.setText("");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        JSONObject jsonObject = new JSONObject(jsonRespone);
+                        String token = jsonObject.getString("token");
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("token", token);
+                        editor.commit();
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        JSONObject user = data.getJSONObject("user");
+                        if (user.has("userInfo")) {
+                            JSONObject userInfo = user.getJSONObject("userInfo");
+                            JSONObject jsonCurrentlyPlayed = userInfo
+                                    .getJSONObject("currentlyPlaying");
+                            String id=userInfo.getString("id");
+                            editor.putString("id",id).commit();
+                            CurrentlyPlaying currentlyPlaying = gson.fromJson(
+                                    jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
+                        } else {
+                            JSONObject jsonCurrentlyPlayed = user
+                                    .getJSONObject("currentlyPlaying");
+                            String id=user.getString("id");
+                            editor.putString("id",id).commit();
+                            CurrentlyPlaying currentlyPlaying = gson.fromJson(
+                                    jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
+                        }
+                        RetrofitClient.getInstance().setToken(token);
+                        Intent intent = new Intent(LoginActivit.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        login_status.setText(getResources().getString(R.string.login_text1));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        }
-    });
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                ConnectionDialog dialog = new ConnectionDialog();
+                dialog.show(getFragmentManager(), "connection_dialog");
+                login_status.setText("");
+
+            }
+        });
 
     }
 
@@ -104,20 +142,20 @@ public class LoginActivit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        login_status=(TextView)findViewById(R.id.login_status);
-        sharedPreferences=getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
-
+        login_status = (TextView) findViewById(R.id.login_status);
+        sharedPreferences = getSharedPreferences(
+                getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
 
         // Remove the windows's background color to reduce overdraw because it is already
         // being drawn by other views
         getWindow().setBackgroundDrawable(null);
         invalid_email = findViewById(R.id.invalid_email);
         login_button = findViewById(R.id.Login_button);
-        forget_password=findViewById(R.id.forget_password);
+        forget_password = findViewById(R.id.forget_password);
         forget_password.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LoginActivit.this,forget_password.class);
+                Intent intent = new Intent(LoginActivit.this, forget_password.class);
                 startActivity(intent);
             }
         });
@@ -129,8 +167,7 @@ public class LoginActivit extends AppCompatActivity {
                 if (!Patterns.EMAIL_ADDRESS.matcher(email_address_holder).matches()) {
                     invalid_email.setText("Please enter a valid email or username");
 
-                }
-                else{
+                } else {
                     invalid_email.setText("");
                     login();
                 }

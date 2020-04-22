@@ -1,97 +1,86 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vnoders.spotify_el8alaba.models.Image;
-import com.vnoders.spotify_el8alaba.models.Tracks;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * This class is used to model data parsed from json network response using {@link Gson} library
+ */
 public class Playlist {
 
     @SerializedName("tracks")
-    @Expose
-    private Tracks tracks;
+    private TracksPagingWrapper tracks;
+
     @SerializedName("collaborative")
-    @Expose
-    private Boolean collaborative;
+    private boolean collaborative;
+
     @SerializedName("public")
-    @Expose
-    private Boolean _public;
+    private boolean isPublic;
+
     @SerializedName("followers")
-    @Expose
-    private Integer followers;
-    @SerializedName("collaborators")
-    @Expose
-    private List<Object> collaborators = null;
+    private int followers;
+
     @SerializedName("name")
-    @Expose
     private String name;
-    @SerializedName("owner")
-    @Expose
-    private String owner;
+
     @SerializedName("description")
-    @Expose
     private String description;
+
+    @SerializedName("owner")
+    private Owner owner;
+
     @SerializedName("images")
-    @Expose
-    private List<Image> images = null;
-    @SerializedName("__v")
-    @Expose
-    private Integer v;
+    private List<TrackImage> images = null;
+
     @SerializedName("type")
-    @Expose
     private String type;
+
     @SerializedName("uri")
-    @Expose
     private String uri;
+
     @SerializedName("href")
-    @Expose
     private String href;
+
     @SerializedName("external_urls")
-    @Expose
     private ExternalUrls externalUrls;
+
     @SerializedName("id")
-    @Expose
     private String id;
 
-    public Tracks getTracks() {
+    public TracksPagingWrapper getTracks() {
         return tracks;
     }
 
-    public void setTracks(Tracks tracks) {
+    public void setTracks(TracksPagingWrapper tracks) {
         this.tracks = tracks;
     }
 
-    public Boolean getCollaborative() {
+    public boolean isCollaborative() {
         return collaborative;
     }
 
-    public void setCollaborative(Boolean collaborative) {
+    public void setCollaborative(boolean collaborative) {
         this.collaborative = collaborative;
     }
 
-    public Boolean getPublic() {
-        return _public;
+    public boolean isPublic() {
+        return isPublic;
     }
 
-    public void setPublic(Boolean _public) {
-        this._public = _public;
+    public void setPublic(boolean _public) {
+        this.isPublic = _public;
     }
 
-    public Integer getFollowers() {
+    public int getFollowers() {
         return followers;
     }
 
-    public void setFollowers(Integer followers) {
+    public void setFollowers(int followers) {
         this.followers = followers;
-    }
-
-    public List<Object> getCollaborators() {
-        return collaborators;
-    }
-
-    public void setCollaborators(List<Object> collaborators) {
-        this.collaborators = collaborators;
     }
 
     public String getName() {
@@ -102,14 +91,6 @@ public class Playlist {
         this.name = name;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -118,20 +99,20 @@ public class Playlist {
         this.description = description;
     }
 
-    public List<Image> getImages() {
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public List<TrackImage> getImages() {
         return images;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<TrackImage> images) {
         this.images = images;
-    }
-
-    public Integer getV() {
-        return v;
-    }
-
-    public void setV(Integer v) {
-        this.v = v;
     }
 
     public String getType() {
@@ -172,6 +153,30 @@ public class Playlist {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Playlist playlist = (Playlist) obj;
+        return collaborative == playlist.collaborative &&
+                isPublic == playlist.isPublic &&
+                Objects.equals(tracks, playlist.tracks) &&
+                Objects.equals(name, playlist.name) &&
+                Objects.equals(description, playlist.description) &&
+                Objects.equals(owner, playlist.owner) &&
+                Objects.equals(images, playlist.images) &&
+                Objects.equals(type, playlist.type) &&
+                Objects.equals(uri, playlist.uri) &&
+                Objects.equals(href, playlist.href) &&
+                Objects.equals(externalUrls, playlist.externalUrls) &&
+                Objects.equals(id, playlist.id);
     }
 
 }

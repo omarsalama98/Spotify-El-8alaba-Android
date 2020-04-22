@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.HomeMainListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
@@ -89,13 +90,11 @@ public class HomeFragment extends Fragment {
         });
 
         settingsButton.setOnClickListener(v -> {
-            CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, currentUserProfileFragment,
-                    "CURRENT_USER_PROFILE")
-                    .addToBackStack(null)
-                    .commit();
+
+            SettingsList settingsList =new SettingsList();
+            FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.nav_host_fragment,settingsList,"SETTINGS_LIST").addToBackStack(null).commit();
         });
 
         Call<List<Playlist>> call2 = apiService

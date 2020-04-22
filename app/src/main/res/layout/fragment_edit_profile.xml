@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:background = "@color/darkGray"
+        android:orientation = "vertical"
+        tools:context = ".EditProfile">
+    <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:orientation="horizontal"
+        >
+        <ImageButton
+                android:layout_gravity="center_horizontal"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:background="@drawable/ic_close_white_24dp"
+                android:layout_marginLeft="10dp"
+                />
+        <TextView
+                android:layout_centerInParent="true"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="@string/edit_profile_title"
+                />
+
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="@string/save"
+                android:layout_alignParentRight = "true"
+                android:layout_marginRight="10dp"
+                />
+
+    </RelativeLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginTop="50dp"
+            android:id="@+id/user_image"
+            android:layout_width = "160dp"
+            android:layout_height = "160dp"
+            android:src = "@drawable/unnamed"
+            android:layout_gravity = "center" />
+
+    <TextView
+            android:textAllCaps="true"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:text="@string/change_photo"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            />
+    <EditText
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:text="YOUR NAME"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            />
+    <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:orientation="horizontal"
+            >
+    <TextView
+
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:textColor="@color/pressed_grey"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:text="@string/edit_your_name"
+            android:layout_gravity="center_horizontal"
+/>
+    </RelativeLayout>
+</LinearLayout>

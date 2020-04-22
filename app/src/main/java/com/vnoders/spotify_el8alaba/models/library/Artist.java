@@ -1,8 +1,13 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * This class is used to model data parsed from json network response using {@link Gson} library
+ */
 public class Artist {
 
     @SerializedName("genres")
@@ -81,6 +86,23 @@ public class Artist {
     public void setUri(String uri) {
         this.uri = uri;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Artist artist = (Artist) obj;
+        return Objects.equals(href, artist.href) &&
+                Objects.equals(id, artist.id) &&
+                Objects.equals(name, artist.name) &&
+                Objects.equals(type, artist.type) &&
+                Objects.equals(uri, artist.uri);
+    }
+
 }
 
 

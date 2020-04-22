@@ -8,13 +8,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayout.Tab;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy;
 import com.vnoders.spotify_el8alaba.R;
 
+/**
+ * This is the fragment which appears when the user clicks on library in the navigation bar.
+ * <p>
+ * It contains 3 tabs for viewing user library. Tab display names are saved in the array {@link
+ * LibraryPagerAdapter#TAB_TITLES}. The 3 tabs return from {@link LibraryPagerAdapter#createFragment}
+ */
 public class LibraryFragment extends Fragment {
 
     @Override
@@ -26,16 +31,9 @@ public class LibraryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
-        if (navView.getSelectedItemId() != R.id.navigation_your_library) {
-            navView.setSelectedItemId(R.id.navigation_your_library);
-        }
-//        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(this);
-        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(getActivity() );
+        LibraryPagerAdapter libraryPagerAdapter = new LibraryPagerAdapter(this);
         ViewPager2 viewPager = view.findViewById(R.id.view_pager);
         viewPager.setAdapter(libraryPagerAdapter);
-
-
 
         TabLayout tabs = view.findViewById(R.id.tabs);
 

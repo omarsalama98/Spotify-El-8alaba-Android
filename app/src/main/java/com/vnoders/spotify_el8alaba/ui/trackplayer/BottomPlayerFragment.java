@@ -213,7 +213,7 @@ public class BottomPlayerFragment extends Fragment {
     private void updateSeekbar(Integer progress) {
 
         // get duration and progress of 0-100
-        int songTime = mCurrentTrack.getDuration();
+        int songTime = (int)mCurrentTrack.getDuration();
 
         int progressScaled = progress * 100 / songTime;
 

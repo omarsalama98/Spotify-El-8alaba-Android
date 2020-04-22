@@ -8,10 +8,11 @@
         tools:context = ".ui.currentUserProfile.CurrentUserProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-            android:id = "@+id/appBarLayout"
+            android:id = "@+id/appBar"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
             android:background = "@drawable/background_gradient">
+
         <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
@@ -27,6 +28,7 @@
                         android:orientation = "vertical"
                         android:layout_marginTop = "90dp">
                     <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/user_image"
                             android:layout_width = "130dp"
                             android:layout_height = "130dp"
                             android:src = "@drawable/unnamed"
@@ -44,6 +46,7 @@
 
                             />
                     <Button
+                            android:id="@+id/edit_profile_button"
                             android:layout_marginTop = "20dp"
                             android:layout_gravity = "center"
                             android:background = "@drawable/custom_face"
@@ -56,6 +59,7 @@
                             />
                 </LinearLayout>
             </FrameLayout>
+
 
             <androidx.appcompat.widget.Toolbar
                     android:background="@color/black"
@@ -81,6 +85,7 @@
                             android:layout_height = "wrap_content"
                             android:src = "@drawable/ic_left_arrow"
                             android:background = "@android:color/transparent" />
+
                     <TextView
                             android:id = "@+id/user_name_toobar"
                             android:layout_width = "wrap_content"
@@ -92,6 +97,7 @@
                             android:textStyle = "bold"
                             android:layout_centerInParent = "true" />
                     <ImageButton
+                            android:id="@+id/bottom_sheet_button"
                             android:layout_centerVertical = "true"
                             android:layout_width = "wrap_content"
                             android:layout_height = "wrap_content"
@@ -136,7 +142,7 @@
                             android:layout_gravity = "center"
                             android:layout_width = "wrap_content"
                             android:layout_height = "wrap_content"
-                            android:text = "0"
+                            android:text = "2"
                             android:textColor = "@color/white" />
                     <TextView
 
@@ -159,7 +165,7 @@
                             android:layout_gravity = "center"
                             android:layout_width = "wrap_content"
                             android:layout_height = "wrap_content"
-                            android:text = "0"
+                            android:text = "2"
                             android:textColor = "@color/white" />
                     <TextView
                             android:textAllCaps = "true"
@@ -180,7 +186,7 @@
                             android:layout_gravity = "center"
                             android:layout_width = "wrap_content"
                             android:layout_height = "wrap_content"
-                            android:text = "0"
+                            android:text = "2"
                             android:textColor = "@color/white" />
                     <TextView
                             android:textAllCaps = "true"

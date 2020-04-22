@@ -162,7 +162,7 @@ public class TrackBotFragment extends Fragment {
         }
 
         // get the duration and setting the text view corresponding to it
-        int songTime = track.getDuration();
+        int songTime = (int)track.getDuration();
 
         String durationText = "";
         int minutes = songTime / 1000 / 60;
@@ -197,7 +197,7 @@ public class TrackBotFragment extends Fragment {
             return;
 
         // get the duration and scale it to 0-100
-        int songTime = mCurrentTrack.getDuration();
+        int songTime = (int)mCurrentTrack.getDuration();
 
         int progressScaled = progress * 100 / songTime;
 
@@ -262,7 +262,7 @@ public class TrackBotFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // if seek from user then change text to update with it
                 if (fromUser)
-                    setProgressText((progress * mCurrentTrack.getDuration()) / 100);
+                    setProgressText((progress * (int)mCurrentTrack.getDuration()) / 100);
             }
 
             @Override

@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
 import android.os.Bundle;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +21,11 @@ import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import org.jetbrains.annotations.NotNull;
 
+
+/**
+ * This is the fragment which appears when the user clicks on a playlist which contains the
+ * playlist's cover photo and the playlist info.
+ */
 public class PlaylistHomeFragment extends Fragment {
 
     private PlaylistHomeViewModel playlistHomeViewModel;
@@ -39,6 +45,13 @@ public class PlaylistHomeFragment extends Fragment {
     // the fragment initialization parameters
     private static final String ARGUMENT_PLAYLIST_ID = "id";
 
+    /**
+     * This is a required public constructor used by android framework but should NOT be used to
+     * initialize a new instance of {@link PlaylistHomeFragment}.
+     * <p>
+     * Use {@link #newInstance} instead to create a new {@link PlaylistHomeFragment} with
+     * parameters.
+     */
     public PlaylistHomeFragment() {
         // Required empty public constructor
     }
@@ -49,7 +62,7 @@ public class PlaylistHomeFragment extends Fragment {
      *
      * @param playlistId The id of the current playlist
      *
-     * @return A new instance of fragment RemoveQuickly.
+     * @return A new instance of fragment {@link PlaylistHomeFragment}.
      */
     @NotNull
     public static PlaylistHomeFragment newInstance(String playlistId) {
@@ -124,12 +137,25 @@ public class PlaylistHomeFragment extends Fragment {
             public void onClick(View view) {
                 isChecked = !isChecked;
                 if (isChecked) {
-                    ((ImageView) view).setImageResource(R.drawable.like_track_liked);
+                    playlistHomeViewModel.followPlaylist();
                 } else {
-                    ((ImageView) view).setImageResource(R.drawable.like_track_unliked_white);
+                    playlistHomeViewModel.unfollowPlaylist();
                 }
             }
         });
+
+        playlistHomeViewModel.getFollowedState()
+                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean isFollowed) {
+                        if (isFollowed) {
+                            follow.setImageResource(R.drawable.like_track_liked);
+                        } else {
+                            follow.setImageResource(R.drawable.like_track_unliked_white);
+                        }
+                    }
+                });
+
 
         playlistHomeViewModel.getImageUrl().observe(getViewLifecycleOwner(),
                 new Observer<String>() {
@@ -158,9 +184,9 @@ public class PlaylistHomeFragment extends Fragment {
                 });
 
         playlistHomeViewModel.getTracksSummary().observe(getViewLifecycleOwner(),
-                new Observer<String>() {
+                new Observer<Spanned>() {
                     @Override
-                    public void onChanged(String summary) {
+                    public void onChanged(Spanned summary) {
                         tracksSummary.setText(summary);
                     }
                 });
