@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         navView = findViewById(R.id.nav_view);
 
-        RetrofitClient.getInstance().setToken(
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlOGYzYTZiYWM5ZWI0MmFiNWFlMDUxNCIsImlhdCI6MTU4NzU4NzIwNywiZXhwIjoxNTk1MzYzMjA3fQ.6Vkhj1i4EEmzJDLuDGfThM6HndWXtNh8ksUOkU2tx1k");
         navView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
