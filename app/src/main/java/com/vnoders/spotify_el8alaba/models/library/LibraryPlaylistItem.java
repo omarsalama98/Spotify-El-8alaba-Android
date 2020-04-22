@@ -1,16 +1,14 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
-import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This class is used to model data parsed from json network response using {@link Gson} library
  */
-public class UserLibraryPlaylistItem {
+public class LibraryPlaylistItem {
 
     @SerializedName("collaborative")
     private boolean collaborative;
@@ -124,10 +122,10 @@ public class UserLibraryPlaylistItem {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof UserLibraryPlaylistItem)) {
+        if (!(obj instanceof LibraryPlaylistItem)) {
             return false;
         }
-        UserLibraryPlaylistItem that = (UserLibraryPlaylistItem) obj;
+        LibraryPlaylistItem that = (LibraryPlaylistItem) obj;
 
         return collaborative == that.collaborative &&
                 isPublic == that.isPublic &&

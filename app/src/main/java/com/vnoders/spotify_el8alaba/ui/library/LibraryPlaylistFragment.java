@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import java.util.List;
 
 
@@ -45,10 +45,10 @@ public class LibraryPlaylistFragment extends Fragment {
         playlistViewModel.requestUserPlaylists();
 
         playlistViewModel.getUserPlaylists().observe(getViewLifecycleOwner(),
-                new Observer<List<UserLibraryPlaylistItem>>() {
+                new Observer<List<LibraryPlaylistItem>>() {
                     @Override
-                    public void onChanged(List<UserLibraryPlaylistItem> userLibraryPlaylistItems) {
-                        playlistAdapter.setUserPlaylists(userLibraryPlaylistItems);
+                    public void onChanged(List<LibraryPlaylistItem> LibraryPlaylistItems) {
+                        playlistAdapter.setUserPlaylists(LibraryPlaylistItems);
                         playlistAdapter.notifyDataSetChanged();
                         //TODO : Use DiffUtil to generate smaller changes instead of notifyDataSetChanged
                         // for better performance

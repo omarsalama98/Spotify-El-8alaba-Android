@@ -8,13 +8,13 @@ import java.util.Objects;
 /**
  * This class is used to model data parsed from json network response using {@link Gson} library
  */
-public class UserLibraryPlaylist {
+public class LibraryPlaylistPagingWrapper {
 
     @SerializedName("href")
     private String href;
     
     @SerializedName("items")
-    private List<UserLibraryPlaylistItem> items = null;
+    private List<LibraryPlaylistItem> items = null;
     
     @SerializedName("limit")
     private int limit;
@@ -33,11 +33,11 @@ public class UserLibraryPlaylist {
         this.href = href;
     }
 
-    public List<UserLibraryPlaylistItem> getItems() {
+    public List<LibraryPlaylistItem> getItems() {
         return items;
     }
 
-    public void setItems(List<UserLibraryPlaylistItem> items) {
+    public void setItems(List<LibraryPlaylistItem> items) {
         this.items = items;
     }
 
@@ -73,7 +73,7 @@ public class UserLibraryPlaylist {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        UserLibraryPlaylist that = (UserLibraryPlaylist) obj;
+        LibraryPlaylistPagingWrapper that = (LibraryPlaylistPagingWrapper) obj;
         return total == that.total &&
                 Objects.equals(href, that.href) &&
                 Objects.equals(items, that.items);

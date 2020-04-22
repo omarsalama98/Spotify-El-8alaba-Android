@@ -11,8 +11,8 @@ import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
-import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylist;
-import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
@@ -42,14 +42,14 @@ public class LibraryRepository {
      *                      the user
      */
     public static void updateLibraryPlaylists(
-            MutableLiveData<List<UserLibraryPlaylistItem>> userPlaylists) {
+            MutableLiveData<List<LibraryPlaylistItem>> userPlaylists) {
 
-        Call<UserLibraryPlaylist> request = libraryApi.getUserPlaylists();
+        Call<LibraryPlaylistPagingWrapper> request = libraryApi.getUserPlaylists();
 
-        request.enqueue(new Callback<UserLibraryPlaylist>() {
+        request.enqueue(new Callback<LibraryPlaylistPagingWrapper>() {
             @Override
-            public void onResponse(@NotNull Call<UserLibraryPlaylist> call,
-                    @NotNull Response<UserLibraryPlaylist> response) {
+            public void onResponse(@NotNull Call<LibraryPlaylistPagingWrapper> call,
+                    @NotNull Response<LibraryPlaylistPagingWrapper> response) {
 
                 if (response.isSuccessful()) {
                     userPlaylists.setValue(response.body().getItems());
@@ -59,7 +59,7 @@ public class LibraryRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<UserLibraryPlaylist> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<LibraryPlaylistPagingWrapper> call, @NotNull Throwable t) {
                 //TODO:
             }
         });

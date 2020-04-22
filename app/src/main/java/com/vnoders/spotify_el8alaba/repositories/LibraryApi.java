@@ -8,7 +8,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
-import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylist;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
@@ -25,11 +25,11 @@ import retrofit2.http.Query;
 public interface LibraryApi {
 
     /**
-     * @return List of playlists (wrapped in {@link UserLibraryPlaylist}) of the current user
+     * @return List of playlists (wrapped in {@link LibraryPlaylistPagingWrapper}) of the current user
      * wrapped in a {@link Call} object
      */
     @GET("me/playlists")
-    Call<UserLibraryPlaylist> getUserPlaylists();
+    Call<LibraryPlaylistPagingWrapper> getUserPlaylists();
 
 
     /**

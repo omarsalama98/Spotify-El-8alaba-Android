@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHolder> {
 
-    private List<UserLibraryPlaylistItem> playlists;
+    private List<LibraryPlaylistItem> playlists;
     private Fragment fragment;
 
     /**
@@ -42,7 +42,7 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<PlaylistViewHol
     /**
      * @param playlists Sets the list of playlists to be displayed.
      */
-    public void setUserPlaylists(List<UserLibraryPlaylistItem> playlists) {
+    public void setUserPlaylists(List<LibraryPlaylistItem> playlists) {
         this.playlists = playlists;
     }
 

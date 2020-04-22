@@ -3,7 +3,7 @@ package com.vnoders.spotify_el8alaba.ui.library;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.vnoders.spotify_el8alaba.models.library.UserLibraryPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class LibraryPlaylistViewModel extends ViewModel {
 
-    private MutableLiveData<List<UserLibraryPlaylistItem>> userPlaylists;
+    private MutableLiveData<List<LibraryPlaylistItem>> userPlaylists;
 
     public LibraryPlaylistViewModel() {
         userPlaylists = new MutableLiveData<>();
@@ -28,7 +28,7 @@ public class LibraryPlaylistViewModel extends ViewModel {
     /**
      * @return The list of user playlists, wrapped in a {@link LiveData} object.
      */
-    public LiveData<List<UserLibraryPlaylistItem>> getUserPlaylists() {
+    public LiveData<List<LibraryPlaylistItem>> getUserPlaylists() {
         return userPlaylists;
     }
 
