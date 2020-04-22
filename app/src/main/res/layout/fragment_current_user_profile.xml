@@ -12,6 +12,7 @@
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
             android:background = "@drawable/background_gradient">
+
         <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
@@ -58,6 +59,7 @@
                 </LinearLayout>
             </FrameLayout>
 
+
             <androidx.appcompat.widget.Toolbar
                     android:background="@color/black"
                     android:id = "@+id/toolbar"
@@ -82,6 +84,7 @@
                             android:layout_height = "wrap_content"
                             android:src = "@drawable/ic_left_arrow"
                             android:background = "@android:color/transparent" />
+
                     <TextView
                             android:id = "@+id/user_name_toobar"
                             android:layout_width = "wrap_content"

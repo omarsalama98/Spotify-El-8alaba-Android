@@ -133,6 +133,7 @@ public class CreateAccount extends Fragment {
                                     CurrentlyPlaying currentlyPlaying = gson.fromJson(
                                             jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
                                 } else if(type == "user") {
+
                                     JSONObject jsonCurrentlyPlayed = user
                                             .getJSONObject("currentlyPlaying");
                                     String id=user.getString("id");

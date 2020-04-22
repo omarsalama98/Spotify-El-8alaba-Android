@@ -97,6 +97,7 @@ public class CurrentUserProfileFragment extends Fragment {
         //this will be replaced by a user image from currentUserProfile later
         Picasso.get().load("https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg").into(userImage);
         GradientUtils.generate("https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg",appBarLayout,GradientUtils.GRADIENT_LINEAR_BLACK);
+        GradientUtils.generate("https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg",toolbar,GradientUtils.SOLID_DOMINANT_COLOR);
         followerNumber.setText(currentUserProfile.getFollowers().toString());
         userName.setText(currentUserProfile.getName());
         userNameToolbar.setText(currentUserProfile.getName());
@@ -106,6 +107,7 @@ public class CurrentUserProfileFragment extends Fragment {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 userNameToolbar.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
+
 
             }
         });
