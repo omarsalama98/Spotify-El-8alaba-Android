@@ -16,6 +16,27 @@ task getCoverage(type: Exec, dependsOn: 'codeCoverageReport') {
 }
 
 android {
+
+    signingConfigs {
+        release {
+            def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+            // Initializes a new Properties() object called keystoreProperties.
+            def keystoreProperties = new Properties()
+
+            // Loads the keystore.properties file into the keystoreProperties object.
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
@@ -32,11 +53,21 @@ android {
 
     buildTypes {
         release {
+            def API_BASE_URL_RELEASE = "\"https://spotify-elghalaba.me/api/v1/\""
+            buildConfigField "String", "BASE_URL", API_BASE_URL_RELEASE
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+//          Remove these two lines to disable debugging
+            debuggable true
             testCoverageEnabled true
         }
         debug{
+            def API_BASE_URL_DEBUG = "\"http://${InetAddress.localHost.hostAddress}:8000/api/v1/\""
+            buildConfigField "String", "BASE_URL", API_BASE_URL_DEBUG
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
             testCoverageEnabled true
         }
     }
