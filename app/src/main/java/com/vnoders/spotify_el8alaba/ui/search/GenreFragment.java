@@ -7,15 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.NestedScrollView;
-import androidx.core.widget.NestedScrollView.OnScrollChangeListener;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.appbar.AppBarLayout;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.GenrePlaylistsGridAdapter;
 import com.vnoders.spotify_el8alaba.R;
@@ -35,10 +34,10 @@ import retrofit2.Response;
 public class GenreFragment extends Fragment {
 
     private RecyclerView genrePlaylistsGridView;
-    private Toolbar toolbar;
+    private ImageView backArrow;
     private TextView genreTopTitle;
     private TextView genreMainTitle;
-    private NestedScrollView scrollView;
+    private AppBarLayout appBar;
 
     public GenreFragment() {
         // Required empty public constructor
@@ -51,10 +50,10 @@ public class GenreFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_genre, container, false);
         genrePlaylistsGridView = root.findViewById(R.id.genre_playlists_grid_view);
-        toolbar = root.findViewById(R.id.genre_fragment_toolbar);
+        backArrow = root.findViewById(R.id.genre_fragment_back_arrow);
         genreTopTitle = root.findViewById(R.id.genre_fragment_top_title);
         genreMainTitle = root.findViewById(R.id.genre_fragment_main_title);
-        scrollView = root.findViewById(R.id.genre_fragment_scroll_view);
+        appBar = root.findViewById(R.id.genre_fragment_appbar);
 
         return root;
     }
@@ -70,7 +69,13 @@ public class GenreFragment extends Fragment {
 
         String id = arguments.getString(SearchByTypeConstantsHelper.GENRE_ID_KEY);
 
-        toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+        backArrow.setOnClickListener(v -> getActivity().onBackPressed());
+
+        appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            genreMainTitle
+                    .setAlpha(1.0f + 2.0f * verticalOffset / appBarLayout.getTotalScrollRange());
+            genreTopTitle.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
+        });
 
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
@@ -98,31 +103,6 @@ public class GenreFragment extends Fragment {
             }
         });
 
-        final float[] alpha = {0.0f};
-        final float[] newAlpha = {0.0f};
-        final int[] overallXScroll = {0};
 
-        scrollView.setOnScrollChangeListener(
-                (OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                    overallXScroll[0] = -scrollY + oldScrollY;
-
-                    if (overallXScroll[0] > 0) {
-                        newAlpha[0] = alpha[0] - 0.2f;
-
-                        if (newAlpha[0] >= 0) {
-                            genreTopTitle.setAlpha(newAlpha[0]);
-                            genreMainTitle.setAlpha(1 - newAlpha[0]);
-                            alpha[0] = newAlpha[0];
-                        }
-                    } else {
-                        newAlpha[0] = alpha[0] + 0.2f;
-
-                        if (newAlpha[0] <= 1) {
-                            genreTopTitle.setAlpha(newAlpha[0]);
-                            genreMainTitle.setAlpha(1 - newAlpha[0]);
-                            alpha[0] = newAlpha[0];
-                        }
-                    }
-                });
     }
 }
