@@ -79,12 +79,7 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
     public void onBindViewHolder(@NonNull TrackViewHolder holder, int position) {
         Track track = tracks.get(position);
         if (track != null) {
-            holder.trackName.setText(track.getName());
-
-            List<Artist> artists = track.getArtists();
-            if (artists != null && artists.size() > 0) {
-                holder.artistName.setText(artists.get(0).getName());
-            }
+            holder.bind(track);
         }
     }
 
@@ -200,6 +195,15 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
                     openTrackMenu(v);
                 }
             });
+        }
+
+        void bind(Track track) {
+            trackName.setText(track.getName());
+
+            List<Artist> artists = track.getArtists();
+            if (artists != null && artists.size() > 0) {
+                artistName.setText(artists.get(0).getName());
+            }
         }
 
         /**

@@ -6,7 +6,10 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
+import com.vnoders.spotify_el8alaba.App;
+import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Owner;
@@ -120,20 +123,28 @@ public class LibraryRepository {
     private static Spanned buildTracksInfo(List<TrackItem> trackItems) {
 
         final String WHITE_COLOR = "#FFFFFF";
+        final String andMore = App.getInstance().getString(R.string.and_more);
         final int MAX_INFO_SIZE = 300;
 
         StringBuilder stringBuilder = new StringBuilder();
 
         for (TrackItem trackItem : trackItems) {
-            stringBuilder
-                    .append("<font color=\'")
-                    .append(WHITE_COLOR)
-                    .append("\'>")
-                    .append(trackItem.getTrack().getArtists().get(0).getName())
-                    .append("</font>")
-                    .append(" ")
-                    .append(trackItem.getTrack().getName())
-                    .append("  •  ");
+
+            Track track = trackItem.getTrack();
+
+            if (track != null) {
+                String artistName = "Artist Name";
+                List<Artist> artists = track.getArtists();
+                if (artists != null && artists.size() > 0 && artists.get(0).getName() != null) {
+                    artistName = artists.get(0).getName();
+                }
+
+                String html = String.format("<font color=\'%s\'> %s </font> %s  •  ",
+                        WHITE_COLOR, artistName, track.getName());
+
+                stringBuilder.append(html);
+            }
+
             if (stringBuilder.length() > MAX_INFO_SIZE) {
                 break;
             }
@@ -141,11 +152,8 @@ public class LibraryRepository {
 
         // in case there are no tracks we do not display it
         if (stringBuilder.length() > 0) {
-            stringBuilder.append("<font color=\'")
-                    .append(WHITE_COLOR)
-                    .append("\'>")
-                    .append("and more")
-                    .append("</font>");
+            String html = String.format("<font color=\'%s\'> %s </font>", WHITE_COLOR, andMore);
+            stringBuilder.append(html);
         }
 
         if (VERSION.SDK_INT >= VERSION_CODES.N) {
