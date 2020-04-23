@@ -124,7 +124,7 @@ public class CreateAccount extends Fragment {
                                 editor.commit();
                                 JSONObject data = jsonObject.getJSONObject("data");
                                 JSONObject user = data.getJSONObject("user");
-                                if (type == "artist") {
+                                if (type.equals("artist")) {
                                     JSONObject userInfo = user.getJSONObject("userInfo");
                                     JSONObject jsonCurrentlyPlayed = userInfo
                                             .getJSONObject("currentlyPlaying");
@@ -132,7 +132,7 @@ public class CreateAccount extends Fragment {
                                     editor.putString("id",id).commit();
                                     CurrentlyPlaying currentlyPlaying = gson.fromJson(
                                             jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
-                                } else if(type == "user") {
+                                } else if(type.equals("user")) {
 
                                     JSONObject jsonCurrentlyPlayed = user
                                             .getJSONObject("currentlyPlaying");

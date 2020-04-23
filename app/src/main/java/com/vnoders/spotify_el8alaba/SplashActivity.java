@@ -26,11 +26,11 @@ public class SplashActivity extends AppCompatActivity {
                 sharedPreferences =getSharedPreferences(
                         getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                if(sharedPreferences.getString("token","token not found")!=""){
-                    Intent intent=new Intent(SplashActivity.this,MainActivity.class);
+                String tokenVal=sharedPreferences.getString("token","token not found");
+                if (!tokenVal.equals("")&&!tokenVal.equals("token not found")) {
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     Intent intent = new Intent(SplashActivity.this, FirstScreen.class);
                     startActivity(intent);
                 }
