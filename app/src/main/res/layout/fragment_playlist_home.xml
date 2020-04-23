@@ -47,7 +47,7 @@
                             android:textSize = "20sp"
                             android:textStyle = "bold"
                             android:textColor = "@color/white"
-                            android:text = "Playlist Name"
+                            tools:text = "Playlist Name"
                             app:layout_constraintTop_toTopOf = "parent"
                             android:layout_centerVertical = "true"
                             android:layout_centerHorizontal = "true"
@@ -153,7 +153,7 @@
                     android:layout_width = "wrap_content"
                     android:layout_height = "30dp"
                     android:background = "@drawable/custom_face"
-                    android:text = "Edit Playlist"
+                    android:text = "@string/edit_playlist"
                     android:textSize = "12sp"
                     android:textAllCaps = "true"
                     android:paddingHorizontal = "36dp"
@@ -167,7 +167,7 @@
                     android:layout_height = "wrap_content"
                     android:textColor = "@color/colorSecondaryText"
                     android:layout_margin = "@dimen/appbar_padding"
-                    android:textSize = "18sp"
+                    android:textSize = "16sp"
                     android:textAlignment = "center"
                     tools:text = "Omar Mostafa Happy Song • Omar Mostafa Happy Song • Omar Mostafa Happy Song" />
 

@@ -91,25 +91,7 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
         LibraryPlaylistItem playlist = getItem(position);
 
         if (playlist != null) {
-            holder.playlistName.setText(playlist.getName());
-
-            Owner owner = playlist.getOwner();
-            if (owner != null) {
-                String playlistInfo = String.format("%s %s",
-                        App.getInstance().getString(R.string.by_owner),
-                        owner.getName());
-                holder.playlistInfo.setText(playlistInfo);
-            }
-
-            holder.playlistId = playlist.getId();
-
-            List<TrackImage> images = playlist.getImages();
-            String imageUrl = null;
-            if (images != null && images.size() > 0) {
-                imageUrl = images.get(0).getUrl();
-            }
-            Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock)
-                    .into(holder.playlistArt);
+            holder.bind(playlist);
         }
     }
 
@@ -167,6 +149,28 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
 
         }
 
+        void bind(LibraryPlaylistItem playlist) {
+            playlistName.setText(playlist.getName());
+
+            Owner owner = playlist.getOwner();
+            if (owner != null) {
+                String info = String.format("%s %s",
+                        App.getInstance().getString(R.string.by_owner),
+                        owner.getName());
+                playlistInfo.setText(info);
+            }
+
+            playlistId = playlist.getId();
+
+            List<TrackImage> images = playlist.getImages();
+            String imageUrl = null;
+            if (images != null && images.size() > 0) {
+                imageUrl = images.get(0).getUrl();
+            }
+
+            Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock)
+                    .into(playlistArt);
+        }
     }
 
 }
