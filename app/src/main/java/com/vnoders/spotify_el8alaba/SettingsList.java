@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
@@ -16,6 +19,7 @@ import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileFragment;
+import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 import java.time.format.TextStyle;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +31,8 @@ public class SettingsList extends Fragment {
     private FragmentTransaction mFragmentTransaction;
     private FragmentManager mFragmentManager;
     private Bundle bundle;
+    private TextView logout;
+    SharedPreferences sharedPreferences;
 
 
     @Override
@@ -42,6 +48,7 @@ public class SettingsList extends Fragment {
         bundle=new Bundle();
         View view= inflater.inflate(R.layout.fragment_settings_list, container, false);
         mCurrentUserProfile=view.findViewById(R.id.current_user_profile);
+        logout=view.findViewById(R.id.logout);
         mCurrentUserProfile.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +76,19 @@ public class SettingsList extends Fragment {
 
             }
         });
-
+        logout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPreferences = getActivity().getSharedPreferences(
+                        getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("token", "");
+                editor.putString("id","");
+                editor.commit();
+                Intent intent=new Intent(getActivity(), FirstScreen.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 }

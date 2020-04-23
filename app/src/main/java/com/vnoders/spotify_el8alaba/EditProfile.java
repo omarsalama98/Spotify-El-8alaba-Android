@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba;
 
 import android.os.Bundle;
+import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,7 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class EditProfile extends Fragment {
-
+    private TextView save;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -57,7 +58,11 @@ public class EditProfile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        View view= inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        save=view.findViewById(R.id.save);
+        save.setEnabled(false);
+        return view;
     }
 }
