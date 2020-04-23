@@ -7,12 +7,13 @@ import android.text.Spanned;
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
+import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
+import com.vnoders.spotify_el8alaba.models.library.Owner;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
-import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
-import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
@@ -51,8 +52,9 @@ public class LibraryRepository {
             public void onResponse(@NotNull Call<LibraryPlaylistPagingWrapper> call,
                     @NotNull Response<LibraryPlaylistPagingWrapper> response) {
 
-                if (response.isSuccessful()) {
-                    userPlaylists.setValue(response.body().getItems());
+                LibraryPlaylistPagingWrapper libraryPlaylist = response.body();
+                if (response.isSuccessful() && libraryPlaylist != null) {
+                    userPlaylists.setValue(libraryPlaylist.getItems());
                 } else {
                     Log.e("updateLibraryPlaylists", response.message());
                 }
@@ -83,13 +85,24 @@ public class LibraryRepository {
             public void onResponse(@NotNull Call<Playlist> call,
                     @NotNull Response<Playlist> response) {
 
-                if (response.isSuccessful()) {
-                    Playlist playlist = response.body();
+                Playlist playlist = response.body();
+                if (response.isSuccessful() && playlist != null) {
 
-                    viewModel.setTracksSummary(
-                            buildTracksInfo(playlist.getTracks().getTrackItems()));
-                    viewModel.setImageUrl(playlist.getImages().get(0).getUrl());
-                    viewModel.setPlaylistOwnerName(playlist.getOwner().getName());
+                    TracksPagingWrapper tracks = playlist.getTracks();
+                    if (tracks != null && tracks.getTrackItems() != null) {
+                        viewModel.setTracksSummary(buildTracksInfo(tracks.getTrackItems()));
+                    }
+
+                    List<TrackImage> images = playlist.getImages();
+                    if (images != null && images.size() > 0) {
+                        viewModel.setImageUrl(images.get(0).getUrl());
+                    }
+
+                    Owner owner = playlist.getOwner();
+                    if (owner != null) {
+                        viewModel.setPlaylistOwnerName(owner.getName());
+                    }
+
                     viewModel.setPlaylistName(playlist.getName());
 
                 }
@@ -159,13 +172,16 @@ public class LibraryRepository {
             public void onResponse(@NotNull Call<TracksPagingWrapper> call,
                     @NotNull Response<TracksPagingWrapper> response) {
 
-                if (response.isSuccessful()) {
+                TracksPagingWrapper tracksWrapper = response.body();
+                if (response.isSuccessful() && tracksWrapper != null) {
 
-                    TracksPagingWrapper tracksWrapper = response.body();
                     ArrayList<Track> tracks = new ArrayList<>();
 
-                    for (TrackItem trackItem : tracksWrapper.getTrackItems()) {
-                        tracks.add(trackItem.getTrack());
+                    List<TrackItem> trackItems = tracksWrapper.getTrackItems();
+                    if (trackItems != null) {
+                        for (TrackItem trackItem : trackItems) {
+                            tracks.add(trackItem.getTrack());
+                        }
                     }
 
                     viewModel.setTracks(tracks);
@@ -198,8 +214,9 @@ public class LibraryRepository {
             public void onResponse(@NotNull Call<List<TrackImage>> call,
                     @NotNull Response<List<TrackImage>> response) {
 
-                if (response.isSuccessful()) {
-                    String imageUrl = response.body().get(0).getUrl();
+                List<TrackImage> images = response.body();
+                if (response.isSuccessful() && images != null && images.size() > 0) {
+                    String imageUrl = images.get(0).getUrl();
                     viewModel.setPlaylistImageUrl(imageUrl);
                 }
 
@@ -221,10 +238,9 @@ public class LibraryRepository {
             public void onResponse(@NotNull Call<List<Boolean>> call,
                     @NotNull Response<List<Boolean>> response) {
 
-                if (response.isSuccessful() && response.body() != null) {
-                    viewModel.setFollowedState(response.body().get(0));
-                } else {
-                    request.clone().enqueue(this);
+                List<Boolean> followStates = response.body();
+                if (response.isSuccessful() && followStates != null && followStates.size() > 0) {
+                    viewModel.setFollowedState(followStates.get(0));
                 }
             }
 

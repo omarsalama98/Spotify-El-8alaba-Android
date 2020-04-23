@@ -40,6 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MediaPlaybackService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
 
+    // used to format string used to stream music from backend
     private static final String PLAYER_STREAMING_BASE_URL = RetrofitClient.BASE_URL + "streaming/";
     private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer ";
 
@@ -322,15 +323,23 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     //-------------------------------Getting tracks-------------------------------------------------
     //______________________________________________________________________________________________
 
+    /**
+     * Used to get currently playing track from backend using access token gotten from login
+     * or sign up
+     */
     private void getCurrentlyPlaying() {
+        // get retrofit client instance
         RetrofitClient retrofitClient = RetrofitClient.getInstance();
 
+        // get access token and set it
         SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
         String access_token = prefs.getString("token", null);
         retrofitClient.setToken(access_token);
 
+        // get API
         Call<CurrentlyPlayingTrack> request = retrofitClient.getAPI(API.class).getCurrentlyPlaying();
 
+        // make the request and put listeners for when request finishes
         request.enqueue(new Callback<CurrentlyPlayingTrack>() {
             @Override
             public void onResponse(Call<CurrentlyPlayingTrack> call, Response<CurrentlyPlayingTrack> response) {

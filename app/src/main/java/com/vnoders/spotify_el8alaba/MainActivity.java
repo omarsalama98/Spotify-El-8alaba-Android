@@ -9,14 +9,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryFragment;
 import com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment;
+import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchGenresFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static int prevFragment = R.id.navigation_home;
     private BottomNavigationView navView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +41,34 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        startFragment(new HomeFragment(), item.getItemId());
+                        if (prevFragment != R.id.navigation_home) {
+                            startFragment(new HomeFragment(), item.getItemId());
+                            prevFragment = R.id.navigation_home;
+                        }
                         return true;
+
                     case R.id.navigation_search:
-                        startFragment(new SearchGenresFragment(), item.getItemId());
+                        if (prevFragment != R.id.navigation_search) {
+                            startFragment(new SearchGenresFragment(), item.getItemId());
+                            prevFragment = R.id.navigation_search;
+                        } else {
+                            startFragment(new SearchFragment(), item.getItemId());
+                            prevFragment = 0;
+                        }
                         return true;
+
                     case R.id.navigation_your_library:
-                        startFragment(new LibraryFragment(), item.getItemId());
+                        if (prevFragment != R.id.navigation_your_library) {
+                            startFragment(new LibraryFragment(), item.getItemId());
+                            prevFragment = R.id.navigation_your_library;
+                        }
                         return true;
+
                     case R.id.navigation_premium:
-                        startFragment(new PremiumFragment(), item.getItemId());
+                        if (prevFragment != R.id.navigation_premium) {
+                            startFragment(new PremiumFragment(), item.getItemId());
+                            prevFragment = R.id.navigation_premium;
+                        }
                         return true;
                 }
                 return false;

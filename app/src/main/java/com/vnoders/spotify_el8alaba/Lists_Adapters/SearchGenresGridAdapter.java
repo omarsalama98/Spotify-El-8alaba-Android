@@ -1,11 +1,10 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,37 +12,26 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import com.vnoders.spotify_el8alaba.ChartsFragment;
+import com.squareup.picasso.Target;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.models.Genre;
+import com.vnoders.spotify_el8alaba.ui.search.ChartsFragment;
 import com.vnoders.spotify_el8alaba.ui.search.GenreFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SpecialGenresFragment;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchGenresGridAdapter extends
         RecyclerView.Adapter<SearchGenresGridAdapter.MyViewHolder> {
 
-    private ArrayList<Genre> mockGenresList;
     private ArrayList<Category> backGenresList;
     private static Fragment mFragment;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchGenresGridAdapter(Fragment fragment, ArrayList<Genre> myDataset) {
-        mockGenresList = myDataset;
-        backGenresList = new ArrayList<>();
-        SearchGenresGridAdapter.mFragment = fragment;
-    }
-
     public SearchGenresGridAdapter(ArrayList<Category> myDataset, Fragment fragment) {
         backGenresList = myDataset;
-        mockGenresList = new ArrayList<>();
         SearchGenresGridAdapter.mFragment = fragment;
     }
-
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -61,66 +49,66 @@ public class SearchGenresGridAdapter extends
 
         final Bitmap[] genreImageBitmap = new Bitmap[1];
 
-        if (backGenresList.isEmpty()) {
-            genreImageBitmap[0] = mockGenresList.get(position).getImageBitmap();
-            holder.genreImage.setImageBitmap(genreImageBitmap[0]);
-            holder.genreTitle.setText(mockGenresList.get(position).getTitle());
-        } else {
-            AsyncTask asyncTask = new AsyncTask() {
-                @Override
-                protected Object doInBackground(Object[] objects) {
-                    try {
-                        genreImageBitmap[0] = Picasso.get()
-                                .load(backGenresList.get(position).getIcons().get(0).getUrl())
-                                .get();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            };
-            holder.genreImage.setImageBitmap(genreImageBitmap[0]);
-            holder.genreTitle.setText(backGenresList.get(position).getName());
+        if (!backGenresList.get(position).getIcons().isEmpty()) {
+            //Picasso.get().load(backGenresList.get(position).getIcons().get(0).getUrl()).into(holder.genreImage);
+            Picasso.get()
+                    .load(backGenresList.get(position).getIcons().get(0).getUrl())
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                            genreImageBitmap[0] = bitmap;
+                            holder.genreImage.setImageBitmap(bitmap);
+                            GradientUtils.generate(genreImageBitmap[0], holder.genreLayout);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
         }
+        holder.genreTitle.setText(backGenresList.get(position).getName());
 
-        GradientUtils.generate(genreImageBitmap[0], holder.genreLayout);
-
-        holder.genreLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment;
-                switch (position) {
-                    case 0:
-                        fragment = new SpecialGenresFragment();
-                        break;
-                    case 1:
-                        fragment = new ChartsFragment();
-                        break;
-                    default:
-                        fragment = new GenreFragment();
-                        break;
-                }
-                Bundle arguments = new Bundle();
-                arguments.putString(SearchByTypeConstantsHelper.GENRE_NAME_KEY,
-                        mockGenresList.get(position).getTitle());
-                fragment.setArguments(arguments);
-                mFragment.getParentFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right,
-                                R.anim.slide_out_left,
-                                R.anim.slide_in_left,
-                                R.anim.slide_out_right)
-                        .replace(R.id.nav_host_fragment, fragment)
-                        .addToBackStack(null)
-                        .commit();
+        holder.genreLayout.setOnClickListener(v -> {
+            Fragment fragment;
+            switch (position) {
+                case 0:
+                    fragment = new SpecialGenresFragment();
+                    break;
+                case 1:
+                    fragment = new ChartsFragment();
+                    break;
+                default:
+                    fragment = new GenreFragment();
+                    break;
             }
+            Bundle arguments = new Bundle();
+            arguments.putString(SearchByTypeConstantsHelper.GENRE_ID_KEY,
+                    backGenresList.get(position).getId());
+            arguments.putString(SearchByTypeConstantsHelper.GENRE_NAME_KEY,
+                    backGenresList.get(position).getName());
+            fragment.setArguments(arguments);
+            mFragment.getParentFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right,
+                            R.anim.slide_out_left,
+                            R.anim.slide_in_left,
+                            R.anim.slide_out_right)
+                    .replace(R.id.nav_host_fragment, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mockGenresList.isEmpty() ? backGenresList.size() : mockGenresList.size();
+        return backGenresList.size();
     }
 
     // Provide a reference to the views for each data item

@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHolder;
 import java.util.ArrayList;
@@ -76,8 +77,15 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
      */
     @Override
     public void onBindViewHolder(@NonNull TrackViewHolder holder, int position) {
-        holder.trackName.setText(tracks.get(position).getName());
-        holder.artistName.setText(tracks.get(position).getArtists().get(0).getName());
+        Track track = tracks.get(position);
+        if (track != null) {
+            holder.trackName.setText(track.getName());
+
+            List<Artist> artists = track.getArtists();
+            if (artists != null && artists.size() > 0) {
+                holder.artistName.setText(artists.get(0).getName());
+            }
+        }
     }
 
 

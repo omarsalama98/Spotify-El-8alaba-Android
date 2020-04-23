@@ -3,6 +3,7 @@
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:background = "@drawable/curved_gradient"
         android:layout_width = "match_parent"
+        android:id = "@+id/special_genre_layout"
         android:layout_height = "match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -47,7 +48,8 @@
         <LinearLayout
                 android:orientation = "vertical"
                 android:layout_width = "match_parent"
-                android:layout_height = "wrap_content">
+                android:layout_height = "wrap_content"
+                android:paddingHorizontal = "20dp">
 
             <TextView
                     android:id = "@+id/special_genre_fragment_main_title"
@@ -62,6 +64,7 @@
                     app:layout_scrollFlags = "scroll|snap" />
 
             <TextView
+                    android:id = "@+id/special_genre_popular_playlists_text_view"
                     android:layout_width = "wrap_content"
                     android:layout_height = "wrap_content"
                     android:text = "@string/popular_playlists"
@@ -75,11 +78,11 @@
                     android:id = "@+id/special_genre_top_playlists_recycler_view"
                     android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
-                    android:paddingHorizontal = "20dp"
                     android:layout_marginVertical = "20dp"
                     android:overScrollMode = "never" />
 
             <TextView
+                    android:id = "@+id/special_genre_categories_text_view"
                     android:layout_width = "wrap_content"
                     android:layout_height = "wrap_content"
                     android:text = "@string/categories"
@@ -93,10 +96,8 @@
                     android:id = "@+id/special_genre_categories_grid_view"
                     android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
-                    android:horizontalSpacing = "10dp"
                     android:overScrollMode = "never"
                     android:layout_marginBottom = "20dp"
-                    android:paddingEnd = "14dp"
                     android:gravity = "center" />
 
 

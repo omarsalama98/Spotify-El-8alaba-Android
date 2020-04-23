@@ -3,6 +3,7 @@
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:background = "@drawable/curved_gradient"
         android:layout_width = "match_parent"
+        android:id = "@+id/genre_fragment_layout"
         android:layout_height = "match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -79,6 +80,7 @@
                     android:overScrollMode = "never" />
 
             <Button
+                    android:id = "@+id/genre_fragment_see_more_button"
                     android:layout_width = "120dp"
                     android:layout_height = "30dp"
                     android:text = "@string/see_more"

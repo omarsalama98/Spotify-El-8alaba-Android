@@ -1,6 +1,11 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
+import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,9 +16,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vnoders.spotify_el8alaba.GridSpacingItemDecoration;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
-import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -44,22 +58,44 @@ public class SearchGenresFragment extends Fragment {
         return v;
     }
 
+    /**
+     * @return Spacing between grid items based on current mobile screen
+     */
+    private int getGridSpacing() {
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        return width / 25;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        /*TODO: UnComment and use it instead of mock data when backend is populated.
+        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+        if (navView.getSelectedItemId() != R.id.navigation_search) {
+            navView.setSelectedItemId(R.id.navigation_search);
+        }
+
         APIInterface apiService =
                 RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        final ArrayList[] topCategories = new ArrayList[]{new ArrayList<>()};
+        int spacingInPixels = getGridSpacing();
+
+        topGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        topGenresGridView
+                .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
 
         Call<List<Category>> call = apiService.getTopCategories();
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 Log.d(TAG, response.body().get(0).getName());
-                topCategories[0] = (ArrayList<Category>) response.body();
+                topGenresGridView
+                        .setAdapter(
+                                new SearchGenresGridAdapter((ArrayList<Category>) response.body(),
+                                        SearchGenresFragment.this));
                     // topCategories[0] will be put in the adapter
             }
 
@@ -68,24 +104,20 @@ public class SearchGenresFragment extends Fragment {
                 Log.d(TAG, "failed to retrieve Categories");
             }
         });
-        */
 
-        topGenresGridView
-                .setAdapter(new SearchGenresGridAdapter(this, Mock.getTopGenres(this)));
-        topGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        browseAllGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        browseAllGenresGridView
+                .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
 
-        /*TODO: UnComment and use it instead of mock data when backend is populated.
-        APIInterface apiService =
-                RetrofitClient.getInstance().getAPI(APIInterface.class);
-
-        final ArrayList[] allCategories = new ArrayList[]{new ArrayList<>()};
-
-        Call<List<Category>> call = apiService.getAllCategories();
-        call.enqueue(new Callback<List<Category>>() {
+        Call<List<Category>> call2 = apiService.getAllCategories();
+        call2.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 Log.d(TAG, response.body().get(0).getName());
-                allCategories[0] = (ArrayList<Category>) response.body();
+                browseAllGenresGridView
+                        .setAdapter(
+                                new SearchGenresGridAdapter((ArrayList<Category>) response.body(),
+                                        SearchGenresFragment.this));
                     // allCategories[0] will be put in the adapter
             }
 
@@ -93,11 +125,7 @@ public class SearchGenresFragment extends Fragment {
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 Log.d(TAG, "failed to retrieve Categories");
             }
-        });*/
-
-        browseAllGenresGridView
-                .setAdapter(new SearchGenresGridAdapter(this, Mock.getAllGenres(this)));
-        browseAllGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        });
 
         genresSearchTextLayout.setOnClickListener(new OnClickListener() {
             @Override
@@ -114,6 +142,5 @@ public class SearchGenresFragment extends Fragment {
             }
         });
     }
-
 
 }

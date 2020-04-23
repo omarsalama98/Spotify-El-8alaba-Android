@@ -134,4 +134,7 @@
     <string name = "save">SAVE</string>
     <string name = "change_photo">change photo</string>
     <string name = "edit_your_name">This could be your first name or a nickname.\nIt\'s how you\'ll appear on Spotify.</string>
+    <string name = "navigate_up">Navigate up</string>
+    <string name = "shuffle_icon">shuffle icon</string>
+    <string name = "by_owner">by</string>
 </resources>

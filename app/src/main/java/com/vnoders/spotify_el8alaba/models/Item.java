@@ -2,8 +2,6 @@ package com.vnoders.spotify_el8alaba.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vnoders.spotify_el8alaba.models.library.AddedBy;
-import com.vnoders.spotify_el8alaba.models.library.Track;
 
 public class Item {
 
@@ -18,10 +16,10 @@ public class Item {
     private String addedAt;
     @SerializedName("added_by")
     @Expose
-    private AddedBy addedBy;
+    private String addedBy;
     @SerializedName("track")
     @Expose
-    private Track track;
+    private String track;
 
     public Boolean getIsLocal() {
         return isLocal;
@@ -47,19 +45,19 @@ public class Item {
         this.addedAt = addedAt;
     }
 
-    public AddedBy getAddedBy() {
+    public String getAddedBy() {
         return addedBy;
     }
 
-    public void setAddedBy(AddedBy addedBy) {
+    public void setAddedBy(String addedBy) {
         this.addedBy = addedBy;
     }
 
-    public Track getTrack() {
+    public String getTrack() {
         return track;
     }
 
-    public void setTrack(Track track) {
+    public void setTrack(String track) {
         this.track = track;
     }
 

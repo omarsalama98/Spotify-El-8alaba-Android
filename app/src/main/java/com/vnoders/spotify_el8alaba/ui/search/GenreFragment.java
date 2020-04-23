@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +18,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.GenrePlaylistsGridAdapter;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -59,21 +68,35 @@ public class GenreFragment extends Fragment {
         genreMainTitle.setText(title);
         genreTopTitle.setText(title);
 
+        String id = arguments.getString(SearchByTypeConstantsHelper.GENRE_ID_KEY);
+
         toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
 
-        ArrayList<HomeInnerListItem> innerListItems = new ArrayList<>();
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+        APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
+        Call<List<HomePlaylist>> call = apiService
+                .getCategoryPlaylists(id);
+
+        ArrayList<HomePlaylist> myDataList = new ArrayList<>();
+
+        GenrePlaylistsGridAdapter adapter = new GenrePlaylistsGridAdapter(myDataList, this);
         genrePlaylistsGridView
-                .setAdapter(new GenrePlaylistsGridAdapter(innerListItems, this));
+                .setAdapter(adapter);
         genrePlaylistsGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        call.enqueue(new Callback<List<HomePlaylist>>() {
+            @Override
+            public void onResponse(Call<List<HomePlaylist>> call,
+                    Response<List<HomePlaylist>> response) {
+                myDataList.addAll(response.body());
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<HomePlaylist>> call, Throwable t) {
+                Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
+            }
+        });
 
         final float[] alpha = {0.0f};
         final float[] newAlpha = {0.0f};

@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba.ui.home;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +16,20 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.HomeMainListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
-import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
-import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileFragment;
+import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
@@ -50,44 +58,35 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ArrayList<HomeInnerListItem> innerListItems = new ArrayList<>();
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+        BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
+        if (navView.getSelectedItemId() != R.id.navigation_home) {
+            navView.setSelectedItemId(R.id.navigation_home);
+        }
 
-        ArrayList<HomeMainListItem> mainListItems = Mock.getMainHomeList();
-
-        /*  TODO: Will be used when backend is populated
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        final ArrayList[] homeCategories = new ArrayList[]{new ArrayList<>()};
+        ArrayList<Category> myDataList = new ArrayList<>();
+        HomeMainListAdapter adapter = new HomeMainListAdapter(getContext(), HomeFragment.this,
+                myDataList);
+
+        mainListRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        mainListRecyclerView.setHasFixedSize(true);
+        mainListRecyclerView.setAdapter(adapter);
 
         Call<List<Category>> call = apiService.getHomeCategories();
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                Log.d(TAG, response.body().get(0).getName());
-                homeCategories[0] = (ArrayList<Category>) response.body();
-                // homeCategories[0] will be put in the adapter
+                myDataList.addAll(response.body());
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve Categories");
+                Log.d(TAG, "failed to retrieve Categories" + t.getMessage());
             }
         });
-        */
-        //mainListRecyclerView.setAdapter(new HomeMainListAdapter(getContext(), this, homeCategories[0]));
-
-        mainListRecyclerView.setLayoutManager(
-                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        mainListRecyclerView.setHasFixedSize(true);
-        mainListRecyclerView.setAdapter(new HomeMainListAdapter(mainListItems, getContext(), this));
 
         settingsButton.setOnClickListener(v -> {
 
@@ -96,10 +95,32 @@ public class HomeFragment extends Fragment {
             FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment,settingsList,"SETTINGS_LIST").addToBackStack(null).commit();
         });
-        recentlyPlayedRecyclerView
-                .setAdapter(new RecentlyPlayedListAdapter(innerListItems, this));
+
+        Call<List<HomePlaylist>> call2 = apiService
+                .getCategoryPlaylists("5e8f3a325c504a25a711ce25");
+
         recentlyPlayedRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
+        ArrayList<HomePlaylist> recentlyPlayedList = new ArrayList<>();
+        RecentlyPlayedListAdapter recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
+                HomeFragment.this, recentlyPlayedList);
+        recentlyPlayedRecyclerView.setAdapter(recentlyPlayedListAdapter);
+
+        call2.enqueue(new Callback<List<HomePlaylist>>() {
+            @Override
+            public void onResponse(Call<List<HomePlaylist>> call,
+                    Response<List<HomePlaylist>> response) {
+                recentlyPlayedList.addAll(response.body());
+                recentlyPlayedListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<HomePlaylist>> call, Throwable t) {
+                Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
+            }
+        });
+
     }
+
 }

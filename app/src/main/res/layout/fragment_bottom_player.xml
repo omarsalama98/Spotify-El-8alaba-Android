@@ -32,6 +32,7 @@
         android:textStyle="bold" />
 
     <LinearLayout
+        android:id="@+id/bottom_player_buttons_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="12dp"

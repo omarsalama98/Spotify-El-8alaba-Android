@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.DiffUtil.ItemCallback;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
-import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenu;
-import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenuItem;
+import com.vnoders.spotify_el8alaba.models.library.Owner;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,11 +88,29 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
      */
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
-        holder.playlistName.setText(getItem(position).getName());
-        holder.playlistInfo.setText( "by " + getItem(position).getOwner().getName());
-        holder.playlistId = getItem(position).getId();
-        String imageUrl = getItem(position).getImages().get(0).getUrl();
-        Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock).into(holder.playlistArt);
+        LibraryPlaylistItem playlist = getItem(position);
+
+        if (playlist != null) {
+            holder.playlistName.setText(playlist.getName());
+
+            Owner owner = playlist.getOwner();
+            if (owner != null) {
+                String playlistInfo = String.format("%s %s",
+                        App.getInstance().getString(R.string.by_owner),
+                        owner.getName());
+                holder.playlistInfo.setText(playlistInfo);
+            }
+
+            holder.playlistId = playlist.getId();
+
+            List<TrackImage> images = playlist.getImages();
+            String imageUrl = null;
+            if (images != null && images.size() > 0) {
+                imageUrl = images.get(0).getUrl();
+            }
+            Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock)
+                    .into(holder.playlistArt);
+        }
     }
 
 

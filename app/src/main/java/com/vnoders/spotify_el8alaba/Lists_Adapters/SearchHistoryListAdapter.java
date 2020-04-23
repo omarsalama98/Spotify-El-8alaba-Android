@@ -2,7 +2,6 @@ package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 
 public class SearchHistoryListAdapter extends
@@ -42,12 +42,12 @@ public class SearchHistoryListAdapter extends
             Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
         }
 
-        holder.removeIcon.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDataset.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, mDataset.size());
+        holder.removeIcon.setOnClickListener(v -> {
+            mDataset.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, mDataset.size());
+            if (mDataset.isEmpty()) {
+                SearchFragment.removeSearchHistoryList();
             }
         });
     }
