@@ -8,18 +8,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.vnoders.spotify_el8alaba.EditProfile;
-import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileBottomSheet;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -39,7 +37,9 @@ public class CurrentUserProfileFragment extends Fragment {
     private TextView followerNumber;
     private ImageView bottomSheetButton;
     private Button editProfileButton;
-
+    private Bundle bundle;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -80,6 +80,7 @@ public class CurrentUserProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             currentUserProfile=(CurrentUserProfile) getArguments().getSerializable("CURRENT_USER_PROFILE");
+            //userName=getArguments().getString("user_name");
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
@@ -121,9 +122,16 @@ public class CurrentUserProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                bundle=new Bundle();
+                //will be uncommented when a user with image is created
+               // bundle.putString("image_url",currentUserProfile.getImage().getUrl());
+                bundle.putString("image_url",IMAGE_URL);
+                bundle.putString("user_name",currentUserProfile.getName());
+                bundle.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
                 EditProfile editProfile=new EditProfile();
-                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                editProfile.setArguments(bundle);
+                fragmentManager=getActivity().getSupportFragmentManager();
+                fragmentTransaction=fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment,editProfile,"EDIT_PROFILE").addToBackStack(null).commit();
             }
         });
@@ -138,7 +146,10 @@ public class CurrentUserProfileFragment extends Fragment {
         backArrowImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().onBackPressed();
+                SettingsList settingsList =new SettingsList();
+                fragmentManager=getActivity().getSupportFragmentManager();
+                fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment,settingsList,"SETTING_LIST").addToBackStack(null).commit();
             }
         });
 

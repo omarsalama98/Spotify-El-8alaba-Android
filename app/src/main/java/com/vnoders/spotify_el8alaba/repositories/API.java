@@ -4,6 +4,7 @@ import com.vnoders.spotify_el8alaba.models.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
+import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 import com.vnoders.spotify_el8alaba.response.signup.SignUpResponse;
 import okhttp3.ResponseBody;
@@ -12,6 +13,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 
 /**
@@ -68,4 +70,7 @@ public interface API {
 
     @GET("users/me")
     Call<CurrentUserProfile> getCurrentUserProfile();
+
+    @PATCH("users")
+    Call<ResponseBody> updateUserInfo(@Body UpdateUserInfo updateUserInfo);
 }
