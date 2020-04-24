@@ -1,5 +1,7 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
+import static com.vnoders.spotify_el8alaba.MainActivity.db;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,18 +9,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 
 public class SearchHistoryListAdapter extends
         RecyclerView.Adapter<SearchHistoryListAdapter.MyViewHolder> {
 
-    private ArrayList<SearchListItem> mDataset;
+    private ArrayList<RecentSearches> mDataset;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchHistoryListAdapter(ArrayList<SearchListItem> myDataset) {
+    public SearchHistoryListAdapter(ArrayList<RecentSearches> myDataset) {
         mDataset = myDataset;
     }
 
@@ -36,13 +38,14 @@ public class SearchHistoryListAdapter extends
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        holder.name.setText(mDataset.get(position).getName());
-        holder.info.setText(mDataset.get(position).getInfo());
-        if (!mDataset.get(position).getImageURL().equals("")) {
-            Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
+        holder.name.setText(mDataset.get(position).itemName);
+        holder.info.setText(mDataset.get(position).itemInfo);
+        if (!mDataset.get(position).itemImageUrl.equals("")) {
+            Picasso.get().load(mDataset.get(position).itemImageUrl).into(holder.image);
         }
 
         holder.removeIcon.setOnClickListener(v -> {
+            db.recentSearchesDao().delete(mDataset.get(position));
             mDataset.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, mDataset.size());
@@ -50,6 +53,7 @@ public class SearchHistoryListAdapter extends
                 SearchFragment.removeSearchHistoryList();
             }
         });
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

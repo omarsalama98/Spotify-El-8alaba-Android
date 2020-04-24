@@ -7,11 +7,17 @@ import androidx.room.PrimaryKey;
 @Entity
 public class RecentSearches {
 
-    @PrimaryKey
-    public int searchItemid;
+    @PrimaryKey(autoGenerate = true)
+    public int primaryId;
 
     @ColumnInfo(name = "name")
     public String itemName;
+
+    @ColumnInfo(name = "item_id")
+    public String itemId;
+
+    @ColumnInfo(name = "item_type")
+    public String itemType;
 
     @ColumnInfo(name = "info")
     public String itemInfo;
