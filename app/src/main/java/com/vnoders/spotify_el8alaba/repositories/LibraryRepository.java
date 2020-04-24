@@ -5,6 +5,7 @@ import android.os.Build.VERSION_CODES;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
@@ -279,14 +280,15 @@ public class LibraryRepository {
         });
     }
 
-    public static void unfollowPlaylist(PlaylistHomeViewModel viewModel) {
-        Call<Void> request = libraryApi.unfollowPlaylist(viewModel.getPlaylistId());
+
+    private static void unfollowPlaylist(String playlistId , @Nullable MutableLiveData<Boolean> followState) {
+        Call<Void> request = libraryApi.unfollowPlaylist(playlistId);
 
         request.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NotNull Call<Void> call, @NotNull Response<Void> response) {
-                if (response.isSuccessful()) {
-                    viewModel.setFollowedState(false);
+                if (response.isSuccessful() && followState != null) {
+                    followState.setValue(false);
                 }
             }
 
@@ -295,5 +297,13 @@ public class LibraryRepository {
 
             }
         });
+    }
+
+    public static void unfollowPlaylist(PlaylistHomeViewModel viewModel) {
+        unfollowPlaylist(viewModel.getPlaylistId() , (MutableLiveData<Boolean>) viewModel.getFollowedState());
+    }
+
+    public static void unfollowPlaylist(String playlistId) {
+        unfollowPlaylist(playlistId, null);
     }
 }

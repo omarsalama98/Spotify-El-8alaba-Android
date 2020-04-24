@@ -29,7 +29,7 @@ public class LibraryPlaylistFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        LibraryPlaylistViewModel playlistViewModel = new ViewModelProvider(this)
+        LibraryPlaylistViewModel playlistViewModel = new ViewModelProvider(requireActivity())
                 .get(LibraryPlaylistViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_library_playlist, container, false);
@@ -37,7 +37,8 @@ public class LibraryPlaylistFragment extends Fragment {
         progressBar = root.findViewById(R.id.progress_bar);
         progressBar.setBackgroundColor(Color.BLACK);
 
-        LibraryPlaylistAdapter playlistAdapter = new LibraryPlaylistAdapter(this);
+        LibraryPlaylistAdapter playlistAdapter = new LibraryPlaylistAdapter(
+                requireActivity().getSupportFragmentManager());
 
         recyclerView = root.findViewById(R.id.library_playlist_recycler_view);
 
