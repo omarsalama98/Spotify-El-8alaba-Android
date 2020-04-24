@@ -78,8 +78,8 @@ public class PlaylistTracksViewModel extends ViewModel {
      * playlist which apply a level of abstraction between UI and business logic and data.
      */
     public void updatePlaylistTracks() {
-        LibraryRepository.updatePlaylistTracks(this);
         LibraryRepository.updatePlaylistCoverImages(this);
+        LibraryRepository.updatePlaylistTracks(this);
     }
 
 }
