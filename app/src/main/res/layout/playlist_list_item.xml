@@ -47,18 +47,13 @@
                 android:orientation = "horizontal"
                 android:layout_weight = "1">
 
-            <ImageView
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:layout_gravity = "center"
-                    android:layout_marginEnd = "@dimen/margin_small"
-                    android:src = "@drawable/ic_shuffle" />
-
             <TextView
                     android:id = "@+id/library_playlist_info"
                     android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
                     android:textColor = "@color/colorSecondaryText"
+                    android:drawableStart="@drawable/ic_shuffle"
+                    android:drawablePadding="@dimen/margin_small"
                     tools:text = "by omar" />
         </LinearLayout>
 
