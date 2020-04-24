@@ -25,6 +25,7 @@ public class PlaylistHomeViewModel extends ViewModel {
     private MutableLiveData<String> imageUrl;
     private String playlistId;
     private MutableLiveData<Boolean> isFollowed;
+    private MutableLiveData<Boolean> finishedLoading;
 
     public PlaylistHomeViewModel() {
         playlistName = new MutableLiveData<>();
@@ -32,6 +33,7 @@ public class PlaylistHomeViewModel extends ViewModel {
         tracksSummary = new MutableLiveData<>();
         imageUrl = new MutableLiveData<>();
         isFollowed = new MutableLiveData<>();
+        finishedLoading = new MutableLiveData<>(false);
     }
 
     /**
@@ -122,6 +124,14 @@ public class PlaylistHomeViewModel extends ViewModel {
 
     public void unfollowPlaylist() {
         LibraryRepository.unfollowPlaylist(this);
+    }
+
+    public LiveData<Boolean> getFinishedLoadingState() {
+        return finishedLoading;
+    }
+
+    public void setFinishedLoading(boolean finishedLoading) {
+        this.finishedLoading.setValue(finishedLoading);
     }
 
     /**

@@ -108,6 +108,7 @@ public class LibraryRepository {
 
                     viewModel.setPlaylistName(playlist.getName());
 
+                    viewModel.setFinishedLoading(true);
                 }
             }
 
