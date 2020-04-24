@@ -16,11 +16,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OverflowMenu extends BottomSheetDialogFragment {
 
-    private List<OverflowMenuItem> actionItems;
+    protected List<OverflowMenuItem> actionItems;
     private String songName;
     private String authorName;
     private String imageUrl;
@@ -31,6 +32,13 @@ public class OverflowMenu extends BottomSheetDialogFragment {
         this.authorName = authorName;
         this.imageUrl = imageUrl;
         this.actionItems = actionItems;
+    }
+
+    protected OverflowMenu(String songName, String authorName, String imageUrl) {
+        this.songName = songName;
+        this.authorName = authorName;
+        this.imageUrl = imageUrl;
+        this.actionItems = new ArrayList<>();
     }
 
     @Override

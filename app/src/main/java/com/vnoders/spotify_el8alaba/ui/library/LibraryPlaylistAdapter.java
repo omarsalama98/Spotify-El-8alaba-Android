@@ -8,10 +8,9 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DiffUtil.ItemCallback;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +30,7 @@ import java.util.List;
  */
 public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, PlaylistViewHolder> {
 
-    private Fragment fragment;
+    private FragmentManager fragmentManager;
 
     private static final ItemCallback<LibraryPlaylistItem> DIFF_COMPARE_CALLBACK = new ItemCallback<LibraryPlaylistItem>() {
         @Override
@@ -48,12 +47,12 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
     };
 
     /**
-     * @param fragment The fragment which the recycler view of this adapter lives in. This is needed
-     *                 in order to be able to open another fragments.
+     * @param fragmentManager The fragment manager which is needed in order to be able to open
+     *                        another fragments.
      */
-    public LibraryPlaylistAdapter(Fragment fragment) {
+    public LibraryPlaylistAdapter(FragmentManager fragmentManager) {
         super(DIFF_COMPARE_CALLBACK);
-        this.fragment = fragment;
+        this.fragmentManager = fragmentManager;
     }
 
     /**
@@ -91,25 +90,7 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
         LibraryPlaylistItem playlist = getItem(position);
 
         if (playlist != null) {
-            holder.playlistName.setText(playlist.getName());
-
-            Owner owner = playlist.getOwner();
-            if (owner != null) {
-                String playlistInfo = String.format("%s %s",
-                        App.getInstance().getString(R.string.by_owner),
-                        owner.getName());
-                holder.playlistInfo.setText(playlistInfo);
-            }
-
-            holder.playlistId = playlist.getId();
-
-            List<TrackImage> images = playlist.getImages();
-            String imageUrl = null;
-            if (images != null && images.size() > 0) {
-                imageUrl = images.get(0).getUrl();
-            }
-            Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock)
-                    .into(holder.playlistArt);
+            holder.bind(playlist);
         }
     }
 
@@ -146,7 +127,7 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
             playlistBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.getActivity().getSupportFragmentManager().beginTransaction()
+                    fragmentManager.beginTransaction()
                             .replace(R.id.nav_host_fragment,
                                     PlaylistHomeFragment.newInstance(playlistId))
                             .addToBackStack(null)
@@ -157,9 +138,14 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
             playlistBody.setOnLongClickListener(new OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    Toast.makeText(v.getContext(),
-                            "Playlist " + playlistName.getText().toString() + " long click menu",
-                            Toast.LENGTH_SHORT).show();
+
+                    LibraryPlaylistItem currentPlaylist = getItem(getLayoutPosition());
+
+                    LibraryPlaylistOverflowMenu overflowMenu =
+                            LibraryPlaylistOverflowMenu.newInstance(currentPlaylist);
+
+                    overflowMenu.show(fragmentManager, null);
+
                     v.setPressed(false);
                     return true;
                 }
@@ -167,6 +153,28 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
 
         }
 
+        void bind(LibraryPlaylistItem playlist) {
+            playlistName.setText(playlist.getName());
+
+            Owner owner = playlist.getOwner();
+            if (owner != null) {
+                String info = String.format("%s %s",
+                        App.getInstance().getString(R.string.by_owner),
+                        owner.getName());
+                playlistInfo.setText(info);
+            }
+
+            playlistId = playlist.getId();
+
+            List<TrackImage> images = playlist.getImages();
+            String imageUrl = null;
+            if (images != null && images.size() > 0) {
+                imageUrl = images.get(0).getUrl();
+            }
+
+            Picasso.get().load(imageUrl).placeholder(R.drawable.artist_mock)
+                    .into(playlistArt);
+        }
     }
 
 }

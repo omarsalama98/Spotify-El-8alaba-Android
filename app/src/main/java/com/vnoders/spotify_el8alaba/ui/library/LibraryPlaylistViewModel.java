@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +31,22 @@ public class LibraryPlaylistViewModel extends ViewModel {
      */
     public LiveData<List<LibraryPlaylistItem>> getUserPlaylists() {
         return userPlaylists;
+    }
+
+    public void unfollowPlaylist(String playlistId) {
+
+        LibraryRepository.unfollowPlaylist(playlistId);
+
+        if (userPlaylists.getValue() != null) {
+            List<LibraryPlaylistItem> newUserPlaylists = new ArrayList<>(userPlaylists.getValue());
+            for (int i = 0; i < newUserPlaylists.size(); i++) {
+                if (newUserPlaylists.get(i).getId().equals(playlistId)) {
+                    newUserPlaylists.remove(i);
+                    userPlaylists.postValue(newUserPlaylists);
+                    break;
+                }
+            }
+        }
     }
 
     /**

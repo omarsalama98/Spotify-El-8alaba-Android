@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -8,9 +9,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -40,6 +43,8 @@ public class PlaylistHomeFragment extends Fragment {
     private Button shuffle;
     private Button editOrPreviewPlaylist;
     private TextView tracksSummary;
+    private NestedScrollView playlistBody;
+    private ProgressBar progressBar;
 
 
     // the fragment initialization parameters
@@ -89,9 +94,13 @@ public class PlaylistHomeFragment extends Fragment {
         playlistName = root.findViewById(R.id.playlist_home_playlist_name);
         playlistOwner = root.findViewById(R.id.playlist_home_playlist_owner);
 
+        playlistBody = root.findViewById(R.id.playlist_home_body);
         shuffle = root.findViewById(R.id.playlist_home_shuffle_button);
         editOrPreviewPlaylist = root.findViewById(R.id.playlist_home_edit_playlist);
         tracksSummary = root.findViewById(R.id.playlist_home_tracks);
+
+        progressBar = root.findViewById(R.id.progress_bar);
+        progressBar.setBackgroundColor(Color.BLACK);
 
         return root;
     }
@@ -107,42 +116,6 @@ public class PlaylistHomeFragment extends Fragment {
             playlistHomeViewModel.setPlaylistId(playlistId);
         }
 
-        View.OnClickListener openTracksClickListener = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment
-                        .newInstance(playlistHomeViewModel.getPlaylistId(),
-                                title.getText().toString());
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.nav_host_fragment, playlistTracksFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        };
-
-        tracksSummary.setOnClickListener(openTracksClickListener);
-        editOrPreviewPlaylist.setOnClickListener(openTracksClickListener);
-
-        upButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().popBackStack();
-            }
-        });
-
-        follow.setOnClickListener(new OnClickListener() {
-            boolean isChecked = true;
-
-            @Override
-            public void onClick(View view) {
-                isChecked = !isChecked;
-                if (isChecked) {
-                    playlistHomeViewModel.followPlaylist();
-                } else {
-                    playlistHomeViewModel.unfollowPlaylist();
-                }
-            }
-        });
 
         playlistHomeViewModel.getFollowedState()
                 .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
@@ -191,6 +164,66 @@ public class PlaylistHomeFragment extends Fragment {
                     }
                 });
 
+        playlistHomeViewModel.getFinishedLoadingState().observe(getViewLifecycleOwner(),
+                new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean finishedLoading) {
+                        if (finishedLoading) {
+                            initializeViews();
+                        }
+                    }
+                });
+
+        playlistHomeViewModel.updateData();
+
+    }
+
+    private void initializeViews() {
+
+        updateViewsVisibility();
+
+        OnClickListener openTracksClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment
+                        .newInstance(playlistHomeViewModel.getPlaylistId(),
+                                title.getText().toString());
+
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment, playlistTracksFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        };
+
+        tracksSummary.setOnClickListener(openTracksClickListener);
+        editOrPreviewPlaylist.setOnClickListener(openTracksClickListener);
+
+        upButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
+        follow.setOnClickListener(new OnClickListener() {
+            boolean isFollowed = true;
+
+            @Override
+            public void onClick(View view) {
+                Boolean followState = playlistHomeViewModel.getFollowedState().getValue();
+                if (followState != null) {
+                    // We are NOTing the followState value because this button toggles follow and unfollow states
+                    isFollowed = !followState;
+                }
+                if (isFollowed) {
+                    playlistHomeViewModel.followPlaylist();
+                } else {
+                    playlistHomeViewModel.unfollowPlaylist();
+                }
+            }
+        });
+
         appBar.addOnOffsetChangedListener(new OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -202,8 +235,15 @@ public class PlaylistHomeFragment extends Fragment {
             }
         });
 
-        playlistHomeViewModel.updateData();
+    }
 
+    private void updateViewsVisibility() {
+
+        progressBar.setVisibility(View.GONE);
+
+        appBar.setVisibility(View.VISIBLE);
+
+        playlistBody.setVisibility(View.VISIBLE);
     }
 
 }

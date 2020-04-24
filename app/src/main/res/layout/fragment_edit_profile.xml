@@ -6,7 +6,7 @@
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:background = "@color/darkGray"
         android:orientation = "vertical"
-        tools:context = ".EditProfile">
+        tools:context = ".ui.currentUserProfile.EditProfile">
     <RelativeLayout
             android:layout_marginTop="20dp"
             android:layout_width = "match_parent"
@@ -37,7 +37,7 @@
                 android:layout_height = "30dp"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/pressed_grey"
                 android:text="@string/save"
                 android:layout_alignParentRight = "true"
                 android:layout_marginRight="10dp"
@@ -53,6 +53,7 @@
             android:layout_gravity = "center" />
 
     <TextView
+            android:id="@+id/change_user_image"
             android:textAllCaps="true"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
@@ -64,6 +65,7 @@
             android:layout_marginTop="10dp"
             />
     <EditText
+            android:id="@+id/user_name"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"

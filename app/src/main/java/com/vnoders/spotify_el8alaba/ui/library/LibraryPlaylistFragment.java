@@ -1,9 +1,11 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,23 +22,25 @@ import java.util.List;
  */
 public class LibraryPlaylistFragment extends Fragment {
 
-    private LibraryPlaylistViewModel playlistViewModel;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        playlistViewModel = new ViewModelProvider(this).get(LibraryPlaylistViewModel.class);
-    }
+    private ProgressBar progressBar;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
+        LibraryPlaylistViewModel playlistViewModel = new ViewModelProvider(requireActivity())
+                .get(LibraryPlaylistViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_library_playlist, container, false);
 
-        LibraryPlaylistAdapter playlistAdapter = new LibraryPlaylistAdapter(this);
+        progressBar = root.findViewById(R.id.progress_bar);
+        progressBar.setBackgroundColor(Color.BLACK);
 
-        RecyclerView recyclerView = root.findViewById(R.id.library_playlist_recycler_view);
+        LibraryPlaylistAdapter playlistAdapter = new LibraryPlaylistAdapter(
+                requireActivity().getSupportFragmentManager());
+
+        recyclerView = root.findViewById(R.id.library_playlist_recycler_view);
 
         recyclerView.setAdapter(playlistAdapter);
 
@@ -48,9 +52,15 @@ public class LibraryPlaylistFragment extends Fragment {
                 new Observer<List<LibraryPlaylistItem>>() {
                     @Override
                     public void onChanged(List<LibraryPlaylistItem> libraryPlaylistItems) {
+                        updateViewsVisibility();
                         playlistAdapter.submitList(libraryPlaylistItems);
                     }
                 });
         return root;
+    }
+
+    private void updateViewsVisibility() {
+        progressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 }

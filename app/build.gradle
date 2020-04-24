@@ -16,8 +16,33 @@ task getCoverage(type: Exec, dependsOn: 'codeCoverageReport') {
 }
 
 android {
+
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+
+    signingConfigs {
+        release {
+
+            def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+            if (keystorePropertiesFile.exists() && android.signingConfigs.hasProperty('release')) {
+
+                // Initializes a new Properties() object called keystoreProperties.
+                def keystoreProperties = new Properties()
+
+                // Loads the keystore.properties file into the keystoreProperties object.
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                v1SigningEnabled true
+                v2SigningEnabled true
+            }
+        }
+    }
 
 
     defaultConfig {
@@ -32,11 +57,21 @@ android {
 
     buildTypes {
         release {
+            def API_BASE_URL_RELEASE = "\"https://spotify-elghalaba.me/api/v1/\""
+            buildConfigField "String", "BASE_URL", API_BASE_URL_RELEASE
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+//          Remove these two lines to disable debugging
+            debuggable true
             testCoverageEnabled true
         }
         debug{
+            def API_BASE_URL_DEBUG = "\"http://${InetAddress.localHost.hostAddress}:8000/api/v1/\""
+            buildConfigField "String", "BASE_URL", API_BASE_URL_DEBUG
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
             testCoverageEnabled true
         }
     }
@@ -48,6 +83,7 @@ android {
 
 }
 
+
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -56,10 +92,10 @@ dependencies {
     implementation "androidx.room:room-runtime:2.2.5"
     annotationProcessor "androidx.room:room-compiler:2.2.5"
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
-    implementation 'com.squareup.retrofit2:retrofit-mock:2.7.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+    implementation 'com.squareup.retrofit2:retrofit-mock:2.8.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.5.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'androidx.palette:palette:1.0.0'
@@ -69,8 +105,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment:2.2.1'
-    implementation 'androidx.navigation:navigation-ui:2.2.1'
+    implementation 'androidx.navigation:navigation-fragment:2.2.2'
+    implementation 'androidx.navigation:navigation-ui:2.2.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

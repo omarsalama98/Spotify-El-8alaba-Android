@@ -1,9 +1,11 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.library.Track;
@@ -25,13 +28,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PlaylistTracksFragment extends Fragment {
 
-    private PlaylistTracksViewModel playlistViewModel;
-
     private TextView title;
     private TextView playlistName;
     private AppBarLayout appBar;
-    private CollapsingToolbarLayout collapsingToolbar;
     private RecyclerView recyclerView;
+    private ExtendedFloatingActionButton shuffle;
+    private ProgressBar progressBar;
 
     // the fragment initialization parameters
     private static final String ARGUMENT_PLAYLIST_ID = "id";
@@ -70,7 +72,8 @@ public class PlaylistTracksFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        playlistViewModel = new ViewModelProvider(this).get(PlaylistTracksViewModel.class);
+        PlaylistTracksViewModel playlistViewModel = new ViewModelProvider(this)
+                .get(PlaylistTracksViewModel.class);
 
         if (getArguments() != null) {
             String playlistId = getArguments().getString(ARGUMENT_PLAYLIST_ID);
@@ -88,6 +91,7 @@ public class PlaylistTracksFragment extends Fragment {
         playlistViewModel.getTracks().observe(getViewLifecycleOwner(), new Observer<List<Track>>() {
             @Override
             public void onChanged(List<Track> tracks) {
+                initializeViews();
                 playlistAdapter.setTracks(tracks);
                 playlistAdapter.notifyDataSetChanged();
                 //TODO : Use DiffUtil to generate smaller changes instead of notifyDataSetChanged
@@ -103,17 +107,6 @@ public class PlaylistTracksFragment extends Fragment {
                     }
                 });
 
-        appBar.addOnOffsetChangedListener(new OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                // Title is fully transparent when the toolbar is expanded and fully visible
-                // when toolbar is collapsed and semi-visible between them
-                // visibility is calculated based on ratio between current toolbar height and the max height
-                // Negative sign in -1.0f because verticalOffset is negative
-                title.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
-            }
-        });
-
         playlistViewModel.updatePlaylistTracks();
 
     }
@@ -126,9 +119,40 @@ public class PlaylistTracksFragment extends Fragment {
         title = root.findViewById(R.id.playlist_tracks_title);
         playlistName = root.findViewById(R.id.playlist_tracks_name);
         appBar = root.findViewById(R.id.app_bar);
-        collapsingToolbar = root.findViewById(R.id.collapsing_toolbar);
+        shuffle = root.findViewById(R.id.playlist_tracks_shuffle);
         recyclerView = root.findViewById(R.id.playlist_recycler_view);
+
+        progressBar = root.findViewById(R.id.progress_bar);
+        progressBar.setBackgroundColor(Color.BLACK);
 
         return root;
     }
+
+    private void initializeViews(){
+
+        updateViewsVisibility();
+
+        appBar.addOnOffsetChangedListener(new OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                // Title is fully transparent when the toolbar is expanded and fully visible
+                // when toolbar is collapsed and semi-visible between them
+                // visibility is calculated based on ratio between current toolbar height and the max height
+                // Negative sign in -1.0f because verticalOffset is negative
+                title.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
+            }
+        });
+
+    }
+
+    private void updateViewsVisibility(){
+
+        progressBar.setVisibility(View.GONE);
+
+        appBar.setVisibility(View.VISIBLE);
+        shuffle.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+
+    }
+
 }

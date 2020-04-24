@@ -5,11 +5,24 @@
         android:layout_width = "match_parent"
         android:layout_height = "match_parent">
 
+    <ProgressBar
+            android:id = "@+id/progress_bar"
+            android:elevation = "2dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:padding="150dp"
+            android:layout_gravity = "center" />
+
+    <!--    Using tools:visibility="visible" with android:visibility="gone"
+            in order to see the layout but it will be hidden on real device
+            (progress bar will be visible until loading finished then view will be visible)-->
     <com.google.android.material.appbar.AppBarLayout
             android:id = "@+id/app_bar"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
             android:paddingTop = "@dimen/status_bar_height"
+            android:visibility = "gone"
+            tools:visibility = "visible"
             tools:background = "@drawable/toolbar_gradient">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -47,7 +60,7 @@
                             android:textSize = "20sp"
                             android:textStyle = "bold"
                             android:textColor = "@color/white"
-                            android:text = "Playlist Name"
+                            tools:text = "Playlist Name"
                             app:layout_constraintTop_toTopOf = "parent"
                             android:layout_centerVertical = "true"
                             android:layout_centerHorizontal = "true"
@@ -123,10 +136,17 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
+    <!--    Using tools:visibility="visible" with android:visibility="gone"
+           in order to see the layout but it will be hidden on real device
+           (progress bar will be visible until loading finished then view will be visible)-->
+
     <androidx.core.widget.NestedScrollView
+            android:id="@+id/playlist_home_body"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
             android:background="@color/black"
+            android:visibility = "gone"
+            tools:visibility = "visible"
             app:layout_behavior = "@string/appbar_scrolling_view_behavior">
 
 
@@ -153,7 +173,7 @@
                     android:layout_width = "wrap_content"
                     android:layout_height = "30dp"
                     android:background = "@drawable/custom_face"
-                    android:text = "Edit Playlist"
+                    android:text = "@string/edit_playlist"
                     android:textSize = "12sp"
                     android:textAllCaps = "true"
                     android:paddingHorizontal = "36dp"
@@ -167,7 +187,7 @@
                     android:layout_height = "wrap_content"
                     android:textColor = "@color/colorSecondaryText"
                     android:layout_margin = "@dimen/appbar_padding"
-                    android:textSize = "18sp"
+                    android:textSize = "16sp"
                     android:textAlignment = "center"
                     tools:text = "Omar Mostafa Happy Song • Omar Mostafa Happy Song • Omar Mostafa Happy Song" />
 

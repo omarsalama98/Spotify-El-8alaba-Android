@@ -59,7 +59,7 @@ public class CreateAccount extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            name_holder = name.getText().toString().trim();
+            name_holder = name.getText().toString();
             create.setEnabled(!name_holder.isEmpty());
         }
 
