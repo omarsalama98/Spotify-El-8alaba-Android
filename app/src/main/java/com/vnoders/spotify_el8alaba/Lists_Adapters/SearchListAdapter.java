@@ -14,6 +14,7 @@ import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
+import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
@@ -77,7 +78,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                 recentSearches.itemName = mDataset.get(getAdapterPosition()).getName();
                 recentSearches.itemInfo = mDataset.get(getAdapterPosition()).getInfo();
                 recentSearches.itemImageUrl = mDataset.get(getAdapterPosition()).getImageURL();
-                db.recentSearchesDao().insertAll(recentSearches);
+                if (!SearchFragment.mySearchHistory.contains(recentSearches)) {
+                    db.recentSearchesDao().insertAll(recentSearches);
+                }
 
                 //TODO: Replace the Name Key with an ID one and pass the selected item id
                 //TODO: The fragment to go to depends on the selected item type
@@ -93,7 +96,5 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             });
         }
     }
-    /*public void addSearchToHistory(RecentSearches recentSearch){
-        class addSearch extends AsyncTask<Void, Void, >
-    }*/
+
 }

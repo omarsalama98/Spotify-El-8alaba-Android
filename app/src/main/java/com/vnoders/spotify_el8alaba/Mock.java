@@ -9,7 +9,6 @@ import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
 import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.models.Genre;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * just a mock class to get a list of track id's that have preview urls to use to play
@@ -51,11 +50,23 @@ public class Mock {
         ArrayList<SearchListItem> myList = new ArrayList<>();
         myList.add(new SearchListItem("LOL xd", "mad",
                 "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
+        myList.add(new SearchListItem("LOL2 xd", "mad",
                 "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
         myList.add(new SearchListItem("DD xd", "mad",
                 "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOLAT xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
         myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("ROFL", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("LOL xd", "mad",
+                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
+        myList.add(new SearchListItem("Song", "mad",
                 "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
         myList.add(new SearchListItem("LOL xd", "mad",
                 "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
@@ -65,19 +76,7 @@ public class Mock {
                 "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
         myList.add(new SearchListItem("LOL xd", "mad",
                 "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
+        myList.add(new SearchListItem("LOL xd", "Rar",
                 "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
 
         return myList;

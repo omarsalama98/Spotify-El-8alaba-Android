@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,14 +42,14 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 public class SearchFragment extends Fragment implements OnClickListener, TextWatcher {
 
-    private ArrayList<RecentSearches> mySearchHistory;
+    public static ArrayList<RecentSearches> mySearchHistory;
     private EditText searchQuery;
     private BottomNavigationView botNavView;
     private RelativeLayout searchTextViewLayout;
     private RelativeLayout searchMainBackground;
     private LinearLayout searchEditTextLayout;
     private ImageView resetSearch;
-    private static LinearLayout searchHistoryListLayout;
+    private static NestedScrollView searchHistoryListLayout;
     private static RelativeLayout searchEmptyBackground;
     private RecyclerView searchListRecyclerView;
     private RecyclerView searchHistoryRecyclerView;
