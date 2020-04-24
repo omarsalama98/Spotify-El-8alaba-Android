@@ -5,11 +5,23 @@
         android:orientation = "vertical"
         android:layout_height = "match_parent">
 
+    <ProgressBar
+            android:id = "@+id/progress_bar"
+            android:elevation = "2dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:padding="150dp"
+            android:layout_gravity = "center" />
 
+    <!--    Using tools:visibility="visible" with android:visibility="gone"
+        in order to see the layout but it will be hidden on real device
+        (progress bar will be visible until loading finished then view will be visible)-->
     <androidx.recyclerview.widget.RecyclerView
             android:id = "@+id/library_playlist_recycler_view"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
+            android:visibility = "gone"
+            tools:visibility = "visible"
             android:background = "@color/backgroundColor"
             tools:listitem = "@layout/playlist_list_item" />
 
