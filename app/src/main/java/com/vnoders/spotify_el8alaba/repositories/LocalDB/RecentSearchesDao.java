@@ -17,4 +17,8 @@ public interface RecentSearchesDao {
 
     @Delete
     void delete(RecentSearches recentSearches);
+
+    @Query("DELETE FROM RecentSearches")
+    void nukeTable();
+
 }

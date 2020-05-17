@@ -1,14 +1,17 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import static com.vnoders.spotify_el8alaba.MainActivity.db;
+
 import android.content.Context;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -19,37 +22,37 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
-import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
+import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 
-public class SearchFragment extends Fragment implements OnClickListener {
+public class SearchFragment extends Fragment implements OnClickListener, TextWatcher {
 
-
-    private ArrayList<SearchListItem> mySearchHistory;
+    public static ArrayList<RecentSearches> mySearchHistory;
     private EditText searchQuery;
     private BottomNavigationView botNavView;
     private RelativeLayout searchTextViewLayout;
     private RelativeLayout searchMainBackground;
     private LinearLayout searchEditTextLayout;
     private ImageView resetSearch;
-    private static LinearLayout searchHistoryListLayout;
+    private static NestedScrollView searchHistoryListLayout;
     private static RelativeLayout searchEmptyBackground;
     private RecyclerView searchListRecyclerView;
+    private RecyclerView searchHistoryRecyclerView;
     private ImageView backArrow;
     private ImageView cameraInTextView;
     private ImageView cameraInEditText;
@@ -69,16 +72,58 @@ public class SearchFragment extends Fragment implements OnClickListener {
         super.onPause();
     }
 
-    /**
-     * Hides Soft Keyboard
-     *
-     * @param view the current view where the keyboard is open
-     */
-    private void closeKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getActivity()
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        assert imm != null;
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    private void setupUI(View view, View root) {
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    closeKeyboard(root);
+                    return false;
+                }
+            });
+        }
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView, root);
+            }
+        }
+    }
+
+    private static void showSearchHistoryList() {
+        searchHistoryListLayout.setVisibility(View.VISIBLE);
+        searchEmptyBackground.setVisibility(View.GONE);
+    }
+
+    private void getData() {
+        class GetData extends AsyncTask<Void, Void, ArrayList<RecentSearches>> {
+
+            @Override
+            protected ArrayList<RecentSearches> doInBackground(Void... voids) {
+                return (ArrayList<RecentSearches>) db.recentSearchesDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<RecentSearches> recentSearches) {
+                SearchHistoryListAdapter searchHistoryListAdapter = new SearchHistoryListAdapter(
+                        recentSearches);
+                searchHistoryRecyclerView.setAdapter(searchHistoryListAdapter);
+                mySearchHistory = recentSearches;
+                if (!mySearchHistory.isEmpty()
+                        && searchResultListLayout.getVisibility() == View.GONE) {
+                    showSearchHistoryList();
+                }
+                super.onPostExecute(recentSearches);
+            }
+        }
+        GetData getData = new GetData();
+        getData.execute();
+    }
+
+    public static void removeSearchHistoryList() {
+        searchHistoryListLayout.setVisibility(View.GONE);
+        searchEmptyBackground.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -108,6 +153,18 @@ public class SearchFragment extends Fragment implements OnClickListener {
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         assert imm != null;
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    /**
+     * Hides Soft Keyboard
+     *
+     * @param view the current view where the keyboard is open
+     */
+    private void closeKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert imm != null;
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void setSearchMainBackgroundColor() {
@@ -157,6 +214,8 @@ public class SearchFragment extends Fragment implements OnClickListener {
 
         searchViewModel.getText().observe(getViewLifecycleOwner(), s -> {
         });
+
+        mySearchHistory = new ArrayList<>();
         return root;
     }
 
@@ -164,56 +223,28 @@ public class SearchFragment extends Fragment implements OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setupUI(view, view);
+        getData();
         searchQuery.requestFocus();
         openKeyboard();
 
         handleTextViewsActions();
 
-        LayoutManager layoutManager1 = new LinearLayoutManager(getContext());
         SearchListAdapter searchListAdapter = new SearchListAdapter(Mock.getMockSearchData(), this);
 
-        searchListRecyclerView.setLayoutManager(layoutManager1);
+        searchListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         searchListRecyclerView.setAdapter(searchListAdapter);
 
         searchHistoryListLayout = view.findViewById(R.id.search_history_list_container);
-        RecyclerView searchHistoryRecyclerView = view
-                .findViewById(R.id.search_history_list_recycler_view);
+        searchHistoryRecyclerView = view.findViewById(R.id.search_history_list_recycler_view);
         TextView clearRecentSearches = view.findViewById(R.id.clear_recent_searches_text_view);
 
-        mySearchHistory = new ArrayList<>();
-        mySearchHistory.add(new SearchListItem("Zeft", "Ay neela", ""));
-        mySearchHistory.add(new SearchListItem("Zeft", "Ay neela", ""));
-        mySearchHistory.add(new SearchListItem("Zeft", "Ay neela", ""));
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        searchHistoryRecyclerView.setLayoutManager(layoutManager);
+        searchHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         clearRecentSearches.setOnClickListener(v -> {
-            mySearchHistory.clear();
+            db.recentSearchesDao().nukeTable();
             removeSearchHistoryList();
         });
-
-        SearchHistoryListAdapter searchHistoryListAdapter = new SearchHistoryListAdapter(
-                mySearchHistory);
-        /*LocalDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
-                LocalDatabase.class, "database-name").build();
-        AsyncTask asyncTask = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                searchHistoryListAdapter[0] = new SearchHistoryListAdapter(
-                        (ArrayList<RecentSearches>)db.recentSearchesDao().getAll());
-                return null;
-            }
-        };*/
-
-        searchHistoryRecyclerView.setAdapter(searchHistoryListAdapter);
-
-        if (!mySearchHistory.isEmpty()) {
-            searchHistoryListLayout.setVisibility(View.VISIBLE);
-            searchEmptyBackground.setVisibility(View.GONE);
-        } else {
-            removeSearchHistoryList();
-        }
 
         backArrow.setOnClickListener(v -> {
             closeKeyboard(view);
@@ -226,13 +257,6 @@ public class SearchFragment extends Fragment implements OnClickListener {
             searchQuery.requestFocus();
             openKeyboard();
         }));
-
-        if (VERSION.SDK_INT >= VERSION_CODES.M) {
-            searchResultListLayout.setOnScrollChangeListener(
-                    (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                        closeKeyboard(view);
-                    });
-        }
 
         resetSearch.setOnClickListener(v -> searchQuery.setText(""));
 
@@ -252,20 +276,44 @@ public class SearchFragment extends Fragment implements OnClickListener {
                     }
                 });
 
-        searchQuery.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        searchQuery.addTextChangedListener(this);
+    }
 
-            }
+    /**
+     * OnClick Method for searching by a certain type: artists, playlists, ...etc.
+     */
+    @Override
+    public void onClick(View v) {
+        SearchByTypeFragment fragment = new SearchByTypeFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(SearchByTypeConstantsHelper.SEARCH_TYPE_KEY, v.getTransitionName());
+        arguments.putString(SearchByTypeConstantsHelper.SEARCH_QUERY_KEY,
+                searchQuery.getText().toString());
+        fragment.setArguments(arguments);
+        getParentFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right)
+                .replace(R.id.nav_host_fragment, fragment)
+                .addToBackStack("search")
+                .commit();
+    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
-                    searchResultListLayout.setVisibility(View.VISIBLE);
-                    searchEmptyBackground.setVisibility(View.GONE);
-                    searchHistoryListLayout.setVisibility(View.GONE);
-                    resetSearch.setVisibility(View.VISIBLE);
-                    cameraInEditText.setVisibility(View.GONE);
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        if (s.length() > 0) {
+            searchResultListLayout.setVisibility(View.VISIBLE);
+            searchEmptyBackground.setVisibility(View.GONE);
+            searchHistoryListLayout.setVisibility(View.GONE);
+            resetSearch.setVisibility(View.VISIBLE);
+            cameraInEditText.setVisibility(View.GONE);
 
                     /*TODO:Remove Comments when backend is finished
 
@@ -290,48 +338,21 @@ public class SearchFragment extends Fragment implements OnClickListener {
                     setSearchMainBackgroundColor(colorOfFirstSearchResultImage);
                     */
 
-                } else {
-                    searchResultListLayout.setVisibility(View.GONE);
-                    if (!mySearchHistory.isEmpty()) {
-                        searchEmptyBackground.setVisibility(View.GONE);
-                        searchHistoryListLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        searchEmptyBackground.setVisibility(View.VISIBLE);
-                        searchHistoryListLayout.setVisibility(View.GONE);
-                    }
-                    resetSearch.setVisibility(View.GONE);
-                    cameraInEditText.setVisibility(View.VISIBLE);
-                }
+        } else {
+            searchResultListLayout.setVisibility(View.GONE);
+            if (!mySearchHistory.isEmpty()) {
+                showSearchHistoryList();
+            } else {
+                removeSearchHistoryList();
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-
-    public static void removeSearchHistoryList() {
-        searchHistoryListLayout.setVisibility(View.GONE);
-        searchEmptyBackground.setVisibility(View.VISIBLE);
+            resetSearch.setVisibility(View.GONE);
+            cameraInEditText.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
-    public void onClick(View v) {
-        SearchByTypeFragment fragment = new SearchByTypeFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(SearchByTypeConstantsHelper.SEARCH_TYPE_KEY, v.getTransitionName());
-        arguments.putString(SearchByTypeConstantsHelper.SEARCH_QUERY_KEY,
-                searchQuery.getText().toString());
-        fragment.setArguments(arguments);
-        getParentFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right,
-                        R.anim.slide_out_left,
-                        R.anim.slide_in_left,
-                        R.anim.slide_out_right)
-                .replace(R.id.nav_host_fragment, fragment)
-                .addToBackStack("search")
-                .commit();
+    public void afterTextChanged(Editable s) {
+
     }
+
 }

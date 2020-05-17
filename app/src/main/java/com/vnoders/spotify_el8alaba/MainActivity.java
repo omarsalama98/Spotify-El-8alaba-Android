@@ -7,9 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Room;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener;
-import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import com.vnoders.spotify_el8alaba.repositories.LocalDB.LocalDatabase;
 import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryFragment;
 import com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static int prevFragment = R.id.navigation_home;
     private BottomNavigationView navView;
-
+    public static LocalDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         navView = findViewById(R.id.nav_view);
+
+        db = Room.databaseBuilder(getApplicationContext(),
+                LocalDatabase.class, "database-name").allowMainThreadQueries()
+                .fallbackToDestructiveMigration().build();
 
         navView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
             @Override
@@ -95,9 +100,7 @@ public class MainActivity extends AppCompatActivity {
         if (id != selectedItemId) {
             fragmentTransaction.addToBackStack(null);
         }
-
         fragmentTransaction.commit();
-
     }
 
 }

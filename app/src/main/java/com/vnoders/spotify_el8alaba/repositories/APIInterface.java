@@ -43,7 +43,7 @@ public interface APIInterface {
 
 
     @GET("search?")
-    Call<List<Artist>> getAllOfSearch(
+    Call<List<Object>> getAllOfSearch(
             @Query("q") String searchQuery,
             @Query("type") String searchType
     );
@@ -83,5 +83,6 @@ public interface APIInterface {
      */
     @GET("browse/categories/{category_id}/playlists")
     Call<List<HomePlaylist>> getCategoryPlaylists(@Path("category_id") String categoryId);
+
 
 }

@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
-import android.os.Bundle;
+import static com.vnoders.spotify_el8alaba.MainActivity.db;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,11 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
+import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
+import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
@@ -72,33 +74,18 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             image = v.findViewById(R.id.search_item_image_view);
 
             v.setOnClickListener(v1 -> {
-                /*LocalDatabase db = Room.databaseBuilder(fragment.getActivity().getApplicationContext(),
-                        LocalDatabase.class, "database-name").build();
                 RecentSearches recentSearches = new RecentSearches();
                 recentSearches.itemName = mDataset.get(getAdapterPosition()).getName();
                 recentSearches.itemInfo = mDataset.get(getAdapterPosition()).getInfo();
                 recentSearches.itemImageUrl = mDataset.get(getAdapterPosition()).getImageURL();
-                AsyncTask asyncTask = new AsyncTask() {
-                    @Override
-                    protected Object doInBackground(Object[] objects) {
-                        if(!db.recentSearchesDao().getAll().contains(recentSearches)){
-                            db.recentSearchesDao().insertAll(recentSearches);
-                            Toast.makeText(fragment.getContext(),"Inserted",Toast.LENGTH_LONG).show();
-                        }else{
-                            Toast.makeText(fragment.getContext(),"Not Inserted",Toast.LENGTH_LONG).show();
-                        }
+                if (!SearchFragment.mySearchHistory.contains(recentSearches)) {
+                    db.recentSearchesDao().insertAll(recentSearches);
+                }
 
-                        return null;
-                    }
-                };*/
-                Bundle arguments = new Bundle();
-                arguments.putString
-                        (SearchByTypeConstantsHelper.PLAYLIST_ID_KEY,
-                                mDataset.get(getAdapterPosition()).getName());
                 //TODO: Replace the Name Key with an ID one and pass the selected item id
                 //TODO: The fragment to go to depends on the selected item type
-                Fragment targetFragment = new PlaylistTracksFragment();
-                targetFragment.setArguments(arguments);
+                Fragment targetFragment = PlaylistHomeFragment
+                        .newInstance(mDataset.get(getAdapterPosition()).getName());
                 fragment.getParentFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
@@ -109,4 +96,5 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             });
         }
     }
+
 }

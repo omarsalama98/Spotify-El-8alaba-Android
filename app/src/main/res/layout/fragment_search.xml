@@ -101,42 +101,46 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
             android:id = "@+id/search_history_list_container"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
             android:layout_below = "@id/search_bar_frame_layout"
             android:layout_marginTop = "10dp"
             android:visibility = "gone"
-            android:orientation = "vertical">
-
-        <TextView
+            android:overScrollMode = "never">
+        <LinearLayout
                 android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "@string/recent_searches"
-                android:textStyle = "bold"
-                android:textSize = "20sp"
-                android:paddingHorizontal = "10dp"
-                android:paddingVertical = "20dp"
-                android:textColor = "@color/white" />
-        <androidx.recyclerview.widget.RecyclerView
-                android:id = "@+id/search_history_list_recycler_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:overScrollMode = "never" />
+                android:layout_height = "match_parent"
+                android:orientation = "vertical">
+            <TextView
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/recent_searches"
+                    android:textStyle = "bold"
+                    android:textSize = "20sp"
+                    android:paddingHorizontal = "10dp"
+                    android:paddingVertical = "20dp"
+                    android:textColor = "@color/white" />
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id = "@+id/search_history_list_recycler_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:nestedScrollingEnabled = "false"
+                    android:overScrollMode = "never" />
 
-        <TextView
-                android:id = "@+id/clear_recent_searches_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "@string/clear_recent_searches"
-                android:textStyle = "bold"
-                android:textSize = "17sp"
-                android:paddingHorizontal = "10dp"
-                android:paddingVertical = "20dp"
-                android:textColor = "@color/whitish_gray" />
-    </LinearLayout>
-
+            <TextView
+                    android:id = "@+id/clear_recent_searches_text_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/clear_recent_searches"
+                    android:textStyle = "bold"
+                    android:textSize = "17sp"
+                    android:paddingHorizontal = "10dp"
+                    android:paddingVertical = "20dp"
+                    android:textColor = "@color/whitish_gray" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
     <ScrollView
             android:id = "@+id/search_result_list_layout"
             android:visibility = "gone"
@@ -146,76 +150,76 @@
             android:overScrollMode = "never"
             android:fillViewport = "true">
 
-    <LinearLayout
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:layout_margin = "10dp"
-            android:paddingBottom = "10dp"
-            android:orientation = "vertical">
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_margin = "10dp"
+                android:paddingBottom = "10dp"
+                android:orientation = "vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id = "@+id/search_list_recycler_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:nestedScrollingEnabled = "false" />
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id = "@+id/search_list_recycler_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:nestedScrollingEnabled = "false" />
 
-        <TextView
-                android:id = "@+id/see_all_artists_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "@string/see_all_artists"
-                android:textStyle = "bold"
-                android:textColor = "@color/white"
-                android:layout_marginVertical = "10dp"
-                android:textSize = "@dimen/search_list_item_title" />
+            <TextView
+                    android:id = "@+id/see_all_artists_text_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/see_all_artists"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    android:layout_marginVertical = "10dp"
+                    android:textSize = "@dimen/search_list_item_title" />
 
-        <TextView
-                android:id = "@+id/see_all_songs_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "@string/see_all_songs"
-                android:textStyle = "bold"
-                android:textColor = "@color/white"
-                android:layout_marginVertical = "10dp"
-                android:textSize = "@dimen/search_list_item_title" />
-        <TextView
-                android:id = "@+id/see_all_playlists_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "@string/see_all_playlists"
-                android:textStyle = "bold"
-                android:textColor = "@color/white"
-                android:layout_marginVertical = "10dp"
-                android:textSize = "@dimen/search_list_item_title" />
-        <TextView
-                android:id = "@+id/see_all_albums_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "@string/see_all_albums"
-                android:textStyle = "bold"
-                android:textColor = "@color/white"
-                android:layout_marginVertical = "10dp"
-                android:textSize = "@dimen/search_list_item_title" />
-        <TextView
-                android:id = "@+id/see_all_genres_and_moods_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "@string/search_all_genres_and_moods"
-                android:textStyle = "bold"
-                android:textColor = "@color/white"
-                android:layout_marginVertical = "10dp"
-                android:textSize = "@dimen/search_list_item_title" />
-        <TextView
-                android:id = "@+id/see_all_profiles_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "@string/see_all_profiles"
-                android:textStyle = "bold"
-                android:textColor = "@color/white"
-                android:layout_marginVertical = "10dp"
-                android:textSize = "@dimen/search_list_item_title" />
+            <TextView
+                    android:id = "@+id/see_all_songs_text_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/see_all_songs"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    android:layout_marginVertical = "10dp"
+                    android:textSize = "@dimen/search_list_item_title" />
+            <TextView
+                    android:id = "@+id/see_all_playlists_text_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/see_all_playlists"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    android:layout_marginVertical = "10dp"
+                    android:textSize = "@dimen/search_list_item_title" />
+            <TextView
+                    android:id = "@+id/see_all_albums_text_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/see_all_albums"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    android:layout_marginVertical = "10dp"
+                    android:textSize = "@dimen/search_list_item_title" />
+            <TextView
+                    android:id = "@+id/see_all_genres_and_moods_text_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/search_all_genres_and_moods"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    android:layout_marginVertical = "10dp"
+                    android:textSize = "@dimen/search_list_item_title" />
+            <TextView
+                    android:id = "@+id/see_all_profiles_text_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/see_all_profiles"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    android:layout_marginVertical = "10dp"
+                    android:textSize = "@dimen/search_list_item_title" />
 
-    </LinearLayout>
+        </LinearLayout>
 
     </ScrollView>
 
