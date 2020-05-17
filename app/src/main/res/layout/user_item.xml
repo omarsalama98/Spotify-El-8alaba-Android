@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:id="@+id/layout_follow"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:background = "@color/backgroundColor"
+        android:layout_margin="8dp"
+        >
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/follow_image"
+            android:layout_width = "50dp"
+            android:layout_height = "50dp"
+            android:src="@drawable/unnamed"
+            android:layout_centerVertical= "true"
+            />
+    <LinearLayout
+            android:layout_alignEnd="@+id/follow_button"
+            android:layout_toEndOf="@id/follow_image"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:id="@+id/follow_details"
+            android:orientation="vertical"
+            android:layout_height = "wrap_content"
+            android:layout_width="match_parent"
+        >
+    <TextView
+            android:id="@+id/follow_name"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="follow name"
+            app:layout_constraintLeft_toRightOf="@+id/follow_image"
+            />
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:orientation="horizontal"
+                >
+            <TextView
+                    android:id="@+id/follow_number"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:text="0"
+                    android:layout_marginEnd="5dp"
+                    />
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:text="@string/followers"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/follow_button"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical = "true"
+            android:layout_width = "25dp"
+            android:layout_height = "25dp"
+            android:background="@android:color/transparent"
+            android:src = "@drawable/ic_person_add_black_24dp"
+            app:civ_border_color="#D4D4D4"
+            app:civ_border_width="2dp"
+            />
+</RelativeLayout>

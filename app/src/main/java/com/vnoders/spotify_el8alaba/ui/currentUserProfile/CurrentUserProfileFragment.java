@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -38,6 +39,7 @@ public class CurrentUserProfileFragment extends Fragment {
     private ImageView bottomSheetButton;
     private Button editProfileButton;
     private Bundle bundle;
+    private LinearLayout followersLayout;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     // TODO: Rename parameter arguments, choose names that match
@@ -91,6 +93,7 @@ public class CurrentUserProfileFragment extends Fragment {
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_current_user_profile, container, false);
+        followersLayout=root.findViewById(R.id.followers_layout);
         userNameToolbar=root.findViewById(R.id.user_name_toobar);
         userName=root.findViewById(R.id.user_name);
         backArrowImage = root.findViewById(R.id.back_button);
@@ -117,6 +120,15 @@ public class CurrentUserProfileFragment extends Fragment {
                 userNameToolbar.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
 
 
+            }
+        });
+        followersLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Followers followers=new Followers();
+                fragmentManager=getActivity().getSupportFragmentManager();
+                fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment,followers,"FOLLOWERS").addToBackStack(null).commit();
             }
         });
         editProfileButton.setOnClickListener(new OnClickListener() {

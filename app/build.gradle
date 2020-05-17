@@ -67,7 +67,7 @@ android {
             debuggable true
             testCoverageEnabled true
         }
-        debug{
+        debug {
             def API_BASE_URL_DEBUG = "\"http://${InetAddress.localHost.hostAddress}:8000/api/v1/\""
             buildConfigField "String", "BASE_URL", API_BASE_URL_DEBUG
             applicationIdSuffix ".debug"

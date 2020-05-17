@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+
+        android:background="@color/backgroundColor"
+        tools:context = ".ui.currentUserProfile.Followers">
+    <ImageButton
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="8dp"
+            android:id = "@+id/back_button"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:src = "@drawable/ic_left_arrow"
+            android:background = "@android:color/transparent" />
+
+    <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_gravity = "center_horizontal"
+            android:text = "@string/followers"
+            android:textColor = "@color/white"
+            android:textSize = "18sp"
+            android:textStyle = "bold"
+            android:layout_centerHorizontal="true"
+            />
+    <ScrollView
+
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="50dp"
+
+            android:id="@+id/followers_recycle_view"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            tools:listitem = "@layout/user_item"
+            android:background = "@color/backgroundColor"
+
+            />
+    </ScrollView>
+
+
+
+</RelativeLayout>

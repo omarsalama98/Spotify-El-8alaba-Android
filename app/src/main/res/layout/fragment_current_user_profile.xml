@@ -156,6 +156,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                        android:id="@+id/followers_layout"
                         android:orientation = "vertical"
                         android:layout_width = "0dp"
                         android:layout_weight = "1"
