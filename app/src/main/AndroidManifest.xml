@@ -88,6 +88,13 @@
                 android:resource="@xml/file_path">
         </meta-data>
 </provider>
+        <service
+                android:name="com.google.firebase.messaging.FirebaseMessagingService"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <service android:name=".MediaPlaybackService" />
 
     </application>

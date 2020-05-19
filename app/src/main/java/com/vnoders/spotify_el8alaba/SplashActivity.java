@@ -1,5 +1,12 @@
 package com.vnoders.spotify_el8alaba;
 import android.content.SharedPreferences;
+import android.util.Log;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,5 +47,20 @@ public class SplashActivity extends AppCompatActivity {
         Handler handler = new Handler();
         int SPLASH_TIME_OUT = 1500;
         handler.postDelayed(runnable, SPLASH_TIME_OUT);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("FAIL", "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        // Log and toast
+                        Log.d("TOKEN", token);
+                        //Toast.makeText(SplashActivity.this,token, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
