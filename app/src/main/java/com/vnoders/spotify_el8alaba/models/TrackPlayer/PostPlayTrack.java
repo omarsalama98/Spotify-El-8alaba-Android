@@ -1,5 +1,9 @@
 package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
+/**
+ * @author Ali Adel
+ * To send the data about the track to play to backend API
+ */
 public class PostPlayTrack {
 
     private String trackId;

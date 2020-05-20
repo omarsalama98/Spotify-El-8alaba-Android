@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer;
 
 import com.vnoders.spotify_el8alaba.OverflowFragment;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
@@ -23,8 +22,8 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 public class TrackTopFragment extends Fragment {
 
     // holds author name text view
-    private TextView typeNameText;
-    private TextView playingFromTextView;
+    private TextView mTypeNameText;
+    private TextView mPlayingFromTextView;
 
     /**
      * inflate layout and return it to system to display
@@ -38,9 +37,9 @@ public class TrackTopFragment extends Fragment {
         rootView.findViewById(R.id.top_overflow_menu).setOnClickListener(v -> startOverflowMenu());
 
         // setting the text
-        playingFromTextView = rootView.findViewById(R.id.playing_from_text);
+        mPlayingFromTextView = rootView.findViewById(R.id.playing_from_text);
 
-        typeNameText = rootView.findViewById(R.id.author_name_text_top);
+        mTypeNameText = rootView.findViewById(R.id.author_name_text_top);
 
         // setting the top button to behave like the back button
         Button button = rootView.findViewById(R.id.top_back_button);
@@ -75,21 +74,21 @@ public class TrackTopFragment extends Fragment {
         String name = track.getTypeName();
 
         if (name == null || name.equals("") || name.equals(" ")) {
-            typeNameText.setVisibility(View.GONE);
-            playingFromTextView.setVisibility(View.GONE);
+            mTypeNameText.setVisibility(View.GONE);
+            mPlayingFromTextView.setVisibility(View.GONE);
         } else {
-            typeNameText.setVisibility(View.VISIBLE);
-            playingFromTextView.setVisibility(View.VISIBLE);
-            typeNameText.setText(name);
+            mTypeNameText.setVisibility(View.VISIBLE);
+            mPlayingFromTextView.setVisibility(View.VISIBLE);
+            mTypeNameText.setText(name);
 
             String type = track.getType();
 
             if (type.equals(Track.TYPE_ALBUM)) {
-                playingFromTextView.setText(getString(R.string.playing_from_album));
+                mPlayingFromTextView.setText(getString(R.string.playing_from_album));
             } else if (type.equals(Track.TYPE_PLAYLIST)) {
-                playingFromTextView.setText(getString(R.string.playing_from_playlist));
+                mPlayingFromTextView.setText(getString(R.string.playing_from_playlist));
             } else {
-                playingFromTextView.setText(getString(R.string.playing_from_artist));
+                mPlayingFromTextView.setText(getString(R.string.playing_from_artist));
             }
         }
     }

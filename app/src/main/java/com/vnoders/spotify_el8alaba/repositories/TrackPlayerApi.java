@@ -18,6 +18,10 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/**
+ * @author Ali Adel
+ * API representation to hit end-points of backend for use by track player module
+ */
 public interface TrackPlayerApi {
 
     @GET("me/player")

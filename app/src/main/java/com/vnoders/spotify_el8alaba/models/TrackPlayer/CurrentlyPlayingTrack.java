@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ali Adel
+ * To turn the JSON to POJO from backend API
+ */
 public class CurrentlyPlayingTrack {
 
     @SerializedName("id")

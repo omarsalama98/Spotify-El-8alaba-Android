@@ -2,9 +2,12 @@ package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Ali Adel
+ * Class to turn the JSON from the get track endpoint of backend to POJO
+ */
 public class GetTrack {
 
 

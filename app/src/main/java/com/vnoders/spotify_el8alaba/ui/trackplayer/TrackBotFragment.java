@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 
@@ -30,11 +30,11 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 public class TrackBotFragment extends Fragment {
 
     // holds the name of song text view
-    private TextView songNameTextView;
+    private TextView mSongNameTextView;
     // holds the author name text view
-    private TextView authorNameText;
+    private TextView mAuthorNameText;
     // holds play_pause button
-    private Button playPauseButton;
+    private Button mPlayPauseButton;
     // holds seek bar
     private SeekBar mSeekbar;
     // tracks progress text
@@ -49,7 +49,7 @@ public class TrackBotFragment extends Fragment {
     private Button mPrevButton;
 
     // if player is currently playing anything
-    private boolean isPlaying = false;
+    private boolean mIsPlaying = false;
     // to know if user is currently seeking
     private boolean mIsSeeking = false;
 
@@ -63,9 +63,9 @@ public class TrackBotFragment extends Fragment {
 
 
         // setting the texts displayed
-        songNameTextView = rootView.findViewById(R.id.song_name_text);
+        mSongNameTextView = rootView.findViewById(R.id.song_name_text);
 
-        authorNameText = rootView.findViewById(R.id.author_name_text_bot);
+        mAuthorNameText = rootView.findViewById(R.id.author_name_text_bot);
 
         // get seek bar and textViews of progress and duration and setting progress to 00:00
         mSeekbar = rootView.findViewById(R.id.seek_bar);
@@ -75,8 +75,8 @@ public class TrackBotFragment extends Fragment {
         mTrackDuration = rootView.findViewById(R.id.trackDuration);
 
         // set play_pause button
-        playPauseButton = rootView.findViewById(R.id.play_pause_button);
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
+        mPlayPauseButton = rootView.findViewById(R.id.play_pause_button);
+        mPlayPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pausePlayPressed();
@@ -151,17 +151,20 @@ public class TrackBotFragment extends Fragment {
         }
 
         // set the name of song and name of author and setting the button to display correctly
-        songNameTextView.setText(track.getName());
-        authorNameText.setText(track.getArtistName());
-        isPlaying = track.getIsPlaying();
-        if (isPlaying) {
-            playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
+        mSongNameTextView.setText(track.getName());
+        if (TextUtils.isEmpty(track.getArtistName()))
+            mAuthorNameText.setText(" ");
+        else
+            mAuthorNameText.setText(track.getArtistName());
+        mIsPlaying = track.getIsPlaying();
+        if (mIsPlaying) {
+            mPlayPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
         } else {
-            playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_filled_white_82dp));
+            mPlayPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_filled_white_82dp));
         }
 
         // get the duration and setting the text view corresponding to it
-        int songTime = (int)track.getDuration();
+        int songTime = track.getDuration();
 
         String durationText = "";
         int minutes = songTime / 1000 / 60;
@@ -218,7 +221,7 @@ public class TrackBotFragment extends Fragment {
      * tell service to pause/skip according to state
      */
     private void pausePlayPressed() {
-        if (isPlaying) {
+        if (mIsPlaying) {
             ((TrackPlayerActivity) getActivity()).getService().pause();
         } else {
             ((TrackPlayerActivity) getActivity()).getService().start();

@@ -1,12 +1,8 @@
 package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,10 +19,8 @@ import androidx.lifecycle.Observer;
 
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.MainActivity;
-import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
@@ -36,15 +30,15 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 public class BottomPlayerFragment extends Fragment {
 
     // text view that scrolls at bottom with name of song and author
-    private TextView songInfoView;
+    private TextView mSongInfoView;
     // image that appears at left of player
-    private ImageView songImage;
+    private ImageView mSongImage;
 
     // holds button
-    private ImageView playPauseButton;
+    private ImageView mPlayPauseButton;
 
     // current state of playing
-    private boolean isPlaying = false;
+    private boolean mIsPlaying = false;
     // current track being played
     private Track mCurrentTrack;
 
@@ -60,13 +54,13 @@ public class BottomPlayerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_bottom_player, container, false);
 
         // setting the texts displayed
-        songInfoView = rootView.findViewById(R.id.song_information);
+        mSongInfoView = rootView.findViewById(R.id.song_information);
         // important line for scrolling
-        songInfoView.setSelected(true);
+        mSongInfoView.setSelected(true);
         //-----------------------------
 
         // finding refernce for image view
-        songImage = rootView.findViewById(R.id.bottom_player_image);
+        mSongImage = rootView.findViewById(R.id.bottom_player_image);
 
         // getting reference to seek bar and stop it from moving when user clicks on it
         mSeekbar = getActivity().findViewById(R.id.seek_bar_bottom_player);
@@ -78,8 +72,8 @@ public class BottomPlayerFragment extends Fragment {
         });
 
         // getting button and calling action function
-        playPauseButton = rootView.findViewById(R.id.bottom_player_play_pause_button);
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
+        mPlayPauseButton = rootView.findViewById(R.id.bottom_player_play_pause_button);
+        mPlayPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 playPausePressed();
@@ -154,30 +148,30 @@ public class BottomPlayerFragment extends Fragment {
 
         // loads the image and puts it
         if (TextUtils.isEmpty(track.getImage())) {
-            songImage.setImageResource(R.drawable.track_image_default);
+            mSongImage.setImageResource(R.drawable.track_image_default);
         } else {
-            Picasso.get().load(track.getImage()).into(songImage);
+            Picasso.get().load(track.getImage()).into(mSongImage);
         }
 
         // concatenating the song info in 1 string
         if (track.getArtistName() == null || track.getArtistName().equals("") || track.getArtistName().equals(" ")) {
             String songInfo = track.getName();
             // if it equals the text already displayed then don't display it
-            if (!TextUtils.equals(songInfo, songInfoView.getText()))
-                songInfoView.setText(songInfo);
+            if (!TextUtils.equals(songInfo, mSongInfoView.getText()))
+                mSongInfoView.setText(songInfo);
         } else {
             String songInfo = track.getName() + " • " + track.getArtistName();
             // if it equals the text already displayed then don't display it
-            if (!TextUtils.equals(songInfo, songInfoView.getText()))
-                songInfoView.setText(songInfo);
+            if (!TextUtils.equals(songInfo, mSongInfoView.getText()))
+                mSongInfoView.setText(songInfo);
         }
 
         // puts correct icon in case of playing or paused
-        isPlaying = track.getIsPlaying();
-        if (isPlaying) {
-            playPauseButton.setImageResource(R.drawable.ic_pause_white_24dp);
+        mIsPlaying = track.getIsPlaying();
+        if (mIsPlaying) {
+            mPlayPauseButton.setImageResource(R.drawable.ic_pause_white_24dp);
         } else {
-            playPauseButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+            mPlayPauseButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
         }
     }
 
@@ -186,7 +180,7 @@ public class BottomPlayerFragment extends Fragment {
      * whether starts playing or pauses
      */
     private void playPausePressed() {
-        if (isPlaying) {
+        if (mIsPlaying) {
             ((MainActivity)getActivity()).getService().pause();
         } else {
             ((MainActivity)getActivity()).getService().start();

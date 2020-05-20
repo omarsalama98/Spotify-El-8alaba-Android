@@ -4,6 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * @author Ali Adel
+ * To turn the JSON to POJO from backend API
+ */
 public class GetAlbum {
 
     @SerializedName("name")
