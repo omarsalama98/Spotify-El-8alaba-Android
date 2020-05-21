@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecentlyPlayedListAdapter extends
         RecyclerView.Adapter<RecentlyPlayedListAdapter.MyViewHolder> {
@@ -43,13 +45,21 @@ public class RecentlyPlayedListAdapter extends
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
+        String imageUrl;
         holder.title.setText(backDataset.get(position).getName());
-        Picasso.get().load(backDataset.get(position).getImages().get(0).getUrl())
-                .into(holder.image);
-        /*TODO: Change The image circularity according to type of list item
-        if(!mDataset.get(position).getType().equals("Artist"))
+
+        List<TrackImage> images = backDataset.get(position).getImages();
+        if (!images.isEmpty()) {
+            imageUrl = images.get(0).getUrl();
+        } else {
+            imageUrl = "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba";
+        }
+
+        Picasso.get().load(imageUrl).into(holder.image);
+        //TODO: Change The image circularity according to type of list item
+        if (!backDataset.get(position).getType().equals("Artist"))
             holder.image.setDisableCircularTransformation(true);
-         */
+
 
     }
 

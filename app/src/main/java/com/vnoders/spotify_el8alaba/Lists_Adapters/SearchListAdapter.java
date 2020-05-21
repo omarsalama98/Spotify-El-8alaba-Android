@@ -10,22 +10,32 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Album;
+import com.vnoders.spotify_el8alaba.models.Artist;
+import com.vnoders.spotify_el8alaba.models.Image;
+import com.vnoders.spotify_el8alaba.models.Track;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
+import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
+import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
+import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
 
     //TODO: SearchListItem Class should be a parent to all types that appear in search
 
-    private static ArrayList<SearchListItem> mDataset;
+    private static ArrayList<Object> mDataset;
     private static Fragment fragment;
+    private static String itemInfo = "", itemName = "", itemImageUrl = "", itemId = "", type = "";
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchListAdapter(ArrayList<SearchListItem> myDataset, Fragment fragment) {
+    public SearchListAdapter(ArrayList<Object> myDataset, Fragment fragment) {
         mDataset = myDataset;
         SearchListAdapter.fragment = fragment;
     }
@@ -44,9 +54,82 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        holder.name.setText(mDataset.get(position).getName());
-        holder.info.setText(mDataset.get(position).getInfo());
-        Picasso.get().load(mDataset.get(position).getImageURL()).into(holder.image);
+        Object result = mDataset.get(position);
+        if (result instanceof Album) {
+            type = "Album";
+            itemId = ((Album) result).getId();
+            itemName = ((Album) result).getName();
+            holder.name.setText(itemName);
+            List<Artist> artists = ((Album) result).getArtists();
+            List<TrackImage> images = ((Album) result).getImages();
+            itemInfo = "Album";
+            if (!artists.isEmpty()) {
+                itemInfo += artists.get(0).getName();
+            }
+            holder.info.setText(itemInfo);
+            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+            if (!images.isEmpty()) {
+                itemImageUrl = images.get(0).getUrl();
+            }
+            Picasso.get().load(itemImageUrl).into(holder.image);
+        } else if (result instanceof Artist) {
+            type = "Artist";
+            itemId = ((Artist) result).getId();
+            itemName = ((Artist) result).getName();
+            holder.name.setText(itemName);
+            List<Image> images = ((Artist) result).getImages();
+            itemInfo = "Artist " + ((Artist) result).getName();
+            holder.info.setText(itemInfo);
+            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+            if (!images.isEmpty()) {
+                itemImageUrl = images.get(0).getUrl();
+            }
+            Picasso.get().load(itemImageUrl).into(holder.image);
+
+        }
+        /*  TODO: Add Users to search
+        if(result instanceof User){
+            type = "User";
+            holder.name.setText((() result).get());
+            List<Artist> artists = ((User) result).getArtists();
+            List<TrackImage> images = ((Album) result).getImages();
+            String albumInfo = "Album";
+            if(!artists.isEmpty())  albumInfo += artists.get(0).getName();
+            holder.info.setText(albumInfo);
+            String imageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+            if(!images.isEmpty()) imageUrl = images.get(0).getUrl();
+            Picasso.get().load(imageUrl).into(holder.image);
+        }*/
+        if (result instanceof Playlist) {
+            type = "Playlist";
+            itemId = ((Playlist) result).getId();
+            itemName = ((Playlist) result).getName();
+            holder.name.setText(itemName);
+            List<TrackImage> images = ((Playlist) result).getImages();
+            itemInfo = "Playlist";
+            holder.info.setText(itemInfo);
+            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+            if (!images.isEmpty()) {
+                itemImageUrl = images.get(0).getUrl();
+            }
+            Picasso.get().load(itemImageUrl).into(holder.image);
+        }
+        if (result instanceof Track) {
+            type = "Track";
+            itemId = ((Track) result).getId();
+            itemName = ((Track) result).getName();
+            holder.name.setText(itemName);
+            List<Artist> artists = ((Track) result).getArtists();
+            //TODO: Tracks should have images (Not added in backend)
+            itemInfo = "Track";
+            if (!artists.isEmpty()) {
+                itemInfo += artists.get(0).getName();
+            }
+            holder.info.setText(itemInfo);
+            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+            Picasso.get().load(itemImageUrl).into(holder.image);
+        }
+
 
     }
 
@@ -56,12 +139,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
         return mDataset.size();
     }
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        // each data item is just a string in this case
         public View v;
         public TextView name;
         TextView info;
@@ -75,17 +155,32 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
 
             v.setOnClickListener(v1 -> {
                 RecentSearches recentSearches = new RecentSearches();
-                recentSearches.itemName = mDataset.get(getAdapterPosition()).getName();
-                recentSearches.itemInfo = mDataset.get(getAdapterPosition()).getInfo();
-                recentSearches.itemImageUrl = mDataset.get(getAdapterPosition()).getImageURL();
+                recentSearches.itemName = itemName;
+                recentSearches.itemInfo = itemInfo;
+                recentSearches.itemImageUrl = itemImageUrl;
                 if (!SearchFragment.mySearchHistory.contains(recentSearches)) {
                     db.recentSearchesDao().insertAll(recentSearches);
                 }
 
                 //TODO: Replace the Name Key with an ID one and pass the selected item id
                 //TODO: The fragment to go to depends on the selected item type
-                Fragment targetFragment = PlaylistHomeFragment
-                        .newInstance(mDataset.get(getAdapterPosition()).getName());
+                Fragment targetFragment;
+                switch (type) {
+                    case "Album":
+                        targetFragment = new AlbumFragment();
+                        break;
+                    case "Artist":
+                        targetFragment = new ArtistFragment();
+                        break;
+                    case "Playlist":
+                        targetFragment = PlaylistHomeFragment
+                                .newInstance(itemId);
+                        break;
+                    default:
+                        targetFragment = new PlaylistTracksFragment();
+                        break;
+                }
+
                 fragment.getParentFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,

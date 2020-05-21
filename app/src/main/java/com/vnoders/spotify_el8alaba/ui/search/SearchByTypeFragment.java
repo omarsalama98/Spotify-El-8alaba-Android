@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
-import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchByTypeFragment extends Fragment {
 
@@ -26,6 +33,8 @@ public class SearchByTypeFragment extends Fragment {
     private String searchType;
     private TextView searchByTypeTitleTextView;
     private APIInterface apiService;
+    private ArrayList<Object> searchResults;
+    private SearchListAdapter mSearchListAdapter;
 
     public SearchByTypeFragment() {
         // Required empty public constructor
@@ -47,6 +56,13 @@ public class SearchByTypeFragment extends Fragment {
         toolbar = root.findViewById(R.id.search_by_type_fragment_toolbar);
         searchByTypeResultsRecyclerView = root
                 .findViewById(R.id.search_by_type_results_recycler_view);
+        searchResults = new ArrayList<>();
+        mSearchListAdapter = new SearchListAdapter(searchResults, this);
+
+        searchByTypeResultsRecyclerView
+                .setAdapter(mSearchListAdapter);
+        searchByTypeResultsRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
         return root;
     }
@@ -58,29 +74,75 @@ public class SearchByTypeFragment extends Fragment {
         String titleText = "\"" + searchQuery + "\"" + " in " + searchType;
         searchByTypeTitleTextView.setText(titleText);
 
-        /*TODO:Remove Comments when backend is functional and Decide Which Service to call from SearchType
-        final ArrayList[] playlists = new ArrayList[]{new ArrayList<Playlist>()};
+        Call<List<Object>> call;
 
-        Call<List<Playlist>> call = apiService.getPLaylistsofSearch(searchQuery);
-        call.enqueue(new Callback<List<Playlist>>() {
-            @Override
-            public void onResponse(Call<List<Playlist>> call,
-                    Response<List<Playlist>> response) {
-                Log.d(TAG, response.body().get(0).getName());
-                playlists[0] = (ArrayList<Playlist>) response.body();
-            }
+        switch (searchType) {
+            case SearchByTypeConstantsHelper.ALBUMS:
+                call = apiService.getAlbumsOfSearch(searchQuery);
+                call.enqueue(new Callback<List<Object>>() {
+                    @Override
+                    public void onResponse(Call<List<Object>> call,
+                            Response<List<Object>> response) {
+                        searchResults.addAll(response.body());
+                        mSearchListAdapter.notifyDataSetChanged();
+                    }
 
-            @Override
-            public void onFailure(Call<List<Playlist>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve playlists");
-            }
-        });
-        */
+                    @Override
+                    public void onFailure(Call<List<Object>> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists");
+                    }
+                });
+                break;
+            case SearchByTypeConstantsHelper.SONGS:
+                call = apiService.getTracksOfSearch(searchQuery);
+                call.enqueue(new Callback<List<Object>>() {
+                    @Override
+                    public void onResponse(Call<List<Object>> call,
+                            Response<List<Object>> response) {
+                        searchResults.addAll(response.body());
+                        mSearchListAdapter.notifyDataSetChanged();
+                    }
 
-        searchByTypeResultsRecyclerView
-                .setAdapter(new SearchListAdapter(Mock.getMockSearchData(), this));
-        searchByTypeResultsRecyclerView.setLayoutManager(
-                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                    @Override
+                    public void onFailure(Call<List<Object>> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists");
+                    }
+                });
+                break;
+            case SearchByTypeConstantsHelper.ARTISTS:
+                call = apiService.getArtistsOfSearch(searchQuery);
+                call.enqueue(new Callback<List<Object>>() {
+                    @Override
+                    public void onResponse(Call<List<Object>> call,
+                            Response<List<Object>> response) {
+                        searchResults.addAll(response.body());
+                        mSearchListAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Object>> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists");
+                    }
+                });
+                break;
+            case SearchByTypeConstantsHelper.PLAYLISTS:
+                call = apiService.getPlaylistsOfSearch(searchQuery);
+                call.enqueue(new Callback<List<Object>>() {
+                    @Override
+                    public void onResponse(Call<List<Object>> call,
+                            Response<List<Object>> response) {
+                        searchResults.addAll(response.body());
+                        mSearchListAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Object>> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists");
+                    }
+                });
+                break;
+        }
+
 
     }
 }

@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment {
         });
 
         Call<List<HomePlaylist>> call2 = apiService
-                .getCategoryPlaylists("5e8f3a325c504a25a711ce25");
+                .getCategoryPlaylists("5ec455f01bf12b31fcfc18c2");
 
         recentlyPlayedRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));

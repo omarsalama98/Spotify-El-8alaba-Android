@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.vnoders.spotify_el8alaba.MainActivity.db;
 
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,13 +33,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
-import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
+import java.util.List;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SearchFragment extends Fragment implements OnClickListener, TextWatcher {
@@ -62,6 +67,8 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
             searchAllSongsTextView,
             searchAllPlaylistsTextView, searchAllAlbumsTextView,
             searchAllGenresAndMoodsTextView, searchAllProfilesTextView;
+    private ArrayList<Object> searchResults;
+    private SearchListAdapter searchListAdapter;
 
     @Override
     public void onPause() {
@@ -219,6 +226,45 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         return root;
     }
 
+    private ArrayList<Object> getTwosOfEach(List<List<Object>> searchListResults) {
+        ArrayList<Object> mSearchResult = new ArrayList<>();
+        for (int i = 0; i < searchListResults.size(); i++) {
+            int mSize = Math.min(searchListResults.get(i).size(), 2);
+            for (int j = 0; j < mSize; j++) {
+                mSearchResult.add(searchListResults.get(i).get(j));
+                Log.d("L", "lol");
+            }
+        }
+        return mSearchResult;
+    }
+
+    /**
+     * OnClick Method for searching by a certain type: artists, playlists, ...etc.
+     */
+    @Override
+    public void onClick(View v) {
+        SearchByTypeFragment fragment = new SearchByTypeFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(SearchByTypeConstantsHelper.SEARCH_TYPE_KEY, v.getTransitionName());
+        arguments.putString(SearchByTypeConstantsHelper.SEARCH_QUERY_KEY,
+                searchQuery.getText().toString());
+        fragment.setArguments(arguments);
+        getParentFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right)
+                .replace(R.id.nav_host_fragment, fragment)
+                .addToBackStack("search")
+                .commit();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -230,7 +276,8 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
 
         handleTextViewsActions();
 
-        SearchListAdapter searchListAdapter = new SearchListAdapter(Mock.getMockSearchData(), this);
+        searchResults = new ArrayList<>();
+        searchListAdapter = new SearchListAdapter(searchResults, this);
 
         searchListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         searchListRecyclerView.setAdapter(searchListAdapter);
@@ -279,30 +326,8 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         searchQuery.addTextChangedListener(this);
     }
 
-    /**
-     * OnClick Method for searching by a certain type: artists, playlists, ...etc.
-     */
     @Override
-    public void onClick(View v) {
-        SearchByTypeFragment fragment = new SearchByTypeFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(SearchByTypeConstantsHelper.SEARCH_TYPE_KEY, v.getTransitionName());
-        arguments.putString(SearchByTypeConstantsHelper.SEARCH_QUERY_KEY,
-                searchQuery.getText().toString());
-        fragment.setArguments(arguments);
-        getParentFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right,
-                        R.anim.slide_out_left,
-                        R.anim.slide_in_left,
-                        R.anim.slide_out_right)
-                .replace(R.id.nav_host_fragment, fragment)
-                .addToBackStack("search")
-                .commit();
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    public void afterTextChanged(Editable s) {
 
     }
 
@@ -318,25 +343,24 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
                     /*TODO:Remove Comments when backend is finished
 
                     *******  This populates the list every time the user types a letter inside search bar  *******
-
-                    final ArrayList[] playlists = new ArrayList[]{new ArrayList<Playlist>()};
-
-                    Call<List<Playlist>> call = apiService.getPLaylistsofSearch(s.toString());
-                    call.enqueue(new Callback<List<Playlist>>() {
+                     */
+            Call<List<List<Object>>> call = apiService.getAllOfSearch(s.toString());
+            call.enqueue(new Callback<List<List<Object>>>() {
                         @Override
-                        public void onResponse(Call<List<Playlist>> call,
-                                Response<List<Playlist>> response) {
-                            Log.d(TAG, response.body().get(0).getName());
-                            playlists[0] = (ArrayList<Playlist>) response.body();
+                        public void onResponse(Call<List<List<Object>>> call,
+                                Response<List<List<Object>>> response) {
+
+                            searchResults.addAll(getTwosOfEach(response.body()));
+                            searchListAdapter.notifyDataSetChanged();
                         }
 
                         @Override
-                        public void onFailure(Call<List<Playlist>> call, Throwable t) {
+                        public void onFailure(Call<List<List<Object>>> call, Throwable t) {
                             Log.d(TAG, "failed to retrieve playlists");
                         }
                     });
-                    setSearchMainBackgroundColor(colorOfFirstSearchResultImage);
-                    */
+            //setSearchMainBackgroundColor(colorOfFirstSearchResultImage);
+
 
         } else {
             searchResultListLayout.setVisibility(View.GONE);
@@ -349,10 +373,4 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
             cameraInEditText.setVisibility(View.VISIBLE);
         }
     }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
-
 }

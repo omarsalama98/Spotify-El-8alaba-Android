@@ -1,10 +1,8 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
-import com.vnoders.spotify_el8alaba.Artist;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.models.library.Album;
-import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -21,31 +19,29 @@ public interface APIInterface {
 
     @GET("search?type=artist")
         //+ "header Authorization: Bearer Bearer Token"
-    Call<List<Artist>> getArtistsOfSearch(
-            @Query("q") String artistName,
-            @Query("type") String searchType
+    Call<List<Object>> getArtistsOfSearch(
+            @Query("q") String artistName
     );
 
     @GET("search?type=album")
-    Call<List<Album>> getAlbumsOfSearch(
+    Call<List<Object>> getAlbumsOfSearch(
             @Query("q") String albumName
     );
 
     @GET("search?type=playlist")
-    Call<List<HomePlaylist>> getPlaylistsOfSearch(
+    Call<List<Object>> getPlaylistsOfSearch(
             @Query("q") String playlistName
     );
 
     @GET("search?type=track")
-    Call<List<Track>> getTracksOfSearch(
+    Call<List<Object>> getTracksOfSearch(
             @Query("q") String trackName
     );
 
 
     @GET("search?")
-    Call<List<Object>> getAllOfSearch(
-            @Query("q") String searchQuery,
-            @Query("type") String searchType
+    Call<List<List<Object>>> getAllOfSearch(
+            @Query("q") String searchQuery
     );
 
 
