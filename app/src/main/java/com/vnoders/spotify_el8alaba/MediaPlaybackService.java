@@ -1,19 +1,40 @@
 package com.vnoders.spotify_el8alaba;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.session.MediaSession;
+import android.media.session.PlaybackState;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Binder;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.media.MediaBrowserServiceCompat;
+import androidx.media.session.MediaButtonReceiver;
 
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.AlbumImage;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
@@ -30,6 +51,7 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.repositories.TrackPlayerApi;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaStyleHelper;
 import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackViewModel;
 
 import java.io.IOException;
@@ -45,7 +67,8 @@ import retrofit2.Response;
  * @author Ali Adel
  * Media playback service to play music from background even when activity is not visible
  */
-public class MediaPlaybackService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
+public class MediaPlaybackService extends MediaBrowserServiceCompat implements
+        MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
     //______________________________________________________________________________________________
     //--------------------------------------CONSTANTS-----------------------------------------------
@@ -74,7 +97,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     // bind to give to activities to interact with this service
     private final IBinder mMediaPlaybackBinder = new MediaPlaybackBinder();
     // list of track ids received to play
-    private List<Track> mTracksList;
+    private List<Track> mTracksList = new ArrayList<>();
 
     // access-token to use to play songs
     private String mAccessToken;
@@ -82,8 +105,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     // index of current track active
     private int mCurrentTrackIndex;
 
-    // instance of media player for audio playback
+    // instance of media player and media session for audio playback
     private MediaPlayer mMediaPlayer;
+    private MediaSessionCompat mMediaSession;
     private boolean mPlayerReady = false;
     private int mLastProgress = 0;
 
@@ -117,6 +141,30 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         }
     };
 
+    // receiver to get events that happened outside of app
+    private BroadcastReceiver mNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            pause();
+        }
+    };
+
+    // receive media session events callbacks
+    private MediaSessionCompat.Callback mMediaSessionCallBacks = new MediaSessionCompat.Callback() {
+        @Override
+        public void onPlay() {
+            super.onPlay();
+
+            start();
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+
+            pause();
+        }
+    };
 
     // know if this is the first init or not
     private boolean mFirstInit = false;
@@ -138,10 +186,16 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
     }
 
     /**
-     * called when startService is called in main activity
+     * Init all my variables here
      */
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onCreate() {
+        super.onCreate();
+
+        createNotificationChannel();
+
+        initMediaSession();
+        initNoisyReceiver();
 
         // get access token to use to play tracks
         SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
@@ -149,6 +203,15 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
         // get the list of tracks to play
         getCurrentlyPlaying();
+    }
+
+    /**
+     * called when startService is called in main activity
+     */
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        MediaButtonReceiver.handleIntent(mMediaSession, intent);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -324,6 +387,10 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
      * called to start playing song
      */
     public void start() {
+
+        if (!successfullyRetrievedAudioFocus())
+            return;
+
         // if no instance then init media player and let on prepared listener play the song
         if (mMediaPlayer == null && mTracksList.get(mCurrentTrackIndex) != null && !TextUtils.isEmpty(mTracksList.get(mCurrentTrackIndex).getId())) {
             initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
@@ -506,6 +573,9 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build());
 
+        mMediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMediaPlayer.setVolume(1.0f, 1.0f);
 
         // set the data source and prepare the data and setting the listener to this class
         try {
@@ -525,6 +595,52 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
 
     }
 
+    void initMediaSession() {
+        ComponentName mediaButtonReceiver = new ComponentName(getApplicationContext(), MediaButtonReceiver.class);
+        mMediaSession = new MediaSessionCompat(getApplicationContext(), "tag", mediaButtonReceiver, null);
+
+        mMediaSession.setCallback(mMediaSessionCallBacks);
+        mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mediaButtonIntent.setClass(this, MediaButtonReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, mediaButtonIntent, 0);
+        mMediaSession.setMediaButtonReceiver(pendingIntent);
+
+        setSessionToken(mMediaSession.getSessionToken());
+    }
+
+    /**
+     * Handles headphones coming unplugged
+     */
+    void initNoisyReceiver() {
+        IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(mNoisyReceiver, filter);
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        switch (focusChange) {
+            case AudioManager.AUDIOFOCUS_LOSS:
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                pause();
+                break;
+
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                if (mPlaying && (mMediaPlayer != null))
+                    mMediaPlayer.setVolume(0.3f, 0.3f);
+                break;
+
+            case AudioManager.AUDIOFOCUS_GAIN:
+                if (mMediaPlayer != null) {
+                    if (!mPlaying)
+                        start();
+                    mMediaPlayer.setVolume(1.0f, 1.0f);
+                }
+                break;
+        }
+    }
+
     /**
      * setting if song is playing or not and updating current playing track accordingly
      *
@@ -534,6 +650,19 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         mPlaying = playing;
         mTracksList.get(mCurrentTrackIndex).setIsPlaying(mPlaying);
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+
+        mMediaSession.setActive(playing);
+
+        if (playing) {
+            setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+            showPlayingNotification();
+        }
+        else {
+            setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+            showPausedNotification();
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            audioManager.abandonAudioFocus(this);
+        }
     }
 
     /**
@@ -546,6 +675,7 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             mMediaPlayer.release();
             mMediaPlayer = null;
             stopHandler();
+            NotificationManagerCompat.from(MediaPlaybackService.this).cancel(1);
         }
     }
 
@@ -1102,8 +1232,6 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
             setIsPlaying(false);
             stopHandler();
         }
-
-        //Toast.makeText(getApplicationContext(), "Completion enter", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -1138,4 +1266,111 @@ public class MediaPlaybackService extends Service implements MediaPlayer.OnPrepa
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    private boolean successfullyRetrievedAudioFocus() {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN);
+
+        return result == AudioManager.AUDIOFOCUS_GAIN;
+    }
+
+    private void setMediaPlaybackState(int state) {
+        PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder();
+
+        if (state == PlaybackStateCompat.STATE_PLAYING) {
+            playbackStateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PAUSE);
+        }
+        else {
+            playbackStateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY);
+        }
+
+        playbackStateBuilder.setState(state,  PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
+        mMediaSession.setPlaybackState(playbackStateBuilder.build());
+    }
+
+    private void showPlayingNotification() {
+
+        if (mTracksList.size() < 1)
+            return;
+
+        initMediaSessionMetaData(mTracksList.get(mCurrentTrackIndex));
+
+        NotificationCompat.Builder builder = MediaStyleHelper
+                .from(MediaPlaybackService.this, mMediaSession);
+        if (builder == null)
+            return;
+
+        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_play,
+                "Play", MediaButtonReceiver
+                .buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                .setShowActionsInCompactView(0).setMediaSession(mMediaSession.getSessionToken()));
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        NotificationManagerCompat.from(MediaPlaybackService.this).notify(1, builder.build());
+    }
+
+    private void showPausedNotification() {
+
+        if (mTracksList.size() < 1)
+            return;
+
+        initMediaSessionMetaData(mTracksList.get(mCurrentTrackIndex));
+
+        NotificationCompat.Builder builder = MediaStyleHelper
+                .from(MediaPlaybackService.this, mMediaSession);
+        if (builder == null)
+            return;
+
+        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause,
+                "Pause", MediaButtonReceiver
+                .buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
+        builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                .setShowActionsInCompactView(0).setMediaSession(mMediaSession.getSessionToken()));
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        NotificationManagerCompat.from(MediaPlaybackService.this).notify(1, builder.build());
+    }
+
+    private void initMediaSessionMetaData(Track track) {
+        MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, track.getName())
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, track.getArtistName())
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, "ass")
+                //.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, )
+                .build();
+        mMediaSession.setMetadata(metadata);
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Spotify El8laba";
+            String description = "Playing Song";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("SPOTIFY_CHANNEL", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    // Just put them for class, not important functions
+    @Nullable
+    @Override
+    public BrowserRoot onGetRoot(@NonNull String clientPackageName, int clientUid, @Nullable Bundle rootHints) {
+        if(TextUtils.equals(clientPackageName, getPackageName())) {
+            return new BrowserRoot(getString(R.string.app_name), null);
+        }
+
+        return null;
+    }
+
+    //Not important for general audio service, required for class
+    @Override
+    public void onLoadChildren(@NonNull String parentId, @NonNull Result<List<MediaBrowserCompat.MediaItem>> result) {
+        result.sendResult(null);
+    }
 }
