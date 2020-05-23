@@ -1,22 +1,23 @@
 package com.vnoders.spotify_el8alaba;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.session.MediaSession;
-import android.media.session.PlaybackState;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
+import android.view.TextureView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +38,6 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.media.MediaBrowserServiceCompat;
 import androidx.media.session.MediaButtonReceiver;
 
-import com.vnoders.spotify_el8alaba.models.TrackPlayer.AlbumImage;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
@@ -47,17 +48,20 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostPlayTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.ShareTrackResponse;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
-import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.repositories.TrackPlayerApi;
-import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaStyleHelper;
 import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackViewModel;
 
-import java.io.IOException;
+import org.w3c.dom.Text;
+
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,7 +80,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
     // To use to specify song url using it's id to play it
     private static final String PLAYER_STREAMING_BASE_URL = RetrofitClient.BASE_URL + "streaming/";
-    private static final String PLAYER_STREAMING_URL_MIDDLE = "?Authorization=Bearer ";
+    private static final String PLAYER_STREAMING_URL_MIDDLE = "?type=mobile&Authorization=Bearer ";
+    private static final String HREF_BASE_URL = RetrofitClient.BASE_URL + "tracks/";
 
     // used to send the type of context the song is playing in the backend
     private static final String CONTEXT_ARTIST_PREFIX = "spotify:artist:";
@@ -98,6 +103,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     private final IBinder mMediaPlaybackBinder = new MediaPlaybackBinder();
     // list of track ids received to play
     private List<Track> mTracksList = new ArrayList<>();
+    // list of tracks to keep in case of shuffle
+    private List<Track> mTracksListOriginal = new ArrayList<>();
 
     // access-token to use to play songs
     private String mAccessToken;
@@ -170,6 +177,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     private boolean mFirstInit = false;
     private int mFirstProgress = 0;
     private boolean mRepeat = false;
+    private boolean mShuffle = false;
 
 
     //______________________________________________________________________________________________
@@ -192,8 +200,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     public void onCreate() {
         super.onCreate();
 
-        createNotificationChannel();
-
         initMediaSession();
         initNoisyReceiver();
 
@@ -203,6 +209,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
         // get the list of tracks to play
         getCurrentlyPlaying();
+        //playTrack("5ec4559c1bf12b31fcfc1807", false);
+        //List<String> tracks = new ArrayList<>();
+        //tracks.add("5ec455a01bf12b31fcfc1808");
+        //tracks.add("5ec4559c1bf12b31fcfc1807");
+        //playList(tracks, false, false, null);
+        //playAlbum("5ec455de1bf12b31fcfc1861", false, false, null);
+        //playPlaylist("5ec455de1bf12b31fcfc1855", false, false, null);
     }
 
     /**
@@ -235,6 +248,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     public void onDestroy() {
         super.onDestroy();
         destroyMediaPlayer();
+        unregisterReceiver(mNoisyReceiver);
         mHandler = null;
         mRunnable = null;
     }
@@ -320,22 +334,96 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     }
 
     /**
+     * Tell backend to love track
+     */
+    public void loveTrack(String trackId) {
+        if (TextUtils.isEmpty(trackId))
+            return;
+
+        if ((mTracksList != null) && (mTracksList.size() > 0)) {
+            for (int i = 0; i < mTracksList.size(); ++i) {
+                if (mTracksList.get(i).getId().equals(trackId)) {
+                    mTracksList.get(i).setLoved(true);
+
+                    if (mCurrentTrackIndex == i)
+                        TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+
+                    break;
+                }
+            }
+        }
+
+        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).loveTrack(trackId);
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {}
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {}});
+    }
+
+    /**
+     * Tell backend to hate track
+     */
+    public void unLoveTrack(String trackId) {
+        if (TextUtils.isEmpty(trackId))
+            return;
+
+        if ((mTracksList != null) && (mTracksList.size() > 0)) {
+            for (int i = 0; i < mTracksList.size(); ++i) {
+                if (mTracksList.get(i).getId().equals(trackId)) {
+                    mTracksList.get(i).setLoved(false);
+
+                    if (mCurrentTrackIndex == i)
+                        TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+
+                    break;
+                }
+            }
+        }
+
+        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).unLoveTrack(trackId);
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {}
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {}});
+    }
+
+    /**
      * Shuffle what is currently being played while preserving the currently playing track
      * but shuffling the entire list around it
      */
-    public void shuffle() {
+    public void shuffleToggle() {
 
         if (mTracksList == null || mTracksList.size() < 1){
             return;
         }
 
-        Track currentTrack = mTracksList.get(mCurrentTrackIndex);
-        mTracksList.remove(mCurrentTrackIndex);
+        mShuffle = !mShuffle;
 
-        Collections.shuffle(mTracksList);
+        if (mShuffle) {
+            mTracksListOriginal = new ArrayList<>();
+            mTracksListOriginal.addAll(mTracksList);
+            Track currentTrack = mTracksList.get(mCurrentTrackIndex);
+            mTracksList.remove(mCurrentTrackIndex);
+            Collections.shuffle(mTracksList);
+            mTracksList.add(mCurrentTrackIndex, currentTrack);
+        }
+        else {
+            String trackId = mTracksList.get(mCurrentTrackIndex).getId();
+            mTracksList = new ArrayList<>();
+            mTracksList.addAll(mTracksListOriginal);
+            for (int i = 0; i < mTracksList.size(); ++i) {
+                if (mTracksList.get(i).getId().equals(trackId)) {
+                    mCurrentTrackIndex = i;
+                    break;
+                }
+            }
+        }
 
-        mTracksList.add(mCurrentTrackIndex, currentTrack);
-        setShuffleState(true);
+        setShuffleState(mShuffle);
+        mTracksList.get(mCurrentTrackIndex).setShuffle(mShuffle);
+        TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
     }
 
     /**
@@ -366,15 +454,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
             mRepeat = true;
 
-            if (mTracksList.size() > 1) {
-                mTracksList.get(mCurrentTrackIndex).setHasPrev(true);
-                mTracksList.get(mCurrentTrackIndex).setHasNext(true);
-            } else {
-                mTracksList.get(mCurrentTrackIndex).setHasNext(false);
-                mTracksList.get(mCurrentTrackIndex).setHasNext(false);
-            }
+            mTracksList.get(mCurrentTrackIndex).setHasPrev(true);
+            mTracksList.get(mCurrentTrackIndex).setHasNext(true);
         }
 
+        mTracksList.get(mCurrentTrackIndex).setRepeat(mRepeat);
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
         setRepeatState(mRepeat);
     }
@@ -539,6 +623,14 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             getAlbumImage(track);
         }
 
+        if (TextUtils.isEmpty(track.getShareUrl())) {
+            getShareUrl(track);
+        }
+
+        // set shuffle and repeat states
+        mTracksList.get(mCurrentTrackIndex).setRepeat(mRepeat);
+        mTracksList.get(mCurrentTrackIndex).setShuffle(mShuffle);
+
         // know if song has next or previous and set data accordingly
         if (mCurrentTrackIndex < 1)
             mTracksList.get(mCurrentTrackIndex).setHasPrev(false);
@@ -551,15 +643,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             mTracksList.get(mCurrentTrackIndex).setHasNext(true);
 
         if (mRepeat) {
-            if (mTracksList.size() > 1) {
-                mTracksList.get(mCurrentTrackIndex).setHasPrev(true);
-                mTracksList.get(mCurrentTrackIndex).setHasNext(true);
-            } else {
-                mTracksList.get(mCurrentTrackIndex).setHasNext(false);
-                mTracksList.get(mCurrentTrackIndex).setHasNext(false);
-            }
-            TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+            mTracksList.get(mCurrentTrackIndex).setHasPrev(true);
+            mTracksList.get(mCurrentTrackIndex).setHasNext(true);
         }
+
+        TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
 
         // Tell backend that i'm playing this track
         postCurrentlyPlaying(track);
@@ -573,6 +661,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build());
 
+
         mMediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setVolume(1.0f, 1.0f);
@@ -581,18 +670,18 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         try {
             // prepare the url to play the song
             String songUrl = PLAYER_STREAMING_BASE_URL + track.getId() + PLAYER_STREAMING_URL_MIDDLE + mAccessToken;
+
             mMediaPlayer.setDataSource(songUrl);
             mMediaPlayer.prepareAsync();
+
             setIsPlaying(false);
             mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.setOnCompletionListener(this);
             mPlayerReady = false;
             mLastProgress = -100000;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     void initMediaSession() {
@@ -654,12 +743,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mMediaSession.setActive(playing);
 
         if (playing) {
+            successfullyRetrievedAudioFocus();
             setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
-            showPlayingNotification();
         }
         else {
             setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
-            showPausedNotification();
             AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             audioManager.abandonAudioFocus(this);
         }
@@ -675,7 +763,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             mMediaPlayer.release();
             mMediaPlayer = null;
             stopHandler();
-            NotificationManagerCompat.from(MediaPlaybackService.this).cancel(1);
         }
     }
 
@@ -736,6 +823,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 String songImageUrl = null;
                 if (track.getAlbum().getImages().size() > 0)
                     songImageUrl = track.getAlbum().getImages().get(0).getUrl();
+
+
                 Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(),
                         artistName, Track.TYPE_ARTIST, artistName, songImageUrl, null, null,
                         response.body().getCurrentTrackWrapper().getTrackContext().getUri());
@@ -743,11 +832,12 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 // init some state variables that definitely happen here
                 mFirstInit = true;
                 mFirstProgress = response.body().getCurrentTrackWrapper().getTrackProgress();
+                // set the repeat stats
+                mRepeat = response.body().getCurrentTrackWrapper().getRepeat();
+                currentTrack.setRepeat(mRepeat);
                 mTracksList = new ArrayList<>();
                 mTracksList.add(currentTrack);
 
-                // set the repeat stats
-                mRepeat = response.body().getCurrentTrackWrapper().getRepeat();
 
                 // decode the context uri that i got from backend
                 String uri = currentTrack.getContextUri();
@@ -762,6 +852,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
                 // get the shuffle stat of currently playing
                 boolean shuffleState = response.body().getCurrentTrackWrapper().getShuffle();
+                currentTrack.setShuffle(shuffleState);
 
                 if (type.equals(CONTEXT_RESPONSE_TYPE_ALBUM)) {
                     getAlbum(id, shuffleState, currentTrack.getId());
@@ -819,6 +910,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                         null, Track.TYPE_ARTIST, null, null,
                         artistId, track.getAlbumId(), uri);
 
+                mShuffle = false;
+                currentTrack.setShuffle(false);
                 setShuffleState(false);
                 mTracksList = new ArrayList<>();
                 mTracksList.add(currentTrack);
@@ -886,8 +979,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                     mTracksList.add(addTrack);
                 }
 
-                // set shuffle stat
+                // set shuffle state
+                mShuffle = shuffle;
                 if (shuffle) {
+                    mTracksListOriginal = new ArrayList<>();
+                    mTracksListOriginal.addAll(mTracksList);
                     Collections.shuffle(mTracksList);
                 }
 
@@ -961,8 +1057,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                     mTracksList.add(addTrack);
                 }
 
-                // if shuffle is enabled then shuffle the list and set shuffle stat
+                // if shuffle is enabled then shuffle the list and set shuffle state
+                mShuffle = shuffle;
                 if (shuffle) {
+                    mTracksListOriginal = new ArrayList<>();
+                    mTracksListOriginal.addAll(mTracksList);
                     Collections.shuffle(mTracksList);
                 }
 
@@ -1031,7 +1130,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 }
 
                 // shuffles the list of shuffle is on and sets the variable
+                mShuffle = shuffle;
                 if (shuffle) {
+                    mTracksListOriginal = new ArrayList<>();
+                    mTracksListOriginal.addAll(mTracksList);
                     Collections.shuffle(mTracksList);
                 }
 
@@ -1150,6 +1252,47 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
             @Override
             public void onFailure(Call<GetAlbum> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /**
+     * Get the external share url of track
+     * @param track to fill share url data for
+     */
+    private void getShareUrl(Track track) {
+        if (track == null || TextUtils.isEmpty(track.getAlbumId())) {
+            return;
+        }
+
+        Call<ShareTrackResponse> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getShareUrl(track.getId());
+
+        request.enqueue(new Callback<ShareTrackResponse>() {
+            @Override
+            public void onResponse(Call<ShareTrackResponse> call, Response<ShareTrackResponse> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                String shareUrl = response.body().getShareUrl();
+
+                // if data is ok then fill the data for track and if track is being played now
+                // then update the live data model
+                if (!TextUtils.isEmpty(shareUrl)) {
+                    track.setShareUrl(shareUrl);
+                    if (track == mTracksList.get(mCurrentTrackIndex)) {
+                        TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShareTrackResponse> call, Throwable t) {
 
             }
         });
@@ -1289,73 +1432,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mMediaSession.setPlaybackState(playbackStateBuilder.build());
     }
 
-    private void showPlayingNotification() {
-
-        if (mTracksList.size() < 1)
-            return;
-
-        initMediaSessionMetaData(mTracksList.get(mCurrentTrackIndex));
-
-        NotificationCompat.Builder builder = MediaStyleHelper
-                .from(MediaPlaybackService.this, mMediaSession);
-        if (builder == null)
-            return;
-
-        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_play,
-                "Play", MediaButtonReceiver
-                .buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
-        builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(0).setMediaSession(mMediaSession.getSessionToken()));
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        NotificationManagerCompat.from(MediaPlaybackService.this).notify(1, builder.build());
-    }
-
-    private void showPausedNotification() {
-
-        if (mTracksList.size() < 1)
-            return;
-
-        initMediaSessionMetaData(mTracksList.get(mCurrentTrackIndex));
-
-        NotificationCompat.Builder builder = MediaStyleHelper
-                .from(MediaPlaybackService.this, mMediaSession);
-        if (builder == null)
-            return;
-
-        builder.addAction(new NotificationCompat.Action(android.R.drawable.ic_media_pause,
-                "Pause", MediaButtonReceiver
-                .buildMediaButtonPendingIntent(this, PlaybackStateCompat.ACTION_PLAY_PAUSE)));
-        builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(0).setMediaSession(mMediaSession.getSessionToken()));
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        NotificationManagerCompat.from(MediaPlaybackService.this).notify(1, builder.build());
-    }
-
-    private void initMediaSessionMetaData(Track track) {
-        MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, track.getName())
-                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, track.getArtistName())
-                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, "ass")
-                //.putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, )
-                .build();
-        mMediaSession.setMetadata(metadata);
-    }
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Spotify El8laba";
-            String description = "Playing Song";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("SPOTIFY_CHANNEL", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 
     // Just put them for class, not important functions
     @Nullable

@@ -36,6 +36,8 @@ public class BottomPlayerFragment extends Fragment {
 
     // holds button
     private ImageView mPlayPauseButton;
+    // holds love button
+    private TextView mLoveButton;
 
     // current state of playing
     private boolean mIsPlaying = false;
@@ -77,6 +79,15 @@ public class BottomPlayerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 playPausePressed();
+            }
+        });
+
+        // getting button and setting it's love action
+        mLoveButton = rootView.findViewById(R.id.love_button_main_fragment_bot);
+        mLoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loveTrack();
             }
         });
 
@@ -173,6 +184,14 @@ public class BottomPlayerFragment extends Fragment {
         } else {
             mPlayPauseButton.setImageResource(R.drawable.ic_play_arrow_white_24dp);
         }
+
+        // set the background color of love button
+        if (track.getLoved()) {
+            mLoveButton.setTextColor(getResources().getColor(R.color.green));
+        }
+        else {
+            mLoveButton.setTextColor(getResources().getColor(R.color.white));
+        }
     }
 
     /**
@@ -186,6 +205,21 @@ public class BottomPlayerFragment extends Fragment {
             ((MainActivity)getActivity()).getService().start();
         }
     }
+
+    /**
+     * Tell service to love track
+     */
+    private void loveTrack() {
+
+        if (mCurrentTrack == null)
+            return;
+
+        if (mCurrentTrack.getLoved())
+            ((MainActivity)getActivity()).getService().unLoveTrack(mCurrentTrack.getId());
+        else
+            ((MainActivity)getActivity()).getService().loveTrack(mCurrentTrack.getId());
+    }
+
 
     /**
      * updates UI when called with progress

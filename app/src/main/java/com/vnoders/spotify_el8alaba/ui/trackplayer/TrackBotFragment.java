@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -10,8 +11,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +50,14 @@ public class TrackBotFragment extends Fragment {
     private Button mNextButton;
     // holds skip previous button
     private Button mPrevButton;
+    //holds love button
+    private Button mLoveButton;
+    // holds shuffle button
+    private Button mShuffleButton;
+    // holds repeat button
+    private Button mRepeatButton;
+    // holds share button
+    private ImageView mShareButton;
 
     // if player is currently playing anything
     private boolean mIsPlaying = false;
@@ -73,6 +84,7 @@ public class TrackBotFragment extends Fragment {
         mTrackProgress = rootView.findViewById(R.id.trackProgress);
         mTrackProgress.setText("00:00");
         mTrackDuration = rootView.findViewById(R.id.trackDuration);
+        mTrackDuration.setText("00:00");
 
         // set play_pause button
         mPlayPauseButton = rootView.findViewById(R.id.play_pause_button);
@@ -98,6 +110,42 @@ public class TrackBotFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 skipToPrev();
+            }
+        });
+
+        // sets the love button
+        mLoveButton = rootView.findViewById(R.id.love_button_track_player_bot);
+        mLoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loveTrack();
+            }
+        });
+
+        // sets the shuffle button
+        mShuffleButton = rootView.findViewById(R.id.shuffle_track);
+        mShuffleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shuffleTracks();
+            }
+        });
+
+        // sets the repeat button
+        mRepeatButton = rootView.findViewById(R.id.repeat_track);
+        mRepeatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                repeatTracks();
+            }
+        });
+
+        // sets the share button
+        mShareButton = rootView.findViewById(R.id.share_button);
+        mShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareTrack();
             }
         });
 
@@ -161,6 +209,30 @@ public class TrackBotFragment extends Fragment {
             mPlayPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
         } else {
             mPlayPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_filled_white_82dp));
+        }
+
+        // set the background color of love button
+        if (track.getLoved()) {
+            mLoveButton.getBackground().setTint(getResources().getColor(R.color.green));
+        }
+        else {
+            mLoveButton.getBackground().setTint(getResources().getColor(R.color.white));
+        }
+
+        // set the background color of shuffle button
+        if (track.getShuffle()) {
+            mShuffleButton.getBackground().setTint(getResources().getColor(R.color.green));
+        }
+        else {
+            mShuffleButton.getBackground().setTint(getResources().getColor(R.color.white));
+        }
+
+        // set the background color of repeat button
+        if (track.getRepeat()) {
+            mRepeatButton.getBackground().setTint(getResources().getColor(R.color.green));
+        }
+        else {
+            mRepeatButton.getBackground().setTint(getResources().getColor(R.color.white));
         }
 
         // get the duration and setting the text view corresponding to it
@@ -240,6 +312,62 @@ public class TrackBotFragment extends Fragment {
      */
     private void skipToPrev() {
         ((TrackPlayerActivity) getActivity()).getService().skipToPrev();
+    }
+
+    /**
+     * Tell service to love track
+     */
+    private void loveTrack() {
+
+        if (mCurrentTrack == null)
+            return;
+
+        if (mCurrentTrack.getLoved())
+            ((TrackPlayerActivity) getActivity()).getService().unLoveTrack(mCurrentTrack.getId());
+        else
+            ((TrackPlayerActivity) getActivity()).getService().loveTrack(mCurrentTrack.getId());
+    }
+
+    /**
+     * Tell service to shuffle list
+     */
+    private void shuffleTracks() {
+        ((TrackPlayerActivity) getActivity()).getService().shuffleToggle();
+    }
+
+    /**
+     * Tell service to repeat list
+     */
+    private void repeatTracks() {
+        ((TrackPlayerActivity) getActivity()).getService().repeatAllToggle();
+    }
+
+    /**
+     * Shares track with social media apps
+     */
+    private void shareTrack() {
+        if ((mCurrentTrack == null) || (TextUtils.isEmpty(mCurrentTrack.getShareUrl()))) {
+            Toast.makeText(getContext(), getString(R.string.share_url_error), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        /*Create an ACTION_SEND Intent*/
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        /*This will be the actual content you wish you share.*/
+        String shareBody;
+        if (!TextUtils.isEmpty(mCurrentTrack.getArtistName()))
+            shareBody = mCurrentTrack.getArtistName() + "\n";
+        else
+            shareBody = "";
+
+        shareBody += mCurrentTrack.getName() + "\n" + mCurrentTrack.getShareUrl();
+        /*The type of the content is text, obviously.*/
+        intent.setType("text/plain");
+        /*Applying information Subject and Body.*/
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Spotify El8alaba");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        /*Fire!*/
+        startActivity(Intent.createChooser(intent, "Share Via"));
     }
 
     /**

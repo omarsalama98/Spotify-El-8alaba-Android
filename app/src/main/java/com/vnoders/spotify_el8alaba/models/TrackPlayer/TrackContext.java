@@ -21,5 +21,4 @@ public class TrackContext {
     public String getUri() {
         return this.mUri;
     }
-
 }

@@ -38,7 +38,7 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/love_button"
+            android:id="@+id/love_button_main_fragment_bot"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"

@@ -44,6 +44,12 @@ public class Track {
     // context URI to tell backend what context is being played right now
     private String mContextUri;
 
+    // share url for sharing track
+    private String mShareUrl;
+
+    // know if track is loved or not
+    private boolean mLoved = false;
+
     // boolean to know if there is a next or not for UI
     private boolean mHasNext = false;
 
@@ -52,6 +58,12 @@ public class Track {
 
     // know if song is being currently played or not
     private boolean mIsPlaying = false;
+
+    // know repeat state
+    private boolean mRepeat = false;
+
+    // know shuffle state
+    private boolean mShuffle = false;
 
     /**
      * Constructor to fill all data about the track
@@ -115,6 +127,10 @@ public class Track {
         this.mImage = image;
     }
 
+    public void setLoved(boolean love) {
+        this.mLoved = love;
+    }
+
     public void setHasNext(boolean hasNext) {
         this.mHasNext = hasNext;
     }
@@ -127,6 +143,14 @@ public class Track {
         this.mIsPlaying = isPlaying;
     }
 
+    public void setRepeat(boolean repeat) {
+        this.mRepeat = repeat;
+    }
+
+    public void setShuffle(boolean shuffle) {
+        this.mShuffle = shuffle;
+    }
+
     public void setArtistId(String artistId) {
         this.mArtistId = artistId;
     }
@@ -135,6 +159,9 @@ public class Track {
         this.mAlbumId = albumId;
     }
 
+    public void setShareUrl(String shareUrl) {
+        this.mShareUrl = shareUrl;
+    }
 
     /**
      * Getters for all member variables
@@ -180,6 +207,14 @@ public class Track {
         return this.mContextUri;
     }
 
+    public String getShareUrl() {
+        return this.mShareUrl;
+    }
+
+    public boolean getLoved() {
+        return this.mLoved;
+    }
+
     public boolean getHasNext() {
         return this.mHasNext;
     }
@@ -190,6 +225,14 @@ public class Track {
 
     public boolean getIsPlaying() {
         return this.mIsPlaying;
+    }
+
+    public boolean getRepeat() {
+        return this.mRepeat;
+    }
+
+    public boolean getShuffle() {
+        return this.mShuffle;
     }
 
 }

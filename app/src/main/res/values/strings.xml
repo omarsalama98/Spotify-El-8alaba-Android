@@ -121,4 +121,6 @@
     <string name = "settings_icon">Settings Icon</string>
     <string name = "recently_played">Recently Played</string>
     <string name = "categories">Categories</string>
+
+    <string name = "share_url_error">Fetching Url from server, try again!</string>
 </resources>

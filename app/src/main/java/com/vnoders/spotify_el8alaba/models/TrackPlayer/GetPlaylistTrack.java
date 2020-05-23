@@ -16,6 +16,9 @@ public class GetPlaylistTrack {
     @SerializedName("name")
     private String mName;
 
+    @SerializedName("href")
+    private String mHref;
+
     @SerializedName("duration_ms")
     private double mDuration;
 
@@ -31,6 +34,10 @@ public class GetPlaylistTrack {
 
     public String getName() {
         return this.mName;
+    }
+
+    public String getHref() {
+        return this.mHref;
     }
 
     public int getDuration() {

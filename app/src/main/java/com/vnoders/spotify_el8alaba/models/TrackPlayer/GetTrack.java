@@ -29,6 +29,9 @@ public class GetTrack {
     @SerializedName("uri")
     private String mUri;
 
+    @SerializedName("href")
+    private String mHref;
+
     public String getId() {
         return this.mId;
     }
@@ -55,5 +58,9 @@ public class GetTrack {
 
     public String getUri() {
         return this.mUri;
+    }
+
+    public String getHref() {
+        return this.mHref;
     }
 }
