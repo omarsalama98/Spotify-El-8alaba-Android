@@ -67,7 +67,7 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
         } else {
             imageUrl = "https://getdrawings.com/free-icon-bw/black-music-icons-23.png";
         }
-        Picasso.get().load(imageUrl).into(holder.image);
+        Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
 
     }
 

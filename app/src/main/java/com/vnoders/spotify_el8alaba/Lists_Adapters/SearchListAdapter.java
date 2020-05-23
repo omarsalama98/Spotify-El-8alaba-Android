@@ -10,13 +10,15 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Album;
-import com.vnoders.spotify_el8alaba.models.Artist;
 import com.vnoders.spotify_el8alaba.models.Image;
-import com.vnoders.spotify_el8alaba.models.Track;
+import com.vnoders.spotify_el8alaba.models.Search.Album;
+import com.vnoders.spotify_el8alaba.models.Search.Artist;
+import com.vnoders.spotify_el8alaba.models.Search.Playlist;
+import com.vnoders.spotify_el8alaba.models.Search.Track;
+import com.vnoders.spotify_el8alaba.models.Search.User;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
-import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
@@ -28,11 +30,9 @@ import java.util.List;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
 
-    //TODO: SearchListItem Class should be a parent to all types that appear in search
-
     private static ArrayList<Object> mDataset;
     private static Fragment fragment;
-    private static String itemInfo = "", itemName = "", itemImageUrl = "", itemId = "", type = "";
+    private static String itemInfo = "", itemName = "", itemImageUrl = "", itemId = "", itemType = "";
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public SearchListAdapter(ArrayList<Object> myDataset, Fragment fragment) {
@@ -56,84 +56,68 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
 
         Object result = mDataset.get(position);
         if (result instanceof Album) {
-            type = "Album";
-            itemId = ((Album) result).getId();
             itemName = ((Album) result).getName();
             holder.name.setText(itemName);
-            List<Artist> artists = ((Album) result).getArtists();
             List<TrackImage> images = ((Album) result).getImages();
             itemInfo = "Album";
-            if (!artists.isEmpty()) {
-                itemInfo += artists.get(0).getName();
-            }
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
             if (!images.isEmpty()) {
                 itemImageUrl = images.get(0).getUrl();
             }
-            Picasso.get().load(itemImageUrl).into(holder.image);
+            Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
         } else if (result instanceof Artist) {
-            type = "Artist";
-            itemId = ((Artist) result).getId();
             itemName = ((Artist) result).getName();
             holder.name.setText(itemName);
-            List<Image> images = ((Artist) result).getImages();
+            Image image = ((Artist) result).getImage();
             itemInfo = "Artist " + ((Artist) result).getName();
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-            if (!images.isEmpty()) {
-                itemImageUrl = images.get(0).getUrl();
+            if (image != null) {
+                itemImageUrl = image.getUrl();
             }
-            Picasso.get().load(itemImageUrl).into(holder.image);
+            Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
 
         }
-        /*  TODO: Add Users to search
         if(result instanceof User){
-            type = "User";
-            holder.name.setText((() result).get());
-            List<Artist> artists = ((User) result).getArtists();
-            List<TrackImage> images = ((Album) result).getImages();
-            String albumInfo = "Album";
-            if(!artists.isEmpty())  albumInfo += artists.get(0).getName();
-            holder.info.setText(albumInfo);
-            String imageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-            if(!images.isEmpty()) imageUrl = images.get(0).getUrl();
-            Picasso.get().load(imageUrl).into(holder.image);
-        }*/
-        if (result instanceof Playlist) {
-            type = "Playlist";
-            itemId = ((Playlist) result).getId();
+            itemName = ((User) result).getName();
+            holder.name.setText(itemName);
+            Image image = ((User) result).getImage();
+            itemInfo = "User";
+            holder.info.setText(itemInfo);
+            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+            if (image != null) {
+                itemImageUrl = image.getUrl();
+            }
+            Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
+        } else if (result instanceof Playlist) {
             itemName = ((Playlist) result).getName();
             holder.name.setText(itemName);
-            List<TrackImage> images = ((Playlist) result).getImages();
             itemInfo = "Playlist";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+            List<TrackImage> images = ((Playlist) result).getImages();
             if (!images.isEmpty()) {
                 itemImageUrl = images.get(0).getUrl();
             }
-            Picasso.get().load(itemImageUrl).into(holder.image);
-        }
-        if (result instanceof Track) {
-            type = "Track";
-            itemId = ((Track) result).getId();
+            Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
+        } else if (result instanceof Track) {
             itemName = ((Track) result).getName();
             holder.name.setText(itemName);
-            List<Artist> artists = ((Track) result).getArtists();
+            List<String> artistsIds = ((Track) result).getArtists();
             //TODO: Tracks should have images (Not added in backend)
             itemInfo = "Track";
-            if (!artists.isEmpty()) {
-                itemInfo += artists.get(0).getName();
-            }
+            // TODO: Maybe request the artists from the server by their ids and show them here
+            /*if (!artistsIds.isEmpty()) {
+                itemInfo += artistsIds.get(0);
+            }*/
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-            Picasso.get().load(itemImageUrl).into(holder.image);
+            Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
         }
-
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mDataset.size();
@@ -154,25 +138,74 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             image = v.findViewById(R.id.search_item_image_view);
 
             v.setOnClickListener(v1 -> {
+
+                Object result = mDataset.get(getAdapterPosition());
+                itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+                if (result instanceof Album) {
+                    itemType = SearchByTypeConstantsHelper.ALBUM;
+                    itemId = ((Album) result).getId();
+                    itemName = ((Album) result).getName();
+                    itemInfo = "Album";
+                    List<TrackImage> images = ((Album) result).getImages();
+                    if (!images.isEmpty()) {
+                        itemImageUrl = images.get(0).getUrl();
+                    }
+                } else if (result instanceof Artist) {
+                    itemType = SearchByTypeConstantsHelper.ARTIST;
+                    itemId = ((Artist) result).getId();
+                    itemName = ((Artist) result).getName();
+                    itemInfo = "Artist";
+                    Image image = ((Artist) result).getImage();
+                    if (image != null) {
+                        itemImageUrl = image.getUrl();
+                    }
+                }
+                if (result instanceof User) {
+                    itemType = SearchByTypeConstantsHelper.USER;
+                    itemId = ((User) result).getId();
+                    itemName = ((User) result).getName();
+                    itemInfo = "User";
+                    Image image = ((User) result).getImage();
+                    if (image != null) {
+                        itemImageUrl = image.getUrl();
+                    }
+                } else if (result instanceof Playlist) {
+                    itemType = SearchByTypeConstantsHelper.PLAYLIST;
+                    itemId = ((Playlist) result).getId();
+                    itemName = ((Playlist) result).getName();
+                    itemInfo = "Playlist";
+                    List<TrackImage> images = ((Playlist) result).getImages();
+                    if (!images.isEmpty()) {
+                        itemImageUrl = images.get(0).getUrl();
+                    }
+                } else if (result instanceof Track) {
+                    itemType = SearchByTypeConstantsHelper.TRACK;
+                    itemId = ((Track) result).getId();
+                    itemName = ((Track) result).getName();
+                    itemInfo = "Track";
+                }
+
                 RecentSearches recentSearches = new RecentSearches();
                 recentSearches.itemName = itemName;
                 recentSearches.itemInfo = itemInfo;
                 recentSearches.itemImageUrl = itemImageUrl;
+                recentSearches.itemType = itemType;
+                recentSearches.itemId = itemId;
                 if (!SearchFragment.mySearchHistory.contains(recentSearches)) {
                     db.recentSearchesDao().insertAll(recentSearches);
                 }
 
                 //TODO: Replace the Name Key with an ID one and pass the selected item id
-                //TODO: The fragment to go to depends on the selected item type
+                //TODO: User should have a fragment to go to
                 Fragment targetFragment;
-                switch (type) {
-                    case "Album":
+                switch (itemType) {
+                    case SearchByTypeConstantsHelper.ALBUM:
                         targetFragment = new AlbumFragment();
                         break;
-                    case "Artist":
+                    case SearchByTypeConstantsHelper.ARTIST:
                         targetFragment = new ArtistFragment();
                         break;
-                    case "Playlist":
+                    case SearchByTypeConstantsHelper.PLAYLIST:
                         targetFragment = PlaylistHomeFragment
                                 .newInstance(itemId);
                         break;

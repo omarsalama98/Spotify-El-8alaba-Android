@@ -55,7 +55,7 @@ public class RecentlyPlayedListAdapter extends
             imageUrl = "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba";
         }
 
-        Picasso.get().load(imageUrl).into(holder.image);
+        Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
         //TODO: Change The image circularity according to type of list item
         if (!backDataset.get(position).getType().equals("Artist"))
             holder.image.setDisableCircularTransformation(true);

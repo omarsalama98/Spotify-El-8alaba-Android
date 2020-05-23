@@ -17,10 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Search.Albums;
+import com.vnoders.spotify_el8alaba.models.Search.Artists;
+import com.vnoders.spotify_el8alaba.models.Search.Playlists;
+import com.vnoders.spotify_el8alaba.models.Search.Tracks;
+import com.vnoders.spotify_el8alaba.models.Search.Users;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
-import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,69 +78,98 @@ public class SearchByTypeFragment extends Fragment {
         String titleText = "\"" + searchQuery + "\"" + " in " + searchType;
         searchByTypeTitleTextView.setText(titleText);
 
-        Call<List<Object>> call;
-
         switch (searchType) {
             case SearchByTypeConstantsHelper.ALBUMS:
-                call = apiService.getAlbumsOfSearch(searchQuery);
-                call.enqueue(new Callback<List<Object>>() {
+                Call<Albums> albumsCall;
+                albumsCall = apiService.getAlbumsOfSearch(searchQuery);
+                albumsCall.enqueue(new Callback<Albums>() {
                     @Override
-                    public void onResponse(Call<List<Object>> call,
-                            Response<List<Object>> response) {
-                        searchResults.addAll(response.body());
-                        mSearchListAdapter.notifyDataSetChanged();
+                    public void onResponse(Call<Albums> call,
+                            Response<Albums> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getAlbums());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Object>> call, Throwable t) {
-                        Log.d(TAG, "failed to retrieve playlists");
+                    public void onFailure(Call<Albums> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve Albums " + t.getMessage());
                     }
                 });
                 break;
             case SearchByTypeConstantsHelper.SONGS:
-                call = apiService.getTracksOfSearch(searchQuery);
-                call.enqueue(new Callback<List<Object>>() {
+                Call<Tracks> tracksCall;
+                tracksCall = apiService.getTracksOfSearch(searchQuery);
+                tracksCall.enqueue(new Callback<Tracks>() {
                     @Override
-                    public void onResponse(Call<List<Object>> call,
-                            Response<List<Object>> response) {
-                        searchResults.addAll(response.body());
-                        mSearchListAdapter.notifyDataSetChanged();
+                    public void onResponse(Call<Tracks> call,
+                            Response<Tracks> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getTracks());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Object>> call, Throwable t) {
-                        Log.d(TAG, "failed to retrieve playlists");
+                    public void onFailure(Call<Tracks> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists " + t.getMessage());
                     }
                 });
                 break;
             case SearchByTypeConstantsHelper.ARTISTS:
-                call = apiService.getArtistsOfSearch(searchQuery);
-                call.enqueue(new Callback<List<Object>>() {
+                Call<Artists> artistsCall;
+                artistsCall = apiService.getArtistsOfSearch(searchQuery);
+                artistsCall.enqueue(new Callback<Artists>() {
                     @Override
-                    public void onResponse(Call<List<Object>> call,
-                            Response<List<Object>> response) {
-                        searchResults.addAll(response.body());
-                        mSearchListAdapter.notifyDataSetChanged();
+                    public void onResponse(Call<Artists> call,
+                            Response<Artists> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getArtists());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Object>> call, Throwable t) {
-                        Log.d(TAG, "failed to retrieve playlists");
+                    public void onFailure(Call<Artists> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists " + t.getMessage());
                     }
                 });
                 break;
             case SearchByTypeConstantsHelper.PLAYLISTS:
-                call = apiService.getPlaylistsOfSearch(searchQuery);
-                call.enqueue(new Callback<List<Object>>() {
+                Call<Playlists> playlistsCall;
+                playlistsCall = apiService.getPlaylistsOfSearch(searchQuery);
+                playlistsCall.enqueue(new Callback<Playlists>() {
                     @Override
-                    public void onResponse(Call<List<Object>> call,
-                            Response<List<Object>> response) {
-                        searchResults.addAll(response.body());
-                        mSearchListAdapter.notifyDataSetChanged();
+                    public void onResponse(Call<Playlists> call,
+                            Response<Playlists> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getPlaylists());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<List<Object>> call, Throwable t) {
+                    public void onFailure(Call<Playlists> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists");
+                    }
+                });
+                break;
+            case SearchByTypeConstantsHelper.PROFILES:
+                Call<Users> usersCall;
+                usersCall = apiService.getUsersOfSearch(searchQuery);
+                usersCall.enqueue(new Callback<Users>() {
+                    @Override
+                    public void onResponse(Call<Users> call,
+                            Response<Users> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getUsers());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Users> call, Throwable t) {
                         Log.d(TAG, "failed to retrieve playlists");
                     }
                 });

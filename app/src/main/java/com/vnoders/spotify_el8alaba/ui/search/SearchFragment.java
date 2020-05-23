@@ -34,6 +34,12 @@ import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Search.Album;
+import com.vnoders.spotify_el8alaba.models.Search.Artist;
+import com.vnoders.spotify_el8alaba.models.Search.Playlist;
+import com.vnoders.spotify_el8alaba.models.Search.Track;
+import com.vnoders.spotify_el8alaba.models.Search.User;
+import com.vnoders.spotify_el8alaba.models.SearchResult;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -70,6 +76,79 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
     private ArrayList<Object> searchResults;
     private SearchListAdapter searchListAdapter;
 
+    private void getData() {
+        class GetData extends AsyncTask<Void, Void, ArrayList<RecentSearches>> {
+
+            @Override
+            protected ArrayList<RecentSearches> doInBackground(Void... voids) {
+                return (ArrayList<RecentSearches>) db.recentSearchesDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<RecentSearches> recentSearches) {
+                SearchHistoryListAdapter searchHistoryListAdapter = new SearchHistoryListAdapter(
+                        recentSearches, SearchFragment.this);
+                searchHistoryRecyclerView.setAdapter(searchHistoryListAdapter);
+                mySearchHistory = recentSearches;
+                if (!mySearchHistory.isEmpty()
+                        && searchResultListLayout.getVisibility() == View.GONE) {
+                    showSearchHistoryList();
+                }
+                super.onPostExecute(recentSearches);
+            }
+        }
+        GetData getData = new GetData();
+        getData.execute();
+    }
+
+    /**
+     * Returns two results from each type of search results(Two albums, two playlists, ...etc.)
+     *
+     * @param searchListResults A List containing Lists of (Albums, Playlists, ...etc.)
+     *
+     * @return A List containing the first two items of each Inner List(If they exist)
+     */
+    private ArrayList<Object> getTwosOfEach(SearchResult searchListResults) {
+
+        ArrayList<Object> mSearchResult = new ArrayList<>();
+        List<Playlist> playlists = searchListResults.getPlaylists();
+        if (playlists.size() == 1) {
+            mSearchResult.add(playlists.get(0));
+        } else if (playlists.size() > 1) {
+            mSearchResult.add(playlists.get(0));
+            mSearchResult.add(playlists.get(1));
+        }
+        List<Album> albums = searchListResults.getAlbums();
+        if (albums.size() == 1) {
+            mSearchResult.add(albums.get(0));
+        } else if (albums.size() > 1) {
+            mSearchResult.add(albums.get(0));
+            mSearchResult.add(albums.get(1));
+        }
+        List<Artist> artists = searchListResults.getArtists();
+        if (artists.size() == 1) {
+            mSearchResult.add(artists.get(0));
+        } else if (artists.size() > 1) {
+            mSearchResult.add(artists.get(0));
+            mSearchResult.add(artists.get(1));
+        }
+        List<Track> tracks = searchListResults.getTracks();
+        if (tracks.size() == 1) {
+            mSearchResult.add(tracks.get(0));
+        } else if (tracks.size() > 1) {
+            mSearchResult.add(tracks.get(0));
+            mSearchResult.add(tracks.get(1));
+        }
+        List<User> users = searchListResults.getUsers();
+        if (users.size() == 1) {
+            mSearchResult.add(users.get(0));
+        } else if (users.size() > 1) {
+            mSearchResult.add(users.get(0));
+            mSearchResult.add(users.get(1));
+        }
+        return mSearchResult;
+    }
+
     @Override
     public void onPause() {
         InputMethodManager imm = (InputMethodManager) getActivity()
@@ -103,29 +182,43 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         searchEmptyBackground.setVisibility(View.GONE);
     }
 
-    private void getData() {
-        class GetData extends AsyncTask<Void, Void, ArrayList<RecentSearches>> {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+            ViewGroup container, Bundle savedInstanceState) {
 
-            @Override
-            protected ArrayList<RecentSearches> doInBackground(Void... voids) {
-                return (ArrayList<RecentSearches>) db.recentSearchesDao().getAll();
-            }
+        apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-            @Override
-            protected void onPostExecute(ArrayList<RecentSearches> recentSearches) {
-                SearchHistoryListAdapter searchHistoryListAdapter = new SearchHistoryListAdapter(
-                        recentSearches);
-                searchHistoryRecyclerView.setAdapter(searchHistoryListAdapter);
-                mySearchHistory = recentSearches;
-                if (!mySearchHistory.isEmpty()
-                        && searchResultListLayout.getVisibility() == View.GONE) {
-                    showSearchHistoryList();
-                }
-                super.onPostExecute(recentSearches);
-            }
-        }
-        GetData getData = new GetData();
-        getData.execute();
+        SearchViewModel searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+        final View root = inflater.inflate(R.layout.fragment_search, container, false);
+
+        cameraInTextView = root.findViewById(R.id.search_camera_image_in_text_view);
+        cameraInEditText = root.findViewById(R.id.search_camera_image_in_edit_text);
+        //TODO: Add Camera functionality if it's required.
+
+        searchTextView = root.findViewById(R.id.search_bar_text_view);
+        resetSearch = root.findViewById(R.id.reset_search_image);
+        backArrow = root.findViewById(R.id.search_bar_back_arrow);
+        searchQuery = root.findViewById(R.id.search_bar_edit_text);
+        botNavView = getActivity().findViewById(R.id.nav_view);
+        searchListRecyclerView = root.findViewById(R.id.search_list_recycler_view);
+        searchEmptyBackground = root.findViewById(R.id.search_empty_background_layout);
+        searchResultListLayout = root.findViewById(R.id.search_result_list_layout);
+        searchEditTextLayout = root.findViewById(R.id.search_edit_text_layout);
+        searchTextViewLayout = root.findViewById(R.id.search_text_layout);
+        searchAllArtistsTextView = root.findViewById(R.id.see_all_artists_text_view);
+        searchAllSongsTextView = root.findViewById(R.id.see_all_songs_text_view);
+        searchAllPlaylistsTextView = root.findViewById(R.id.see_all_playlists_text_view);
+        searchAllAlbumsTextView = root.findViewById(R.id.see_all_albums_text_view);
+        searchMainBackground = root.findViewById(R.id.search_main_background_layout);
+
+        searchAllGenresAndMoodsTextView = root
+                .findViewById(R.id.see_all_genres_and_moods_text_view);
+        searchAllProfilesTextView = root.findViewById(R.id.see_all_profiles_text_view);
+
+        searchViewModel.getText().observe(getViewLifecycleOwner(), s -> {
+        });
+
+        mySearchHistory = new ArrayList<>();
+        return root;
     }
 
     public static void removeSearchHistoryList() {
@@ -187,84 +280,6 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         searchMainBackground.setBackground(mDrawable);*/
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
-
-        apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
-
-        SearchViewModel searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-        final View root = inflater.inflate(R.layout.fragment_search, container, false);
-
-        cameraInTextView = root.findViewById(R.id.search_camera_image_in_text_view);
-        cameraInEditText = root.findViewById(R.id.search_camera_image_in_edit_text);
-        //TODO: Add Camera functionality if it's required.
-
-        searchTextView = root.findViewById(R.id.search_bar_text_view);
-        resetSearch = root.findViewById(R.id.reset_search_image);
-        backArrow = root.findViewById(R.id.search_bar_back_arrow);
-        searchQuery = root.findViewById(R.id.search_bar_edit_text);
-        botNavView = getActivity().findViewById(R.id.nav_view);
-        searchListRecyclerView = root.findViewById(R.id.search_list_recycler_view);
-        searchEmptyBackground = root.findViewById(R.id.search_empty_background_layout);
-        searchResultListLayout = root.findViewById(R.id.search_result_list_layout);
-        searchEditTextLayout = root.findViewById(R.id.search_edit_text_layout);
-        searchTextViewLayout = root.findViewById(R.id.search_text_layout);
-        searchAllArtistsTextView = root.findViewById(R.id.see_all_artists_text_view);
-        searchAllSongsTextView = root.findViewById(R.id.see_all_songs_text_view);
-        searchAllPlaylistsTextView = root.findViewById(R.id.see_all_playlists_text_view);
-        searchAllAlbumsTextView = root.findViewById(R.id.see_all_albums_text_view);
-        searchMainBackground = root.findViewById(R.id.search_main_background_layout);
-
-        searchAllGenresAndMoodsTextView = root
-                .findViewById(R.id.see_all_genres_and_moods_text_view);
-        searchAllProfilesTextView = root.findViewById(R.id.see_all_profiles_text_view);
-
-        searchViewModel.getText().observe(getViewLifecycleOwner(), s -> {
-        });
-
-        mySearchHistory = new ArrayList<>();
-        return root;
-    }
-
-    private ArrayList<Object> getTwosOfEach(List<List<Object>> searchListResults) {
-        ArrayList<Object> mSearchResult = new ArrayList<>();
-        for (int i = 0; i < searchListResults.size(); i++) {
-            int mSize = Math.min(searchListResults.get(i).size(), 2);
-            for (int j = 0; j < mSize; j++) {
-                mSearchResult.add(searchListResults.get(i).get(j));
-                Log.d("L", "lol");
-            }
-        }
-        return mSearchResult;
-    }
-
-    /**
-     * OnClick Method for searching by a certain type: artists, playlists, ...etc.
-     */
-    @Override
-    public void onClick(View v) {
-        SearchByTypeFragment fragment = new SearchByTypeFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(SearchByTypeConstantsHelper.SEARCH_TYPE_KEY, v.getTransitionName());
-        arguments.putString(SearchByTypeConstantsHelper.SEARCH_QUERY_KEY,
-                searchQuery.getText().toString());
-        fragment.setArguments(arguments);
-        getParentFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right,
-                        R.anim.slide_out_left,
-                        R.anim.slide_in_left,
-                        R.anim.slide_out_right)
-                .replace(R.id.nav_host_fragment, fragment)
-                .addToBackStack("search")
-                .commit();
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -277,9 +292,9 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         handleTextViewsActions();
 
         searchResults = new ArrayList<>();
-        searchListAdapter = new SearchListAdapter(searchResults, this);
 
         searchListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchListAdapter = new SearchListAdapter(searchResults, this);
         searchListRecyclerView.setAdapter(searchListAdapter);
 
         searchHistoryListLayout = view.findViewById(R.id.search_history_list_container);
@@ -326,6 +341,33 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         searchQuery.addTextChangedListener(this);
     }
 
+    /**
+     * OnClick Method for searching by a certain type: artists, playlists, ...etc.
+     */
+    @Override
+    public void onClick(View v) {
+        SearchByTypeFragment fragment = new SearchByTypeFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString(SearchByTypeConstantsHelper.SEARCH_TYPE_KEY, v.getTransitionName());
+        arguments.putString(SearchByTypeConstantsHelper.SEARCH_QUERY_KEY,
+                searchQuery.getText().toString());
+        fragment.setArguments(arguments);
+        getParentFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right,
+                        R.anim.slide_out_left,
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right)
+                .replace(R.id.nav_host_fragment, fragment)
+                .addToBackStack("search")
+                .commit();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
     @Override
     public void afterTextChanged(Editable s) {
 
@@ -334,29 +376,31 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() > 0) {
+
             searchResultListLayout.setVisibility(View.VISIBLE);
             searchEmptyBackground.setVisibility(View.GONE);
             searchHistoryListLayout.setVisibility(View.GONE);
             resetSearch.setVisibility(View.VISIBLE);
             cameraInEditText.setVisibility(View.GONE);
 
-                    /*TODO:Remove Comments when backend is finished
+            //*******  This populates the list every time the user types a letter inside search bar  ********/
 
-                    *******  This populates the list every time the user types a letter inside search bar  *******
-                     */
-            Call<List<List<Object>>> call = apiService.getAllOfSearch(s.toString());
-            call.enqueue(new Callback<List<List<Object>>>() {
-                        @Override
-                        public void onResponse(Call<List<List<Object>>> call,
-                                Response<List<List<Object>>> response) {
+            Call<SearchResult> call = apiService.getAllOfSearch(s.toString());
+            call.enqueue(new Callback<SearchResult>() {
+                @Override
+                public void onResponse(Call<SearchResult> call,
+                        Response<SearchResult> response) {
 
-                            searchResults.addAll(getTwosOfEach(response.body()));
+                    Log.d("Meh", "doll");
+                    searchResults.clear();
+                    searchResults.addAll(getTwosOfEach(response.body()));
                             searchListAdapter.notifyDataSetChanged();
-                        }
+                    Log.d("Meh", "d");
+                }
 
                         @Override
-                        public void onFailure(Call<List<List<Object>>> call, Throwable t) {
-                            Log.d(TAG, "failed to retrieve playlists");
+                        public void onFailure(Call<SearchResult> call, Throwable t) {
+                            Log.d(TAG, "failed to retrieve playlists" + t.getMessage());
                         }
                     });
             //setSearchMainBackgroundColor(colorOfFirstSearchResultImage);
@@ -364,6 +408,8 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
 
         } else {
             searchResultListLayout.setVisibility(View.GONE);
+            searchResults.clear();
+            searchListAdapter.notifyDataSetChanged();
             if (!mySearchHistory.isEmpty()) {
                 showSearchHistoryList();
             } else {

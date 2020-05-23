@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class GenrePlaylistsGridAdapter extends
         RecyclerView.Adapter<GenrePlaylistsGridAdapter.MyViewHolder> {
 
-    private static ArrayList<HomePlaylist> mPlaylists;    //TODO: Change to ArrayList<Playlist>
+    private static ArrayList<HomePlaylist> mPlaylists;
     private static Fragment fragment;
 
     /**
@@ -47,7 +47,7 @@ public class GenrePlaylistsGridAdapter extends
         holder.playlistTitle.setText(mPlaylists.get(position).getName());
         holder.playlistSubTitle.setText(mPlaylists.get(position).getDescription());
         Picasso.get().load(mPlaylists.get(position).getImages().get(0).getUrl())
-                .into(holder.playlistImage);
+                .placeholder(R.drawable.spotify).into(holder.playlistImage);
     }
 
     // Return the size of your data set (invoked by the layout manager)
@@ -56,12 +56,9 @@ public class GenrePlaylistsGridAdapter extends
         return mPlaylists.size();
     }
 
-    // Provide a reference to the views for each data item
-// Complex data items may need more than one view per item, and
-// you provide access to all the views for a data item in a view holder
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        // each data item is just a string in this case
         public View v;
         ImageView playlistImage;
         TextView playlistTitle;
