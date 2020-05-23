@@ -62,6 +62,7 @@ public class RetrofitClient {
         headers.addHeader(HEADER_USER_AGENT, getUserAgent());
 
        // httpClientBuilder.cache(getCache())
+
         //        .addInterceptor(useCachedResponsesInterceptor())
         //        .addNetworkInterceptor(cacheResponsesInterceptor());
 

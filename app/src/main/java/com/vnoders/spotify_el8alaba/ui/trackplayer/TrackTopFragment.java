@@ -12,12 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
 import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenu;
 import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenuItem;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
  * @author Ali Adel Top part of track player fragment
@@ -25,7 +25,8 @@ import java.util.List;
 public class TrackTopFragment extends Fragment {
 
     // holds author name text view
-    private TextView authorNameText;
+    private TextView mTypeNameText;
+    private TextView mPlayingFromTextView;
 
     /**
      * inflate layout and return it to system to display
@@ -38,12 +39,10 @@ public class TrackTopFragment extends Fragment {
         // set the overflow menu click listener to start overflow menu
         rootView.findViewById(R.id.top_overflow_menu).setOnClickListener(v -> startOverflowMenu());
 
-        String playingFrom = getString(R.string.playing_from_artist);
         // setting the text
-        TextView playingFromTextView = rootView.findViewById(R.id.playing_from_text);
-        playingFromTextView.setText(playingFrom);
+        mPlayingFromTextView = rootView.findViewById(R.id.playing_from_text);
 
-        authorNameText = rootView.findViewById(R.id.author_name_text_top);
+        mTypeNameText = rootView.findViewById(R.id.author_name_text_top);
 
         // setting the top button to behave like the back button
         Button button = rootView.findViewById(R.id.top_back_button);
@@ -55,9 +54,9 @@ public class TrackTopFragment extends Fragment {
         });
 
         // setting the observer on the data change then calling updateUI on data change
-        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<Track>() {
             @Override
-            public void onChanged(RealTrack realTrack) {
+            public void onChanged(Track realTrack) {
                 updateUI(realTrack);
             }
         });
@@ -70,12 +69,31 @@ public class TrackTopFragment extends Fragment {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(RealTrack track) {
+    private void updateUI(Track track) {
 
         if (track == null)
             return;
 
-        authorNameText.setText(track.getArtists().get(0).getUserInfo().getName());
+        String name = track.getTypeName();
+
+        if (name == null || name.equals("") || name.equals(" ")) {
+            mTypeNameText.setVisibility(View.GONE);
+            mPlayingFromTextView.setVisibility(View.GONE);
+        } else {
+            mTypeNameText.setVisibility(View.VISIBLE);
+            mPlayingFromTextView.setVisibility(View.VISIBLE);
+            mTypeNameText.setText(name);
+
+            String type = track.getType();
+
+            if (type.equals(Track.TYPE_ALBUM)) {
+                mPlayingFromTextView.setText(getString(R.string.playing_from_album));
+            } else if (type.equals(Track.TYPE_PLAYLIST)) {
+                mPlayingFromTextView.setText(getString(R.string.playing_from_playlist));
+            } else {
+                mPlayingFromTextView.setText(getString(R.string.playing_from_artist));
+            }
+        }
     }
 
     /**
@@ -87,7 +105,7 @@ public class TrackTopFragment extends Fragment {
         AppCompatActivity parentActivity = (AppCompatActivity)getActivity();
         if (parentActivity != null) {
 
-            RealTrack track = TrackViewModel.getInstance().getCurrentTrack().getValue();
+            Track track = TrackViewModel.getInstance().getCurrentTrack().getValue();
 
             String songName = " Temp Track Name";
             if (track != null) {
@@ -96,7 +114,7 @@ public class TrackTopFragment extends Fragment {
             
             String authorName = "Temp Author Name";
             if (track != null) {
-                authorName = track.getArtists().get(0).getUserInfo().getName();
+                authorName = track.getArtistName();
             }
 
             List<OverflowMenuItem> actionItems = new ArrayList<>();

@@ -4,17 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.test.rule.ActivityTestRule;
 
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.RealArtist;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
-import com.vnoders.spotify_el8alaba.models.RealUserInfo;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -30,11 +25,11 @@ public class TrackTopFragmentTest {
 
     @Before
     public void loadingData() {
-        LiveData<RealTrack> mViewTrack = TrackViewModel.getInstance().getCurrentTrack();
+        LiveData<Track> mViewTrack = TrackViewModel.getInstance().getCurrentTrack();
 
-        List<RealArtist> artists = new ArrayList<>();
-        artists.add(new RealArtist(new RealUserInfo("My Testing Artist")));
-        RealTrack track = new RealTrack("12313", "My Testing Song", 2000, artists);
+        Track track = new Track("12313", "My Testing Song", 2000,
+                "My Testing Artist", "PLAYING_ARTIST", "My Testing Artist",
+                null, "1234", "1534", "asdasf");
         TrackViewModel.getInstance().updateCurrentTrack(track);
     }
 

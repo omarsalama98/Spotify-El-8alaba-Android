@@ -11,6 +11,7 @@
     <string name = "speaker_image_desc">Speaker Image</string>
     <string name = "share_image_desc">Share Image</string>
     <string name = "playing_from_playlist">Playing from playlist</string>
+    <string name = "playing_from_album">Playing from album</string>
     <string name = "playing_from_artist">Playing from artist</string>
     <string name = "play_button_desc">Play Button</string>
     <string name = "find_the_music_you_love">Find the music you love</string>
@@ -140,4 +141,6 @@
     <string name = "and_more">and more</string>
     <string name = "edit_playlist">Edit Playlist</string>
     <string name = "preview_playlist">Preview</string>
+
+    <string name = "share_url_error">Fetching Url from server, try again!</string>
 </resources>

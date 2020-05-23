@@ -56,7 +56,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="03:02"
             android:textColor="@color/white" />
 
     </RelativeLayout>
@@ -68,23 +67,22 @@
         android:layout_marginTop="12dp">
 
         <Button
-            android:id="@+id/love_button"
+            android:id="@+id/repeat_track"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
-            android:background="@drawable/like_track_unliked" />
+            android:layout_centerVertical="true"
+            android:background="@drawable/repeat_trackplayer"
+            android:backgroundTint="@color/white" />
 
 
         <RelativeLayout
-            android:id="@+id/track_control_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginStart="38dp"
             android:layout_marginEnd="38dp"
-            android:layout_toStartOf="@id/remove_song_button"
-            android:layout_toEndOf="@id/love_button">
+            android:layout_toStartOf="@id/shuffle_track"
+            android:layout_toEndOf="@id/repeat_track">
 
             <Button
                 android:id="@+id/skip_previous_button"
@@ -113,12 +111,13 @@
         </RelativeLayout>
 
         <Button
-            android:id="@+id/remove_song_button"
+            android:id="@+id/shuffle_track"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/ic_remove_circle_outline_white_56dp" />
+            android:background="@drawable/shuffle_trackplayer"
+            android:backgroundTint="@color/white" />
 
     </RelativeLayout>
 
@@ -128,25 +127,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp">
 
-        <RelativeLayout
-            android:id="@+id/connect_devices_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/love_button_track_player_bot"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/like_track_unliked"
+            android:backgroundTint="@color/white" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/desktop_image_desc"
-                android:src="@drawable/ic_desktop_windows_white_24dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:contentDescription="@string/speaker_image_desc"
-                android:src="@drawable/ic_speaker_white_24dp" />
-
-        </RelativeLayout>
 
         <View
             android:layout_width="0dp"

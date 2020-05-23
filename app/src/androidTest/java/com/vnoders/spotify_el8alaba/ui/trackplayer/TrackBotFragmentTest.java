@@ -4,17 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.test.rule.ActivityTestRule;
 
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.RealArtist;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
-import com.vnoders.spotify_el8alaba.models.RealUserInfo;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -30,11 +25,11 @@ public class TrackBotFragmentTest {
 
     @Before
     public void loadingData() {
-        LiveData<RealTrack> mViewTrack = TrackViewModel.getInstance().getCurrentTrack();
+        LiveData<Track> mViewTrack = TrackViewModel.getInstance().getCurrentTrack();
 
-        List<RealArtist> artists = new ArrayList<>();
-        artists.add(new RealArtist(new RealUserInfo("My Testing Artist")));
-        RealTrack track = new RealTrack("12313", "My Testing Song", 2000, artists);
+        Track track = new Track("12313", "My Testing Song", 2000,
+                "My Testing Artist", "PLAYING_ARTIST", "My Testing Artist",
+                null, "1234", "1534", "asdasf");
         TrackViewModel.getInstance().updateCurrentTrack(track);
     }
 
@@ -49,14 +44,11 @@ public class TrackBotFragmentTest {
         onView(withId(R.id.trackProgress)).check(matches(isDisplayed()));
         onView(withId(R.id.trackDuration)).check(matches(isDisplayed()));
         onView(withId(R.id.buttons_bot_container)).check(matches(isDisplayed()));
-        onView(withId(R.id.love_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.track_control_buttons)).check(matches(isDisplayed()));
+        onView(withId(R.id.love_button_track_player_bot)).check(matches(isDisplayed()));
         onView(withId(R.id.skip_previous_button)).check(matches(isDisplayed()));
         onView(withId(R.id.play_pause_button)).check(matches(isDisplayed()));
         onView(withId(R.id.skip_next_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.remove_song_button)).check(matches(isDisplayed()));
         onView(withId(R.id.bottom_buttons_share_play_others)).check(matches(isDisplayed()));
-        onView(withId(R.id.connect_devices_button)).check(matches(isDisplayed()));
         onView(withId(R.id.share_button)).check(matches(isDisplayed()));
 
         onView(withId(R.id.song_name_text))
