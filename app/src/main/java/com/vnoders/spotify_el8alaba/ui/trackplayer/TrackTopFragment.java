@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -105,45 +107,73 @@ public class TrackTopFragment extends Fragment {
         AppCompatActivity parentActivity = (AppCompatActivity)getActivity();
         if (parentActivity != null) {
 
+            // get the track object to display
             Track track = TrackViewModel.getInstance().getCurrentTrack().getValue();
 
-            String songName = " Temp Track Name";
-            if (track != null) {
-                songName = track.getName();
-            }
-            
-            String authorName = "Temp Author Name";
-            if (track != null) {
-                authorName = track.getArtistName();
+            // if track is null don't do anything and display error
+            if (track == null) {
+                Toast.makeText(getContext(), getString(R.string.open_overflow_error), Toast.LENGTH_SHORT).show();
+                return;
             }
 
+            // create the overflow menu
+            OverflowMenu overflowMenu = new OverflowMenu();
+
+            // get track name otherwise set it to space
+            String songName = track.getName() == null ? " " : track.getName();
+
+            // get author name otherwise set it to space
+            String authorName = track.getArtistName() == null ? " " : track.getArtistName();
+
+            // create the buttons it display
             List<OverflowMenuItem> actionItems = new ArrayList<>();
 
-            actionItems.add(new OverflowMenuItem(R.drawable.like_track_unliked,
-                    getString(R.string.overflow_like), null));
+            // customize the like button according to whether the track is liked or not
+            int likeDrawable;
+            View.OnClickListener likeListener;
+            String likeText;
+            if (track.getLoved()) {
+                likeDrawable = R.drawable.like_track_liked;
+                likeListener = v -> {
+                    ((TrackPlayerActivity)getActivity()).getService().unLoveTrack(track.getId());
+                    overflowMenu.dismiss();
+                };
+                likeText = getString(R.string.overflow_unlike);
+            }
+            else {
+                likeDrawable = R.drawable.like_track_unliked;
+                likeListener = v -> {
+                    ((TrackPlayerActivity)getActivity()).getService().loveTrack(track.getId());
+                    overflowMenu.dismiss();
+                };
+                likeText = getString(R.string.overflow_like);
+            }
 
-            actionItems.add(new OverflowMenuItem(R.drawable.hide_track_visible,
-                    getString(R.string.overflow_hide), null));
+            // add the like button to actions
+            actionItems.add(new OverflowMenuItem(likeDrawable, likeText, likeListener));
 
-            actionItems.add(new OverflowMenuItem(R.drawable.add_song,
-                    getString(R.string.overflow_add), null));
+            // add the hide track action to buttons
+            actionItems.add(new OverflowMenuItem(R.drawable.hide_track_visible, getString(R.string.overflow_hide),
+                    v -> {
+                ((TrackPlayerActivity)getActivity()).getService().hideTrack(track.getId());
+                overflowMenu.dismiss();
+            }));
 
-            actionItems.add(new OverflowMenuItem(R.drawable.artist,
-                    getString(R.string.overflow_view), null));
+            // add the share button to actions
+            actionItems.add(new OverflowMenuItem(R.drawable.share, getString(R.string.overflow_share),
+                    v -> {
+                ((TrackPlayerActivity)getActivity()).getService().shareTrack(track);
+                overflowMenu.dismiss();
+                }));
 
-            actionItems.add(new OverflowMenuItem(R.drawable.share,
-                    getString(R.string.overflow_share), null));
 
-            actionItems.add(new OverflowMenuItem(R.drawable.sleep,
-                    getString(R.string.overflow_sleep), null));
+            // set the song name, author name, image, and actions
+            overflowMenu.setSongName(songName);
+            overflowMenu.setAuthorName(authorName);
+            overflowMenu.setImageUrl(track.getImage());
+            overflowMenu.setActionItems(actionItems);
 
-            actionItems.add(new OverflowMenuItem(R.drawable.report,
-                    getString(R.string.overflow_report), null));
-
-            actionItems.add(new OverflowMenuItem(R.drawable.credits,
-                    getString(R.string.overflow_credits), null));
-
-            OverflowMenu overflowMenu = new OverflowMenu(songName, authorName, null, actionItems);
+            // start the overflow menu
             overflowMenu.show(parentActivity.getSupportFragmentManager(), overflowMenu.getTag());
         }
     }

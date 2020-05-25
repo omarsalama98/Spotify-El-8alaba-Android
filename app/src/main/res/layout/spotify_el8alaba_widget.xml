@@ -1,0 +1,69 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin">
+
+    <TextView
+        android:id="@+id/widget_song_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:text="@string/widget_warning"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/widget_artist_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/widget_song_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:textColor="@color/pressed_grey"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:src="@mipmap/ic_launcher"/>
+
+    <Button
+        android:id="@+id/widget_skip_backward"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@android:drawable/ic_media_previous"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/widget_artist_name"
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/widget_play"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/widget_artist_name"
+        android:layout_toEndOf="@id/widget_skip_backward"
+        android:background="@android:drawable/ic_media_play" />
+
+    <Button
+        android:id="@+id/widget_pause"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/widget_artist_name"
+        android:layout_toEndOf="@id/widget_play"
+        android:background="@android:drawable/ic_media_pause" />
+
+    <Button
+        android:id="@+id/widget_skip_forward"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/widget_artist_name"
+        android:layout_toEndOf="@id/widget_pause"
+        android:background="@android:drawable/ic_media_next"
+        android:padding="8dp" />
+
+</RelativeLayout>

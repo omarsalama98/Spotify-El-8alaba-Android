@@ -213,9 +213,11 @@ public class TrackBotFragment extends Fragment {
 
         // set the background color of love button
         if (track.getLoved()) {
+            mLoveButton.setBackground(getResources().getDrawable(R.drawable.like_track_liked));
             mLoveButton.getBackground().setTint(getResources().getColor(R.color.green));
         }
         else {
+            mLoveButton.setBackground(getResources().getDrawable(R.drawable.like_track_unliked));
             mLoveButton.getBackground().setTint(getResources().getColor(R.color.white));
         }
 
@@ -346,28 +348,7 @@ public class TrackBotFragment extends Fragment {
      * Shares track with social media apps
      */
     private void shareTrack() {
-        if ((mCurrentTrack == null) || (TextUtils.isEmpty(mCurrentTrack.getShareUrl()))) {
-            Toast.makeText(getContext(), getString(R.string.share_url_error), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        /*Create an ACTION_SEND Intent*/
-        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-        /*This will be the actual content you wish you share.*/
-        String shareBody;
-        if (!TextUtils.isEmpty(mCurrentTrack.getArtistName()))
-            shareBody = mCurrentTrack.getArtistName() + "\n";
-        else
-            shareBody = "";
-
-        shareBody += mCurrentTrack.getName() + "\n" + mCurrentTrack.getShareUrl();
-        /*The type of the content is text, obviously.*/
-        intent.setType("text/plain");
-        /*Applying information Subject and Body.*/
-        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Spotify El8alaba");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-        /*Fire!*/
-        startActivity(Intent.createChooser(intent, "Share Via"));
+        ((TrackPlayerActivity) getActivity()).getService().shareTrack(mCurrentTrack);
     }
 
     /**

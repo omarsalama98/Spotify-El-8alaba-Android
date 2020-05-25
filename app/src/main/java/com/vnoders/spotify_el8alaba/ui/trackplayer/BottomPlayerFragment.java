@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class BottomPlayerFragment extends Fragment {
     // holds button
     private ImageView mPlayPauseButton;
     // holds love button
-    private TextView mLoveButton;
+    private Button mLoveButton;
 
     // current state of playing
     private boolean mIsPlaying = false;
@@ -187,10 +188,12 @@ public class BottomPlayerFragment extends Fragment {
 
         // set the background color of love button
         if (track.getLoved()) {
-            mLoveButton.setTextColor(getResources().getColor(R.color.green));
+            mLoveButton.setBackground(getResources().getDrawable(R.drawable.like_track_liked));
+            mLoveButton.getBackground().setTint(getResources().getColor(R.color.green));
         }
         else {
-            mLoveButton.setTextColor(getResources().getColor(R.color.white));
+            mLoveButton.setBackground(getResources().getDrawable(R.drawable.like_track_unliked));
+            mLoveButton.getBackground().setTint(getResources().getColor(R.color.white));
         }
     }
 

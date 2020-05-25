@@ -30,7 +30,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitClient {
 
-    public static final String BASE_URL = BuildConfig.BASE_URL;
+    //public static final String BASE_URL = BuildConfig.BASE_URL;
+    public static final String BASE_URL = "https://spotify-elghalaba.me/api/v1/";
 
 
     private static final String HEADER_AUTHORIZATION = "Authorization";

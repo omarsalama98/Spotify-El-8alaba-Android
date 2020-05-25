@@ -1,6 +1,8 @@
-package com.vnoders.spotify_el8alaba;
+package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
+import android.app.Notification;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,12 +23,16 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
+import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.media.MediaBrowserServiceCompat;
 import androidx.media.session.MediaButtonReceiver;
 
+import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.SplashActivity;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
@@ -39,10 +45,8 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostPlayTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.ShareTrackResponse;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
-import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.repositories.TrackPlayerApi;
-import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +55,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.HEAD;
 
 /**
  * @author Ali Adel
@@ -77,6 +80,14 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     private static final String CONTEXT_RESPONSE_TYPE_PLAYLIST = "playlist";
     private static final String CONTEXT_RESPONSE_TYPE_ARTIST = "artist";
 
+    // Widget constants for starting intent
+    public static final String OPEN_APP = "open_app";
+    public static final String PLAY_ID = "play_track";
+    public static final String PAUSE_ID = "pause_track";
+    public static final String SKIP_FORWARD = "skip_forward";
+    public static final String SKIP_BACKWARD = "skip_backward";
+
+
     // constant which dictates time of handler thread
     private static final int HANDLER_DELAY = 1000;
     private static final int POST_UPDATE_PROGRESS_SECONDS = 10;
@@ -91,6 +102,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     private List<Track> mTracksList = new ArrayList<>();
     // list of tracks to keep in case of shuffle
     private List<Track> mTracksListOriginal = new ArrayList<>();
+    // list of hidden tracks
+    private List<String> mTracksHidden = new ArrayList<>();
 
     // access-token to use to play songs
     private String mAccessToken;
@@ -106,6 +119,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
     // know if playing right now
     private boolean mPlaying = false;
+
+    // reference to all widgets
+    private int[] mAllWidgetIds;
 
     // this is for event every .. ms
     private Handler mHandler = new Handler();
@@ -195,13 +211,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
         // get the list of tracks to play
         getCurrentlyPlaying();
-        //playTrack("5ec4559c1bf12b31fcfc1807", false);
-        //List<String> tracks = new ArrayList<>();
-        //tracks.add("5ec455a01bf12b31fcfc1808");
-        //tracks.add("5ec4559c1bf12b31fcfc1807");
-        //playList(tracks, false, false, null);
-        //playAlbum("5ec455de1bf12b31fcfc1861", false, false, null);
-        //playPlaylist("5ec455de1bf12b31fcfc1855", false, false, null);
     }
 
     /**
@@ -211,6 +220,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         MediaButtonReceiver.handleIntent(mMediaSession, intent);
+
+        // check if widget is the one who launched me
+        checkWidget(intent);
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -326,11 +338,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         if (TextUtils.isEmpty(trackId))
             return;
 
+        // find track in list and when found then set it's love status to true
         if ((mTracksList != null) && (mTracksList.size() > 0)) {
             for (int i = 0; i < mTracksList.size(); ++i) {
                 if (mTracksList.get(i).getId().equals(trackId)) {
                     mTracksList.get(i).setLoved(true);
 
+                    // if track is one being played right now then update it
                     if (mCurrentTrackIndex == i)
                         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
 
@@ -339,6 +353,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             }
         }
 
+        // tell backend about loving track
         Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).loveTrack(trackId);
         request.enqueue(new Callback<Void>() {
             @Override
@@ -354,11 +369,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         if (TextUtils.isEmpty(trackId))
             return;
 
+        // find track in list and when found then set it's love status to false
         if ((mTracksList != null) && (mTracksList.size() > 0)) {
             for (int i = 0; i < mTracksList.size(); ++i) {
                 if (mTracksList.get(i).getId().equals(trackId)) {
                     mTracksList.get(i).setLoved(false);
 
+                    // if track is one being played right now then update it
                     if (mCurrentTrackIndex == i)
                         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
 
@@ -367,6 +384,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             }
         }
 
+        // tell backend about unloving track
         Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).unLoveTrack(trackId);
         request.enqueue(new Callback<Void>() {
             @Override
@@ -385,20 +403,30 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             return;
         }
 
+        // toggle the shuffle state
         mShuffle = !mShuffle;
 
         if (mShuffle) {
+            // shuffle is enabled
             mTracksListOriginal = new ArrayList<>();
+            // create the temp list to store the original order of tracks
             mTracksListOriginal.addAll(mTracksList);
+            // get the current track being played as to not disturb the playing right now
             Track currentTrack = mTracksList.get(mCurrentTrackIndex);
+            // remove it from list
             mTracksList.remove(mCurrentTrackIndex);
+            // then shuffle
             Collections.shuffle(mTracksList);
+            // finally add the currently being played again in same place
             mTracksList.add(mCurrentTrackIndex, currentTrack);
         }
         else {
+            // shuffle is off so get the being played right now
             String trackId = mTracksList.get(mCurrentTrackIndex).getId();
             mTracksList = new ArrayList<>();
+            // add the original list order to being played list
             mTracksList.addAll(mTracksListOriginal);
+            // find the current being played and make index point to it
             for (int i = 0; i < mTracksList.size(); ++i) {
                 if (mTracksList.get(i).getId().equals(trackId)) {
                     mCurrentTrackIndex = i;
@@ -407,8 +435,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             }
         }
 
+        // tell backend about shuffle state
         setShuffleState(mShuffle);
+        // update current track shuffle state
         mTracksList.get(mCurrentTrackIndex).setShuffle(mShuffle);
+        // update being played right now
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
     }
 
@@ -424,8 +455,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
         if (mRepeat) {
 
+            // toggle the repeat
             mRepeat = false;
 
+            // update next and previous accordingly
             if (mCurrentTrackIndex < 1)
                 mTracksList.get(mCurrentTrackIndex).setHasPrev(false);
             else
@@ -437,9 +470,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 mTracksList.get(mCurrentTrackIndex).setHasNext(true);
 
         } else {
-
+            // toggle the repeat
             mRepeat = true;
 
+            // if activating repeat then always gonna be a previous and next
             mTracksList.get(mCurrentTrackIndex).setHasPrev(true);
             mTracksList.get(mCurrentTrackIndex).setHasNext(true);
         }
@@ -447,6 +481,69 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mTracksList.get(mCurrentTrackIndex).setRepeat(mRepeat);
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
         setRepeatState(mRepeat);
+    }
+
+    /**
+     * Called to hide track from playlist
+     * @param trackId id of track to hide from playlist
+     */
+    public void hideTrack(String trackId) {
+        if ((mTracksList == null) || (mTracksList.size() < 1) || (TextUtils.isEmpty(trackId)))
+            return;
+
+        // add track to hidden tracks list
+        mTracksHidden.add(trackId);
+
+        // if it is currently being played then skip it
+        // if can't skip forward(End of list) then skip backward
+        if (mTracksList.get(mCurrentTrackIndex).getId().equals(trackId))
+            if (!skipToNext())
+                skipToPrev();
+    }
+
+    /**
+     * Called to make track visible again
+     * @param trackId id of track to return to visibility
+     */
+    public void unHideTrack(String trackId) {
+        if ((mTracksList == null) || (mTracksList.size() < 1) || (TextUtils.isEmpty(trackId)))
+            return;
+
+        // un hide track and remove it from hidden tracks list
+        mTracksHidden.remove(trackId);
+    }
+
+    /**
+     * Shares track with social media apps
+     * @param track track object that is gonna get shared
+     */
+    public void shareTrack(Track track) {
+        if ((track == null) || (TextUtils.isEmpty(track.getShareUrl()))) {
+            Toast.makeText(MediaPlaybackService.this, getString(R.string.share_url_error), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        /*Create an ACTION_SEND Intent*/
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        /*This will be the actual content you wish you share.*/
+        String shareBody;
+        if (!TextUtils.isEmpty(track.getArtistName()))
+            shareBody = track.getArtistName() + "\n";
+        else
+            shareBody = "";
+
+        shareBody += track.getName() + "\n" + track.getShareUrl();
+        /*The type of the content is text, obviously.*/
+        intent.setType("text/plain");
+        /*Applying information Subject and Body.*/
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Spotify El8alaba");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // because from service so have to add this flag
+        Intent chooser = Intent.createChooser(intent, "Share Via");
+        chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        /*Fire!*/
+        startActivity(chooser);
     }
 
     //______________________________________________________________________________________________
@@ -458,6 +555,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
      */
     public void start() {
 
+        if ((mTracksList == null) || (mTracksList.size() < 1) || (mCurrentTrackIndex < 0))
+            return;
+
+        // try to get audio focus first, if failed then don't play
         if (!successfullyRetrievedAudioFocus())
             return;
 
@@ -466,8 +567,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
             return;
         }
-
-        //Toast.makeText(getApplicationContext(), "Start enter", Toast.LENGTH_SHORT).show();
 
         // if media player is already active and there is network connection then play song
         // and start handler to update user about progress
@@ -483,7 +582,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
      * called to pause song
      */
     public void pause() {
-        //Toast.makeText(getApplicationContext(), "Pause enter", Toast.LENGTH_SHORT).show();
+        if ((mTracksList == null) || (mTracksList.size() < 1) || (mCurrentTrackIndex < 0))
+            return;
 
         // if song is already playing then pause it and stop the handler from updating
         if (mPlaying && mPlayerReady) {
@@ -501,11 +601,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
      */
     public boolean skipToNext() {
 
-        mFirstInit = false;
-
-        // if there are no tracks then return false
-        if (mTracksList == null || mTracksList.isEmpty())
+        // if not tracks then return false
+        if ((mTracksList == null) || (mTracksList.size() < 1) || (mCurrentTrackIndex < 0))
             return false;
+
+        mFirstInit = false;
 
         // if last song in list return false
         ++mCurrentTrackIndex;
@@ -537,12 +637,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
      * called to skip to previous song
      */
     public void skipToPrev() {
+        // if no track in list then do nothing
+        if ((mTracksList == null) || (mTracksList.size() < 1) || (mCurrentTrackIndex < 0))
+            return;
 
         mFirstInit = false;
-
-        // if no track in list then do nothing
-        if (mTracksList == null || mTracksList.isEmpty())
-            return;
 
         // if first song in list then just seek to beginning of song
         --mCurrentTrackIndex;
@@ -601,17 +700,31 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             return;
         }
 
+        // if track is hidden then skip to next one
+        if (mTracksHidden.contains(track.getId())) {
+            if (!skipToNext()) {
+                skipToPrev();
+            }
+            return;
+        }
+
+        // if there is not artist name then fetch it from backend
         if (TextUtils.isEmpty(track.getArtistName())) {
             getArtistInfo(track);
         }
 
+        // if there is not image then fetch it from backend
         if (TextUtils.isEmpty(track.getImage())) {
             getAlbumImage(track);
         }
 
+        // if there is no share url ready then fetch it from backend
         if (TextUtils.isEmpty(track.getShareUrl())) {
             getShareUrl(track);
         }
+
+        // update the widget UI with the new track
+        updateWidget(track);
 
         // set shuffle and repeat states
         mTracksList.get(mCurrentTrackIndex).setRepeat(mRepeat);
@@ -633,6 +746,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             mTracksList.get(mCurrentTrackIndex).setHasNext(true);
         }
 
+        // update the currently played track
         TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
 
         // Tell backend that i'm playing this track
@@ -647,7 +761,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build());
 
-
+        // set volume, wake mode and audio stream type
         mMediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setVolume(1.0f, 1.0f);
@@ -657,9 +771,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             // prepare the url to play the song
             String songUrl = PLAYER_STREAMING_BASE_URL + track.getId() + PLAYER_STREAMING_URL_MIDDLE + mAccessToken;
 
+            // prepare the data
             mMediaPlayer.setDataSource(songUrl);
             mMediaPlayer.prepareAsync();
 
+            // set playing and set media player listeners
             setIsPlaying(false);
             mMediaPlayer.setOnPreparedListener(this);
             mMediaPlayer.setOnCompletionListener(this);
@@ -670,6 +786,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         }
     }
 
+    /**
+     * Init the media session that handles audio focus and call backs
+     */
     void initMediaSession() {
         ComponentName mediaButtonReceiver = new ComponentName(getApplicationContext(), MediaButtonReceiver.class);
         mMediaSession = new MediaSessionCompat(getApplicationContext(), "tag", mediaButtonReceiver, null);
@@ -693,19 +812,26 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         registerReceiver(mNoisyReceiver, filter);
     }
 
+    /**
+     * If audio focus changed so getting notified and taking proper actions
+     * @param focusChange state of what happened
+     */
     @Override
     public void onAudioFocusChange(int focusChange) {
         switch (focusChange) {
+            // if lost audio focus for a short time or long time just pause then playback
             case AudioManager.AUDIOFOCUS_LOSS:
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 pause();
                 break;
 
+            // if can duck the audio then reduce it
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 if (mPlaying && (mMediaPlayer != null))
                     mMediaPlayer.setVolume(0.3f, 0.3f);
                 break;
 
+            // got the focus again, if not playing then play, if playing then update volume
             case AudioManager.AUDIOFOCUS_GAIN:
                 if (mMediaPlayer != null) {
                     if (!mPlaying)
@@ -824,7 +950,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 currentTrack.setRepeat(mRepeat);
                 mTracksList = new ArrayList<>();
                 mTracksList.add(currentTrack);
-
 
                 // decode the context uri that i got from backend
                 String uri = currentTrack.getContextUri();
@@ -1364,6 +1489,108 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         }
     }
 
+    //______________________________________________________________________________________________
+    //------------------------------------Widget Functions------------------------------------------
+    //______________________________________________________________________________________________
+
+    /**
+     * Check the widget intent and see if it matches any code used
+     * @param intent with data from widget
+     */
+    private void checkWidget(Intent intent) {
+
+        if (intent != null) {
+            String code = intent.getAction();
+            if (!TextUtils.isEmpty(code)) {
+
+                if (code.equals(OPEN_APP)) {
+                    openApp();
+                } else if (code.equals(PLAY_ID)) {
+                    playPressed();
+                }
+                else if (code.equals(PAUSE_ID)) {
+                    pausePressed();
+                }
+                else if (code.equals(SKIP_FORWARD)) {
+                    skipForward();
+                }
+                else if (code.equals(SKIP_BACKWARD)) {
+                    skipBackward();
+                }
+
+                // store the widget ids in global variable
+                mAllWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+            }
+        }
+    }
+
+    /**
+     * Open application with intent
+     */
+    private void openApp() {
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    /**
+     * play the track
+     */
+    private void playPressed() {
+        start();
+    }
+
+    /**
+     * pause track
+     */
+    private void pausePressed() {
+        pause();
+    }
+
+    /**
+     * skip to next track
+     */
+    private void skipForward() {
+        skipToNext();
+    }
+
+    /**
+     * skip to previous track
+     */
+    private void skipBackward() {
+        skipToPrev();
+    }
+
+    /**
+     * Updates the Widget UI to reflect current playing track
+     * @param track object to update widget UI with
+     */
+    private void updateWidget(Track track) {
+        // if any error then return
+        if ((mAllWidgetIds == null) || (mTracksList == null) || (mTracksList.size() < 1) || (mCurrentTrackIndex < 0))
+            return;
+
+        // loop on all widgets
+        for (int id : mAllWidgetIds) {
+            // fetch the remote view
+            RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.spotify_el8alaba_widget);
+
+            // update track name
+            if (track.getName() != null)
+                views.setTextViewText(R.id.widget_song_name, track.getName());
+            else
+                views.setTextViewText(R.id.widget_song_name, getString(R.string.widget_warning));
+
+            // update track artist name
+            if (track.getArtistName() != null)
+                views.setTextViewText(R.id.widget_artist_name, track.getArtistName());
+            else
+                views.setTextViewText(R.id.widget_artist_name, " ");
+
+            // update the widget
+            AppWidgetManager.getInstance(this).updateAppWidget(id, views);
+        }
+    }
 
     //______________________________________________________________________________________________
     //------------------------------------Utility Functions-----------------------------------------
@@ -1396,6 +1623,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * Tries to retrieve audio focus
+     * @return true : got audio focus successfully, false : failed to get audio focus
+     */
     private boolean successfullyRetrievedAudioFocus() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -1405,6 +1636,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         return result == AudioManager.AUDIOFOCUS_GAIN;
     }
 
+    /**
+     * set the media session state of playing or not
+     * @param state of playing or not
+     */
     private void setMediaPlaybackState(int state) {
         PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder();
 

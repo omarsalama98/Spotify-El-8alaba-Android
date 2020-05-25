@@ -26,6 +26,11 @@ public class OverflowMenu extends BottomSheetDialogFragment {
     private String authorName;
     private String imageUrl;
 
+    /**
+     * Constructor for early creating and then setting the value with setters to get early reference
+     */
+    public OverflowMenu() {};
+
     public OverflowMenu(String songName, String authorName, String imageUrl,
             @NonNull List<OverflowMenuItem> actionItems) {
         this.songName = songName;
@@ -163,5 +168,35 @@ public class OverflowMenu extends BottomSheetDialogFragment {
         }
     }
 
+    /**
+     * Setter for the song name
+     * @param songName name of song to display
+     */
+    public void setSongName(String songName) {
+        this.songName = songName;
+    }
 
+    /**
+     * Setter for the author/artist name
+     * @param authorName name of artist to display after song
+     */
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    /**
+     * Setter for image url to display
+     * @param imageUrl to display at top
+     */
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    /**
+     * Setter for action items list to display
+     * @param actionItems to display
+     */
+    public void setActionItems(@NonNull List<OverflowMenuItem> actionItems) {
+        this.actionItems = actionItems;
+    }
 }

@@ -25,7 +25,6 @@ import androidx.palette.graphics.Palette;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;

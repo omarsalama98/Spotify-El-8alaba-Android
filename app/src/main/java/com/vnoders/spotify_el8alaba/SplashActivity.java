@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ public class SplashActivity extends AppCompatActivity {
                 String tokenVal=sharedPreferences.getString("token","token not found");
                 if (!tokenVal.equals("")&&!tokenVal.equals("token not found")) {
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    // set the token that was in the preferences before to retrofit client
+                    RetrofitClient.getInstance().setToken(tokenVal);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(SplashActivity.this, FirstScreen.class);
