@@ -2,6 +2,7 @@ package com.vnoders.spotify_el8alaba.ui.login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.rtt.ResponderLocation;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,15 +20,20 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
 import com.vnoders.spotify_el8alaba.ConnectionDialog;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.FacebookToken;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
 import com.vnoders.spotify_el8alaba.ui.signup.SignUpEmail;
+import java.io.IOException;
 import java.util.Arrays;
 import okhttp3.ResponseBody;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +44,7 @@ public class FirstScreen extends AppCompatActivity {
     private Button sign_up_button;
     private LoginButton facebook_button;
     private CallbackManager callbackManager;
+    SharedPreferences sharedPreferences;
 
 
    /* AccessTokenTracker tokenTracker = new AccessTokenTracker() {
@@ -60,6 +67,8 @@ public class FirstScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getSharedPreferences(
+                getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_first_screen);
         // Remove the windows's background color to reduce overdraw because it is already
@@ -67,27 +76,60 @@ public class FirstScreen extends AppCompatActivity {
         getWindow().setBackgroundDrawable(null);
         callbackManager = CallbackManager.Factory.create();
         facebook_button = findViewById(R.id.facebook_button);
-        facebook_button.setReadPermissions(Arrays.asList("email","user_birthday"));
+        facebook_button.setReadPermissions(Arrays.asList("email", "user_birthday"));
         facebook_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-            AccessToken token=loginResult.getAccessToken();
-                FacebookToken facebookToken=new FacebookToken(token.getToken());
+                AccessToken token = loginResult.getAccessToken();
+                FacebookToken facebookToken = new FacebookToken(token.getToken());
                 Log.v("TAG", "Token::" + token.getToken());
-                Toast.makeText(FirstScreen.this,token.getToken(),Toast.LENGTH_SHORT).show();
-                Call<ResponseBody> call=RetrofitClient.getInstance().getAPI(API.class).loginFB(facebookToken);
+                Call<ResponseBody> call = RetrofitClient.getInstance().getAPI(API.class)
+                        .loginFB(facebookToken);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call,
                             Response<ResponseBody> response) {
-                        Toast.makeText(FirstScreen.this,"SUCCESS",Toast.LENGTH_LONG).show();
-                        Log.d("RESPONSE FACEBOOK",response.toString());
+                        Log.d("RESPONSE FACEBOOK", response.toString());
+                        String jsonRespone = null;
+                        try {
+                            if (response.code() == 200) {
+                                Gson gson = new Gson();
+                                try {
+                                    jsonRespone = response.body().string();
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                JSONObject jsonObject = new JSONObject(jsonRespone);
+                                String token = jsonObject.getString("token");
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("token", token);
+                                editor.commit();
+                                JSONObject data = jsonObject.getJSONObject("data");
+                                JSONObject user = data.getJSONObject("user");
+                                JSONObject jsonCurrentlyPlayed = user
+                                        .getJSONObject("currentlyPlaying");
+                                String id=user.getString("id");
+                                editor.putString("id",id).commit();
+                                CurrentlyPlaying currentlyPlaying = gson.fromJson(
+                                        jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
+                                RetrofitClient.getInstance().setToken(token);
+                                Intent intent = new Intent(FirstScreen.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(FirstScreen.this,"FAILURE",Toast.LENGTH_LONG).show();
-
+                        ConnectionDialog dialog = new ConnectionDialog();
+                        dialog.show(getFragmentManager(), "connection_dialog");
                     }
                 });
 
