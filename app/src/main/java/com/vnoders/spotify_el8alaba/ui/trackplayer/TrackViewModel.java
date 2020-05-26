@@ -19,11 +19,14 @@ public class TrackViewModel extends ViewModel {
     private MutableLiveData<Track> mCurrentTrack;
     // mutable live data object to hold progress of bar
     private MutableLiveData<Integer> mTrackProgress;
+    // mutable live data object to hold init status
+    private MutableLiveData<Boolean> mInitRequired;
 
     /**
      * private constructor for singleton
      */
     private TrackViewModel() {
+        mInitRequired = new MutableLiveData<>(true);
     }
 
     /**
@@ -84,4 +87,29 @@ public class TrackViewModel extends ViewModel {
         mTrackProgress.postValue(progress);
     }
 
+    /**
+     * Called to get the status of init by service to see if init now or not
+     *
+     * @return status of init
+     */
+    public MutableLiveData<Boolean> getInitRequired() {
+        if (mInitRequired == null) {
+            mInitRequired = new MutableLiveData<>();
+            mInitRequired.postValue(Boolean.TRUE);
+        }
+        return mInitRequired;
+    }
+
+    /**
+     * updates the init status if user logs out
+     *
+     * @param initRequired status of init
+     */
+    public void updateInitRequired(Boolean initRequired) {
+        if (mInitRequired == null) {
+            mInitRequired = new MutableLiveData<>();
+            mInitRequired.postValue(Boolean.TRUE);
+        }
+        mInitRequired.postValue(initRequired);
+    }
 }

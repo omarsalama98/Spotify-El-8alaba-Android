@@ -148,4 +148,6 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name = "widget_warning">Open App!</string>
+    <string name = "like_track_popup">Added to liked tracks!</string>
+    <string name = "unlike_track_popup">Removed from liked tracks!</string>
 </resources>

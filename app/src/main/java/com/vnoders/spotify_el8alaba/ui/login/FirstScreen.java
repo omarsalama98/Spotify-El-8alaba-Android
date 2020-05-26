@@ -18,6 +18,7 @@ import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.signup.SignUpEmail;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackViewModel;
 
 public class FirstScreen extends AppCompatActivity {
 
@@ -51,6 +52,9 @@ public class FirstScreen extends AppCompatActivity {
         // Remove the windows's background color to reduce overdraw because it is already
         // being drawn by other views
         getWindow().setBackgroundDrawable(null);
+
+        // initialize status of init again
+        TrackViewModel.getInstance().updateInitRequired(true);
 
 
         callbackManager = CallbackManager.Factory.create();

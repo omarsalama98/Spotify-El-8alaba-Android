@@ -1,6 +1,5 @@
 package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
@@ -36,11 +35,13 @@ import com.vnoders.spotify_el8alaba.SplashActivity;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetLikedTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.LikedTrackWrapper;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostPlayTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.ShareTrackResponse;
@@ -104,6 +105,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     private List<Track> mTracksListOriginal = new ArrayList<>();
     // list of hidden tracks
     private List<String> mTracksHidden = new ArrayList<>();
+    // list of ids of liked tracks
+    private List<String> mLikedTracks = new ArrayList<>();
 
     // access-token to use to play songs
     private String mAccessToken;
@@ -202,15 +205,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     public void onCreate() {
         super.onCreate();
 
+        // init the session and the broadcast receiver
         initMediaSession();
         initNoisyReceiver();
-
-        // get access token to use to play tracks
-        SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
-        mAccessToken = prefs.getString("token", null);
-
-        // get the list of tracks to play
-        getCurrentlyPlaying();
     }
 
     /**
@@ -218,6 +215,20 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (TrackViewModel.getInstance().getInitRequired().getValue()) {
+            // get access token to use to play tracks
+            SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
+            mAccessToken = prefs.getString("token", null);
+
+            // get the list of tracks to play
+            getCurrentlyPlaying();
+            // get a list of liked tracks
+            getLikedTracks();
+
+            // reset init status
+            TrackViewModel.getInstance().updateInitRequired(false);
+        }
 
         MediaButtonReceiver.handleIntent(mMediaSession, intent);
 
@@ -353,6 +364,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             }
         }
 
+        // inform user
+        Toast.makeText(MediaPlaybackService.this,
+                getString(R.string.like_track_popup), Toast.LENGTH_SHORT).show();
+
+        // add track to liked tracks list
+        mLikedTracks.add(trackId);
+
         // tell backend about loving track
         Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).loveTrack(trackId);
         request.enqueue(new Callback<Void>() {
@@ -383,6 +401,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 }
             }
         }
+
+        // inform user
+        Toast.makeText(MediaPlaybackService.this,
+                getString(R.string.unlike_track_popup), Toast.LENGTH_SHORT).show();
+
+        // add track to liked tracks list
+        mLikedTracks.remove(trackId);
 
         // tell backend about unloving track
         Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).unLoveTrack(trackId);
@@ -987,6 +1012,51 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     }
 
     /**
+     * Get List of liked tracks ids from backend
+     */
+    private void getLikedTracks() {
+        // get request function
+        Call<GetLikedTracks> request = RetrofitClient.getInstance()
+                .getAPI(TrackPlayerApi.class).getLikedTracks();
+
+        // make the request
+        request.enqueue(new Callback<GetLikedTracks>() {
+            @Override
+            public void onResponse(Call<GetLikedTracks> call, Response<GetLikedTracks> response) {
+
+                // if there is any error return from function
+
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                List<LikedTrackWrapper> likedTracks = response.body().getLikedTracks();
+                mLikedTracks = new ArrayList<>();
+
+                if ((likedTracks == null) || (likedTracks.isEmpty())) {
+                    return;
+                }
+
+                // add all tracks to liked tracks list
+                for (int i = 0; i < likedTracks.size(); ++i) {
+                    mLikedTracks.add(likedTracks.get(i).getLikedTrack().getId());
+                }
+
+                // check list of tracks to mark liked ones
+                checkLikedTracks();
+            }
+
+            @Override
+            public void onFailure(Call<GetLikedTracks> call, Throwable t) {
+            }
+        });
+    }
+
+    /**
      * Get a track request
      * @param trackId id of track to request from backend
      */
@@ -1030,6 +1100,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 mCurrentTrackIndex = 0;
                 destroyMediaPlayer();
                 initMediaPlayer(currentTrack);
+
+                // check if list has liked tracks
+                checkLikedTracks();
             }
 
             @Override
@@ -1115,6 +1188,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
                 destroyMediaPlayer();
                 initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
+
+                // check if list has liked tracks
+                checkLikedTracks();
             }
 
             @Override
@@ -1193,6 +1269,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
                 destroyMediaPlayer();
                 initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
+
+                // check if list has liked tracks
+                checkLikedTracks();
             }
 
             @Override
@@ -1265,6 +1344,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
                 destroyMediaPlayer();
                 initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
+
+                // check if list has liked tracks
+                checkLikedTracks();
             }
 
             @Override
@@ -1595,6 +1677,31 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     //______________________________________________________________________________________________
     //------------------------------------Utility Functions-----------------------------------------
     //______________________________________________________________________________________________
+
+    /**
+     * Function to loop on tracks list and mark all tracks with liked ones or not
+     */
+    private void checkLikedTracks() {
+
+        // if there is any error return from function
+
+        if ((mLikedTracks == null) || (mLikedTracks.isEmpty()))
+            return;
+
+        if ((mTracksList == null) || (mTracksList.isEmpty()))
+            return;
+
+        // loop on all tracks if they exist in liked tracks list then mark them
+        for (int i = 0; i < mTracksList.size(); ++i) {
+            if (mLikedTracks.contains(mTracksList.get(i).getId())) {
+                mTracksList.get(i).setLoved(true);
+            }
+            else {
+                // otherwise un mark them
+                mTracksList.get(i).setLoved(false);
+            }
+        }
+    }
 
     /**
      * start the handler to watch progress and report it

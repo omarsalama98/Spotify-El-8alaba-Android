@@ -1,7 +1,6 @@
 package com.vnoders.spotify_el8alaba;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -13,7 +12,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
-import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 
 public class SplashActivity extends AppCompatActivity {
 
