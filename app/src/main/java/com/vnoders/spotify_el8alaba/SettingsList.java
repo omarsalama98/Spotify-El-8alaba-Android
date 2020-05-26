@@ -86,6 +86,8 @@ public class SettingsList extends Fragment {
                 editor.putString("id","");
                 editor.commit();
                 Intent intent=new Intent(getActivity(), FirstScreen.class);
+                // stop playing songs
+                ((MainActivity)getActivity()).getService().pause();
                 startActivity(intent);
             }
         });
