@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
 import com.vnoders.spotify_el8alaba.models.CurrentlyPlayingTrack;
+import com.vnoders.spotify_el8alaba.models.FacebookToken;
 import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
@@ -73,4 +74,7 @@ public interface API {
 
     @PATCH("users")
     Call<ResponseBody> updateUserInfo(@Body UpdateUserInfo updateUserInfo);
+
+    @POST("authentication/facebook-token")
+    Call <ResponseBody> loginFB(@Body FacebookToken facebookToken);
 }

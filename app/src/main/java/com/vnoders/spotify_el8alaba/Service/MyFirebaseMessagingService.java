@@ -22,6 +22,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        //Toast.makeText(MyFirebaseMessagingService.this,"DELIVERED",Toast.LENGTH_LONG).show();
         super.onMessageReceived(remoteMessage);
         if(remoteMessage.getData().isEmpty())
             showNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
@@ -66,6 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationChannel.setLightColor(Color.BLUE);
             notificationChannel.setVibrationPattern(new long[]{0,1000,500,1000});
             notificationManager.createNotificationChannel(notificationChannel);
+
         }
         NotificationCompat.Builder notificationBuilder=new Builder(this,NOTIFICATION_CHANNEL_ID);
         notificationBuilder.setAutoCancel(true)
@@ -80,7 +82,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(@NonNull String s) {
-        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
         Log.d("EL TOKEN",s);
         super.onNewToken(s);
 

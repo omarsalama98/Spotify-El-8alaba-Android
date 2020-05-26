@@ -59,7 +59,8 @@ public class SplashActivity extends AppCompatActivity {
                         String token = task.getResult().getToken();
                         // Log and toast
                         Log.d("TOKEN", token);
-                        //Toast.makeText(SplashActivity.this,token, Toast.LENGTH_SHORT).show();
+
+                       // Toast.makeText(SplashActivity.this,token, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

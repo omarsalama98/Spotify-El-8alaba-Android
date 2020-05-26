@@ -107,17 +107,20 @@ public class CreateAccount extends Fragment {
                     @Override
                     public void onResponse(Call<ResponseBody> call,
                             Response<ResponseBody> response) {
-                        String jsonRespone = null;
-                        try {
+                       // String jsonRespone = null;
+                       // try {
                             if (response.code() == 200) {
+                                ConfirmationEmailDialog dialog = new ConfirmationEmailDialog();
+                                dialog.show(getFragmentManager(), "CONFIRMATIONEMAILDIALOG");
+
                                 Gson gson = new Gson();
-                                try {
+                                /*try {
                                     jsonRespone = response.body().string();
 
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                }
-                                JSONObject jsonObject = new JSONObject(jsonRespone);
+                                }*/
+                              /*  JSONObject jsonObject = new JSONObject(jsonRespone);
                                 String token = jsonObject.getString("token");
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("token", token);
@@ -145,15 +148,15 @@ public class CreateAccount extends Fragment {
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
-                                getActivity().finish();
+                                getActivity().finish();*/
                             } else {
                                 Toast.makeText(getActivity(), "Email already Exists!",
                                         Toast.LENGTH_LONG).show();
                             }
 
-                        } catch (JSONException e) {
+                         /*catch (JSONException e) {
                             e.printStackTrace();
-                        }
+                        }*/
 
                     }
 
