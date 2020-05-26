@@ -1,51 +1,49 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
-import com.vnoders.spotify_el8alaba.Artist;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
-import com.vnoders.spotify_el8alaba.models.library.Album;
-import com.vnoders.spotify_el8alaba.models.library.Track;
+import com.vnoders.spotify_el8alaba.models.Search.Albums;
+import com.vnoders.spotify_el8alaba.models.Search.Artists;
+import com.vnoders.spotify_el8alaba.models.Search.Playlists;
+import com.vnoders.spotify_el8alaba.models.Search.Tracks;
+import com.vnoders.spotify_el8alaba.models.Search.Users;
+import com.vnoders.spotify_el8alaba.models.SearchResult;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface APIInterface {
 
-    @Headers("Authorization: Bearer BQCsc8oABwhk39J1UG4laFproywJrjQb1ucgYLJuBIQ1pF6kGoPGD1L3XzdeKbP0Q-rpO4QeAbas6J9CCV49bedjWannp4xfMuBshTfWhzOpUq2hIoGDA0X3pxKicrhHmZ6IC8oE5RDVIaQyirDpK-EnEaqrLxs0TrH-NSX5690s5nWnMMaxmduVOVg5BB7bXT2yusDKCrqmPrds")
-    @GET("tracks/2TpxZ7JUBn3uw46aR7qd6V")
-    Call<Album> getAlbum();
-
-
-    @GET("search?type=artist")
-        //+ "header Authorization: Bearer Bearer Token"
-    Call<List<Artist>> getArtistsOfSearch(
-            @Query("q") String artistName,
-            @Query("type") String searchType
-    );
-
     @GET("search?type=album")
-    Call<List<Album>> getAlbumsOfSearch(
+    Call<Albums> getAlbumsOfSearch(
             @Query("q") String albumName
     );
 
+    @GET("search?type=artist")
+    Call<Artists> getArtistsOfSearch(
+            @Query("q") String artistName
+    );
+
     @GET("search?type=playlist")
-    Call<List<HomePlaylist>> getPlaylistsOfSearch(
+    Call<Playlists> getPlaylistsOfSearch(
             @Query("q") String playlistName
     );
 
     @GET("search?type=track")
-    Call<List<Track>> getTracksOfSearch(
+    Call<Tracks> getTracksOfSearch(
             @Query("q") String trackName
     );
 
+    @GET("search?type=user")
+    Call<Users> getUsersOfSearch(
+            @Query("q") String userName
+    );
 
-    @GET("search?")
-    Call<List<Object>> getAllOfSearch(
-            @Query("q") String searchQuery,
-            @Query("type") String searchType
+    @GET("search?limit=10")
+    Call<SearchResult> getAllOfSearch(
+            @Query("q") String searchQuery
     );
 
 

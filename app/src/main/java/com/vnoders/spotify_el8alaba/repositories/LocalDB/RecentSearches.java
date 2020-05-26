@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 public class RecentSearches {
 
     @PrimaryKey(autoGenerate = true)
-    public int primaryId;
+    int primaryId;
 
     @ColumnInfo(name = "name")
     public String itemName;

@@ -63,8 +63,8 @@
     <string name = "create_account_text5">Privacy Policy</string>
     <string name = "CREATE">CREATE</string>
     <string name = "offline_signup">Something went wrong, please try again later.</string>
-    <string name = "facebook_app_id">917688838667332</string>
-    <string name = "fb_login_protocol_scheme">fb917688838667332</string>
+    <string name = "facebook_app_id">561779244683632</string>
+    <string name = "fb_login_protocol_scheme">fb561779244683632</string>
 
 
     <string name = "recent_searches">Recent searches</string>
@@ -140,7 +140,4 @@
     <string name = "and_more">and more</string>
     <string name = "edit_playlist">Edit Playlist</string>
     <string name = "preview_playlist">Preview</string>
-    <string name = "confirm_email">Confirm Your Email</string>
-    <string name = "confirm_email_description">You have signed up successfully.\n Please press OK to verify your email</string>
-
 </resources>

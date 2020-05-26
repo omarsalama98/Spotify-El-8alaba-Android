@@ -1,6 +1,9 @@
 package com.vnoders.spotify_el8alaba.ui.search;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +16,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
-import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Search.Albums;
+import com.vnoders.spotify_el8alaba.models.Search.Artists;
+import com.vnoders.spotify_el8alaba.models.Search.Playlists;
+import com.vnoders.spotify_el8alaba.models.Search.Tracks;
+import com.vnoders.spotify_el8alaba.models.Search.Users;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import java.util.ArrayList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchByTypeFragment extends Fragment {
 
@@ -26,6 +37,8 @@ public class SearchByTypeFragment extends Fragment {
     private String searchType;
     private TextView searchByTypeTitleTextView;
     private APIInterface apiService;
+    private ArrayList<Object> searchResults;
+    private SearchListAdapter mSearchListAdapter;
 
     public SearchByTypeFragment() {
         // Required empty public constructor
@@ -47,6 +60,13 @@ public class SearchByTypeFragment extends Fragment {
         toolbar = root.findViewById(R.id.search_by_type_fragment_toolbar);
         searchByTypeResultsRecyclerView = root
                 .findViewById(R.id.search_by_type_results_recycler_view);
+        searchResults = new ArrayList<>();
+        mSearchListAdapter = new SearchListAdapter(searchResults, this);
+
+        searchByTypeResultsRecyclerView
+                .setAdapter(mSearchListAdapter);
+        searchByTypeResultsRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
         return root;
     }
@@ -58,29 +78,104 @@ public class SearchByTypeFragment extends Fragment {
         String titleText = "\"" + searchQuery + "\"" + " in " + searchType;
         searchByTypeTitleTextView.setText(titleText);
 
-        /*TODO:Remove Comments when backend is functional and Decide Which Service to call from SearchType
-        final ArrayList[] playlists = new ArrayList[]{new ArrayList<Playlist>()};
+        switch (searchType) {
+            case SearchByTypeConstantsHelper.ALBUMS:
+                Call<Albums> albumsCall;
+                albumsCall = apiService.getAlbumsOfSearch(searchQuery);
+                albumsCall.enqueue(new Callback<Albums>() {
+                    @Override
+                    public void onResponse(Call<Albums> call,
+                            Response<Albums> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getAlbums());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
+                    }
 
-        Call<List<Playlist>> call = apiService.getPLaylistsofSearch(searchQuery);
-        call.enqueue(new Callback<List<Playlist>>() {
-            @Override
-            public void onResponse(Call<List<Playlist>> call,
-                    Response<List<Playlist>> response) {
-                Log.d(TAG, response.body().get(0).getName());
-                playlists[0] = (ArrayList<Playlist>) response.body();
-            }
+                    @Override
+                    public void onFailure(Call<Albums> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve Albums " + t.getMessage());
+                    }
+                });
+                break;
+            case SearchByTypeConstantsHelper.SONGS:
+                Call<Tracks> tracksCall;
+                tracksCall = apiService.getTracksOfSearch(searchQuery);
+                tracksCall.enqueue(new Callback<Tracks>() {
+                    @Override
+                    public void onResponse(Call<Tracks> call,
+                            Response<Tracks> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getTracks());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<List<Playlist>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve playlists");
-            }
-        });
-        */
+                    @Override
+                    public void onFailure(Call<Tracks> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists " + t.getMessage());
+                    }
+                });
+                break;
+            case SearchByTypeConstantsHelper.ARTISTS:
+                Call<Artists> artistsCall;
+                artistsCall = apiService.getArtistsOfSearch(searchQuery);
+                artistsCall.enqueue(new Callback<Artists>() {
+                    @Override
+                    public void onResponse(Call<Artists> call,
+                            Response<Artists> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getArtists());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
+                    }
 
-        searchByTypeResultsRecyclerView
-                .setAdapter(new SearchListAdapter(Mock.getMockSearchData(), this));
-        searchByTypeResultsRecyclerView.setLayoutManager(
-                new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                    @Override
+                    public void onFailure(Call<Artists> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists " + t.getMessage());
+                    }
+                });
+                break;
+            case SearchByTypeConstantsHelper.PLAYLISTS:
+                Call<Playlists> playlistsCall;
+                playlistsCall = apiService.getPlaylistsOfSearch(searchQuery);
+                playlistsCall.enqueue(new Callback<Playlists>() {
+                    @Override
+                    public void onResponse(Call<Playlists> call,
+                            Response<Playlists> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getPlaylists());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Playlists> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists");
+                    }
+                });
+                break;
+            case SearchByTypeConstantsHelper.PROFILES:
+                Call<Users> usersCall;
+                usersCall = apiService.getUsersOfSearch(searchQuery);
+                usersCall.enqueue(new Callback<Users>() {
+                    @Override
+                    public void onResponse(Call<Users> call,
+                            Response<Users> response) {
+                        if (response.body() != null) {
+                            searchResults.addAll(response.body().getUsers());
+                            mSearchListAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Users> call, Throwable t) {
+                        Log.d(TAG, "failed to retrieve playlists");
+                    }
+                });
+                break;
+        }
+
 
     }
 }

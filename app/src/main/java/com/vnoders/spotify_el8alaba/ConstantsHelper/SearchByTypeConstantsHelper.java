@@ -9,6 +9,12 @@ public class SearchByTypeConstantsHelper {
     public static final String GENRES_AND_MOODS = "Genres & Moods";
     public static final String PROFILES = "Profiles";
 
+    public static final String ARTIST = "Artist";
+    public static final String TRACK = "Track";
+    public static final String PLAYLIST = "Playlist";
+    public static final String ALBUM = "Album";
+    public static final String USER = "User";
+
     public static final String SEARCH_TYPE_KEY = "search type";
     public static final String SEARCH_QUERY_KEY = "search query";
 

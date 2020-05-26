@@ -13,6 +13,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -24,12 +25,9 @@ import androidx.palette.graphics.Palette;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import com.vnoders.spotify_el8alaba.MediaPlaybackService;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 
 /**
@@ -70,9 +68,18 @@ public class TrackPlayerActivity extends AppCompatActivity {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(RealTrack track) {
-        mTrackImageView.setImageResource(R.drawable.track_image_default);
+    private void updateUI(Track track) {
+        if (track == null) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(track.getImage())) {
+            mTrackImageView.setImageResource(R.drawable.track_image_default);
+        } else {
+            Picasso.get().load(track.getImage()).into(mTarget);
+        }
     }
+
 
     /**
      * override back pressed to show sliding down animation when quitting
@@ -131,9 +138,9 @@ public class TrackPlayerActivity extends AppCompatActivity {
                 });
 
         // setting observer to know when data changes
-        TrackViewModel.getInstance().getCurrentTrack().observe(this, new Observer<RealTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(this, new Observer<Track>() {
             @Override
-            public void onChanged(RealTrack realTrack) {
+            public void onChanged(Track realTrack) {
                 updateUI(realTrack);
             }
         });

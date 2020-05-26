@@ -11,8 +11,10 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdapter.MyViewHolder> {
 
@@ -57,7 +59,15 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
         //TODO: Replace the former with the latter code when backend is completed
         holder.title.setText(backDataset.get(position).getName());
         holder.subTitle.setText(backDataset.get(position).getDescription());
-        Picasso.get().load(backDataset.get(position).getImages().get(0).getUrl()).into(holder.image);
+
+        String imageUrl;
+        List<TrackImage> images = backDataset.get(position).getImages();
+        if (!images.isEmpty()) {
+            imageUrl = images.get(0).getUrl();
+        } else {
+            imageUrl = "https://getdrawings.com/free-icon-bw/black-music-icons-23.png";
+        }
+        Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
 
     }
 

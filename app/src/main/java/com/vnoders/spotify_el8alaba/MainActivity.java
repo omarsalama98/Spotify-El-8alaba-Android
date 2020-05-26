@@ -1,7 +1,11 @@
 package com.vnoders.spotify_el8alaba;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +20,7 @@ import com.vnoders.spotify_el8alaba.ui.library.LibraryFragment;
 import com.vnoders.spotify_el8alaba.ui.premium.PremiumFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchGenresFragment;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -101,6 +106,64 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
+    }
+
+
+    /**
+     * @return an instance of media playback service for use by fragments
+     */
+    public MediaPlaybackService getService() {
+        return mService;
+    }
+
+
+    // connection to service
+    private MediaPlaybackService mService;
+    // boolean to know if currently bound to service or not
+    private boolean mBound = false;
+
+    /**
+     * Connection to bind with media playback service
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MediaPlaybackService.MediaPlaybackBinder binder =
+                    (MediaPlaybackService.MediaPlaybackBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBound = false;
+        }
+    };
+
+    /**
+     * Override it to bind to media playback service
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // bind the activity to service
+        Intent intent = new Intent(this, MediaPlaybackService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    /**
+     * Override it to sever connection to bound service
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // if bound then unbind to release service
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
     }
 
 }

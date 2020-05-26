@@ -6,18 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
 import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenu;
 import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenuItem;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
  * @author Ali Adel Top part of track player fragment
@@ -25,7 +27,8 @@ import java.util.List;
 public class TrackTopFragment extends Fragment {
 
     // holds author name text view
-    private TextView authorNameText;
+    private TextView mTypeNameText;
+    private TextView mPlayingFromTextView;
 
     /**
      * inflate layout and return it to system to display
@@ -38,12 +41,10 @@ public class TrackTopFragment extends Fragment {
         // set the overflow menu click listener to start overflow menu
         rootView.findViewById(R.id.top_overflow_menu).setOnClickListener(v -> startOverflowMenu());
 
-        String playingFrom = getString(R.string.playing_from_artist);
         // setting the text
-        TextView playingFromTextView = rootView.findViewById(R.id.playing_from_text);
-        playingFromTextView.setText(playingFrom);
+        mPlayingFromTextView = rootView.findViewById(R.id.playing_from_text);
 
-        authorNameText = rootView.findViewById(R.id.author_name_text_top);
+        mTypeNameText = rootView.findViewById(R.id.author_name_text_top);
 
         // setting the top button to behave like the back button
         Button button = rootView.findViewById(R.id.top_back_button);
@@ -55,9 +56,9 @@ public class TrackTopFragment extends Fragment {
         });
 
         // setting the observer on the data change then calling updateUI on data change
-        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<Track>() {
             @Override
-            public void onChanged(RealTrack realTrack) {
+            public void onChanged(Track realTrack) {
                 updateUI(realTrack);
             }
         });
@@ -70,12 +71,31 @@ public class TrackTopFragment extends Fragment {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(RealTrack track) {
+    private void updateUI(Track track) {
 
         if (track == null)
             return;
 
-        authorNameText.setText(track.getArtists().get(0).getUserInfo().getName());
+        String name = track.getTypeName();
+
+        if (name == null || name.equals("") || name.equals(" ")) {
+            mTypeNameText.setVisibility(View.GONE);
+            mPlayingFromTextView.setVisibility(View.GONE);
+        } else {
+            mTypeNameText.setVisibility(View.VISIBLE);
+            mPlayingFromTextView.setVisibility(View.VISIBLE);
+            mTypeNameText.setText(name);
+
+            String type = track.getType();
+
+            if (type.equals(Track.TYPE_ALBUM)) {
+                mPlayingFromTextView.setText(getString(R.string.playing_from_album));
+            } else if (type.equals(Track.TYPE_PLAYLIST)) {
+                mPlayingFromTextView.setText(getString(R.string.playing_from_playlist));
+            } else {
+                mPlayingFromTextView.setText(getString(R.string.playing_from_artist));
+            }
+        }
     }
 
     /**
@@ -87,45 +107,73 @@ public class TrackTopFragment extends Fragment {
         AppCompatActivity parentActivity = (AppCompatActivity)getActivity();
         if (parentActivity != null) {
 
-            RealTrack track = TrackViewModel.getInstance().getCurrentTrack().getValue();
+            // get the track object to display
+            Track track = TrackViewModel.getInstance().getCurrentTrack().getValue();
 
-            String songName = " Temp Track Name";
-            if (track != null) {
-                songName = track.getName();
-            }
-            
-            String authorName = "Temp Author Name";
-            if (track != null) {
-                authorName = track.getArtists().get(0).getUserInfo().getName();
+            // if track is null don't do anything and display error
+            if (track == null) {
+                Toast.makeText(getContext(), getString(R.string.open_overflow_error), Toast.LENGTH_SHORT).show();
+                return;
             }
 
+            // create the overflow menu
+            OverflowMenu overflowMenu = new OverflowMenu();
+
+            // get track name otherwise set it to space
+            String songName = track.getName() == null ? " " : track.getName();
+
+            // get author name otherwise set it to space
+            String authorName = track.getArtistName() == null ? " " : track.getArtistName();
+
+            // create the buttons it display
             List<OverflowMenuItem> actionItems = new ArrayList<>();
 
-            actionItems.add(new OverflowMenuItem(R.drawable.like_track_unliked,
-                    getString(R.string.overflow_like), null));
+            // customize the like button according to whether the track is liked or not
+            int likeDrawable;
+            View.OnClickListener likeListener;
+            String likeText;
+            if (track.getLoved()) {
+                likeDrawable = R.drawable.like_track_liked;
+                likeListener = v -> {
+                    ((TrackPlayerActivity)getActivity()).getService().unLoveTrack(track.getId());
+                    overflowMenu.dismiss();
+                };
+                likeText = getString(R.string.overflow_unlike);
+            }
+            else {
+                likeDrawable = R.drawable.like_track_unliked;
+                likeListener = v -> {
+                    ((TrackPlayerActivity)getActivity()).getService().loveTrack(track.getId());
+                    overflowMenu.dismiss();
+                };
+                likeText = getString(R.string.overflow_like);
+            }
 
-            actionItems.add(new OverflowMenuItem(R.drawable.hide_track_visible,
-                    getString(R.string.overflow_hide), null));
+            // add the like button to actions
+            actionItems.add(new OverflowMenuItem(likeDrawable, likeText, likeListener));
 
-            actionItems.add(new OverflowMenuItem(R.drawable.add_song,
-                    getString(R.string.overflow_add), null));
+            // add the hide track action to buttons
+            actionItems.add(new OverflowMenuItem(R.drawable.hide_track_visible, getString(R.string.overflow_hide),
+                    v -> {
+                ((TrackPlayerActivity)getActivity()).getService().hideTrack(track.getId());
+                overflowMenu.dismiss();
+            }));
 
-            actionItems.add(new OverflowMenuItem(R.drawable.artist,
-                    getString(R.string.overflow_view), null));
+            // add the share button to actions
+            actionItems.add(new OverflowMenuItem(R.drawable.share, getString(R.string.overflow_share),
+                    v -> {
+                ((TrackPlayerActivity)getActivity()).getService().shareTrack(track);
+                overflowMenu.dismiss();
+                }));
 
-            actionItems.add(new OverflowMenuItem(R.drawable.share,
-                    getString(R.string.overflow_share), null));
 
-            actionItems.add(new OverflowMenuItem(R.drawable.sleep,
-                    getString(R.string.overflow_sleep), null));
+            // set the song name, author name, image, and actions
+            overflowMenu.setSongName(songName);
+            overflowMenu.setAuthorName(authorName);
+            overflowMenu.setImageUrl(track.getImage());
+            overflowMenu.setActionItems(actionItems);
 
-            actionItems.add(new OverflowMenuItem(R.drawable.report,
-                    getString(R.string.overflow_report), null));
-
-            actionItems.add(new OverflowMenuItem(R.drawable.credits,
-                    getString(R.string.overflow_credits), null));
-
-            OverflowMenu overflowMenu = new OverflowMenu(songName, authorName, null, actionItems);
+            // start the overflow menu
             overflowMenu.show(parentActivity.getSupportFragmentManager(), overflowMenu.getTag());
         }
     }

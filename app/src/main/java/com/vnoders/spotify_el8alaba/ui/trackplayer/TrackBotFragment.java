@@ -1,16 +1,20 @@
 package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,9 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.TrackViewModel;
-import com.vnoders.spotify_el8alaba.models.PlayableTrack;
-import com.vnoders.spotify_el8alaba.models.RealTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 
 /**
@@ -31,11 +33,11 @@ import com.vnoders.spotify_el8alaba.models.RealTrack;
 public class TrackBotFragment extends Fragment {
 
     // holds the name of song text view
-    private TextView songNameTextView;
+    private TextView mSongNameTextView;
     // holds the author name text view
-    private TextView authorNameText;
+    private TextView mAuthorNameText;
     // holds play_pause button
-    private Button playPauseButton;
+    private Button mPlayPauseButton;
     // holds seek bar
     private SeekBar mSeekbar;
     // tracks progress text
@@ -43,14 +45,22 @@ public class TrackBotFragment extends Fragment {
     // track progress duration
     private TextView mTrackDuration;
     // holds current track being played
-    private RealTrack mCurrentTrack;
+    private Track mCurrentTrack;
     // holds skip next button
     private Button mNextButton;
     // holds skip previous button
     private Button mPrevButton;
+    //holds love button
+    private Button mLoveButton;
+    // holds shuffle button
+    private Button mShuffleButton;
+    // holds repeat button
+    private Button mRepeatButton;
+    // holds share button
+    private ImageView mShareButton;
 
     // if player is currently playing anything
-    private boolean isPlaying = false;
+    private boolean mIsPlaying = false;
     // to know if user is currently seeking
     private boolean mIsSeeking = false;
 
@@ -64,9 +74,9 @@ public class TrackBotFragment extends Fragment {
 
 
         // setting the texts displayed
-        songNameTextView = rootView.findViewById(R.id.song_name_text);
+        mSongNameTextView = rootView.findViewById(R.id.song_name_text);
 
-        authorNameText = rootView.findViewById(R.id.author_name_text_bot);
+        mAuthorNameText = rootView.findViewById(R.id.author_name_text_bot);
 
         // get seek bar and textViews of progress and duration and setting progress to 00:00
         mSeekbar = rootView.findViewById(R.id.seek_bar);
@@ -74,10 +84,11 @@ public class TrackBotFragment extends Fragment {
         mTrackProgress = rootView.findViewById(R.id.trackProgress);
         mTrackProgress.setText("00:00");
         mTrackDuration = rootView.findViewById(R.id.trackDuration);
+        mTrackDuration.setText("00:00");
 
         // set play_pause button
-        playPauseButton = rootView.findViewById(R.id.play_pause_button);
-        playPauseButton.setOnClickListener(new View.OnClickListener() {
+        mPlayPauseButton = rootView.findViewById(R.id.play_pause_button);
+        mPlayPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pausePlayPressed();
@@ -102,10 +113,46 @@ public class TrackBotFragment extends Fragment {
             }
         });
 
-        // setting to observe change in global song being played
-        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<RealTrack>() {
+        // sets the love button
+        mLoveButton = rootView.findViewById(R.id.love_button_track_player_bot);
+        mLoveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(RealTrack realTrack) {
+            public void onClick(View v) {
+                loveTrack();
+            }
+        });
+
+        // sets the shuffle button
+        mShuffleButton = rootView.findViewById(R.id.shuffle_track);
+        mShuffleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shuffleTracks();
+            }
+        });
+
+        // sets the repeat button
+        mRepeatButton = rootView.findViewById(R.id.repeat_track);
+        mRepeatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                repeatTracks();
+            }
+        });
+
+        // sets the share button
+        mShareButton = rootView.findViewById(R.id.share_button);
+        mShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareTrack();
+            }
+        });
+
+        // setting to observe change in global song being played
+        TrackViewModel.getInstance().getCurrentTrack().observe(getActivity(), new Observer<Track>() {
+            @Override
+            public void onChanged(Track realTrack) {
                 updateUI(realTrack);
             }
         });
@@ -126,7 +173,7 @@ public class TrackBotFragment extends Fragment {
      *
      * @param track current track being played holding info
      */
-    private void updateUI(RealTrack track) {
+    private void updateUI(Track track) {
 
         if (track == null)
             return;
@@ -152,17 +199,46 @@ public class TrackBotFragment extends Fragment {
         }
 
         // set the name of song and name of author and setting the button to display correctly
-        songNameTextView.setText(track.getName());
-        authorNameText.setText(track.getArtists().get(0).getUserInfo().getName());
-        isPlaying = track.getIsPlaying();
-        if (isPlaying) {
-            playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
+        mSongNameTextView.setText(track.getName());
+        if (TextUtils.isEmpty(track.getArtistName()))
+            mAuthorNameText.setText(" ");
+        else
+            mAuthorNameText.setText(track.getArtistName());
+        mIsPlaying = track.getIsPlaying();
+        if (mIsPlaying) {
+            mPlayPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_pause_circle_filled_white_82dp));
         } else {
-            playPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_filled_white_82dp));
+            mPlayPauseButton.setBackground(getResources().getDrawable(R.drawable.ic_play_circle_filled_white_82dp));
+        }
+
+        // set the background color of love button
+        if (track.getLoved()) {
+            mLoveButton.setBackground(getResources().getDrawable(R.drawable.like_track_liked));
+            mLoveButton.getBackground().setTint(getResources().getColor(R.color.green));
+        }
+        else {
+            mLoveButton.setBackground(getResources().getDrawable(R.drawable.like_track_unliked));
+            mLoveButton.getBackground().setTint(getResources().getColor(R.color.white));
+        }
+
+        // set the background color of shuffle button
+        if (track.getShuffle()) {
+            mShuffleButton.getBackground().setTint(getResources().getColor(R.color.green));
+        }
+        else {
+            mShuffleButton.getBackground().setTint(getResources().getColor(R.color.white));
+        }
+
+        // set the background color of repeat button
+        if (track.getRepeat()) {
+            mRepeatButton.getBackground().setTint(getResources().getColor(R.color.green));
+        }
+        else {
+            mRepeatButton.getBackground().setTint(getResources().getColor(R.color.white));
         }
 
         // get the duration and setting the text view corresponding to it
-        int songTime = (int)track.getDuration();
+        int songTime = track.getDuration();
 
         String durationText = "";
         int minutes = songTime / 1000 / 60;
@@ -193,11 +269,11 @@ public class TrackBotFragment extends Fragment {
     private void updateSeekbar(Integer progress) {
 
         // if user is currently seeking then don't update
-        if (mIsSeeking)
+        if (mIsSeeking || mCurrentTrack == null)
             return;
 
         // get the duration and scale it to 0-100
-        int songTime = (int)mCurrentTrack.getDuration();
+        int songTime = mCurrentTrack.getDuration();
 
         int progressScaled = progress * 100 / songTime;
 
@@ -219,7 +295,7 @@ public class TrackBotFragment extends Fragment {
      * tell service to pause/skip according to state
      */
     private void pausePlayPressed() {
-        if (isPlaying) {
+        if (mIsPlaying) {
             ((TrackPlayerActivity) getActivity()).getService().pause();
         } else {
             ((TrackPlayerActivity) getActivity()).getService().start();
@@ -238,6 +314,41 @@ public class TrackBotFragment extends Fragment {
      */
     private void skipToPrev() {
         ((TrackPlayerActivity) getActivity()).getService().skipToPrev();
+    }
+
+    /**
+     * Tell service to love track
+     */
+    private void loveTrack() {
+
+        if (mCurrentTrack == null)
+            return;
+
+        if (mCurrentTrack.getLoved())
+            ((TrackPlayerActivity) getActivity()).getService().unLoveTrack(mCurrentTrack.getId());
+        else
+            ((TrackPlayerActivity) getActivity()).getService().loveTrack(mCurrentTrack.getId());
+    }
+
+    /**
+     * Tell service to shuffle list
+     */
+    private void shuffleTracks() {
+        ((TrackPlayerActivity) getActivity()).getService().shuffleToggle();
+    }
+
+    /**
+     * Tell service to repeat list
+     */
+    private void repeatTracks() {
+        ((TrackPlayerActivity) getActivity()).getService().repeatAllToggle();
+    }
+
+    /**
+     * Shares track with social media apps
+     */
+    private void shareTrack() {
+        ((TrackPlayerActivity) getActivity()).getService().shareTrack(mCurrentTrack);
     }
 
     /**
