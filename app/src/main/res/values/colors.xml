@@ -23,7 +23,8 @@
     <color name = "pressed_grey">#9B9898</color>
     <color name="nonpressed_edit_text">#464646</color>
     <color name="pressed_edit_text">#828282</color>
-
+    <color name = "rosy">#F65A4A</color>
+    <color name = "darkBlue">#153656</color>
 
     <color name = "backgroundColor">#FF181818</color>
 

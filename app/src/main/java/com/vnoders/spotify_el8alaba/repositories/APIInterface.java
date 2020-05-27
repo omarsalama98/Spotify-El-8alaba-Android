@@ -1,16 +1,22 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import com.vnoders.spotify_el8alaba.models.Artist.TrackListens;
+import com.vnoders.spotify_el8alaba.models.Artist.TrackListensRequestBody;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.models.Search.Albums;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.Playlists;
+import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.Tracks;
 import com.vnoders.spotify_el8alaba.models.Search.Users;
 import com.vnoders.spotify_el8alaba.models.SearchResult;
+import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -82,5 +88,18 @@ public interface APIInterface {
     @GET("browse/categories/{category_id}/playlists")
     Call<List<HomePlaylist>> getCategoryPlaylists(@Path("category_id") String categoryId);
 
+
+    @POST("tracks/listens")
+    Call<List<TrackListens>> getTrackListens(@Body TrackListensRequestBody trackListensRequestBody);
+
+    @GET("tracks/{id}")
+    Call<SearchTrack> getTrack(
+            @Path("id") String trackId
+    );
+
+    @GET("artists/{id}/top-tracks")
+    Call<List<Track>> getArtistTopTracks(
+            @Path("id") String artistId
+    );
 
 }

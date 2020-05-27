@@ -46,10 +46,17 @@
             android:windowSoftInputMode="adjustPan"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Splash"
-            tools:ignore="LockedOrientationActivity">
+                android:name = ".ArtistMainActivity"
+                android:label = "@string/title_artist_activity_main"
+                android:launchMode = "singleTop"
+                android:screenOrientation = "portrait"
+                android:windowSoftInputMode = "adjustPan"
+                tools:ignore = "LockedOrientationActivity" />
+        <activity
+                android:name=".SplashActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.Splash"
+                tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

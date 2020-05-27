@@ -1,7 +1,10 @@
 package com.vnoders.spotify_el8alaba.ui.home;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vnoders.spotify_el8alaba.ArtistMainActivity;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.HomeMainListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.R;
@@ -36,17 +40,24 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private ImageView settingsButton;
+    private ImageView spotifyArtistButton;
 
     private RecyclerView recentlyPlayedRecyclerView;
     private RecyclerView mainListRecyclerView;
+    private SharedPreferences sharedPreferences;
+    private String accType;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        sharedPreferences = getActivity().getSharedPreferences(
+                getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
+        accType = sharedPreferences.getString("type", "");
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         settingsButton=root.findViewById(R.id.settings_image_view);
+        spotifyArtistButton = root.findViewById(R.id.spotify_artist_image_view);
 
         mainListRecyclerView = root.findViewById(R.id.home_main_list_recycler_view);
         recentlyPlayedRecyclerView = root.findViewById(R.id.home_recently_played_recycler_view);
@@ -63,6 +74,9 @@ public class HomeFragment extends Fragment {
             navView.setSelectedItemId(R.id.navigation_home);
         }
 
+        if (accType.equals("artist")) {
+            spotifyArtistButton.setVisibility(View.VISIBLE);
+        }
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
         ArrayList<Category> myDataList = new ArrayList<>();
@@ -87,6 +101,10 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "failed to retrieve Categories" + t.getMessage());
             }
         });
+
+        spotifyArtistButton.setVisibility(View.VISIBLE);
+        spotifyArtistButton.setOnClickListener(
+                v -> startActivity(new Intent(getActivity(), ArtistMainActivity.class)));
 
         settingsButton.setOnClickListener(v -> {
 

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.Search.Album;
 import com.vnoders.spotify_el8alaba.models.Search.Artist;
 import com.vnoders.spotify_el8alaba.models.Search.Playlist;
-import com.vnoders.spotify_el8alaba.models.Search.Track;
+import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class SearchResult {
     private List<Playlist> playlists = null;
     @SerializedName("tracks")
     @Expose
-    private List<Track> tracks = null;
+    private List<SearchTrack> tracks = null;
 
     public List<Album> getAlbums() {
         return albums;
@@ -43,7 +43,7 @@ public class SearchResult {
         return playlists;
     }
 
-    public List<Track> getTracks() {
+    public List<SearchTrack> getTracks() {
         return tracks;
     }
 
