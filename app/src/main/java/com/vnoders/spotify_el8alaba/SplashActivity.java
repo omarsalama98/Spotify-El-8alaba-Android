@@ -1,18 +1,17 @@
 package com.vnoders.spotify_el8alaba;
+
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
-import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
 import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 
 public class SplashActivity extends AppCompatActivity {
@@ -62,7 +61,8 @@ public class SplashActivity extends AppCompatActivity {
                         String token = task.getResult().getToken();
                         // Log and toast
                         Log.d("TOKEN", token);
-                        //Toast.makeText(SplashActivity.this,token, Toast.LENGTH_SHORT).show();
+
+                        // Toast.makeText(SplashActivity.this,token, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

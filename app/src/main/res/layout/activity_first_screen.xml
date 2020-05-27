@@ -57,7 +57,6 @@
             android:background = "@drawable/custom_signup" />
 
     <com.facebook.login.widget.LoginButton
-
             android:id = "@+id/facebook_button"
             android:layout_width = "300dp"
             android:layout_height = "wrap_content"

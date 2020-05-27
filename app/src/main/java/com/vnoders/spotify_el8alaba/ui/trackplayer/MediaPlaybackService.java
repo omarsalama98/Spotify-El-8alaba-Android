@@ -1,6 +1,5 @@
 package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
@@ -25,33 +24,31 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.media.MediaBrowserServiceCompat;
 import androidx.media.session.MediaButtonReceiver;
-
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SplashActivity;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetLikedTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.LikedTrackWrapper;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostPlayTrack;
-import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.ShareTrackResponse;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.repositories.TrackPlayerApi;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,6 +101,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     private List<Track> mTracksListOriginal = new ArrayList<>();
     // list of hidden tracks
     private List<String> mTracksHidden = new ArrayList<>();
+    // list of ids of liked tracks
+    private List<String> mLikedTracks = new ArrayList<>();
 
     // access-token to use to play songs
     private String mAccessToken;
@@ -196,35 +195,106 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     }
 
     /**
-     * Init all my variables here
+     * Get List of liked tracks ids from backend
      */
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    private void getLikedTracks() {
+        // get request function
+        Call<GetLikedTracks> request = RetrofitClient.getInstance()
+                .getAPI(TrackPlayerApi.class).getLikedTracks();
 
-        initMediaSession();
-        initNoisyReceiver();
+        // make the request
+        request.enqueue(new Callback<GetLikedTracks>() {
+            @Override
+            public void onResponse(Call<GetLikedTracks> call, Response<GetLikedTracks> response) {
 
-        // get access token to use to play tracks
-        SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
-        mAccessToken = prefs.getString("token", null);
+                // if there is any error return from function
 
-        // get the list of tracks to play
-        getCurrentlyPlaying();
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                List<LikedTrackWrapper> likedTracks = response.body().getLikedTracks();
+                mLikedTracks = new ArrayList<>();
+
+                if ((likedTracks == null) || (likedTracks.isEmpty())) {
+                    return;
+                }
+
+                // add all tracks to liked tracks list
+                for (int i = 0; i < likedTracks.size(); ++i) {
+                    mLikedTracks.add(likedTracks.get(i).getLikedTrack().getId());
+                }
+
+                // check list of tracks to mark liked ones
+                checkLikedTracks();
+            }
+
+            @Override
+            public void onFailure(Call<GetLikedTracks> call, Throwable t) {
+            }
+        });
     }
 
     /**
-     * called when startService is called in main activity
+     * Get a track request
+     * @param trackId id of track to request from backend
      */
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    private void getTrack(String trackId) {
+        Call<GetTrack> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class)
+                .getTrack(trackId);
 
-        MediaButtonReceiver.handleIntent(mMediaSession, intent);
+        request.enqueue(new Callback<GetTrack>() {
+            @Override
+            public void onResponse(Call<GetTrack> call, Response<GetTrack> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
 
-        // check if widget is the one who launched me
-        checkWidget(intent);
+                if (response.body() == null) {
+                    return;
+                }
 
-        return super.onStartCommand(intent, flags, startId);
+                GetTrack track = response.body();
+
+                if (track.getArtists() == null || track.getArtists().size() < 1) {
+                    return;
+                }
+
+                String uri = null;
+                if (track.getArtists().size() > 0) {
+                    uri = CONTEXT_ARTIST_PREFIX + track.getArtists().get(0);
+                }
+
+                String artistId = null;
+                if (track.getArtists().size() > 0) {
+                    artistId = track.getArtists().get(0);
+                }
+
+                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(),
+                        null, Track.TYPE_ARTIST, null, null,
+                        artistId, track.getAlbumId(), uri);
+
+                mShuffle = false;
+                currentTrack.setShuffle(false);
+                setShuffleState(false);
+                mTracksList = new ArrayList<>();
+                mTracksList.add(currentTrack);
+                mCurrentTrackIndex = 0;
+                destroyMediaPlayer();
+                initMediaPlayer(currentTrack);
+
+                // check if list has liked tracks
+                checkLikedTracks();
+            }
+
+            @Override
+            public void onFailure(Call<GetTrack> call, Throwable t) {
+            }
+        });
     }
 
     /**
@@ -332,65 +402,180 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     }
 
     /**
-     * Tell backend to love track
+     * get several tracks from backend to play them
+     * @param tracksIds ids of tracks as a list
+     * @param shuffle shuffle stat to play
+     * @param trackId id of track to start playing at (start at start if null)
      */
-    public void loveTrack(String trackId) {
-        if (TextUtils.isEmpty(trackId))
-            return;
+    private void getSeveralTracks(List<String> tracksIds, boolean shuffle, String trackId) {
 
-        // find track in list and when found then set it's love status to true
-        if ((mTracksList != null) && (mTracksList.size() > 0)) {
-            for (int i = 0; i < mTracksList.size(); ++i) {
-                if (mTracksList.get(i).getId().equals(trackId)) {
-                    mTracksList.get(i).setLoved(true);
+        // preps the track request
+        String tracksIdsReadyString = tracksIds.get(0);
 
-                    // if track is one being played right now then update it
-                    if (mCurrentTrackIndex == i)
-                        TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
-
-                    break;
-                }
-            }
+        for (int i = 1; i < tracksIds.size(); ++i) {
+            tracksIdsReadyString += "," + tracksIds.get(i);
         }
 
-        // tell backend about loving track
-        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).loveTrack(trackId);
-        request.enqueue(new Callback<Void>() {
+        Call<GetSeveralTracks> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class)
+                .getSeveralTracks(tracksIdsReadyString);
+
+        request.enqueue(new Callback<GetSeveralTracks>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {}
+            public void onResponse(Call<GetSeveralTracks> call,
+                    Response<GetSeveralTracks> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                List<GetTrack> tracks = response.body().getTracks();
+                mTracksList = new ArrayList<>();
+
+                if (tracks == null || tracks.size() < 1) {
+                    return;
+                }
+
+                if (tracks.get(0).getArtists() == null || tracks.get(0).getArtists().size() < 1) {
+                    return;
+                }
+
+                // loops on array and gets all tracks
+                for (int i = 0; i < tracks.size(); ++i) {
+                    GetTrack currentLoop = tracks.get(i);
+                    String artistId = null;
+                    if (currentLoop.getArtists().size() > 0) {
+                        artistId = currentLoop.getArtists().get(0);
+                    }
+                    String uri = CONTEXT_ARTIST_PREFIX + artistId;
+                    Track addTrack = new Track(currentLoop.getId(), currentLoop.getName(),
+                            currentLoop.getDuration(), null, Track.TYPE_ARTIST,
+                            null, null, artistId,
+                            currentLoop.getAlbumId(), uri);
+                    mTracksList.add(addTrack);
+                }
+
+                // set shuffle state
+                mShuffle = shuffle;
+                if (shuffle) {
+                    mTracksListOriginal = new ArrayList<>();
+                    mTracksListOriginal.addAll(mTracksList);
+                    Collections.shuffle(mTracksList);
+                }
+
+                setShuffleState(shuffle);
+
+                mCurrentTrackIndex = 0;
+
+                // if trackId variable is not null then finds it and starts at it
+                if (!TextUtils.isEmpty(trackId)) {
+                    for (int i = 0; i < mTracksList.size(); ++i) {
+                        if (mTracksList.get(i).getId().equals(trackId)) {
+                            mCurrentTrackIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                destroyMediaPlayer();
+                initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
+
+                // check if list has liked tracks
+                checkLikedTracks();
+            }
+
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {}});
+            public void onFailure(Call<GetSeveralTracks> call, Throwable t) {
+
+            }
+        });
     }
 
     /**
-     * Tell backend to hate track
+     * Get an album on request
+     *
+     * @param albumId id of album
+     * @param shuffle shuffle stat to play with
+     * @param trackId id of track to start at (plays from start if null)
      */
-    public void unLoveTrack(String trackId) {
-        if (TextUtils.isEmpty(trackId))
-            return;
+    private void getAlbum(String albumId, boolean shuffle, String trackId) {
+        Call<GetAlbum> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class)
+                .getAlbum(albumId);
 
-        // find track in list and when found then set it's love status to false
-        if ((mTracksList != null) && (mTracksList.size() > 0)) {
-            for (int i = 0; i < mTracksList.size(); ++i) {
-                if (mTracksList.get(i).getId().equals(trackId)) {
-                    mTracksList.get(i).setLoved(false);
-
-                    // if track is one being played right now then update it
-                    if (mCurrentTrackIndex == i)
-                        TrackViewModel.getInstance().updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
-
-                    break;
+        request.enqueue(new Callback<GetAlbum>() {
+            @Override
+            public void onResponse(Call<GetAlbum> call, Response<GetAlbum> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
                 }
-            }
-        }
 
-        // tell backend about unloving track
-        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).unLoveTrack(trackId);
-        request.enqueue(new Callback<Void>() {
+                if (response.body() == null) {
+                    return;
+                }
+
+                GetAlbum album = response.body();
+
+                String imageUrl = null;
+                if (album.getImages().size() > 0) {
+                    imageUrl = album.getImages().get(0).getUrl();
+                }
+
+                List<GetTrack> tracks = album.getTracks();
+                String albumName = album.getName();
+
+                mTracksList = new ArrayList<>();
+
+                String uri = CONTEXT_ALBUM_PREFIX + albumId;
+
+                // loops on all tracks of album and preps them
+                for (int i = 0; i < tracks.size(); ++i) {
+                    GetTrack track = tracks.get(i);
+                    String artistId = null;
+                    if (track.getArtists().size() > 0) {
+                        artistId = track.getArtists().get(0);
+                    }
+                    Track addTrack = new Track(track.getId(), track.getName(),
+                            track.getDuration(), null, Track.TYPE_ALBUM, albumName,
+                            imageUrl, artistId, null, uri);
+                    mTracksList.add(addTrack);
+                }
+
+                // if shuffle is enabled then shuffle the list and set shuffle state
+                mShuffle = shuffle;
+                if (shuffle) {
+                    mTracksListOriginal = new ArrayList<>();
+                    mTracksListOriginal.addAll(mTracksList);
+                    Collections.shuffle(mTracksList);
+                }
+
+                setShuffleState(shuffle);
+
+                mCurrentTrackIndex = 0;
+
+                // if trackId is not null then find the track and start at it
+                if (!TextUtils.isEmpty(trackId)) {
+                    for (int i = 0; i < mTracksList.size(); ++i) {
+                        if (mTracksList.get(i).getId().equals(trackId)) {
+                            mCurrentTrackIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                destroyMediaPlayer();
+                initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
+
+                // check if list has liked tracks
+                checkLikedTracks();
+            }
+
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {}
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {}});
+            public void onFailure(Call<GetAlbum> call, Throwable t) {
+
+            }
+        });
     }
 
     /**
@@ -987,222 +1172,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     }
 
     /**
-     * Get a track request
-     * @param trackId id of track to request from backend
-     */
-    private void getTrack(String trackId) {
-        Call<GetTrack> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getTrack(trackId);
-
-        request.enqueue(new Callback<GetTrack>() {
-            @Override
-            public void onResponse(Call<GetTrack> call, Response<GetTrack> response) {
-                if ((!response.isSuccessful()) || (response.code() != 200)) {
-                    return;
-                }
-
-                if (response.body() == null) {
-                    return;
-                }
-
-                GetTrack track = response.body();
-
-                if (track.getArtists() == null || track.getArtists().size() < 1) {
-                    return;
-                }
-
-                String uri = null;
-                if (track.getArtists().size() > 0)
-                    uri = CONTEXT_ARTIST_PREFIX + track.getArtists().get(0);
-
-                String artistId = null;
-                if (track.getArtists().size() > 0)
-                    artistId = track.getArtists().get(0);
-
-                Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(),
-                        null, Track.TYPE_ARTIST, null, null,
-                        artistId, track.getAlbumId(), uri);
-
-                mShuffle = false;
-                currentTrack.setShuffle(false);
-                setShuffleState(false);
-                mTracksList = new ArrayList<>();
-                mTracksList.add(currentTrack);
-                mCurrentTrackIndex = 0;
-                destroyMediaPlayer();
-                initMediaPlayer(currentTrack);
-            }
-
-            @Override
-            public void onFailure(Call<GetTrack> call, Throwable t) {
-            }
-        });
-    }
-
-    /**
-     * get several tracks from backend to play them
-     * @param tracksIds ids of tracks as a list
-     * @param shuffle shuffle stat to play
-     * @param trackId id of track to start playing at (start at start if null)
-     */
-    private void getSeveralTracks(List<String> tracksIds, boolean shuffle, String trackId) {
-
-        // preps the track request
-        String tracksIdsReadyString = tracksIds.get(0);
-
-        for (int i = 1; i < tracksIds.size(); ++i) {
-            tracksIdsReadyString += "," + tracksIds.get(i);
-        }
-
-        Call<GetSeveralTracks> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getSeveralTracks(tracksIdsReadyString);
-
-        request.enqueue(new Callback<GetSeveralTracks>() {
-            @Override
-            public void onResponse(Call<GetSeveralTracks> call, Response<GetSeveralTracks> response) {
-                if ((!response.isSuccessful()) || (response.code() != 200)) {
-                    return;
-                }
-
-                if (response.body() == null) {
-                    return;
-                }
-
-                List<GetTrack> tracks = response.body().getTracks();
-                mTracksList = new ArrayList<>();
-
-                if (tracks == null || tracks.size() < 1) {
-                    return;
-                }
-
-                if (tracks.get(0).getArtists() == null || tracks.get(0).getArtists().size() < 1) {
-                    return;
-                }
-
-                // loops on array and gets all tracks
-                for (int i = 0; i < tracks.size(); ++i) {
-                    GetTrack currentLoop = tracks.get(i);
-                    String artistId = null;
-                    if (currentLoop.getArtists().size() > 0)
-                        artistId = currentLoop.getArtists().get(0);
-                    String uri = CONTEXT_ARTIST_PREFIX + artistId;
-                    Track addTrack = new Track(currentLoop.getId(), currentLoop.getName(),
-                            currentLoop.getDuration(), null, Track.TYPE_ARTIST,
-                            null, null, artistId,
-                            currentLoop.getAlbumId(), uri);
-                    mTracksList.add(addTrack);
-                }
-
-                // set shuffle state
-                mShuffle = shuffle;
-                if (shuffle) {
-                    mTracksListOriginal = new ArrayList<>();
-                    mTracksListOriginal.addAll(mTracksList);
-                    Collections.shuffle(mTracksList);
-                }
-
-                setShuffleState(shuffle);
-
-                mCurrentTrackIndex = 0;
-
-                // if trackId variable is not null then finds it and starts at it
-                if (!TextUtils.isEmpty(trackId)) {
-                    for (int i = 0; i < mTracksList.size(); ++i) {
-                        if (mTracksList.get(i).getId().equals(trackId)) {
-                            mCurrentTrackIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                destroyMediaPlayer();
-                initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
-            }
-
-            @Override
-            public void onFailure(Call<GetSeveralTracks> call, Throwable t) {
-
-            }
-        });
-    }
-
-    /**
-     * Get an album on request
-     * @param albumId id of album
-     * @param shuffle shuffle stat to play with
-     * @param trackId id of track to start at (plays from start if null)
-     */
-    private void getAlbum(String albumId, boolean shuffle, String trackId) {
-        Call<GetAlbum> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getAlbum(albumId);
-
-        request.enqueue(new Callback<GetAlbum>() {
-            @Override
-            public void onResponse(Call<GetAlbum> call, Response<GetAlbum> response) {
-                if ((!response.isSuccessful()) || (response.code() != 200)) {
-                    return;
-                }
-
-                if (response.body() == null) {
-                    return;
-                }
-
-                GetAlbum album = response.body();
-
-                String imageUrl = null;
-                if (album.getImages().size() > 0)
-                    imageUrl = album.getImages().get(0).getUrl();
-
-                List<GetTrack> tracks = album.getTracks();
-                String albumName = album.getName();
-
-                mTracksList = new ArrayList<>();
-
-                String uri = CONTEXT_ALBUM_PREFIX + albumId;
-
-                // loops on all tracks of album and preps them
-                for (int i = 0; i < tracks.size(); ++i) {
-                    GetTrack track = tracks.get(i);
-                    String artistId = null;
-                    if (track.getArtists().size() > 0)
-                        artistId = track.getArtists().get(0);
-                    Track addTrack = new Track(track.getId(), track.getName(),
-                            track.getDuration(), null, Track.TYPE_ALBUM, albumName,
-                            imageUrl, artistId, null, uri);
-                    mTracksList.add(addTrack);
-                }
-
-                // if shuffle is enabled then shuffle the list and set shuffle state
-                mShuffle = shuffle;
-                if (shuffle) {
-                    mTracksListOriginal = new ArrayList<>();
-                    mTracksListOriginal.addAll(mTracksList);
-                    Collections.shuffle(mTracksList);
-                }
-
-                setShuffleState(shuffle);
-
-                mCurrentTrackIndex = 0;
-
-                // if trackId is not null then find the track and start at it
-                if (!TextUtils.isEmpty(trackId)) {
-                    for (int i = 0; i < mTracksList.size(); ++i) {
-                        if (mTracksList.get(i).getId().equals(trackId)) {
-                            mCurrentTrackIndex = i;
-                            break;
-                        }
-                    }
-                }
-
-                destroyMediaPlayer();
-                initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
-            }
-
-            @Override
-            public void onFailure(Call<GetAlbum> call, Throwable t) {
-
-            }
-        });
-    }
-
-    /**
      * Play the playlist that is passed
      * @param playlistId id of playlist
      * @param shuffle shuffle stat to use
@@ -1265,10 +1234,126 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
                 destroyMediaPlayer();
                 initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
+
+                // check if list has liked tracks
+                checkLikedTracks();
             }
 
             @Override
             public void onFailure(Call<GetPlaylist> call, Throwable t) {
+            }
+        });
+    }
+
+    /**
+     * Function to loop on tracks list and mark all tracks with liked ones or not
+     */
+    private void checkLikedTracks() {
+
+        // if there is any error return from function
+
+        if ((mLikedTracks == null) || (mLikedTracks.isEmpty())) {
+            return;
+        }
+
+        if ((mTracksList == null) || (mTracksList.isEmpty())) {
+            return;
+        }
+
+        // loop on all tracks if they exist in liked tracks list then mark them
+        for (int i = 0; i < mTracksList.size(); ++i) {
+            if (mLikedTracks.contains(mTracksList.get(i).getId())) {
+                mTracksList.get(i).setLoved(true);
+            } else {
+                // otherwise un mark them
+                mTracksList.get(i).setLoved(false);
+            }
+        }
+    }
+
+    /**
+     * Init all my variables here
+     */
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        // init the session and the broadcast receiver
+        initMediaSession();
+        initNoisyReceiver();
+    }
+
+    /**
+     * called when startService is called in main activity
+     */
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (TrackViewModel.getInstance().getInitRequired().getValue()) {
+            // get access token to use to play tracks
+            SharedPreferences prefs = getSharedPreferences(
+                    getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
+            mAccessToken = prefs.getString("token", null);
+
+            // get the list of tracks to play
+            getCurrentlyPlaying();
+            // get a list of liked tracks
+            getLikedTracks();
+
+            // reset init status
+            TrackViewModel.getInstance().updateInitRequired(false);
+        }
+
+        MediaButtonReceiver.handleIntent(mMediaSession, intent);
+
+        // check if widget is the one who launched me
+        checkWidget(intent);
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    /**
+     * Tell backend to love track
+     */
+    public void loveTrack(String trackId) {
+        if (TextUtils.isEmpty(trackId)) {
+            return;
+        }
+
+        // find track in list and when found then set it's love status to true
+        if ((mTracksList != null) && (mTracksList.size() > 0)) {
+            for (int i = 0; i < mTracksList.size(); ++i) {
+                if (mTracksList.get(i).getId().equals(trackId)) {
+                    mTracksList.get(i).setLoved(true);
+
+                    // if track is one being played right now then update it
+                    if (mCurrentTrackIndex == i) {
+                        TrackViewModel.getInstance()
+                                .updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        // inform user
+        Toast.makeText(MediaPlaybackService.this,
+                getString(R.string.like_track_popup), Toast.LENGTH_SHORT).show();
+
+        // add track to liked tracks list
+        mLikedTracks.add(trackId);
+
+        // tell backend about loving track
+        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class)
+                .loveTrack(trackId);
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
             }
         });
     }
@@ -1595,6 +1680,52 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     //______________________________________________________________________________________________
     //------------------------------------Utility Functions-----------------------------------------
     //______________________________________________________________________________________________
+
+    /**
+     * Tell backend to hate track
+     */
+    public void unLoveTrack(String trackId) {
+        if (TextUtils.isEmpty(trackId)) {
+            return;
+        }
+
+        // find track in list and when found then set it's love status to false
+        if ((mTracksList != null) && (mTracksList.size() > 0)) {
+            for (int i = 0; i < mTracksList.size(); ++i) {
+                if (mTracksList.get(i).getId().equals(trackId)) {
+                    mTracksList.get(i).setLoved(false);
+
+                    // if track is one being played right now then update it
+                    if (mCurrentTrackIndex == i) {
+                        TrackViewModel.getInstance()
+                                .updateCurrentTrack(mTracksList.get(mCurrentTrackIndex));
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        // inform user
+        Toast.makeText(MediaPlaybackService.this,
+                getString(R.string.unlike_track_popup), Toast.LENGTH_SHORT).show();
+
+        // add track to liked tracks list
+        mLikedTracks.remove(trackId);
+
+        // tell backend about unloving track
+        Call<Void> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class)
+                .unLoveTrack(trackId);
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
+    }
 
     /**
      * start the handler to watch progress and report it

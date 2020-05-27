@@ -14,26 +14,15 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompat.Builder;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.vnoders.spotify_el8alaba.R;
 import java.util.Map;
 import java.util.Random;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    @Override
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-        if(remoteMessage.getData().isEmpty())
-            showNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
-        else
-            showNotification(remoteMessage.getData());
-
-    }
-
     private void showNotification(Map<String, String> data) {
-        String title=data.get("title").toString();
+        String title = data.get("title");
         Toast.makeText(this,title,Toast.LENGTH_LONG).show();
-        String body=data.get("body").toString();
+        String body = data.get("body");
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID="com.vnoders.spotify_el8alaba.test";
         if(VERSION.SDK_INT>= Build.VERSION_CODES.O){
@@ -66,6 +55,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationChannel.setLightColor(Color.BLUE);
             notificationChannel.setVibrationPattern(new long[]{0,1000,500,1000});
             notificationManager.createNotificationChannel(notificationChannel);
+
         }
         NotificationCompat.Builder notificationBuilder=new Builder(this,NOTIFICATION_CHANNEL_ID);
         notificationBuilder.setAutoCancel(true)
@@ -79,8 +69,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @Override
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        //Toast.makeText(MyFirebaseMessagingService.this,"DELIVERED",Toast.LENGTH_LONG).show();
+        super.onMessageReceived(remoteMessage);
+        if (remoteMessage.getData().isEmpty()) {
+            showNotification(remoteMessage.getNotification().getTitle(),
+                    remoteMessage.getNotification().getBody());
+        } else {
+            showNotification(remoteMessage.getData());
+        }
+
+    }
+
+    @Override
     public void onNewToken(@NonNull String s) {
-        Toast.makeText(this,s,Toast.LENGTH_LONG).show();
         Log.d("EL TOKEN",s);
         super.onNewToken(s);
 

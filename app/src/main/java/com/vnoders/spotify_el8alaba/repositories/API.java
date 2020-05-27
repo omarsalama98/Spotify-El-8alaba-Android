@@ -1,7 +1,8 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
-import com.vnoders.spotify_el8alaba.models.LoginInfo;
+import com.vnoders.spotify_el8alaba.models.FacebookToken;
 import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
+import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
@@ -9,7 +10,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-
 import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -30,7 +30,7 @@ public interface API {
      * @return ResponseBody and it will be changed in the future to a login response
      */
     @Headers({"X-Forwarded-For: 197.52.255.130",
-        //  "Content-Type: application/json"
+            //  "Content-Type: application/json"
     })
     @POST("authentication/login")
     Call<ResponseBody>userLogin(@Body LoginInfo loginInfo);
@@ -45,7 +45,7 @@ public interface API {
      */
 
     @Headers({"X-Forwarded-For: 197.52.255.130",
-  //          "Content-Type: application/json"
+            //          "Content-Type: application/json"
     })
     @POST("authentication/signup")
     Call<ResponseBody> signup(@Body SignUpInfo signUpInfo);
@@ -57,7 +57,7 @@ public interface API {
      */
     @Headers({
             "X-Forwarded-For: 197.52.255.130",
- //           "Content-Type: application/json"
+            //           "Content-Type: application/json"
     })
 
     @POST("authentication/forgotPassword")
@@ -69,4 +69,7 @@ public interface API {
 
     @PATCH("users")
     Call<ResponseBody> updateUserInfo(@Body UpdateUserInfo updateUserInfo);
+
+    @POST("authentication/facebook-token")
+    Call<ResponseBody> loginFB(@Body FacebookToken facebookToken);
 }

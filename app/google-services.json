@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "665790088454",
-    "firebase_url": "https://new-project-4221b.firebaseio.com",
-    "project_id": "new-project-4221b",
-    "storage_bucket": "new-project-4221b.appspot.com"
+    "project_number": "872884422789",
+    "firebase_url": "https://sp8-notifications.firebaseio.com",
+    "project_id": "sp8-notifications",
+    "storage_bucket": "sp8-notifications.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:665790088454:android:da5272066228026c7a4a87",
+        "mobilesdk_app_id": "1:872884422789:android:9671ca64ba5f3a7552c1ec",
         "android_client_info": {
           "package_name": "com.vnoders.spotify_el8alaba"
         }
       },
       "oauth_client": [
         {
-          "client_id": "665790088454-hdr15qgn1k9f2nt1dktj6gcj3eago6hu.apps.googleusercontent.com",
+          "client_id": "872884422789-fojqpf0pmrp8h4prshoof0nc9344csin.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.vnoders.spotify_el8alaba",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "665790088454-5fres3kldu7bvm2mmgbm8scaki0t89pk.apps.googleusercontent.com",
+          "client_id": "872884422789-vadak60jn2uj2r3nond1dvsj6jas2klb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDe1On6-TZhsJB7-1hucG9TEvwiB3GORYQ"
+          "current_key": "AIzaSyCBhFYUhK85aaT2peNgakXGlu4DAR-Wp54"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "665790088454-5fres3kldu7bvm2mmgbm8scaki0t89pk.apps.googleusercontent.com",
+              "client_id": "872884422789-vadak60jn2uj2r3nond1dvsj6jas2klb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -45,14 +45,14 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:665790088454:android:18864b8485b428da7a4a87",
+        "mobilesdk_app_id": "1:872884422789:android:e4c9afc92e9da6c652c1ec",
         "android_client_info": {
           "package_name": "com.vnoders.spotify_el8alaba.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "665790088454-it6ofuk23vm37prmtv6988rkg4emp03u.apps.googleusercontent.com",
+          "client_id": "872884422789-7l5mbm9nfqma2f98p9r9n8k03vl7cdmq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.vnoders.spotify_el8alaba.debug",
@@ -60,20 +60,20 @@
           }
         },
         {
-          "client_id": "665790088454-5fres3kldu7bvm2mmgbm8scaki0t89pk.apps.googleusercontent.com",
+          "client_id": "872884422789-vadak60jn2uj2r3nond1dvsj6jas2klb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDe1On6-TZhsJB7-1hucG9TEvwiB3GORYQ"
+          "current_key": "AIzaSyCBhFYUhK85aaT2peNgakXGlu4DAR-Wp54"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "665790088454-5fres3kldu7bvm2mmgbm8scaki0t89pk.apps.googleusercontent.com",
+              "client_id": "872884422789-vadak60jn2uj2r3nond1dvsj6jas2klb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
