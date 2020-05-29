@@ -12,7 +12,7 @@
             android:layout_height = "wrap_content"
             android:text = "Give your playlist a name"
             android:textStyle = "bold"
-            android:textSize = "24sp"
+            android:textSize = "20sp"
             android:textColor = "@color/white"
             android:paddingVertical = "24dp" />
 
