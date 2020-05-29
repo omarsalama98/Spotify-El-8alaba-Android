@@ -26,6 +26,9 @@ public class PlaylistHomeViewModel extends ViewModel {
     private String playlistId;
     private MutableLiveData<Boolean> isFollowed;
     private MutableLiveData<Boolean> finishedLoading;
+    private MutableLiveData<Boolean> isEmpty;
+    private MutableLiveData<Boolean> isOwnedByMe;
+    private MutableLiveData<Boolean> isCollaborative;
 
     public PlaylistHomeViewModel() {
         playlistName = new MutableLiveData<>();
@@ -33,6 +36,9 @@ public class PlaylistHomeViewModel extends ViewModel {
         tracksSummary = new MutableLiveData<>();
         imageUrl = new MutableLiveData<>();
         isFollowed = new MutableLiveData<>();
+        isEmpty = new MutableLiveData<>();
+        isOwnedByMe = new MutableLiveData<>();
+        isCollaborative = new MutableLiveData<>();
         finishedLoading = new MutableLiveData<>(false);
     }
 
@@ -132,6 +138,31 @@ public class PlaylistHomeViewModel extends ViewModel {
 
     public void setFinishedLoading(boolean finishedLoading) {
         this.finishedLoading.setValue(finishedLoading);
+    }
+
+
+    public LiveData<Boolean> isEmptyPlaylist() {
+        return isEmpty;
+    }
+
+    public void setIsEmpty(boolean isEmpty) {
+        this.isEmpty.setValue(isEmpty);
+    }
+
+    public LiveData<Boolean> isOwnedByMe() {
+        return isOwnedByMe;
+    }
+
+    public void setIsOwnedByMe(boolean isOwnedByMe) {
+        this.isOwnedByMe.setValue(isOwnedByMe);
+    }
+
+    public LiveData<Boolean> isCollaborative() {
+        return isCollaborative;
+    }
+
+    public void setIsCollaborative(boolean isCollaborative) {
+        this.isCollaborative.setValue(isCollaborative);
     }
 
     /**

@@ -169,6 +169,7 @@ public class PlaylistHomeFragment extends Fragment {
                     @Override
                     public void onChanged(Boolean finishedLoading) {
                         if (finishedLoading) {
+                            setProperData();
                             initializeViews();
                         }
                     }
@@ -176,6 +177,25 @@ public class PlaylistHomeFragment extends Fragment {
 
         playlistHomeViewModel.updateData();
 
+    }
+
+    /**
+     * Set proper data based on current playlist state as owner, size and collaboration
+     */
+    private void setProperData() {
+        Boolean isCollaborative = playlistHomeViewModel.isCollaborative().getValue();
+        Boolean isOwnedByMe = playlistHomeViewModel.isOwnedByMe().getValue();
+        Boolean isEmptyPlaylist = playlistHomeViewModel.isEmptyPlaylist().getValue();
+
+        if(isCollaborative != null && isOwnedByMe != null && isEmptyPlaylist != null){
+            if((isOwnedByMe || isCollaborative) && isEmptyPlaylist){
+                shuffle.setText("Add Songs");
+                editOrPreviewPlaylist.setVisibility(View.GONE);
+                tracksSummary.setVisibility(View.GONE);
+            }else if (!isOwnedByMe && !isCollaborative){
+                editOrPreviewPlaylist.setText("Preview");
+            }
+        }
     }
 
     private void initializeViews() {

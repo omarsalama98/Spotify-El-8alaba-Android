@@ -1,5 +1,8 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.text.Html;
@@ -106,9 +109,19 @@ public class LibraryRepository {
                     Owner owner = playlist.getOwner();
                     if (owner != null) {
                         viewModel.setPlaylistOwnerName(owner.getName());
+
+                        String currentUserId = App.getInstance().getCurrentUserId();
+
+                        viewModel.setIsOwnedByMe(currentUserId != null &&
+                                currentUserId.equals(owner.getId()));
+
                     }
 
                     viewModel.setPlaylistName(playlist.getName());
+
+                    viewModel.setIsCollaborative(playlist.isCollaborative());
+
+                    viewModel.setIsEmpty(playlist.getTracks().getTrackItems().isEmpty());
 
                     viewModel.setFinishedLoading(true);
                 }
