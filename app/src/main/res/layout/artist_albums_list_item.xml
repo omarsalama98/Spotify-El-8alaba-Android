@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:id = "@+id/artist_albums_list_item_view"
         android:orientation = "horizontal"
         android:weightSum = "100"
         android:paddingVertical = "10dp"
@@ -8,40 +9,31 @@
         android:layout_height = "wrap_content">
 
     <ImageView
-            android:id = "@+id/search_item_image_view"
+            android:id = "@+id/artist_album_item_image_view"
             android:layout_width = "0dp"
             android:layout_weight = "20"
             android:layout_height = "match_parent"
+            android:src = "@drawable/ic_spotify_logo"
             android:contentDescription = "@string/search_result_image"
             android:layout_gravity = "center_vertical" />
 
-    <LinearLayout
+    <TextView
+            android:id = "@+id/artist_album_item_name_text_view"
             android:layout_width = "0dp"
             android:layout_height = "wrap_content"
             android:layout_weight = "70"
-            android:orientation = "vertical">
-        <TextView
-                android:id = "@+id/search_item_name_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "Title"
-                android:textSize = "@dimen/search_list_item_title"
-                android:textColor = "@color/white" />
-        <TextView
-                android:id = "@+id/search_item_info_text_view"
-                android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:text = "Title"
-                android:textSize = "15sp"
-                android:textColor = "@color/colorSecondaryText" />
-
-    </LinearLayout>
-
+            android:text = "@string/title_placeholder"
+            android:textSize = "@dimen/search_list_item_title"
+            android:textColor = "@color/black" />
     <ImageView
+            android:id = "@+id/artist_album_item_arrow_image_view"
             android:layout_width = "0dp"
             android:layout_weight = "10"
             android:layout_height = "wrap_content"
+            android:tint = "@color/pressed_grey"
             android:src = "@drawable/ic_right"
+            android:contentDescription = "@string/right_arrow"
             android:layout_gravity = "center_vertical" />
+
 
 </LinearLayout>

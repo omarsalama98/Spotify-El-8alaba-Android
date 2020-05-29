@@ -1,14 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
-        tools:context = ".ui.artistLibrary.ArtistLibraryFragment">
+        android:orientation = "vertical"
+        android:paddingTop = "@dimen/status_bar_height"
+        android:padding = "10dp"
+        android:weightSum = "100"
+        android:background = "@color/white"
+        tools:context = ".Artist.ArtistLibraryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
             android:layout_width = "match_parent"
-            android:layout_height = "match_parent"
-            android:text = "@string/hello_blank_fragment" />
+            android:paddingHorizontal = "20dp"
+            android:paddingTop = "30dp"
+            android:background = "@android:color/transparent"
+            android:layout_height = "0dp"
+            android:layout_weight = "10">
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id = "@+id/artist_settings_image_view"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:src = "@drawable/ic_settings"
+                android:layout_alignParentEnd = "true"
+                android:layout_alignParentBottom = "true"
+                android:contentDescription = "@string/settings_icon" />
+    </RelativeLayout>
 
-</FrameLayout>
+    <TextView
+            android:layout_width = "wrap_content"
+            android:layout_height = "0dp"
+            android:layout_weight = "10"
+            android:text = "@string/music"
+            android:textStyle = "bold"
+            android:textColor = "@color/black"
+            android:textSize = "40sp" />
+
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "15"
+            android:layout_marginVertical = "10dp"
+            android:weightSum = "2"
+            android:orientation = "horizontal">
+        <TextView
+                android:id = "@+id/artist_songs_text_view"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_weight = "1"
+                android:text = "@string/songs"
+                android:textSize = "30sp"
+                android:textColor = "@color/black"
+                android:textStyle = "italic"
+                android:layout_gravity = "center"
+                android:gravity = "center" />
+        <TextView
+                android:id = "@+id/artist_albums_text_view"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_weight = "1"
+                android:text = "@string/albums"
+                android:textSize = "30sp"
+                android:textColor = "@color/pressed_grey"
+                android:textStyle = "italic"
+                android:layout_gravity = "center"
+                android:gravity = "center" />
+
+    </LinearLayout>
+
+    <FrameLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "65">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id = "@+id/artist_songs_recycler_view"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id = "@+id/artist_albums_recycler_view"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:visibility = "gone" />
+
+    </FrameLayout>
+
+</LinearLayout>
