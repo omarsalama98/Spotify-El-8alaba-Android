@@ -65,6 +65,10 @@ public class Playlist implements Serializable {
     @Expose(serialize = false)
     private String id;
 
+    public Playlist(String name) {
+        this.name = name;
+    }
+
     public TracksPagingWrapper getTracks() {
         return tracks;
     }

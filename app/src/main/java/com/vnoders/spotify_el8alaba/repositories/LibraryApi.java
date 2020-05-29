@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba.repositories;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -12,8 +13,10 @@ import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -85,5 +88,8 @@ public interface LibraryApi {
     @DELETE("playlists/{playlist_id}/followers")
     Call<Void> unfollowPlaylist(@Path("playlist_id") String playlistId);
 
+
+    @POST("users/playlists")
+    Call<JsonObject> createPlaylist(@Body Playlist playlist);
 
 }

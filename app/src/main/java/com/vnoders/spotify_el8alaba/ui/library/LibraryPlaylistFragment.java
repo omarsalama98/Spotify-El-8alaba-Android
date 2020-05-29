@@ -1,5 +1,7 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -25,8 +28,24 @@ import java.util.List;
  */
 public class LibraryPlaylistFragment extends Fragment {
 
+    private static final int REQUEST_CREATED_PLAYLIST_ID = 0;
+    static final String REQUEST_DATA_CREATED_PLAYLIST_ID = "id";
+
     private ProgressBar progressBar;
     private NestedScrollView playlistsContainer;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CREATED_PLAYLIST_ID && resultCode == RESULT_OK && data != null) {
+            String createdPlaylistId = data.getStringExtra(REQUEST_DATA_CREATED_PLAYLIST_ID);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment,
+                            PlaylistHomeFragment.newInstance(createdPlaylistId))
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,10 +66,9 @@ public class LibraryPlaylistFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext() , CreatePlaylistActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CREATED_PLAYLIST_ID);
             }
         });
-
 
         LibraryPlaylistAdapter playlistAdapter = new LibraryPlaylistAdapter(
                 requireActivity().getSupportFragmentManager());

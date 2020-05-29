@@ -7,6 +7,7 @@ import android.text.Spanned;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -306,4 +307,26 @@ public class LibraryRepository {
     public static void unfollowPlaylist(String playlistId) {
         unfollowPlaylist(playlistId, null);
     }
+
+
+    public static void createPlaylist(String playlistName , MutableLiveData<String> playlistId){
+
+        Call<JsonObject> request = libraryApi.createPlaylist( new Playlist(playlistName));
+
+        request.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    JsonObject json = response.body();
+                    playlistId.setValue(json.get("id").getAsString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
 }
