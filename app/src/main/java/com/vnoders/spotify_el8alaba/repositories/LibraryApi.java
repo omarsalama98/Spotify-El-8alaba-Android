@@ -72,10 +72,7 @@ public interface LibraryApi {
     default Call<List<Boolean>> doesCurrentUserFollowPlaylist(
             @Path("playlist_id") String playlistId) {
 
-        Context app = App.getInstance();
-        String currentUserId = app
-                .getSharedPreferences(app.getString(R.string.access_token_preference), MODE_PRIVATE)
-                .getString("id", null);
+        String currentUserId = App.getInstance().getCurrentUserId();
 
         return doesUsersFollowPlaylist(playlistId, Collections.singletonList(currentUserId));
     }
