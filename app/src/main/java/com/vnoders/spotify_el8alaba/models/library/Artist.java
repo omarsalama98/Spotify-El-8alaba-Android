@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import java.util.Objects;
@@ -11,24 +12,31 @@ import java.util.Objects;
 public class Artist {
 
     @SerializedName("genres")
+    @Expose
     private List<String> genres = null;
 
     @SerializedName("href")
+    @Expose
     private String href;
 
     @SerializedName("id")
+    @Expose
     private String id;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("popularity")
+    @Expose
     private int popularity;
 
     @SerializedName("type")
+    @Expose
     private String type;
 
     @SerializedName("uri")
+    @Expose
     private String uri;
 
     public List<String> getGenres() {

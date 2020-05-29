@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
@@ -11,33 +12,43 @@ import java.util.List;
 public class LibraryPlaylistItem {
 
     @SerializedName("collaborative")
+    @Expose
     private boolean collaborative;
 
     @SerializedName("external_urls")
+    @Expose
     private ExternalUrls externalUrls;
 
     @SerializedName("href")
+    @Expose
     private String href;
 
     @SerializedName("id")
+    @Expose
     private String id;
 
     @SerializedName("images")
+    @Expose
     private List<TrackImage> images = null;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("owner")
+    @Expose
     private Owner owner;
 
     @SerializedName("public")
+    @Expose
     private boolean isPublic;
 
     @SerializedName("type")
+    @Expose
     private String type;
 
     @SerializedName("uri")
+    @Expose
     private String uri;
 
     public boolean isCollaborative() {

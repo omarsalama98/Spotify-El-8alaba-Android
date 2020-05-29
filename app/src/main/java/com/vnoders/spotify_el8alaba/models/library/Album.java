@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
@@ -14,42 +15,55 @@ import java.util.Objects;
 public class Album {
 
     @SerializedName("album_type")
+    @Expose
     private String albumType;
 
     @SerializedName("artists")
+    @Expose
     private List<Artist> artists = null;
 
     @SerializedName("genres")
+    @Expose
     private List<Object> genres = null;
 
     @SerializedName("href")
+    @Expose
     private String href;
 
     @SerializedName("id")
+    @Expose
     private String id;
 
     @SerializedName("images")
+    @Expose
     private List<TrackImage> images = null;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("popularity")
+    @Expose
     private int popularity;
 
     @SerializedName("release_date")
+    @Expose
     private String releaseDate;
 
     @SerializedName("release_date_precision")
+    @Expose
     private String releaseDatePrecision;
 
     @SerializedName("tracks")
+    @Expose
     private ArrayList<Track> tracks;
 
     @SerializedName("type")
+    @Expose
     private String type;
 
     @SerializedName("uri")
+    @Expose
     private String uri;
 
     public String getAlbumType() {

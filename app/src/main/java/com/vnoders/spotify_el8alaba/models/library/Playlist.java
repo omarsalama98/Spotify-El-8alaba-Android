@@ -14,42 +14,55 @@ import java.util.Objects;
 public class Playlist implements Serializable {
 
     @SerializedName("tracks")
+    @Expose(serialize = false)
     private TracksPagingWrapper tracks;
 
     @SerializedName("collaborative")
+    @Expose(serialize = false)
     private boolean collaborative;
 
     @SerializedName("public")
+    @Expose(serialize = false)
     private boolean isPublic;
 
     @SerializedName("followers")
+    @Expose(serialize = false)
     private int followers;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("description")
+    @Expose(serialize = false)
     private String description;
 
     @SerializedName("owner")
+    @Expose(serialize = false)
     private Owner owner;
 
     @SerializedName("images")
+    @Expose(serialize = false)
     private List<TrackImage> images = null;
 
     @SerializedName("type")
+    @Expose(serialize = false)
     private String type;
 
     @SerializedName("uri")
+    @Expose(serialize = false)
     private String uri;
 
     @SerializedName("href")
+    @Expose(serialize = false)
     private String href;
 
     @SerializedName("external_urls")
+    @Expose(serialize = false)
     private ExternalUrls externalUrls;
 
     @SerializedName("id")
+    @Expose(serialize = false)
     private String id;
 
     public TracksPagingWrapper getTracks() {

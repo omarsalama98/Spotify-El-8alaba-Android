@@ -1,5 +1,6 @@
  package com.vnoders.spotify_el8alaba.models;
 
+ import com.google.gson.annotations.Expose;
  import com.google.gson.annotations.SerializedName;
 
  /**
@@ -19,7 +20,9 @@
         public void setEmail_address(String email_address) {
             this.email_address = email_address;
         }
+
         @SerializedName("email")
+        @Expose
         private String email_address;
 
     }

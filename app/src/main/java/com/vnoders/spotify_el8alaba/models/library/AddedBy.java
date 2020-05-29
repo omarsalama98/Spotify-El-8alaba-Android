@@ -2,6 +2,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
@@ -11,15 +12,19 @@ import java.util.Objects;
 public class AddedBy {
 
     @SerializedName("type")
+    @Expose
     private String type;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("uri")
+    @Expose
     private String uri;
 
     @SerializedName("id")
+    @Expose
     private String id;
 
     public String getType() {
