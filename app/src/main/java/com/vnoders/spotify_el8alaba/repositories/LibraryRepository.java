@@ -6,6 +6,7 @@ import android.os.Build.VERSION_CODES;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import com.google.gson.JsonObject;
@@ -20,7 +21,6 @@ import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
-import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
@@ -431,5 +431,40 @@ public class LibraryRepository {
         });
 
     }
+
+
+    public static void likeTrack(String trackId) {
+        Call<Void> request = libraryApi.likeTrack(trackId);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(App.getInstance(),"Added to Liked Songs", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public static void unlikeTrack(String trackId) {
+        Call<Void> request = libraryApi.unlikeTrack(trackId);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(App.getInstance(),"Removed from Liked Songs", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
 
 }

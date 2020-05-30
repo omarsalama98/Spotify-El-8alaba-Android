@@ -22,6 +22,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
+import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHolder;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +116,8 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         ToggleButton hideTrack;
         Button othersMenu;
 
+        private String trackId;
+
 
         /**
          * @param itemView The view of the new created item
@@ -148,7 +151,7 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
             trackBody.setOnLongClickListener(new OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    TrackViewHolder.this.openTrackMenu(v);
+                    openTrackMenu(v);
                     return true;
                 }
             });
@@ -172,11 +175,20 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
             likeTrack.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        buttonView.setBackgroundResource(R.drawable.like_track_liked);
-                    } else {
-                        buttonView.setBackgroundResource(R.drawable.like_track_unliked);
+                    // if the user actually pressed on the button
+                    if (buttonView.isPressed()) {
+                        if (isChecked) {
+                            LibraryRepository.likeTrack(trackId);
+                        } else {
+                            LibraryRepository.unlikeTrack(trackId);
+                        }
                     }
+
+                    // change the background based on the current button check status
+                    if (isChecked)
+                        buttonView.setBackgroundResource(R.drawable.like_track_liked);
+                    else
+                        buttonView.setBackgroundResource(R.drawable.like_track_unliked);
                 }
             });
 
@@ -200,6 +212,9 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         }
 
         void bind(Track track) {
+
+            trackId = track.getId();
+
             trackName.setText(track.getName());
 
             if (track.getAlbum() != null && track.getAlbum().getImages() != null) {
@@ -210,10 +225,7 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
                 }
             }
 
-            if(track.isLiked())
-                likeTrack.setBackgroundResource(R.drawable.like_track_liked);
-            else
-                likeTrack.setBackgroundResource(R.drawable.like_track_unliked);
+            likeTrack.setChecked(track.isLiked());
 
             List<Artist> artists = track.getArtists();
             if (artists != null && artists.size() > 0) {
