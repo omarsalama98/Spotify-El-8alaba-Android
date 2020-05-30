@@ -203,19 +203,12 @@ public class Track {
             return false;
         }
         Track track = (Track) obj;
-        return discNumber == track.discNumber &&
-                durationInMilliseconds == track.durationInMilliseconds &&
-                explicit == track.explicit &&
-                isLocal == track.isLocal &&
-                trackNumber == track.trackNumber &&
-                Objects.equals(album, track.album) &&
+        return Objects.equals(album, track.album) &&
                 Objects.equals(artists, track.artists) &&
-                Objects.equals(externalUrls, track.externalUrls) &&
                 Objects.equals(href, track.href) &&
                 Objects.equals(id, track.id) &&
                 Objects.equals(name, track.name) &&
                 Objects.equals(previewUrl, track.previewUrl) &&
-                Objects.equals(type, track.type) &&
                 Objects.equals(uri, track.uri);
     }
 

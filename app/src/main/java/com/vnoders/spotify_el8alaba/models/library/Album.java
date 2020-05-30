@@ -191,15 +191,9 @@ public class Album {
             return false;
         }
         Album album = (Album) obj;
-        return Objects.equals(albumType, album.albumType) &&
-                Objects.equals(genres, album.genres) &&
-                Objects.equals(href, album.href) &&
-                Objects.equals(id, album.id) &&
-                Objects.equals(images, album.images) &&
+        return Objects.equals(id, album.id) &&
                 Objects.equals(name, album.name) &&
-                Objects.equals(releaseDate, album.releaseDate) &&
                 Objects.equals(tracks, album.tracks) &&
-                Objects.equals(type, album.type) &&
                 Objects.equals(uri, album.uri);
     }
 

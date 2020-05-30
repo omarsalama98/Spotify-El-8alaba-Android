@@ -107,7 +107,6 @@ public class Artist {
         return Objects.equals(href, artist.href) &&
                 Objects.equals(id, artist.id) &&
                 Objects.equals(name, artist.name) &&
-                Objects.equals(type, artist.type) &&
                 Objects.equals(uri, artist.uri);
     }
 
