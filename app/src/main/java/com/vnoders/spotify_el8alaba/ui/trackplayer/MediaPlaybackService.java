@@ -32,7 +32,9 @@ import androidx.media.session.MediaButtonReceiver;
 
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SplashActivity;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.AdItem;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAdRequest;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetLikedTracks;
@@ -41,6 +43,7 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetUserStatus;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.LikedTrackWrapper;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostPlayTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
@@ -81,6 +84,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     private static final String CONTEXT_RESPONSE_TYPE_PLAYLIST = "playlist";
     private static final String CONTEXT_RESPONSE_TYPE_ARTIST = "artist";
 
+    // what backend sends as free user
+    private static final String FREE_USER_INDICATOR = "free";
+
     // Widget constants for starting intent
     public static final String OPEN_APP = "open_app";
     public static final String PLAY_ID = "play_track";
@@ -92,6 +98,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
     // constant which dictates time of handler thread
     private static final int HANDLER_DELAY = 1000;
     private static final int POST_UPDATE_PROGRESS_SECONDS = 10;
+
+    // constant on how many tracks to play before display AD
+    private static final int TRACKS_BETWEEN_ADVERTISEMENTS = 5;
 
     //______________________________________________________________________________________________
     //--------------------------------------Variables-----------------------------------------------
@@ -125,6 +134,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
     // reference to all widgets
     private int[] mAllWidgetIds;
+
+    // true if user premium, false if free
+    private boolean mPremium = false;
+    // number of tracks played without displaying an ad
+    private int mTracksPlayedWithoutAd = 0;
 
     // this is for event every .. ms
     private Handler mHandler = new Handler();
@@ -221,6 +235,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             SharedPreferences prefs =getSharedPreferences(getResources().getString(R.string.access_token_preference),MODE_PRIVATE);
             mAccessToken = prefs.getString("token", null);
 
+            // remove the currently playing if there is any
+            TrackViewModel.getInstance().updateCurrentTrack(null);
+
+            // reset the Ad state
+            mTracksPlayedWithoutAd = 0;
+            TrackViewModel.getInstance().updateAdItem(null);
+
             // get the list of tracks to play
             getCurrentlyPlaying();
             // get a list of liked tracks
@@ -228,6 +249,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
             // reset init status
             TrackViewModel.getInstance().updateInitRequired(false);
+
+            // get user status
+            mPremium = false;
+            getUserStatus();
         }
 
         MediaButtonReceiver.handleIntent(mMediaSession, intent);
@@ -751,6 +776,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         // update the widget UI with the new track
         updateWidget(track);
 
+        // check if there is ad to display and show it
+        checkAd();
+
         // set shuffle and repeat states
         mTracksList.get(mCurrentTrackIndex).setRepeat(mRepeat);
         mTracksList.get(mCurrentTrackIndex).setShuffle(mShuffle);
@@ -1153,6 +1181,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 // loops on array and gets all tracks
                 for (int i = 0; i < tracks.size(); ++i) {
                     GetTrack currentLoop = tracks.get(i);
+
+                    if (currentLoop == null)
+                        continue;
+
                     String artistId = null;
                     if (currentLoop.getArtists().size() > 0)
                         artistId = currentLoop.getArtists().get(0);
@@ -1236,6 +1268,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 // loops on all tracks of album and preps them
                 for (int i = 0; i < tracks.size(); ++i) {
                     GetTrack track = tracks.get(i);
+
+                    if (track == null)
+                        continue;
+
                     String artistId = null;
                     if (track.getArtists().size() > 0)
                         artistId = track.getArtists().get(0);
@@ -1309,6 +1345,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 // read all tracks in album
                 for (int i = 0; i < items.size(); ++i) {
                     GetPlaylistTrack track = items.get(i).getTrack();
+
+                    if (track == null)
+                        continue;
 
                     String artistId = null;
                     if (track.getArtists().size() > 0)
@@ -1672,6 +1711,96 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
             // update the widget
             AppWidgetManager.getInstance(this).updateAppWidget(id, views);
         }
+    }
+
+
+    //______________________________________________________________________________________________
+    //---------------------------------Advertisement Functions--------------------------------------
+    //______________________________________________________________________________________________
+
+    /**
+     * Increments the Ad counter and checks if time yet to show an ad and gets ad from backend
+     * and load the Ad into the variable observed by UI
+     */
+    private void checkAd() {
+        // if user is premium then don't try to do anything with Ads
+        if (mPremium)
+            return;
+
+        // increment times of played
+        ++mTracksPlayedWithoutAd;
+
+        // if below the limit then just return
+        if (mTracksPlayedWithoutAd <= TRACKS_BETWEEN_ADVERTISEMENTS)
+            return;
+
+        // played too many tracks without Ad so reset counter and get an Ad to show
+        mTracksPlayedWithoutAd = 0;
+
+        // make Ad request
+        Call<GetAdRequest> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getAd();
+
+        // launch the Ad request
+        request.enqueue(new Callback<GetAdRequest>() {
+            @Override
+            public void onResponse(Call<GetAdRequest> call, Response<GetAdRequest> response) {
+                // if there is any error return from function
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                TrackViewModel.getInstance().updateAdItem(response.body().getItem());
+            }
+
+            @Override
+            public void onFailure(Call<GetAdRequest> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /**
+     * sets mPremium if user if premium or not by fetching data from backend
+     */
+    private void getUserStatus() {
+        // make request
+        Call<GetUserStatus> request = RetrofitClient.getInstance().getAPI(TrackPlayerApi.class).getUserStatus();
+
+        // launch request
+        request.enqueue(new Callback<GetUserStatus>() {
+            @Override
+            public void onResponse(Call<GetUserStatus> call, Response<GetUserStatus> response) {
+                // if there is any error return from function
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                // if there is text then check what it equals to
+                if (!(TextUtils.isEmpty(response.body().getUserType()))) {
+                    // if it equals 'free' then set premium to false
+                    if (response.body().getUserType().equals(FREE_USER_INDICATOR)) {
+                        mPremium = false;
+                    }
+                    else {
+                        // else set premium to true
+                        mPremium = true;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetUserStatus> call, Throwable t) {
+
+            }
+        });
     }
 
     //______________________________________________________________________________________________

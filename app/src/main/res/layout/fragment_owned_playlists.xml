@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:background="@color/backgroundColor"
+    tools:context=".ui.currentUserProfile.Followers">
+
+    <Button
+        android:id="@+id/owned_playlist_back_button"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/ic_left_arrow"
+        android:padding="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="@string/playlists"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/owned_playlists_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_below="@id/owned_playlist_back_button"
+        android:layout_marginTop="36dp"
+        android:text="@string/no_owned_playlists"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:visibility="gone" />
+
+
+    <ProgressBar
+        android:id="@+id/owned_playlists_progress_bar"
+        android:layout_below="@id/owned_playlist_back_button"
+        android:layout_marginTop="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/owned_playlists_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/owned_playlist_back_button"
+        android:layout_margin="12dp"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/owned_playlist_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundColor"
+            tools:listitem="@layout/owned_playlist_item" />
+
+    </ScrollView>
+
+
+</RelativeLayout>

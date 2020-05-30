@@ -13,14 +13,25 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
+import com.vnoders.spotify_el8alaba.models.userProfile.GetUsersPlaylists;
+import com.vnoders.spotify_el8alaba.models.userProfile.UserPlaylistItem;
+import com.vnoders.spotify_el8alaba.repositories.API;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
+
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass. Use the {@link CurrentUserProfileFragment#newInstance}
@@ -40,6 +51,7 @@ public class CurrentUserProfileFragment extends Fragment {
     private Button editProfileButton;
     private Bundle bundle;
     private LinearLayout followersLayout;
+    private View playListWrap;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     // TODO: Rename parameter arguments, choose names that match
@@ -104,6 +116,8 @@ public class CurrentUserProfileFragment extends Fragment {
         followerNumber=root.findViewById(R.id.followers_number);
         followingNumber=root.findViewById(R.id.following_numbers);
         playlistNumber=root.findViewById(R.id.playlist_number);
+        playListWrap = root.findViewById(R.id.followPlaylistsWrap);
+        playlistNumber.setText("-");
         editProfileButton=root.findViewById(R.id.edit_profile_button);
         //this will be replaced by a user image from currentUserProfile later
         Picasso.get().load(IMAGE_URL).into(userImage);
@@ -165,7 +179,69 @@ public class CurrentUserProfileFragment extends Fragment {
             }
         });
 
+        // make request to display the owned playlists correctly
+        setPlaylistsNumber();
+
+        // setup the click on the playlists
+        playListWrap.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OwnedPlaylistsFragment ownedPlaylistsFragment = OwnedPlaylistsFragment.newInstance(currentUserProfile.getId());
+                fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment, ownedPlaylistsFragment,"OWNED_PLAYLISTS").addToBackStack(null).commit();
+            }
+        });
+
         return root;
+    }
+
+    /**
+     * Gets the playlists number from backend and displays it
+     */
+    private void setPlaylistsNumber() {
+        // make request
+        Call<GetUsersPlaylists> request = RetrofitClient.getInstance().getAPI(API.class).getCurrentUsersPlaylists();
+
+        // start the request
+        request.enqueue(new Callback<GetUsersPlaylists>() {
+            @Override
+            public void onResponse(Call<GetUsersPlaylists> call, Response<GetUsersPlaylists> response) {
+
+                // if there is any error return from function
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                // get list of items
+                List<UserPlaylistItem> items = response.body().getItems();
+
+                if (items == null)
+                    return;
+
+                // init the variables used
+                int playlistsNumber = 0;
+                String userId = currentUserProfile.getId();
+
+                for (int i = 0; i < items.size(); ++i) {
+                    if (userId.equals(items.get(i).getOwner().getId())) {
+                        ++playlistsNumber;
+                    }
+                }
+
+                // put the number of playlists owned on text
+                playlistNumber.setText(String.valueOf(playlistsNumber));
+            }
+
+            @Override
+            public void onFailure(Call<GetUsersPlaylists> call, Throwable t) {
+
+            }
+        });
     }
 
 }

@@ -6,6 +6,7 @@ import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
+import com.vnoders.spotify_el8alaba.models.userProfile.GetUsersPlaylists;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -74,4 +75,10 @@ public interface API {
 
     @POST("authentication/facebook-token")
     Call <ResponseBody> loginFB(@Body FacebookToken facebookToken);
+
+    /**
+     * @return This function gets the users followed or created playlists
+     */
+    @GET("me/playlists?limit=50")
+    Call<GetUsersPlaylists> getCurrentUsersPlaylists();
 }
