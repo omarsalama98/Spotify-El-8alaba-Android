@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import android.print.PrintAttributes.Resolution;
 import com.vnoders.spotify_el8alaba.models.FacebookToken;
 
 import com.vnoders.spotify_el8alaba.models.LoginInfo;
@@ -7,14 +8,17 @@ import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 /**
  * This interface will include all the back-end functions which will handle the API requests
@@ -74,4 +78,11 @@ public interface API {
 
     @POST("authentication/facebook-token")
     Call <ResponseBody> loginFB(@Body FacebookToken facebookToken);
+
+    @POST("users/notification-token")
+    Call<ResponseBody> addNotificationToken(@Body String token);
+
+    @Multipart
+    @POST("users/update-avatar")
+    Call<ResponseBody> changeProfilePicture(@Part MultipartBody.Part image);
 }

@@ -21,7 +21,7 @@ public class CurrentUserProfile implements Serializable {
     private String type;
     @SerializedName("image")
     @Expose
-    private Image image;
+    private List<Image> image;
     @SerializedName("product")
     @Expose
     private String product;
@@ -99,11 +99,11 @@ public class CurrentUserProfile implements Serializable {
     }
 
 
-    public Image getImage() {
+    public List<Image> getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(List<Image> image) {
         this.image = image;
     }
 

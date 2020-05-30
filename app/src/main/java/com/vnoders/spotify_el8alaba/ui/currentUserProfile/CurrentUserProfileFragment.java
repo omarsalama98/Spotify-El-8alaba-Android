@@ -19,8 +19,10 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass. Use the {@link CurrentUserProfileFragment#newInstance}
@@ -42,11 +44,12 @@ public class CurrentUserProfileFragment extends Fragment {
     private LinearLayout followersLayout;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+    private  String imageUrl ="https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String IMAGE_URL ="https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg";
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -91,6 +94,10 @@ public class CurrentUserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        List<Image> userImages =currentUserProfile.getImage();
+        if(!userImages.isEmpty()) {
+             imageUrl = userImages.get(1).getUrl();
+        }
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_current_user_profile, container, false);
         followersLayout=root.findViewById(R.id.followers_layout);
@@ -105,10 +112,8 @@ public class CurrentUserProfileFragment extends Fragment {
         followingNumber=root.findViewById(R.id.following_numbers);
         playlistNumber=root.findViewById(R.id.playlist_number);
         editProfileButton=root.findViewById(R.id.edit_profile_button);
-        //this will be replaced by a user image from currentUserProfile later
-        Picasso.get().load(IMAGE_URL).into(userImage);
-        GradientUtils.generate(IMAGE_URL,appBarLayout,GradientUtils.GRADIENT_LINEAR_BLACK);
-        GradientUtils.generate(IMAGE_URL,toolbar,GradientUtils.SOLID_DOMINANT_COLOR);
+            Picasso.get().load(imageUrl).into(userImage);
+        GradientUtils.generate(imageUrl,appBarLayout,GradientUtils.GRADIENT_LINEAR_BLACK);
         followerNumber.setText(currentUserProfile.getFollowers().toString());
         userName.setText(currentUserProfile.getName());
         userNameToolbar.setText(currentUserProfile.getName());
@@ -137,7 +142,7 @@ public class CurrentUserProfileFragment extends Fragment {
                 bundle=new Bundle();
                 //will be uncommented when a user with image is created
                // bundle.putString("image_url",currentUserProfile.getImage().getUrl());
-                bundle.putString("image_url",IMAGE_URL);
+                bundle.putString("image_url",imageUrl);
                 bundle.putString("user_name",currentUserProfile.getName());
                 bundle.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
                 EditProfile editProfile=new EditProfile();
@@ -150,7 +155,12 @@ public class CurrentUserProfileFragment extends Fragment {
         bottomSheetButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                bundle=new Bundle();
+                bundle.putString("image_url",imageUrl);
+                bundle.putString("user_name",currentUserProfile.getName());
+                bundle.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
                 CurrentUserProfileBottomSheet currentUserProfileBottomSheet=new CurrentUserProfileBottomSheet();
+                currentUserProfileBottomSheet.setArguments(bundle);
                 currentUserProfileBottomSheet.show(getActivity().getSupportFragmentManager(),"CURRENT_USER_PROFILE_BOTTOM_SHEET");
 
             }
