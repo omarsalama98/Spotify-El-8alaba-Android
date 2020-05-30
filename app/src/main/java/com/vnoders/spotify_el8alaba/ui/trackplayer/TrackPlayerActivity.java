@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.vnoders.spotify_el8alaba.OnSwipeTouchListener;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.AdItem;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 
@@ -45,6 +47,16 @@ public class TrackPlayerActivity extends AppCompatActivity {
 
     // holds track image view
     private ImageView mTrackImageView;
+
+    // holds grey screen for ad layout
+    private View mGreyScreen;
+    // holds ad layout
+    private View mAdWrapper;
+    // holds ad image
+    private ImageView mAdImage;
+    // holds ad text
+    private TextView mAdText;
+
     /**
      * Connection to bind with media playback service
      */
@@ -80,6 +92,52 @@ public class TrackPlayerActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Function to display Ad to screen
+     * @param adItem to display to user
+     */
+    private void displayAd(AdItem adItem) {
+        if (adItem == null) {
+            mGreyScreen.setVisibility(View.GONE);
+            mAdWrapper.setVisibility(View.GONE);
+            return;
+        }
+
+        // show the  items
+        mGreyScreen.setVisibility(View.VISIBLE);
+        mAdWrapper.setVisibility(View.VISIBLE);
+
+        // show text of ad
+        if (adItem.getText() != null)
+            mAdText.setText(adItem.getText());
+        else
+            mAdText.setText(" ");
+
+        // show image of ad
+        if (adItem.getImages() != null) {
+            if (adItem.getImages().size() > 0) {
+                if (!(TextUtils.isEmpty(adItem.getImages().get(0).getUrl()))) {
+                    Picasso.get().load(adItem.getImages().get(0).getUrl()).into(mAdImage);
+                    return;
+                }
+            }
+        }
+
+        mAdImage.setImageResource(R.drawable.track_image_default);
+    }
+
+    /**
+     * Init ad items to be gone
+     */
+    private void initAdComponents() {
+        mGreyScreen.setVisibility(View.GONE);
+        mAdWrapper.setVisibility(View.GONE);
+
+        // set listener to hide ad when clicked
+        mGreyScreen.setOnClickListener(v -> TrackViewModel.getInstance().updateAdItem(null));
+
+        mAdWrapper.setOnClickListener(v -> TrackViewModel.getInstance().updateAdItem(null));
+    }
 
     /**
      * override back pressed to show sliding down animation when quitting
@@ -122,6 +180,14 @@ public class TrackPlayerActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         );
 
+        // get reference to ad items
+        mGreyScreen = findViewById(R.id.track_play_grey_screen);
+        mAdWrapper = findViewById(R.id.ad_wrapper);
+        mAdImage = findViewById(R.id.track_player_ad_image);
+        mAdText = findViewById(R.id.track_player_ad_text);
+        // init Ad settings
+        initAdComponents();
+
         // listener for touches on image and surrounding space for swipe gestures
         // tell the service if swipe is detected to skip
         findViewById(R.id.track_player_space)
@@ -142,6 +208,14 @@ public class TrackPlayerActivity extends AppCompatActivity {
             @Override
             public void onChanged(Track realTrack) {
                 updateUI(realTrack);
+            }
+        });
+
+        // observe to know when to display track
+        TrackViewModel.getInstance().getAdItem().observe(this, new Observer<AdItem>() {
+            @Override
+            public void onChanged(AdItem adItem) {
+                displayAd(adItem);
             }
         });
     }
