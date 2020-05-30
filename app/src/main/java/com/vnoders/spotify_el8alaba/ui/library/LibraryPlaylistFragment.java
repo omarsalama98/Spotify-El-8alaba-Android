@@ -94,6 +94,19 @@ public class LibraryPlaylistFragment extends Fragment {
         View likedSongs = root.findViewById(R.id.liked_songs);
         TextView numberOfLikedSongs = root.findViewById(R.id.number_of_liked_songs);
 
+        likedSongs.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlaylistTracksFragment playlistTracksFragment = PlaylistTracksFragment
+                        .newInstance(null,"Liked Songs");
+
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment, playlistTracksFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
         playlistViewModel.getNumberOfLikedSongs().observe(getViewLifecycleOwner(),
                 new Observer<Integer>() {
                     @Override

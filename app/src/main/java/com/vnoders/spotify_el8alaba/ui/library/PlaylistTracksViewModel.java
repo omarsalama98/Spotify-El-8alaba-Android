@@ -78,8 +78,14 @@ public class PlaylistTracksViewModel extends ViewModel {
      * playlist which apply a level of abstraction between UI and business logic and data.
      */
     public void updatePlaylistTracks() {
-        LibraryRepository.updatePlaylistCoverImages(this);
-        LibraryRepository.updatePlaylistTracks(this);
+
+        if (playlistId != null) {
+            LibraryRepository.updatePlaylistCoverImages(this);
+            LibraryRepository.updatePlaylistTracks(this);
+        }else{
+            // If the playlist has no id therefore it is the list of liked songs
+            LibraryRepository.updateLikedTracksList(this);
+        }
     }
 
 }

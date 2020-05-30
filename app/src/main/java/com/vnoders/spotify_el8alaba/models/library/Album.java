@@ -18,10 +18,6 @@ public class Album {
     @Expose
     private String albumType;
 
-    @SerializedName("artists")
-    @Expose
-    private List<Artist> artists = null;
-
     @SerializedName("genres")
     @Expose
     private List<Object> genres = null;
@@ -74,13 +70,6 @@ public class Album {
         this.albumType = albumType;
     }
 
-    public List<Artist> getArtists() {
-        return artists;
-    }
-
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
-    }
 
     public List<Object> getGenres() {
         return genres;
@@ -203,7 +192,6 @@ public class Album {
         }
         Album album = (Album) obj;
         return Objects.equals(albumType, album.albumType) &&
-                Objects.equals(artists, album.artists) &&
                 Objects.equals(genres, album.genres) &&
                 Objects.equals(href, album.href) &&
                 Objects.equals(id, album.id) &&

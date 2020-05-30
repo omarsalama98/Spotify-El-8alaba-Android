@@ -221,13 +221,13 @@ public class LibraryRepository {
         new AsyncTask<Void, Void, ArrayList<Track>>() {
             @Override
             protected ArrayList<Track> doInBackground(Void... voids) {
+                ArrayList<Track> tracks = new ArrayList<>();
                 try {
                     Response<TracksPagingWrapper> response = likedTracksRequest.execute();
 
                     if (response.isSuccessful() && response.body() != null) {
                         List<TrackItem> likedTracks = response.body().getTrackItems();
 
-                        ArrayList<Track> tracks = new ArrayList<>();
                         if (trackItems != null) {
                             for (TrackItem trackItem : trackItems) {
                                 boolean isLiked = likedTracks.contains(trackItem);
@@ -238,15 +238,12 @@ public class LibraryRepository {
                                 }
                             }
                         }
-
-                        return tracks;
-
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return null;
+                return tracks;
             }
 
             @Override
@@ -395,6 +392,44 @@ public class LibraryRepository {
 
             }
         });
+    }
+
+    public static void updateLikedTracksList(PlaylistTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> request = libraryApi.getLikedTracks();
+
+        request.enqueue(new Callback<TracksPagingWrapper>() {
+            @Override
+            public void onResponse(@NotNull Call<TracksPagingWrapper> call,
+                    @NotNull Response<TracksPagingWrapper> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    List<TrackItem> trackItems = response.body().getTrackItems();
+                    ArrayList<Track> tracks = new ArrayList<>();
+
+                    if (trackItems != null) {
+                        for (TrackItem trackItem : trackItems) {
+                            Track track = trackItem.getTrack();
+                            if (track != null) {
+                                track.setLiked(true);
+                                tracks.add(track);
+                            }
+                        }
+                    }
+
+                    viewModel.setTracks(tracks);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<TracksPagingWrapper> call, @NotNull Throwable t) {
+
+            }
+        });
+
     }
 
 }
