@@ -46,7 +46,7 @@ public class EditAlbumSongsListAdapter extends
             int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.artist_albums_list_item, parent, false);
+                .inflate(R.layout.artist_songs_list_item, parent, false);
         return new MyViewHolder(v);
     }
 

@@ -9,7 +9,6 @@ public class MyTrack {
     public MyTrack(String id, int streams) {
         this.id = id;
         this.streams = streams;
-        this.name = "";
     }
 
     public int getStreams() {
@@ -26,5 +25,19 @@ public class MyTrack {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof MyTrack)) {
+            return false;
+        }
+
+        MyTrack obj = (MyTrack) o;
+        return obj.getName().equals(name) && obj.getId().equals(id);
     }
 }

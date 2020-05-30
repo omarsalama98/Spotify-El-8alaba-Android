@@ -6,7 +6,7 @@
         android:paddingVertical = "10dp"
         android:foreground = "?android:attr/selectableItemBackground"
         android:layout_width = "match_parent"
-        android:layout_height = "wrap_content">
+        android:layout_height = "60dp">
 
     <ImageView
             android:id = "@+id/artist_album_item_image_view"
@@ -22,8 +22,9 @@
             android:layout_width = "0dp"
             android:layout_height = "wrap_content"
             android:layout_weight = "70"
+            android:paddingStart = "10dp"
             android:text = "@string/title_placeholder"
-            android:textSize = "@dimen/search_list_item_title"
+            android:textSize = "20sp"
             android:textColor = "@color/black" />
     <ImageView
             android:id = "@+id/artist_album_item_arrow_image_view"

@@ -67,7 +67,6 @@ public class AlbumsListAdapter extends RecyclerView.Adapter<AlbumsListAdapter.My
             imageUrl = "https://getdrawings.com/free-icon-bw/black-music-icons-23.png";
         }
         Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -94,10 +93,16 @@ public class AlbumsListAdapter extends RecyclerView.Adapter<AlbumsListAdapter.My
                         backDataset.get(getAdapterPosition()).getId());
                 bundle.putString(ArtistConstantsHelper.ALBUM_NAME,
                         backDataset.get(getAdapterPosition()).getName());
-                if (!backDataset.get(getAdapterPosition()).getImages().isEmpty()) {
-                    bundle.putString(ArtistConstantsHelper.ALBUM_IMAGE_URL,
-                            backDataset.get(getAdapterPosition()).getImages().get(0).getUrl());
+
+                String imageUrl;
+                List<TrackImage> images = backDataset.get(getAdapterPosition()).getImages();
+                if (!images.isEmpty()) {
+                    imageUrl = images.get(0).getUrl();
+                } else {
+                    imageUrl = "https://getdrawings.com/free-icon-bw/black-music-icons-23.png";
                 }
+                bundle.putString(ArtistConstantsHelper.ALBUM_IMAGE_URL, imageUrl);
+
                 Fragment targetFragment = new ArtistEditAlbumFragment();
                 targetFragment.setArguments(bundle);
                 fragment.getParentFragmentManager()

@@ -8,7 +8,7 @@ public class ArtistTrack {
 
     @SerializedName("artists")
     @Expose
-    private List<Artist> artists = null;
+    private List<String> artists = null;
     @SerializedName("disc_number")
     @Expose
     private Integer discNumber;
@@ -46,11 +46,11 @@ public class ArtistTrack {
     @Expose
     private String id;
 
-    public List<Artist> getArtists() {
+    public List<String> getArtists() {
         return artists;
     }
 
-    public void setArtists(List<Artist> artists) {
+    public void setArtists(List<String> artists) {
         this.artists = artists;
     }
 

@@ -1201,13 +1201,17 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                     GetPlaylistTrack track = items.get(i).getTrack();
 
                     String artistId = null;
-                    if (track.getArtists().size() > 0)
-                        artistId = track.getArtists().get(0).getId();
+                    if (track != null) {
+                        if (track.getArtists().size() > 0) {
+                            artistId = track.getArtists().get(0).getId();
+                        }
 
-                    Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(),
-                            null, Track.TYPE_PLAYLIST, response.body().getName(),
-                            null, artistId, track.getAlbum().getId(), uri);
-                    mTracksList.add(addTrack);
+                        Track addTrack = new Track(track.getId(), track.getName(),
+                                track.getDuration(),
+                                null, Track.TYPE_PLAYLIST, response.body().getName(),
+                                null, artistId, track.getAlbum().getId(), uri);
+                        mTracksList.add(addTrack);
+                    }
                 }
 
                 // shuffles the list of shuffle is on and sets the variable

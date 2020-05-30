@@ -43,6 +43,7 @@ public class ArtistMainActivity extends AppCompatActivity {
     private ArrayList<String> ids;
     private List<Track> tracks;
     private Artist mArtist;
+    static String followers, songTopStreams, allSongsStreams, topSongName;
 
     /**
      * @param fragment The fragment we want to load
@@ -170,7 +171,11 @@ public class ArtistMainActivity extends AppCompatActivity {
                     sum += played;
                 }
             }
-            mTracks.add(new MyTrack(trackListens.get(i).getTrack().getId(), sum));
+            MyTrack myTrack = new MyTrack(trackListens.get(i).getTrack().getId(), sum);
+            myTrack.setName(trackListens.get(i).getTrack().getName());
+            if (!mTracks.contains(myTrack)) {
+                mTracks.add(myTrack);
+            }
             totSum += trackListens.get(i).getPlayed();
             if (sum >= max) {
                 max = sum;
@@ -184,13 +189,12 @@ public class ArtistMainActivity extends AppCompatActivity {
         call.enqueue(new Callback<ArtistTrack>() {
             @Override
             public void onResponse(Call<ArtistTrack> call, Response<ArtistTrack> response) {
-                ArtistHomeFragment.artistTopSongTextView.setText(response.body().getName());
-                String streams = played + " streams";
-                ArtistHomeFragment.artistTopSongStreamsTextView.setText(streams);
-                String allStreams = sumStreams + " streams";
-                ArtistHomeFragment.artistStreamsTextView.setText(allStreams);
+                topSongName = response.body().getName();
+                songTopStreams = played + " streams";
+                allSongsStreams = sumStreams + " streams";
                 goingArtistLayout.setVisibility(View.GONE);
-                ArtistMainActivity.navView.setVisibility(View.VISIBLE);
+                navView.setVisibility(View.VISIBLE);
+                ArtistHomeFragment.updateUI();
             }
 
             @Override
@@ -206,10 +210,8 @@ public class ArtistMainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Artist> call, Response<Artist> response) {
                 mArtist = response.body();
-                String followers = mArtist.getFollowers().getTotal() + " followers";
-                ArtistHomeFragment.artistFollowersTextView.setText(followers);
+                followers = mArtist.getFollowers().getTotal() + " followers";
             }
-
             @Override
             public void onFailure(Call<Artist> call, Throwable t) {
             }
@@ -273,5 +275,10 @@ public class ArtistMainActivity extends AppCompatActivity {
             return false;
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

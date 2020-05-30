@@ -10,57 +10,51 @@
         <RelativeLayout
                 android:layout_width = "match_parent"
                 android:paddingHorizontal = "20dp"
-                android:paddingTop = "30dp"
                 android:background = "@color/darkBlue"
                 android:layout_height = "0dp"
                 android:layout_weight = "10">
-            <de.hdodenhof.circleimageview.CircleImageView
-                    android:id = "@+id/artist_settings_image_view"
-                    android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:src = "@drawable/ic_settings"
-                    android:layout_alignParentEnd = "true"
-                    android:layout_alignParentBottom = "true"
-                    android:contentDescription = "@string/settings_icon" />
             <ImageView
                     android:id = "@+id/spotify_user_image_view"
                     android:layout_width = "50dp"
                     android:layout_height = "match_parent"
                     android:src = "@drawable/spotify"
                     android:layout_alignParentStart = "true"
-                    android:layout_alignParentBottom = "true"
+                    android:layout_centerInParent = "true"
+                    android:padding = "5dp"
                     android:contentDescription = "@string/spotify_artist_icon" />
         </RelativeLayout>
 
         <LinearLayout
                 android:layout_width = "match_parent"
                 android:layout_height = "0dp"
-                android:layout_weight = "40"
+                android:layout_weight = "42"
                 android:background = "@color/darkBlue"
+                android:weightSum = "100"
                 android:padding = "20dp"
                 android:orientation = "vertical">
             <TextView
                     android:id = "@+id/artist_streams_text_view"
                     android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:layout_marginTop = "20dp"
+                    android:layout_height = "0dp"
                     android:text = "3 streams"
                     android:textSize = "35sp"
+                    android:gravity = "center_vertical"
+                    android:layout_weight = "30"
                     android:textColor = "@color/rosy"
                     android:textStyle = "bold" />
             <TextView
                     android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
-                    android:layout_marginTop = "10dp"
+                    android:layout_height = "0dp"
+                    android:layout_weight = "20"
                     android:text = "@string/last_7_days"
                     android:textSize = "20sp"
                     android:textColor = "@color/rosy" />
             <TextView
                     android:id = "@+id/artist_followers_text_view"
                     android:layout_width = "wrap_content"
-                    android:layout_height = "wrap_content"
+                    android:layout_height = "0dp"
+                    android:layout_weight = "30"
                     android:text = "1 followers"
-                    android:layout_marginTop = "30dp"
                     android:textSize = "35sp"
                     android:textColor = "@color/rosy"
                     android:textStyle = "bold" />
@@ -70,7 +64,7 @@
         <LinearLayout
                 android:layout_width = "match_parent"
                 android:layout_height = "0dp"
-                android:layout_weight = "45"
+                android:layout_weight = "48"
                 android:background = "@color/white"
                 android:paddingTop = "30dp"
                 android:paddingHorizontal = "20dp"
@@ -93,7 +87,7 @@
             <LinearLayout
                     android:layout_width = "match_parent"
                     android:layout_height = "match_parent"
-                    android:paddingTop = "20dp"
+                    android:paddingTop = "10dp"
                     android:orientation = "horizontal">
                 <ImageView
                         android:id = "@+id/artist_top_song_image_view"

@@ -7,12 +7,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.Artist.EditAlbumSongsListAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Artist.AlbumTracks;
@@ -37,8 +39,10 @@ public class ArtistEditAlbumFragment extends Fragment {
     private Button saveAlbumBtn;
     private Button deleteAlbumBtn;
     private EditText albumNameEditText;
+    private ImageView albumImage;
     private String albumName;
     private String albumId;
+    private String albumImageUrl;
     private APIInterface apiService;
     private ArrayList<MyTrack> myTracks;
     private RecyclerView songsRecyclerView;
@@ -52,11 +56,13 @@ public class ArtistEditAlbumFragment extends Fragment {
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_artist_edit_album, container, false);
-        albumName = getArguments().getString(ArtistConstantsHelper.SONG_NAME);
-        albumId = getArguments().getString(ArtistConstantsHelper.SONG_ID);
+        albumName = getArguments().getString(ArtistConstantsHelper.ALBUM_NAME);
+        albumId = getArguments().getString(ArtistConstantsHelper.ALBUM_ID);
+        albumImageUrl = getArguments().getString(ArtistConstantsHelper.ALBUM_IMAGE_URL);
         deleteAlbumBtn = root.findViewById(R.id.edit_album_delete_button);
         saveAlbumBtn = root.findViewById(R.id.edit_album_save_button);
         albumNameEditText = root.findViewById(R.id.edit_album_edit_text);
+        albumImage = root.findViewById(R.id.edit_album_image_view);
         selectedSongsIds = new ArrayList<>();
         apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
         songsRecyclerView = root.findViewById(R.id.edit_album_songs_recycler_view);
@@ -70,6 +76,8 @@ public class ArtistEditAlbumFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         albumNameEditText.setText(albumName);
         albumNameEditText.setHint(albumName);
+
+        Picasso.get().load(albumImageUrl).placeholder(R.drawable.spotify).into(albumImage);
 
         EditAlbumSongsListAdapter adapter = new EditAlbumSongsListAdapter(this, myTracks);
         songsRecyclerView.setAdapter(adapter);
@@ -140,16 +148,18 @@ public class ArtistEditAlbumFragment extends Fragment {
                         }
                     });
                 }
-                apiService.deleteAlbum(albumId, new Callback<Response>() {
+                Call<Void> call1 = apiService.deleteAlbum(albumId);
+                call1.enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<Response> call, Response<Response> response) {
+                    public void onResponse(Call<Void> call, Response<Void> response) {
                         Toast.makeText(getContext(), "Album Deleted successfully",
                                 Toast.LENGTH_LONG).show();
                         getActivity().onBackPressed();
                     }
 
                     @Override
-                    public void onFailure(Call<Response> call, Throwable t) {
+                    public void onFailure(Call<Void> call, Throwable t) {
+
                     }
                 });
             }
