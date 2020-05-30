@@ -89,4 +89,17 @@ public interface LibraryApi {
     @POST("users/playlists")
     Call<JsonObject> createPlaylist(@Body Playlist playlist);
 
+
+    @GET("me/tracks")
+    Call<TracksPagingWrapper> getLikedTracks();
+
+
+    @PUT("me/tracks")
+    Call<Void> likeTrack(@Query("ids") String trackId);
+
+
+    @DELETE("me/tracks")
+    Call<Void> unlikeTrack(@Query("ids") String trackId);
+
+
 }

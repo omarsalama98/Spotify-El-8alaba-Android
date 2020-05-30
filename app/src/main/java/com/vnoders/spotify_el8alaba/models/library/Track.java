@@ -71,6 +71,8 @@ public class Track {
     @Expose
     private String uri;
 
+    private boolean isLiked;
+
     public Album getAlbum() {
         return album;
     }
@@ -182,6 +184,15 @@ public class Track {
     public void setUri(String uri) {
         this.uri = uri;
     }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

@@ -68,7 +68,6 @@ public class TrackItem {
         }
         TrackItem trackItem = (TrackItem) obj;
         return isLocal == trackItem.isLocal &&
-                Objects.equals(addedAt, trackItem.addedAt) &&
                 Objects.equals(addedBy, trackItem.addedBy) &&
                 Objects.equals(track, trackItem.track);
     }

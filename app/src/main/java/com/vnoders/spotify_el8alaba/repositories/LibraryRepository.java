@@ -1,8 +1,6 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.text.Html;
@@ -196,19 +194,11 @@ public class LibraryRepository {
             public void onResponse(@NotNull Call<TracksPagingWrapper> call,
                     @NotNull Response<TracksPagingWrapper> response) {
 
-                TracksPagingWrapper tracksWrapper = response.body();
-                if (response.isSuccessful() && tracksWrapper != null) {
+                if (response.isSuccessful() && response.body() != null) {
 
-                    ArrayList<Track> tracks = new ArrayList<>();
+                    List<TrackItem> trackItems = response.body().getTrackItems();
+                    updateLikedStatusInTracks(trackItems, viewModel);
 
-                    List<TrackItem> trackItems = tracksWrapper.getTrackItems();
-                    if (trackItems != null) {
-                        for (TrackItem trackItem : trackItems) {
-                            tracks.add(trackItem.getTrack());
-                        }
-                    }
-
-                    viewModel.setTracks(tracks);
                 }
 
             }
@@ -219,6 +209,51 @@ public class LibraryRepository {
             }
         });
 
+    }
+
+    // Request the liked tracks to know which of our tracks are liked or not
+    private static void updateLikedStatusInTracks(List<TrackItem> trackItems,
+            PlaylistTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> likedTracksRequest = libraryApi.getLikedTracks();
+
+        new AsyncTask<Void, Void, ArrayList<Track>>() {
+            @Override
+            protected ArrayList<Track> doInBackground(Void... voids) {
+                try {
+                    Response<TracksPagingWrapper> response = likedTracksRequest.execute();
+
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<TrackItem> likedTracks = response.body().getTrackItems();
+
+                        ArrayList<Track> tracks = new ArrayList<>();
+                        if (trackItems != null) {
+                            for (TrackItem trackItem : trackItems) {
+                                boolean isLiked = likedTracks.contains(trackItem);
+                                Track track = trackItem.getTrack();
+                                if (track != null) {
+                                    track.setLiked(isLiked);
+                                    tracks.add(track);
+                                }
+                            }
+                        }
+
+                        return tracks;
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<Track> tracks) {
+                viewModel.setTracks(tracks);
+            }
+
+        }.execute();
     }
 
 
@@ -341,5 +376,6 @@ public class LibraryRepository {
             }
         });
     }
+
 
 }

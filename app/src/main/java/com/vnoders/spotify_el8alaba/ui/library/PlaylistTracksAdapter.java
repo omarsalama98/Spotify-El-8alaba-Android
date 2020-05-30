@@ -17,7 +17,9 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHolder;
@@ -199,6 +201,19 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
 
         void bind(Track track) {
             trackName.setText(track.getName());
+
+            if (track.getAlbum() != null && track.getAlbum().getImages() != null) {
+                List<TrackImage> images = track.getAlbum().getImages();
+                if (!images.isEmpty()) {
+                    Picasso.get().load(images.get(0).getUrl()).placeholder(R.drawable.add_song)
+                            .into(trackArt);
+                }
+            }
+
+            if(track.isLiked())
+                likeTrack.setBackgroundResource(R.drawable.like_track_liked);
+            else
+                likeTrack.setBackgroundResource(R.drawable.like_track_unliked);
 
             List<Artist> artists = track.getArtists();
             if (artists != null && artists.size() > 0) {
