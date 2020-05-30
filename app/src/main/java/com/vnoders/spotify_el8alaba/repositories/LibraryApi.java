@@ -94,6 +94,13 @@ public interface LibraryApi {
     Call<TracksPagingWrapper> getLikedTracks();
 
 
+    // Used to check the number of liked tracks of the current user
+    // because the backend API does not provide this endpoint
+    // It returns a paging object with a field contains total number of items
+    @GET("me/tracks?limit=0")
+    Call<JsonObject> getNumberOfLikedTracks();
+
+
     @PUT("me/tracks")
     Call<Void> likeTrack(@Query("ids") String trackId);
 

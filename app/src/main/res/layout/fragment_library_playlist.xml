@@ -57,6 +57,52 @@
             </LinearLayout>
 
 
+            <LinearLayout
+                    android:id="@+id/liked_songs"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:padding="8dp"
+                    android:backgroundTint = "@color/backgroundColor"
+                    android:background = "@drawable/playlist_item_background_ripple">
+
+                <ImageView
+                        android:layout_width = "@dimen/track_list_item"
+                        android:layout_height = "@dimen/track_list_item"
+                        android:src = "@drawable/liked_songs" />
+
+                <LinearLayout
+                        android:layout_height = "match_parent"
+                        android:layout_width = "match_parent"
+                        android:orientation = "vertical"
+                        android:layout_margin = "8dp">
+
+                    <TextView
+                            android:layout_width = "match_parent"
+                            android:layout_height = "0dp"
+                            android:layout_weight = "1"
+                            android:gravity = "bottom"
+                            android:layout_gravity = "center"
+                            android:textColor = "@color/colorPrimaryText"
+                            android:textStyle = "bold"
+                            android:text = "Liked Songs" />
+
+                        <TextView
+                                android:id = "@+id/number_of_liked_songs"
+                                android:layout_width = "match_parent"
+                                android:layout_height = "0dp"
+                                android:layout_weight = "1"
+                                android:textColor = "@color/colorSecondaryText"
+                                android:drawableStart="@drawable/ic_shuffle"
+                                android:drawablePadding="@dimen/margin_small"
+                                tools:text = "10 songs" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
             <androidx.recyclerview.widget.RecyclerView
                     android:id = "@+id/library_playlist_recycler_view"
                     android:layout_width = "match_parent"

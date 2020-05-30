@@ -20,6 +20,7 @@ import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
+import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
@@ -377,5 +378,23 @@ public class LibraryRepository {
         });
     }
 
+    public static void getNumberOfLikedTracks(MutableLiveData<Integer> numberOfLikedSongs) {
+        Call<JsonObject> request = libraryApi.getNumberOfLikedTracks();
+
+        request.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject json = response.body();
+                    numberOfLikedSongs.setValue(json.get("total").getAsInt());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
 
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -89,6 +90,24 @@ public class LibraryPlaylistFragment extends Fragment {
                         playlistAdapter.submitList(libraryPlaylistItems);
                     }
                 });
+
+        View likedSongs = root.findViewById(R.id.liked_songs);
+        TextView numberOfLikedSongs = root.findViewById(R.id.number_of_liked_songs);
+
+        playlistViewModel.getNumberOfLikedSongs().observe(getViewLifecycleOwner(),
+                new Observer<Integer>() {
+                    @Override
+                    public void onChanged(Integer noOfLikedSongs) {
+                        if (noOfLikedSongs > 0) {
+                            likedSongs.setVisibility(View.VISIBLE);
+                            numberOfLikedSongs.setText(noOfLikedSongs + " songs");
+                        } else {
+                            // if no liked songs, the item will disappear
+                            likedSongs.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
         return root;
     }
 

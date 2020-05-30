@@ -27,6 +27,10 @@ public class TracksPagingWrapper {
     @Expose
     private int offset;
 
+    @SerializedName("total")
+    @Expose
+    private int total;
+
     public String getHref() {
         return href;
     }

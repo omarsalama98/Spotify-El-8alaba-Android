@@ -21,9 +21,11 @@ import java.util.List;
 public class LibraryPlaylistViewModel extends ViewModel {
 
     private MutableLiveData<List<LibraryPlaylistItem>> userPlaylists;
+    private MutableLiveData<Integer> numberOfLikedSongs;
 
     public LibraryPlaylistViewModel() {
         userPlaylists = new MutableLiveData<>();
+        numberOfLikedSongs = new MutableLiveData<>();
     }
 
     /**
@@ -49,11 +51,20 @@ public class LibraryPlaylistViewModel extends ViewModel {
         }
     }
 
+    public LiveData<Integer> getNumberOfLikedSongs() {
+        return numberOfLikedSongs;
+    }
+
+    public void setNumberOfLikedSongs(int numberOfLikedSongs) {
+        this.numberOfLikedSongs.setValue(numberOfLikedSongs);
+    }
+
     /**
      * Make a call to {@link LibraryRepository#updateLibraryPlaylists} to update the list of the
      * user playlists which apply a level of abstraction between UI and business logic and data.
      */
     public void requestUserPlaylists() {
+        LibraryRepository.getNumberOfLikedTracks(numberOfLikedSongs);
         LibraryRepository.updateLibraryPlaylists(userPlaylists);
     }
 
