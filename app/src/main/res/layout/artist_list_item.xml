@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:id = "@+id/library_artist_item_body"
+        android:backgroundTint = "@color/backgroundColor"
+        android:background = "@drawable/playlist_item_background_ripple"
+        android:layout_margin = "8dp"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id = "@+id/library_artist_image"
+            android:layout_width = "@dimen/library_list_item"
+            android:layout_height = "@dimen/library_list_item"
+            android:src = "@drawable/artist_mock" />
+
+    <TextView
+            android:id = "@+id/library_artist_name"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:gravity="center|start"
+            android:textColor = "@color/colorPrimaryText"
+            android:textStyle = "bold"
+            tools:text = "Artist Name"
+            android:padding="16dp" />
+
+
+</LinearLayout>

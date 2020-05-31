@@ -3,12 +3,35 @@
         xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
-        tools:context = ".ui.library.ArtistFragment">
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        tools:context = ".ui.library.LibraryArtistFragment">
 
-    <!-- TODO: Update fragment layout -->
-    <TextView
+
+    <LinearLayout
+            android:id = "@+id/add_artists"
             android:layout_width = "match_parent"
-            android:layout_height = "match_parent"
-            android:text = "Artist" />
+            android:layout_height = "wrap_content"
+            android:padding = "8dp"
+            android:backgroundTint = "@color/backgroundColor"
+            android:background = "@drawable/playlist_item_background_ripple">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width = "@dimen/track_list_item"
+                android:layout_height = "@dimen/track_list_item"
+                android:src = "@drawable/ic_plus"
+                app:civ_circle_background_color = "#424242" />
+
+        <TextView
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_gravity = "center"
+                android:text = "Add Artists"
+                android:textStyle = "bold"
+                android:textSize = "16sp"
+                android:textColor = "@color/white"
+                android:paddingHorizontal = "16dp" />
+
+    </LinearLayout>
+
 
 </FrameLayout>
