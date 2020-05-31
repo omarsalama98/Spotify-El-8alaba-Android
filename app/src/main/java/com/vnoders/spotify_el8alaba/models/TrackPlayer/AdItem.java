@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.List;
 public class AdItem {
 
     @SerializedName("adText")
+    @Expose
     private String mText;
 
     @SerializedName("images")
+    @Expose
     private List<AlbumImage> mImages;
 
     public String getText() {

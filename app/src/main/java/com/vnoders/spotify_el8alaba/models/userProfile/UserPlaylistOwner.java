@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.models.userProfile;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -9,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class UserPlaylistOwner {
 
     @SerializedName("id")
+    @Expose
     private String mId;
 
     public String getId() {

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:id = "@+id/add_artist_item_body"
+        android:layout_margin = "8dp"
+        android:layout_width = "wrap_content"
+        tools:background = "@color/backgroundColor"
+        android:layout_height = "wrap_content">
+
+    <!--    Using tools:visibility="visible" with android:visibility="gone"
+     in order to see the layout but it will be hidden on real device
+     (progress bar will be visible until loading finished then view will be visible)-->
+    <ImageView
+            android:id = "@+id/add_artist_checked"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:src = "@drawable/ic_check_circle"
+            app:layout_constraintEnd_toEndOf = "parent"
+            app:layout_constraintTop_toTopOf = "parent"
+            tools:visibility = "visible"
+            android:visibility = "gone"
+            android:elevation = "2dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id = "@+id/add_artist_image"
+            android:layout_width = "@dimen/library_add_artist_list_item"
+            android:layout_height = "@dimen/library_add_artist_list_item"
+            android:src = "@drawable/artist"
+            app:layout_constraintTop_toTopOf = "parent"
+            app:layout_constraintStart_toStartOf = "parent" />
+
+    <TextView
+            android:id = "@+id/add_artist_name"
+            android:textSize = "12sp"
+            android:textStyle = "bold"
+            android:layout_gravity = "center_horizontal|fill_vertical"
+            android:gravity = "center|clip_horizontal|clip_vertical"
+            android:textColor = "@color/colorPrimaryText"
+            android:layout_width = "@dimen/library_add_artist_list_item"
+            android:layout_height = "36dp"
+            android:ellipsize = "end"
+            android:text = "I am omar Mostafa mahmoud"
+            android:maxLines = "2"
+            app:layout_constraintStart_toStartOf = "parent"
+            app:layout_constraintTop_toBottomOf = "@+id/add_artist_image" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

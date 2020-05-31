@@ -2,6 +2,7 @@ package com.vnoders.spotify_el8alaba.models.userProfile;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.AlbumImage;
 
@@ -14,18 +15,23 @@ import java.util.List;
 public class UserPlaylistItem {
 
     @SerializedName("id")
+    @Expose
     private String mId;
 
     @SerializedName("name")
+    @Expose
     private String mName;
 
     @SerializedName("images")
+    @Expose
     private List<AlbumImage> mImages;
 
     @SerializedName("owner")
+    @Expose
     private UserPlaylistOwner mOwner;
 
     @SerializedName("description")
+    @Expose
     private String mDescription;
 
     public String getId() {

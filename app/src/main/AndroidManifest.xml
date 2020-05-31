@@ -40,6 +40,9 @@
         <activity android:name=".ui.login.FirstScreen" />
         <activity android:name = ".ui.library.CreatePlaylistActivity"/>
         <activity
+                android:name = ".ui.library.AddArtistActivity"
+                android:theme="@style/AppTheme.AddArtist"/>
+        <activity
                 android:name = ".MainActivity"
                 android:label = "@string/title_activity_main"
                 android:launchMode = "singleTop"

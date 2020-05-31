@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -10,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
 public class GetAdRequest {
 
     @SerializedName("ad")
+    @Expose
     private AdItem mAdItem;
 
     public AdItem getItem() {

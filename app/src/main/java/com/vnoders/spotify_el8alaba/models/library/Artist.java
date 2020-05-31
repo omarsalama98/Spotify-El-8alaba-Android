@@ -39,6 +39,11 @@ public class Artist {
     @Expose
     private String uri;
 
+
+    public Artist(String name) {
+        this.name = name;
+    }
+
     public List<String> getGenres() {
         return genres;
     }

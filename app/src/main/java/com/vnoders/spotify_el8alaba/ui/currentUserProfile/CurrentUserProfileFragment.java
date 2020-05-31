@@ -132,7 +132,6 @@ public class CurrentUserProfileFragment extends Fragment {
         followerNumber.setText(currentUserProfile.getFollowers().toString());
         userName.setText(currentUserProfile.getName());
         userNameToolbar.setText(currentUserProfile.getName());
-        playlistNumber.setText(String.valueOf(currentUserProfile.getFollowedPlaylists().size()));
         followingNumber.setText(String.valueOf(currentUserProfile.getFollowing().size()));
         appBarLayout.addOnOffsetChangedListener(new OnOffsetChangedListener() {
             @Override

@@ -68,6 +68,10 @@ public class Artist {
     @Expose
     private String id;
 
+    public Artist(String name) {
+        this.name = name;
+    }
+
     public String getType() {
         return type;
     }
