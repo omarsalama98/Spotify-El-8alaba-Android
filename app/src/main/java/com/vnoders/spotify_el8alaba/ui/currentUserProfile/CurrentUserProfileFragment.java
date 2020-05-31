@@ -108,7 +108,7 @@ public class CurrentUserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         List<Image> userImages =currentUserProfile.getImage();
-        if(!userImages.isEmpty()) {
+        if(userImages!=null) {
              imageUrl = userImages.get(1).getUrl();
         }
         // Inflate the layout for this fragment
