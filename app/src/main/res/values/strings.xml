@@ -186,4 +186,6 @@
     <string name = "album_genre">Album Genre:</string>
     <string name = "album_label">Album Label:</string>
     <string name = "please_enter_an_album_label">Please enter an album label.</string>
+    <string name = "search_icon">Search Icon</string>
+    <string name = "play_what_you_love">Play what you love</string>
 </resources>
