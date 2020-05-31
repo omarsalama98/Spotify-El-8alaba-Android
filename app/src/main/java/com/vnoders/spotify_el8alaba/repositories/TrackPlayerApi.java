@@ -2,12 +2,15 @@ package com.vnoders.spotify_el8alaba.repositories;
 
 
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.AdItem;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAdRequest;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetLikedTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetUserStatus;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostPlayTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.ShareTrackResponse;
 import java.util.List;
@@ -67,4 +70,10 @@ public interface TrackPlayerApi {
 
     @GET("me/tracks?limit=50")
     Call<GetLikedTracks> getLikedTracks();
+
+    @GET("ads")
+    Call<GetAdRequest> getAd();
+
+    @GET("users/me")
+    Call<GetUserStatus> getUserStatus();
 }

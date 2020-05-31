@@ -150,6 +150,9 @@
     <string name = "widget_warning">Open App!</string>
     <string name = "like_track_popup">Added to liked tracks!</string>
     <string name = "unlike_track_popup">Removed from liked tracks!</string>
+
+    <string name = "playlists">Playlists</string>
+    <string name = "no_owned_playlists">No Owned Playlists!</string>
     <string name = "title_artist_profile">profile</string>
     <string name = "title_artist_activity_main">ArtistMainActivity</string>
     <string name = "your_top_song">Your top song</string>

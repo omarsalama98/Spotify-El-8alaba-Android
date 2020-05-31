@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.library.ExternalUrls;
 import java.util.List;
@@ -11,42 +12,55 @@ import java.util.List;
 public class HomePlaylist {
 
     @SerializedName("tracks")
+    @Expose
     private Tracks tracks;
 
     @SerializedName("collaborative")
+    @Expose
     private boolean collaborative;
 
     @SerializedName("public")
+    @Expose
     private boolean isPublic;
 
     @SerializedName("followers")
+    @Expose
     private int followers;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("description")
+    @Expose
     private String description;
 
     @SerializedName("owner")
+    @Expose
     private String owner;
 
     @SerializedName("images")
+    @Expose
     private List<TrackImage> images = null;
 
     @SerializedName("type")
+    @Expose
     private String type;
 
     @SerializedName("uri")
+    @Expose
     private String uri;
 
     @SerializedName("href")
+    @Expose
     private String href;
 
     @SerializedName("external_urls")
+    @Expose
     private ExternalUrls externalUrls;
 
     @SerializedName("id")
+    @Expose
     private String id;
 
     public Tracks getTracks() {

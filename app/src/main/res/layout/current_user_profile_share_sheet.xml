@@ -12,12 +12,14 @@
             android:layout_height = "wrap_content"
         >
 <ImageView
+        android:id="@+id/user_image"
         android:layout_width = "140dp"
         android:layout_height = "140dp"
         android:layout_gravity="center"
         android:src = "@drawable/unnamed"
         />
     <TextView
+            android:id="@+id/user_name"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
             android:layout_gravity="center"

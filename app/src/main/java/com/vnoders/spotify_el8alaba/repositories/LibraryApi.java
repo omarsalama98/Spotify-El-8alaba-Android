@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba.repositories;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -12,8 +13,10 @@ import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import java.util.Collections;
 import java.util.List;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -69,10 +72,7 @@ public interface LibraryApi {
     default Call<List<Boolean>> doesCurrentUserFollowPlaylist(
             @Path("playlist_id") String playlistId) {
 
-        Context app = App.getInstance();
-        String currentUserId = app
-                .getSharedPreferences(app.getString(R.string.access_token_preference), MODE_PRIVATE)
-                .getString("id", null);
+        String currentUserId = App.getInstance().getCurrentUserId();
 
         return doesUsersFollowPlaylist(playlistId, Collections.singletonList(currentUserId));
     }
@@ -84,6 +84,29 @@ public interface LibraryApi {
 
     @DELETE("playlists/{playlist_id}/followers")
     Call<Void> unfollowPlaylist(@Path("playlist_id") String playlistId);
+
+
+    @POST("users/playlists")
+    Call<JsonObject> createPlaylist(@Body Playlist playlist);
+
+
+    @GET("me/tracks")
+    Call<TracksPagingWrapper> getLikedTracks();
+
+
+    // Used to check the number of liked tracks of the current user
+    // because the backend API does not provide this endpoint
+    // It returns a paging object with a field contains total number of items
+    @GET("me/tracks?limit=0")
+    Call<JsonObject> getNumberOfLikedTracks();
+
+
+    @PUT("me/tracks")
+    Call<Void> likeTrack(@Query("ids") String trackId);
+
+
+    @DELETE("me/tracks")
+    Call<Void> unlikeTrack(@Query("ids") String trackId);
 
 
 }

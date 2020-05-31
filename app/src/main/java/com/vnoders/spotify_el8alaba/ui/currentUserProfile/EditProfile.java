@@ -10,6 +10,8 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -20,6 +22,7 @@ import android.provider.MediaStore.Images.Media;
 import android.telephony.mbms.MbmsErrors;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -47,24 +50,31 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import androidx.core.content.FileProvider;
+import java.util.Random;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.json.JSONException;
 import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Multipart;
 
 /**
  * A simple {@link Fragment} subclass. Use the {@link EditProfile#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class EditProfile extends Fragment {
-    private static final int PERMISSION_GALLERY_CODE=1001;
-    private static final int PERMISSION_CAMERA_CODE=1000;
+
+    private static final int PERMISSION_GALLERY_CODE = 1001;
+    private static final int PERMISSION_CAMERA_CODE = 1000;
     protected static final int CAMERA_REQUEST = 0;
     protected static final int GALLERY_REQUEST = 1;
     private TextView save;
@@ -75,14 +85,14 @@ public class EditProfile extends Fragment {
     private Uri imageUri;
     private String newName;
     private CurrentUserProfile currentUserProfile;
-    // TODO: Rename and change types of parameters
+    public boolean changeAvatar = false;
+    public boolean changeUserName = false;
     private String imageUrl;
     private String name;
+    private String absolutePath;
 
-    public EditProfile() {
-        // Required empty public constructor
-    }
-    private TextWatcher userNameTextWatcher=new TextWatcher() {
+
+    private TextWatcher userNameTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -91,6 +101,8 @@ public class EditProfile extends Fragment {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             save.setEnabled(true);
+            changeUserName = true;
+
         }
 
         @Override
@@ -98,22 +110,10 @@ public class EditProfile extends Fragment {
 
         }
     };
-    /**
-     * Use this factory method to create a new instance of this fragment using the provided
-     * parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     *
-     * @return A new instance of fragment EditProfile.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static EditProfile newInstance(String param1, String param2) {
         EditProfile fragment = new EditProfile();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -121,7 +121,8 @@ public class EditProfile extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            currentUserProfile=(CurrentUserProfile) getArguments().getSerializable("CURRENT_USER_PROFILE");
+            currentUserProfile = (CurrentUserProfile) getArguments()
+                    .getSerializable("CURRENT_USER_PROFILE");
             imageUrl = getArguments().getString("image_url");
             name = getArguments().getString("user_name");
         }
@@ -132,14 +133,14 @@ public class EditProfile extends Fragment {
             Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_edit_profile, container, false);
-        Bundle bundle=new Bundle();
-        imageUri=Uri.EMPTY;
-        save=view.findViewById(R.id.save);
+        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        Bundle bundle = new Bundle();
+        imageUri = Uri.EMPTY;
+        save = view.findViewById(R.id.save);
         save.setEnabled(false);
-        changeUserImage=view.findViewById(R.id.change_user_image);
-        userName=view.findViewById(R.id.user_name);
-        userImage=view.findViewById(R.id.user_image);
+        changeUserImage = view.findViewById(R.id.change_user_image);
+        userName = view.findViewById(R.id.user_name);
+        userImage = view.findViewById(R.id.user_image);
         userName.setText(name);
         Picasso.get().load(imageUrl).into(userImage);
         changeUserImage.setOnClickListener(new OnClickListener() {
@@ -152,135 +153,182 @@ public class EditProfile extends Fragment {
         save.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                UpdateUserInfo updateUserInfo=new UpdateUserInfo();
-                updateUserInfo.setUserName(userName.getText().toString());
-                Call<ResponseBody> updateUserInfoCall=RetrofitClient.getInstance().getAPI(API.class).updateUserInfo(updateUserInfo);
-                updateUserInfoCall.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call,
-                            Response<ResponseBody> response) {
-                        try {
-                            JSONObject jsonObject=new JSONObject(response.body().string());
-                            newName=jsonObject.getString("name");
-                            if(!Uri.EMPTY.equals(imageUri)){
-                               // bundle.putString("image_uri",imageUri);
+                if (changeUserName) {
+                    UpdateUserInfo updateUserInfo = new UpdateUserInfo();
+                    updateUserInfo.setUserName(userName.getText().toString());
+                    Call<ResponseBody> updateUserInfoCall = RetrofitClient.getInstance()
+                            .getAPI(API.class).updateUserInfo(updateUserInfo);
+                    updateUserInfoCall.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call,
+                                Response<ResponseBody> response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response.body().string());
+                                newName = jsonObject.getString("name");
+                                currentUserProfile.setName(newName);
+                            } catch (IOException | JSONException e) {
+                                e.printStackTrace();
                             }
-                            currentUserProfile.setName(newName);
-                            bundle.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
-                            CurrentUserProfileFragment currentUserProfileFragment=new CurrentUserProfileFragment();
-                            currentUserProfileFragment.setArguments(bundle);
-                            FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.nav_host_fragment,currentUserProfileFragment,"CURRENT_USER_PROFILE").addToBackStack(null).commit();
-
-                        } catch (IOException | JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        //dialog here will be created
-                        ConnectionDialog dialog = new ConnectionDialog();
-                        dialog.show(getActivity().getFragmentManager(), "connection_dialog");
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            //dialog here will be created
+                            ConnectionDialog dialog = new ConnectionDialog();
+                            dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                        }
+                    });
+                }
+                if (changeAvatar) {
+                    sendImage(absolutePath);
+                }
+                bundle.putSerializable("CURRENT_USER_PROFILE", currentUserProfile);
+                CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
+                currentUserProfileFragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity()
+                        .getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager
+                        .beginTransaction();
+                fragmentTransaction
+                        .replace(R.id.nav_host_fragment, currentUserProfileFragment,
+                                "CURRENT_USER_PROFILE").addToBackStack(null)
+                        .commit();
             }
         });
-
         return view;
-
     }
-public void pickImage(){
-    AlertDialog.Builder changeImageDialog=new AlertDialog.Builder(getActivity());
-    changeImageDialog.setTitle("change profile photo");
-    changeImageDialog.setPositiveButton("Choose photo", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(getContext(), permission.READ_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_DENIED) {
-                    String[] permissions = {permission.CAMERA, permission.READ_EXTERNAL_STORAGE};
-                    requestPermissions(permissions, PERMISSION_GALLERY_CODE);
+
+    public void pickImage() {
+        AlertDialog.Builder changeImageDialog = new AlertDialog.Builder(getActivity());
+        changeImageDialog.setTitle("change profile photo");
+        changeImageDialog.setPositiveButton("Choose photo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat
+                            .checkSelfPermission(getContext(), permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED) {
+                        String[] permissions = {permission.CAMERA,
+                                permission.READ_EXTERNAL_STORAGE};
+                        requestPermissions(permissions, PERMISSION_GALLERY_CODE);
+                    } else {
+                        openGallery();
+                    }
                 } else {
                     openGallery();
                 }
-            } else {
-                openGallery();
             }
-        }
-    });
+        });
 
-    changeImageDialog.setNegativeButton("Take photo", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
+        changeImageDialog.setNegativeButton("Take photo", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-            if(VERSION.SDK_INT>=Build.VERSION_CODES.M){
-                if(ContextCompat.checkSelfPermission(getContext(), permission.CAMERA)== PackageManager.PERMISSION_DENIED||ContextCompat.checkSelfPermission(getContext(),
-                        permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_DENIED){
-                    String[] permissions={permission.CAMERA, permission.WRITE_EXTERNAL_STORAGE};
-                    requestPermissions(permissions,PERMISSION_CAMERA_CODE);
+                if (VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(getContext(), permission.CAMERA)
+                            == PackageManager.PERMISSION_DENIED
+                            || ContextCompat.checkSelfPermission(getContext(),
+                            permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED) {
+                        String[] permissions = {permission.CAMERA,
+                                permission.WRITE_EXTERNAL_STORAGE};
+                        requestPermissions(permissions, PERMISSION_CAMERA_CODE);
+                    } else {
+                        try {
+                            openCamera();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    try {
+                        openCamera();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                else{
-                    openCamera();
-                }
             }
-            else {
-                openCamera();
-            }
+        });
+        changeImageDialog.show();
+
+    }
+
+    /**
+     * this function is used to open the device's camera to capture image
+     */
+    public void openCamera() throws IOException {
+        try {
+            ContentValues values = new ContentValues();
+            values.put(Media.TITLE, "New Picture");
+            values.put(Media.DESCRIPTION, "From the camera");
+            //imageUri= getActivity().getContentResolver().insert(Media.EXTERNAL_CONTENT_URI,values);
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider
+                    .getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider",
+                            createImageFile()));
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-    });
-changeImageDialog.show();
+    }
 
-}
+    /**
+     * function used to open gallery to select new avatar and filter the images to jpg,jpeg
+     * extensions
+     */
+    public void openGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+        galleryIntent.setType("image/*");
+        String[] mimeTypes = {"image/jpg"};
+        galleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        startActivityForResult(galleryIntent, GALLERY_REQUEST);
+    }
 
-public void openCamera(){
-    ContentValues values=new ContentValues();
-    values.put(Media.TITLE,"New Picture");
-    values.put(Media.DESCRIPTION,"From the camera");
-    imageUri= getActivity().getContentResolver().insert(Media.EXTERNAL_CONTENT_URI,values);
-    Intent cameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    /**
+     * this function is used to create file for captured images by camera to get the absolute path
+     * which will be sent to the API
+     *
+     * @return image file
+     */
 
-}
+    public File createImageFile() throws IOException {
+        byte[] array = new byte[10]; // length is bounded by 7
+        new Random().nextBytes(array);
+        String generatedString = new String(array, Charset.forName("UTF-8"));
+        String imageFileName = "SPOTIFY" + generatedString + ".jpg";
+        File storageDir = new File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        .toString());
+        Log.d("DIRECTORY", storageDir.toString());
+        File image = new File(storageDir, imageFileName);
+        cameraFilePath = "file://" + image.getAbsolutePath();
+        absolutePath = image.getAbsolutePath();
+        return image;
+    }
 
-public void openGallery(){
-    Intent galleryIntent=new Intent(Intent.ACTION_PICK);
-    galleryIntent.setType("image/*");
-    String[] mimeTypes = {"image/jpeg", "image/png"};
-    galleryIntent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
-    startActivityForResult(galleryIntent,GALLERY_REQUEST);
-}
-
-/*public File createImageFile() throws IOException{
-
-  SimpleDateFormat fomatter = new SimpleDateFormat("dd/MM/yyyy:HH:mm:ss");
-    Date date=new Date();
-    //String timeStampDate= DateFormat.getDateInstance().format(date);
-    String timeStampDate=fomatter.format(date);
-    String imageFileName = "JPEG_" + timeStampDate + "_";
-    File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_DCIM), "Camera");
-    File image = File.createTempFile(
-            imageFileName,
-            ".jpg",
-            storageDir
-    );
-    cameraFilePath = "file://" + image.getAbsolutePath();
-    return image;
-
-
-}*/
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK&&requestCode==CAMERA_REQUEST){
+        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
+            imageUri=Uri.parse(cameraFilePath);
+            userImage.setImageURI(Uri.parse(cameraFilePath));
+            changeAvatar = true;
+            save.setEnabled(true);
+            //sendImage(absolutePath);
+        } else if (resultCode == RESULT_OK && requestCode == GALLERY_REQUEST) {
+            imageUri = data.getData();
+            String[] filePathColumn = {Media.DATA};
+            Cursor cursor = getActivity().getContentResolver()
+                    .query(imageUri, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            absolutePath = cursor.getString(columnIndex);
+            cursor.close();
             userImage.setImageURI(imageUri);
-        }
-        else if(resultCode==RESULT_OK&&requestCode==GALLERY_REQUEST){
-            imageUri=data.getData();
-            userImage.setImageURI(imageUri);
+            changeAvatar = true;
+            save.setEnabled(true);
+            //sendImage(absolutePath);
         }
 
     }
@@ -288,14 +336,43 @@ public void openGallery(){
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {
-    switch (requestCode){
-        case PERMISSION_CAMERA_CODE:{
-            if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){openCamera();}
-        }
-        case PERMISSION_GALLERY_CODE:{
-            if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){openGallery();}
+        switch (requestCode) {
+            case PERMISSION_CAMERA_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        openCamera();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            case PERMISSION_GALLERY_CODE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openGallery();
+                }
+            }
         }
     }
+
+    public void sendImage(String filePath) {
+        File file = new File(filePath);
+        RequestBody imageUploadRequest = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part part = MultipartBody.Part
+                .createFormData("image", file.getName(), imageUploadRequest);
+        Call<ResponseBody> call = RetrofitClient.getInstance().getAPI(API.class)
+                .changeProfilePicture(part);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            }
+        });
     }
 
 }

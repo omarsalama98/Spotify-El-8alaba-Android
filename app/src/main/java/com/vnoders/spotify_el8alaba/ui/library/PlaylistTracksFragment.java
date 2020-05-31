@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,11 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.vnoders.spotify_el8alaba.GradientUtils;
+import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.library.Track;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
+import java.util.ArrayList;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,9 +38,14 @@ public class PlaylistTracksFragment extends Fragment {
     private ExtendedFloatingActionButton shuffle;
     private ProgressBar progressBar;
 
+    private List<String> tracksIds;
+    private String playlistId;
+
+
     // the fragment initialization parameters
     private static final String ARGUMENT_PLAYLIST_ID = "id";
     private static final String ARGUMENT_PLAYLIST_NAME = "name";
+    private MediaPlaybackService mediaPlaybackService;
 
     /**
      * This is a required public constructor used by android framework but should NOT be used to
@@ -75,14 +83,18 @@ public class PlaylistTracksFragment extends Fragment {
         PlaylistTracksViewModel playlistViewModel = new ViewModelProvider(this)
                 .get(PlaylistTracksViewModel.class);
 
+        mediaPlaybackService = ((MainActivity) requireActivity()).getService();
+
+
         if (getArguments() != null) {
-            String playlistId = getArguments().getString(ARGUMENT_PLAYLIST_ID);
+            playlistId = getArguments().getString(ARGUMENT_PLAYLIST_ID);
             playlistViewModel.setPlaylistId(playlistId);
             playlistName.setText(getArguments().getString(ARGUMENT_PLAYLIST_NAME));
             title.setText(getArguments().getString(ARGUMENT_PLAYLIST_NAME));
         }
 
-        PlaylistTracksAdapter playlistAdapter = new PlaylistTracksAdapter();
+        PlaylistTracksAdapter playlistAdapter = new PlaylistTracksAdapter(
+                playlistId, mediaPlaybackService);
 
         recyclerView.setAdapter(playlistAdapter);
 
@@ -91,9 +103,21 @@ public class PlaylistTracksFragment extends Fragment {
         playlistViewModel.getTracks().observe(getViewLifecycleOwner(), new Observer<List<Track>>() {
             @Override
             public void onChanged(List<Track> tracks) {
-                initializeViews();
                 playlistAdapter.setTracks(tracks);
+
+                // if no playlist id, therefore it is list of liked songs, we need tracks' ids to play them
+                if (playlistId == null) {
+                    List<String> tracksIds = new ArrayList<>();
+                    // TODO: make it async
+                    for (Track track : tracks) {
+                        tracksIds.add(track.getId());
+                    }
+                    PlaylistTracksFragment.this.tracksIds = tracksIds;
+                    playlistAdapter.setTracksIds(tracksIds);
+                }
+
                 playlistAdapter.notifyDataSetChanged();
+                initializeViews();
                 //TODO : Use DiffUtil to generate smaller changes instead of notifyDataSetChanged
                 // for better performance
             }
@@ -124,6 +148,18 @@ public class PlaylistTracksFragment extends Fragment {
 
         progressBar = root.findViewById(R.id.progress_bar);
         progressBar.setBackgroundColor(Color.BLACK);
+
+        shuffle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // if no playlist id, therefore it is list of liked songs, we need tracks' ids to play them
+                if (playlistId != null) {
+                    mediaPlaybackService.playPlaylist(playlistId, true, true, null);
+                } else {
+                    mediaPlaybackService.playList(tracksIds, true, true, null);
+                }
+            }
+        });
 
         return root;
     }

@@ -3,6 +3,9 @@ package com.vnoders.spotify_el8alaba.ui.trackplayer;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.AdItem;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
@@ -19,12 +22,15 @@ public class TrackViewModel extends ViewModel {
     private MutableLiveData<Integer> mTrackProgress;
     // mutable live data object to hold init status
     private MutableLiveData<Boolean> mInitRequired;
+    // mutable live data object to holds ad
+    private MutableLiveData<AdItem> mAdItem;
 
     /**
      * private constructor for singleton
      */
     private TrackViewModel() {
         mInitRequired = new MutableLiveData<>(true);
+        mAdItem = new MutableLiveData<>(null);
     }
 
     /**
@@ -109,5 +115,29 @@ public class TrackViewModel extends ViewModel {
             mInitRequired.postValue(Boolean.TRUE);
         }
         mInitRequired.postValue(initRequired);
+    }
+
+    /**
+     * Called to get ad item
+     *
+     * @return ad item to display
+     */
+    public MutableLiveData<AdItem> getAdItem() {
+        if (mAdItem == null) {
+            mAdItem = new MutableLiveData<>(null);
+        }
+        return mAdItem;
+    }
+
+    /**
+     * updates the ad to display
+     *
+     * @param adItem to display to user
+     */
+    public void updateAdItem(AdItem adItem) {
+        if (mAdItem == null) {
+            mAdItem = new MutableLiveData<>(null);
+        }
+        mAdItem.postValue(adItem);
     }
 }
