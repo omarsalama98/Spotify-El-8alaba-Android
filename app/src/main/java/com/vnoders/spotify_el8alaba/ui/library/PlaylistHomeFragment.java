@@ -21,7 +21,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
+import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -45,6 +47,8 @@ public class PlaylistHomeFragment extends Fragment {
     private TextView tracksSummary;
     private NestedScrollView playlistBody;
     private ProgressBar progressBar;
+
+    private MediaPlaybackService mediaPlaybackService;
 
 
     // the fragment initialization parameters
@@ -116,6 +120,15 @@ public class PlaylistHomeFragment extends Fragment {
             playlistHomeViewModel.setPlaylistId(playlistId);
         }
 
+        mediaPlaybackService = ((MainActivity) requireActivity()).getService();
+
+        shuffle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String playlistId = playlistHomeViewModel.getPlaylistId();
+                mediaPlaybackService.playPlaylist(playlistId, true, true, null);
+            }
+        });
 
         playlistHomeViewModel.getFollowedState()
                 .observe(getViewLifecycleOwner(), new Observer<Boolean>() {

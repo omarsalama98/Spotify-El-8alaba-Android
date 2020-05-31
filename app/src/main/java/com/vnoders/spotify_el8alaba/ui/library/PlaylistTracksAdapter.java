@@ -24,6 +24,7 @@ import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHolder;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +36,10 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
 
     private List<Track> tracks;
 
-    public PlaylistTracksAdapter() {
+    public PlaylistTracksAdapter(String playlistId, MediaPlaybackService mediaPlaybackService) {
         this.tracks = new ArrayList<>();
+        TrackViewHolder.playlistId = playlistId;
+        TrackViewHolder.mediaPlaybackService = mediaPlaybackService;
     }
 
 
@@ -45,6 +48,15 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
      */
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
+    }
+
+
+    /**
+     * @param tracksIds Sets the list of ids of tracks in the playlist to be displayed. It is used
+     *                  ONLY with liked songs because it it a playlist with no id
+     */
+    public void setTracksIds(List<String> tracksIds) {
+        TrackViewHolder.tracksIds = tracksIds;
     }
 
 
@@ -117,6 +129,9 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         Button othersMenu;
 
         private String trackId;
+        static String playlistId;
+        static List<String> tracksIds;
+        static MediaPlaybackService mediaPlaybackService;
 
 
         /**
@@ -142,9 +157,11 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
             trackBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(),
-                            "Song " + trackName.getText().toString() + " plays", Toast.LENGTH_SHORT)
-                            .show();
+                    if (playlistId != null) {
+                        mediaPlaybackService.playPlaylist(playlistId, true, true, trackId);
+                    } else {
+                        mediaPlaybackService.playList(tracksIds, true, true, trackId);
+                    }
                 }
             });
 
