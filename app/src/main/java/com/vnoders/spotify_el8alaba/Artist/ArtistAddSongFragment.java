@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.Artist.AddSongAlbumsListAdapter;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Artist.Album;
+import com.vnoders.spotify_el8alaba.models.Artist.ArtistAlbum;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.CreateATrackRequestBody;
 import com.vnoders.spotify_el8alaba.models.Artist.MyAlbum;
@@ -78,6 +78,9 @@ public class ArtistAddSongFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getContext(), "Something went wrong. Try again later",
+                        Toast.LENGTH_LONG)
+                        .show();
             }
         });
     }
@@ -122,7 +125,7 @@ public class ArtistAddSongFragment extends Fragment {
 
         ArrayList<MyAlbum> albums = new ArrayList<>();
         for (int i = 0; i < mAlbums.size(); i++) {
-            Album album = mAlbums.get(i);
+            ArtistAlbum album = mAlbums.get(i);
             MyAlbum myAlbum = new MyAlbum(album.getId());
             myAlbum.setSelected(false);
             myAlbum.setName(album.getName());
@@ -193,14 +196,11 @@ public class ArtistAddSongFragment extends Fragment {
                 @Override
                 public void onResponse(Call<ArtistTrack> call, Response<ArtistTrack> response) {
                     songId = response.body().getId();
-
                     MultipartBody.Part body =
                             MultipartBody.Part.createFormData("track", file.getName(), requestFile);
-
                     /*RequestBody description =
                             RequestBody.create(
                                     okhttp3.MultipartBody.FORM, songId);*/
-
                     if (hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         ActivityCompat.requestPermissions(getActivity(),
                                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
@@ -209,7 +209,6 @@ public class ArtistAddSongFragment extends Fragment {
                         uploadTrack(songId, body);
                     }
                 }
-
                 @Override
                 public void onFailure(Call<ArtistTrack> call, Throwable t) {
                 }

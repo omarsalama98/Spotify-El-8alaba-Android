@@ -86,6 +86,17 @@ public class ArtistLibraryFragment extends Fragment {
                     .commit();
         });
 
+        addAlbumBtn.setOnClickListener(v -> {
+            Fragment targetFragment = new ArtistAddAlbumFragment();
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                            R.anim.fade_out)
+                    .replace(R.id.artist_nav_host_fragment, targetFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
 
     }
 

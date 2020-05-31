@@ -8,7 +8,7 @@ public class ArtistAlbums {
 
     @SerializedName("items")
     @Expose
-    private List<Album> items = null;
+    private List<ArtistAlbum> items = null;
     @SerializedName("limit")
     @Expose
     private Integer limit;
@@ -28,11 +28,11 @@ public class ArtistAlbums {
     @Expose
     private String href;
 
-    public List<Album> getAlbums() {
+    public List<ArtistAlbum> getAlbums() {
         return items;
     }
 
-    public void setAlbums(List<Album> items) {
+    public void setAlbums(List<ArtistAlbum> items) {
         this.items = items;
     }
 

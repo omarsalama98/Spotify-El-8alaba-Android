@@ -5,6 +5,7 @@ import com.vnoders.spotify_el8alaba.models.Artist.Artist;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistAlbums;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.CreateATrackRequestBody;
+import com.vnoders.spotify_el8alaba.models.Artist.CreateAnAlbumRequestBody;
 import com.vnoders.spotify_el8alaba.models.Artist.TrackListens;
 import com.vnoders.spotify_el8alaba.models.Artist.TrackListensRequestBody;
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateAlbumNameRequestBody;
@@ -154,11 +155,23 @@ public interface APIInterface {
             @Body CreateATrackRequestBody createATrackRequestBody
     );
 
+    @POST("albums")
+    Call<com.vnoders.spotify_el8alaba.models.Search.Album> createAlbum(
+            @Body CreateAnAlbumRequestBody createAnAlbumRequestBody
+    );
+
+    @Multipart
+    @POST("albums/{id}/images")
+    Call<ResponseBody> uploadAlbumImage(
+            @Path("id") String albumId,
+            @Part MultipartBody.Part image
+    );
+
     @Multipart
     @POST("streaming")
     Call<ResponseBody> uploadTrack(
             @Part("trackId") String trackId,
-            @Part MultipartBody.Part file
+            @Part MultipartBody.Part track
     );
 
     @PATCH("albums/{id}")

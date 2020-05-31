@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Artist.ArtistConstantsHelper;
 import com.vnoders.spotify_el8alaba.Artist.ArtistEditAlbumFragment;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Artist.Album;
+import com.vnoders.spotify_el8alaba.models.Artist.ArtistAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,8 @@ import java.util.List;
 public class AlbumsListAdapter extends RecyclerView.Adapter<AlbumsListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private static ArrayList<Album> mockDataset;
-    private static ArrayList<Album> backDataset;
+    private static ArrayList<ArtistAlbum> mockDataset;
+    private static ArrayList<ArtistAlbum> backDataset;
 
     //               The difference between these two constructors is that one uses mock data and the other
     //                  uses data retrieved from the server and the mock data one will be removed later on.
@@ -31,13 +31,13 @@ public class AlbumsListAdapter extends RecyclerView.Adapter<AlbumsListAdapter.My
      * @param fragment  The fragment where this list is in (Used to load another fragment)
      */
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AlbumsListAdapter(ArrayList<Album> myDataset, Fragment fragment) {
+    public AlbumsListAdapter(ArrayList<ArtistAlbum> myDataset, Fragment fragment) {
         backDataset = new ArrayList<>();
         mockDataset = myDataset;
         AlbumsListAdapter.fragment = fragment;
     }
 
-    public AlbumsListAdapter(Fragment fragment, ArrayList<Album> backDataset) {
+    public AlbumsListAdapter(Fragment fragment, ArrayList<ArtistAlbum> backDataset) {
         mockDataset = new ArrayList<>();
         AlbumsListAdapter.backDataset = backDataset;
         AlbumsListAdapter.fragment = fragment;

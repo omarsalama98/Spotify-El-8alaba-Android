@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.Artist.EditSongAlbumsListAdapter;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Artist.Album;
+import com.vnoders.spotify_el8alaba.models.Artist.ArtistAlbum;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.MyAlbum;
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateSongNameAndAlbumRequestBody;
@@ -70,7 +70,7 @@ public class ArtistEditSongFragment extends Fragment {
 
         ArrayList<MyAlbum> albums = new ArrayList<>();
         for (int i = 0; i < mAlbums.size(); i++) {
-            Album album = mAlbums.get(i);
+            ArtistAlbum album = mAlbums.get(i);
             MyAlbum myAlbum = new MyAlbum(album.getId());
             myAlbum.setSelected(false);
             myAlbum.setName(album.getName());

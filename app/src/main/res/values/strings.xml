@@ -179,4 +179,11 @@
     <string name = "add_a_song">Add a Song</string>
     <string name = "new_song">New Song</string>
     <string name = "new_album">New Album</string>
+    <string name = "album_name">Album Name:</string>
+    <string name = "please_enter_an_album_name">Please enter an album name.</string>
+    <string name = "upload_picture">Upload Picture</string>
+    <string name = "selected_album_image">Selected album image</string>
+    <string name = "album_genre">Album Genre:</string>
+    <string name = "album_label">Album Label:</string>
+    <string name = "please_enter_an_album_label">Please enter an album label.</string>
 </resources>
