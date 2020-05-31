@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.models;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class UpdateUserInfo {
@@ -13,6 +14,7 @@ public class UpdateUserInfo {
     }
 
     @SerializedName("name")
+    @Expose
     private String userName;
 
 }

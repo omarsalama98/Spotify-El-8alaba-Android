@@ -37,7 +37,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.Album;
 import com.vnoders.spotify_el8alaba.models.Search.Artist;
 import com.vnoders.spotify_el8alaba.models.Search.Playlist;
-import com.vnoders.spotify_el8alaba.models.Search.Track;
+import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
 import com.vnoders.spotify_el8alaba.models.SearchResult;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
@@ -132,7 +132,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
             mSearchResult.add(artists.get(0));
             mSearchResult.add(artists.get(1));
         }
-        List<Track> tracks = searchListResults.getTracks();
+        List<SearchTrack> tracks = searchListResults.getTracks();
         if (tracks.size() == 1) {
             mSearchResult.add(tracks.get(0));
         } else if (tracks.size() > 1) {

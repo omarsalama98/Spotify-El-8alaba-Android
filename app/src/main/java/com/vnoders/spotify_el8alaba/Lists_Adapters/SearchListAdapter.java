@@ -16,7 +16,7 @@ import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.Album;
 import com.vnoders.spotify_el8alaba.models.Search.Artist;
 import com.vnoders.spotify_el8alaba.models.Search.Playlist;
-import com.vnoders.spotify_el8alaba.models.Search.Track;
+import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
@@ -101,10 +101,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                 itemImageUrl = images.get(0).getUrl();
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
-        } else if (result instanceof Track) {
-            itemName = ((Track) result).getName();
+        } else if (result instanceof SearchTrack) {
+            itemName = ((SearchTrack) result).getName();
             holder.name.setText(itemName);
-            List<String> artistsIds = ((Track) result).getArtists();
+            List<String> artistsIds = ((SearchTrack) result).getArtists();
             //TODO: Tracks should have images (Not added in backend)
             itemInfo = "Track";
             // TODO: Maybe request the artists from the server by their ids and show them here
@@ -178,10 +178,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     if (!images.isEmpty()) {
                         itemImageUrl = images.get(0).getUrl();
                     }
-                } else if (result instanceof Track) {
+                } else if (result instanceof SearchTrack) {
                     itemType = SearchByTypeConstantsHelper.TRACK;
-                    itemId = ((Track) result).getId();
-                    itemName = ((Track) result).getName();
+                    itemId = ((SearchTrack) result).getId();
+                    itemName = ((SearchTrack) result).getName();
                     itemInfo = "Track";
                 }
 

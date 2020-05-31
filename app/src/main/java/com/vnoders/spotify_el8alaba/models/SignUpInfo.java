@@ -1,5 +1,7 @@
 package com.vnoders.spotify_el8alaba.models;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * This class stores all user's information that will be needed in the registration an object of
  * this class will be sent to the post function which creates account to the user
@@ -9,13 +11,25 @@ package com.vnoders.spotify_el8alaba.models;
 
 public class SignUpInfo {
 
-
+    @Expose
     private String name;
+
+    @Expose
     private String email;
+
+    @Expose
     private String password;
+
+    @Expose
     private String passwordConfirm;
+
+    @Expose
     private String gender;
+
+    @Expose
     private String birthdate;
+
+    @Expose
     private String type;
 
     /**

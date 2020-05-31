@@ -28,6 +28,15 @@
                         android:layout_alignParentEnd = "true"
                         android:layout_alignParentBottom = "true"
                         android:contentDescription = "@string/settings_icon" />
+                <ImageView
+                        android:id = "@+id/spotify_artist_image_view"
+                        android:layout_width = "40dp"
+                        android:layout_height = "30dp"
+                        android:src = "@drawable/spotify_blue"
+                        android:layout_alignParentStart = "true"
+                        android:layout_alignParentBottom = "true"
+                        android:visibility = "gone"
+                        android:contentDescription = "@string/spotify_artist_icon" />
             </RelativeLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

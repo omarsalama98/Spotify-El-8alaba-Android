@@ -10,10 +10,9 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
-import com.vnoders.spotify_el8alaba.ui.login.LoginActivit;
 
 public class ConfirmationEmailDialog extends DialogFragment {
+
     private Button ok_button;
 
     @Nullable

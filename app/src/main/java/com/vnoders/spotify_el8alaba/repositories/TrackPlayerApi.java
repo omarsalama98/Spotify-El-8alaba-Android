@@ -13,9 +13,7 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetUserStatus;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.PostPlayTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.ShareTrackResponse;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

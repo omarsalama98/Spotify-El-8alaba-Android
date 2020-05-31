@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import java.util.Objects;
@@ -11,49 +12,66 @@ import java.util.Objects;
 public class Track {
 
     @SerializedName("album")
+    @Expose
     private Album album;
 
     @SerializedName("artists")
+    @Expose
     private List<Artist> artists = null;
 
     @SerializedName("external_urls")
+    @Expose
     private List<ExternalUrls> externalUrls = null;
 
     @SerializedName("disc_number")
+    @Expose
     private int discNumber;
 
     @SerializedName("duration_ms")
+    @Expose
     private int durationInMilliseconds;
 
     @SerializedName("explicit")
+    @Expose
     private boolean explicit;
 
     @SerializedName("href")
+    @Expose
     private String href;
 
     @SerializedName("id")
+    @Expose
     private String id;
 
     @SerializedName("is_local")
+    @Expose
     private boolean isLocal;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("popularity")
+    @Expose
     private int popularity;
 
     @SerializedName("preview_url")
+    @Expose
     private String previewUrl;
 
     @SerializedName("track_number")
+    @Expose
     private int trackNumber;
 
     @SerializedName("type")
+    @Expose
     private String type;
 
     @SerializedName("uri")
+    @Expose
     private String uri;
+
+    private boolean isLiked;
 
     public Album getAlbum() {
         return album;
@@ -167,6 +185,15 @@ public class Track {
         this.uri = uri;
     }
 
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -176,19 +203,12 @@ public class Track {
             return false;
         }
         Track track = (Track) obj;
-        return discNumber == track.discNumber &&
-                durationInMilliseconds == track.durationInMilliseconds &&
-                explicit == track.explicit &&
-                isLocal == track.isLocal &&
-                trackNumber == track.trackNumber &&
-                Objects.equals(album, track.album) &&
+        return Objects.equals(album, track.album) &&
                 Objects.equals(artists, track.artists) &&
-                Objects.equals(externalUrls, track.externalUrls) &&
                 Objects.equals(href, track.href) &&
                 Objects.equals(id, track.id) &&
                 Objects.equals(name, track.name) &&
                 Objects.equals(previewUrl, track.previewUrl) &&
-                Objects.equals(type, track.type) &&
                 Objects.equals(uri, track.uri);
     }
 

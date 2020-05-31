@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.BuildConfig;
 import com.vnoders.spotify_el8alaba.R;
@@ -71,9 +73,11 @@ public class RetrofitClient {
         // in order to log other interceptors
         enableLogging();
 
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+
         retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClientBuilder.build());
 
     }

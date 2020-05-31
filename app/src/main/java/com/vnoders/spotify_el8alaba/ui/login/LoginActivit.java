@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.vnoders.spotify_el8alaba.ConnectionDialog;
@@ -22,7 +21,6 @@ import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
-import com.vnoders.spotify_el8alaba.response.signup.SignUpResponse;
 import java.io.IOException;
 import okhttp3.ResponseBody;
 import org.json.JSONException;
@@ -102,6 +100,7 @@ public class LoginActivit extends AppCompatActivity {
                                     .getJSONObject("currentlyPlaying");
                             String id=user.getString("id");
                             editor.putString("id",id).commit();
+                            editor.putString("type", user.getString("type"));
                             CurrentlyPlaying currentlyPlaying = gson.fromJson(
                                     jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
                         }
@@ -142,7 +141,7 @@ public class LoginActivit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        login_status = (TextView) findViewById(R.id.login_status);
+        login_status = findViewById(R.id.login_status);
         sharedPreferences = getSharedPreferences(
                 getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
 

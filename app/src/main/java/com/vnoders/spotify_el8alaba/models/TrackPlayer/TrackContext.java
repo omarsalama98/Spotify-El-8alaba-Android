@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -9,9 +10,11 @@ import com.google.gson.annotations.SerializedName;
 public class TrackContext {
 
     @SerializedName("type")
+    @Expose
     private String mType;
 
     @SerializedName("uri")
+    @Expose
     private String mUri;
 
     public String getType() {

@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.models;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
@@ -10,12 +11,15 @@ import java.util.Objects;
 public class TrackImage {
 
     @SerializedName("height")
+    @Expose
     private int height;
 
     @SerializedName("width")
+    @Expose
     private int width;
 
     @SerializedName("url")
+    @Expose
     private String url;
 
     public int getHeight() {

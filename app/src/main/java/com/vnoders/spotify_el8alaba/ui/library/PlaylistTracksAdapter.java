@@ -17,10 +17,14 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
+import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHolder;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +36,10 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
 
     private List<Track> tracks;
 
-    public PlaylistTracksAdapter() {
+    public PlaylistTracksAdapter(String playlistId, MediaPlaybackService mediaPlaybackService) {
         this.tracks = new ArrayList<>();
+        TrackViewHolder.playlistId = playlistId;
+        TrackViewHolder.mediaPlaybackService = mediaPlaybackService;
     }
 
 
@@ -42,6 +48,15 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
      */
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
+    }
+
+
+    /**
+     * @param tracksIds Sets the list of ids of tracks in the playlist to be displayed. It is used
+     *                  ONLY with liked songs because it it a playlist with no id
+     */
+    public void setTracksIds(List<String> tracksIds) {
+        TrackViewHolder.tracksIds = tracksIds;
     }
 
 
@@ -113,6 +128,11 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         ToggleButton hideTrack;
         Button othersMenu;
 
+        private String trackId;
+        static String playlistId;
+        static List<String> tracksIds;
+        static MediaPlaybackService mediaPlaybackService;
+
 
         /**
          * @param itemView The view of the new created item
@@ -137,16 +157,18 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
             trackBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(),
-                            "Song " + trackName.getText().toString() + " plays", Toast.LENGTH_SHORT)
-                            .show();
+                    if (playlistId != null) {
+                        mediaPlaybackService.playPlaylist(playlistId, true, true, trackId);
+                    } else {
+                        mediaPlaybackService.playList(tracksIds, true, true, trackId);
+                    }
                 }
             });
 
             trackBody.setOnLongClickListener(new OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    TrackViewHolder.this.openTrackMenu(v);
+                    openTrackMenu(v);
                     return true;
                 }
             });
@@ -170,11 +192,20 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
             likeTrack.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        buttonView.setBackgroundResource(R.drawable.like_track_liked);
-                    } else {
-                        buttonView.setBackgroundResource(R.drawable.like_track_unliked);
+                    // if the user actually pressed on the button
+                    if (buttonView.isPressed()) {
+                        if (isChecked) {
+                            LibraryRepository.likeTrack(trackId);
+                        } else {
+                            LibraryRepository.unlikeTrack(trackId);
+                        }
                     }
+
+                    // change the background based on the current button check status
+                    if (isChecked)
+                        buttonView.setBackgroundResource(R.drawable.like_track_liked);
+                    else
+                        buttonView.setBackgroundResource(R.drawable.like_track_unliked);
                 }
             });
 
@@ -198,7 +229,20 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         }
 
         void bind(Track track) {
+
+            trackId = track.getId();
+
             trackName.setText(track.getName());
+
+            if (track.getAlbum() != null && track.getAlbum().getImages() != null) {
+                List<TrackImage> images = track.getAlbum().getImages();
+                if (!images.isEmpty()) {
+                    Picasso.get().load(images.get(0).getUrl()).placeholder(R.drawable.add_song)
+                            .into(trackArt);
+                }
+            }
+
+            likeTrack.setChecked(track.isLiked());
 
             List<Artist> artists = track.getArtists();
             if (artists != null && artists.size() > 0) {
