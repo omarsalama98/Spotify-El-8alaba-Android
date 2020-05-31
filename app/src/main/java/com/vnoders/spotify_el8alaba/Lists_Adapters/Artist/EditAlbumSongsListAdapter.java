@@ -58,9 +58,9 @@ public class EditAlbumSongsListAdapter extends
         holder.deleteSongImage.setImageResource(R.drawable.ic_remove_circle_outline_white_56dp);
 
         holder.deleteSongImage.setOnClickListener(v -> {
+            ArtistEditAlbumFragment.selectedSongsIds.add(backDataset.get(position).getId());
             backDataset.remove(position);
             notifyDataSetChanged();
-            ArtistEditAlbumFragment.selectedSongsIds.add(backDataset.get(position).getId());
         });
     }
 

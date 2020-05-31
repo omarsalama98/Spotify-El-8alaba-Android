@@ -71,7 +71,7 @@
     <FrameLayout
             android:layout_width = "match_parent"
             android:layout_height = "0dp"
-            android:layout_weight = "65">
+            android:layout_weight = "45">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id = "@+id/artist_songs_recycler_view"
@@ -85,5 +85,38 @@
                 android:visibility = "gone" />
 
     </FrameLayout>
+
+    <RelativeLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "20"
+            android:padding = "10dp">
+        <Button
+                android:id = "@+id/artist_library_add_song"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:text = "@string/new_song"
+                android:textColor = "@color/white"
+                android:textSize = "20sp"
+                android:paddingVertical = "15dp"
+                android:paddingHorizontal = "20dp"
+                android:background = "@drawable/cornered_button"
+                android:layout_alignParentStart = "true" />
+
+        <Button
+                android:id = "@+id/artist_library_add_album"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:text = "@string/new_album"
+                android:textColor = "@color/black"
+                android:textSize = "20sp"
+                android:textStyle = "italic"
+                android:paddingVertical = "15dp"
+                android:paddingHorizontal = "20dp"
+                android:layout_alignParentEnd = "true"
+                android:backgroundTint = "@color/pressed_grey"
+                android:background = "@drawable/cornered_button" />
+
+    </RelativeLayout>
 
 </LinearLayout>

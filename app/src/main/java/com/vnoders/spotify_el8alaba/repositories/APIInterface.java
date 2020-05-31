@@ -4,6 +4,7 @@ import com.vnoders.spotify_el8alaba.models.Artist.AlbumTracks;
 import com.vnoders.spotify_el8alaba.models.Artist.Artist;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistAlbums;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistTrack;
+import com.vnoders.spotify_el8alaba.models.Artist.CreateATrackRequestBody;
 import com.vnoders.spotify_el8alaba.models.Artist.TrackListens;
 import com.vnoders.spotify_el8alaba.models.Artist.TrackListensRequestBody;
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateAlbumNameRequestBody;
@@ -21,12 +22,16 @@ import com.vnoders.spotify_el8alaba.models.SearchResult;
 import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -142,6 +147,18 @@ public interface APIInterface {
     Call<ArtistTrack> updateTrackName(
             @Path("id") String trackId,
             @Body UpdateSongNameRequestBody updateSongNameRequestBody
+    );
+
+    @POST("tracks")
+    Call<ArtistTrack> createTrack(
+            @Body CreateATrackRequestBody createATrackRequestBody
+    );
+
+    @Multipart
+    @POST("streaming")
+    Call<ResponseBody> uploadTrack(
+            @Part("trackId") String trackId,
+            @Part MultipartBody.Part file
     );
 
     @PATCH("albums/{id}")

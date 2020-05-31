@@ -164,4 +164,16 @@
     <string name = "delete">delete</string>
     <string name = "add_to_album">Add to album</string>
     <string name = "album_image">Album Image</string>
+    <string name = "explicit">Explicit: </string>
+    <string name = "song_name">Song Name:</string>
+    <string name = "please_enter_a_song_name_error">Please Enter a song name</string>
+    <string name = "choose_song">Choose Song</string>
+    <string name = "choose_an_album">Choose an Album</string>
+    <string name = "add">add</string>
+    <string name = "cancel">Cancel</string>
+    <string name = "please_choose_a_song">Please Choose a song</string>
+    <string name = "please_choose_an_album">Please choose an album</string>
+    <string name = "add_a_song">Add a Song</string>
+    <string name = "new_song">New Song</string>
+    <string name = "new_album">New Album</string>
 </resources>

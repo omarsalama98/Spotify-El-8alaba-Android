@@ -2,7 +2,6 @@ package com.vnoders.spotify_el8alaba.models.Artist;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import java.util.List;
 
 public class AlbumTracks {
@@ -12,7 +11,7 @@ public class AlbumTracks {
     private String href;
     @SerializedName("items")
     @Expose
-    private List<SearchTrack> items = null;
+    private List<ArtistReTrack> items = null;
     @SerializedName("limit")
     @Expose
     private Integer limit;
@@ -37,11 +36,11 @@ public class AlbumTracks {
         this.href = href;
     }
 
-    public List<SearchTrack> getTracks() {
+    public List<ArtistReTrack> getTracks() {
         return items;
     }
 
-    public void setTracks(List<SearchTrack> items) {
+    public void setTracks(List<ArtistReTrack> items) {
         this.items = items;
     }
 

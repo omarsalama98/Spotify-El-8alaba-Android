@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ public class ArtistLibraryFragment extends Fragment {
     static AlbumsListAdapter albumsListAdapter;
     private TextView songsTextView, albumsTextView;
     private RecyclerView songsRecyclerView, albumsRecyclerView;
+    private Button addSongBtn, addAlbumBtn;
 
     public ArtistLibraryFragment() {
     }
@@ -39,6 +41,8 @@ public class ArtistLibraryFragment extends Fragment {
         albumsTextView = root.findViewById(R.id.artist_albums_text_view);
         songsRecyclerView = root.findViewById(R.id.artist_songs_recycler_view);
         albumsRecyclerView = root.findViewById(R.id.artist_albums_recycler_view);
+        addAlbumBtn = root.findViewById(R.id.artist_library_add_album);
+        addSongBtn = root.findViewById(R.id.artist_library_add_song);
 
         return root;
     }
@@ -69,6 +73,17 @@ public class ArtistLibraryFragment extends Fragment {
             albumsTextView.setTextColor(getResources().getColor(R.color.black));
             songsRecyclerView.setVisibility(View.GONE);
             albumsRecyclerView.setVisibility(View.VISIBLE);
+        });
+
+        addSongBtn.setOnClickListener(v -> {
+            Fragment targetFragment = new ArtistAddSongFragment();
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                            R.anim.fade_out)
+                    .replace(R.id.artist_nav_host_fragment, targetFragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
 

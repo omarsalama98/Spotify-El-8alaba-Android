@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.Artist;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,9 +19,9 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.Artist.EditAlbumSongsListAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Artist.AlbumTracks;
+import com.vnoders.spotify_el8alaba.models.Artist.ArtistReTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.MyTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateAlbumNameRequestBody;
-import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -88,9 +89,9 @@ public class ArtistEditAlbumFragment extends Fragment {
         call.enqueue(new Callback<AlbumTracks>() {
             @Override
             public void onResponse(Call<AlbumTracks> call, Response<AlbumTracks> response) {
-                List<SearchTrack> tracks = response.body().getTracks();
+                List<ArtistReTrack> tracks = response.body().getTracks();
                 for (int i = 0; i < tracks.size(); i++) {
-                    SearchTrack track = tracks.get(i);
+                    ArtistReTrack track = tracks.get(i);
                     MyTrack myTrack = new MyTrack(track.getId(), track.getPlayed());
                     myTrack.setName(track.getName());
                     myTracks.add(myTrack);
@@ -111,9 +112,9 @@ public class ArtistEditAlbumFragment extends Fragment {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                     }
-
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
+                        Log.d("df", "Failed" + t.getMessage());
                     }
                 });
             }
