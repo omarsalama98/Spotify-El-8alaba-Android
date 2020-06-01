@@ -205,6 +205,20 @@ public class PlaylistHomeFragment extends Fragment {
                 shuffle.setText("Add Songs");
                 editOrPreviewPlaylist.setVisibility(View.GONE);
                 tracksSummary.setVisibility(View.GONE);
+
+                shuffle.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String playlistId = playlistHomeViewModel.getPlaylistId();
+
+                        getParentFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment,
+                                        SearchTracksFragment.newInstance(playlistId))
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+
             }else if (!isOwnedByMe && !isCollaborative){
                 editOrPreviewPlaylist.setText("Preview");
             }

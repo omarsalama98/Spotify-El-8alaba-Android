@@ -20,9 +20,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vnoders.spotify_el8alaba.ArtistMainActivity;
+import com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.HomeMainListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
+import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.models.Category;
@@ -103,8 +104,10 @@ public class HomeFragment extends Fragment {
         });
 
         spotifyArtistButton.setVisibility(View.VISIBLE);
-        spotifyArtistButton.setOnClickListener(
-                v -> startActivity(new Intent(getActivity(), ArtistMainActivity.class)));
+        spotifyArtistButton.setOnClickListener(v -> {
+            ((MainActivity) getActivity()).getService().pause();
+            startActivity(new Intent(getActivity(), ArtistMainActivity.class));
+        });
 
         settingsButton.setOnClickListener(v -> {
 

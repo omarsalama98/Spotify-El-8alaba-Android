@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:id = "@+id/search_main_background_layout"
+        android:background = "@color/midGray"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:paddingTop = "25dp">
+
+    <FrameLayout
+            android:id = "@+id/search_bar_frame_layout"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content">
+
+        <LinearLayout
+                android:id = "@+id/search_edit_text_layout"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:orientation = "horizontal"
+                android:weightSum = "100"
+                android:padding = "7dp"
+                android:background = "@color/lightGray"
+                android:visibility = "visible">
+
+            <ImageView
+                    android:id = "@+id/search_bar_back_arrow"
+                    android:contentDescription = "@string/back_arrow_in_search_bar"
+                    android:layout_width = "0dp"
+                    android:layout_weight = "10"
+                    android:layout_height = "match_parent"
+                    android:padding = "7dp"
+                    android:src = "@drawable/ic_left_arrow" />
+
+            <EditText
+                    android:id = "@+id/search_bar_edit_text"
+                    android:layout_width = "0dp"
+                    android:layout_weight = "77"
+                    android:layout_height = "wrap_content"
+                    android:textSize = "18sp"
+                    android:textColor = "@color/white"
+                    android:padding = "7dp"
+                    android:background = "@android:color/transparent"
+                    android:textCursorDrawable = "@drawable/green_cursor"
+                    android:cursorVisible = "true"
+                    android:inputType = "text" />
+
+            <FrameLayout
+                    android:layout_width = "0dp"
+                    android:layout_weight = "13"
+                    android:layout_height = "match_parent">
+                <ImageView
+                        android:id = "@+id/search_camera_image_in_edit_text"
+                        android:contentDescription = "@string/camera_icon_in_search_bar"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "match_parent"
+                        android:padding = "6dp"
+                        android:src = "@drawable/ic_photo_camera" />
+                <ImageView
+                        android:id = "@+id/reset_search_image"
+                        android:contentDescription = "@string/reset_icon_in_search_bar"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "match_parent"
+                        android:padding = "7dp"
+                        android:src = "@drawable/ic_close_white_24dp"
+                        android:visibility = "gone" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+                android:id = "@+id/search_text_layout"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:orientation = "horizontal"
+                android:padding = "5dp"
+                android:layout_marginHorizontal = "10dp"
+                android:layout_marginTop = "8dp"
+                android:visibility = "gone"
+                android:background = "@color/lightGray">
+
+            <TextView
+                    android:id = "@+id/search_bar_text_view"
+                    android:layout_width = "300dp"
+                    android:layout_height = "wrap_content"
+                    android:textSize = "14sp"
+                    android:textStyle = "bold"
+                    android:text = "@string/search"
+                    android:layout_centerHorizontal = "true"
+                    android:gravity = "center"
+                    android:textColor = "@color/white"
+                    android:padding = "4dp" />
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id = "@+id/search_tracks_list_recycler_view"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:layout_below = "@id/search_bar_frame_layout"
+            android:overScrollMode = "never"
+            android:padding = "10dp"
+            android:visibility = "gone"
+            android:fillViewport = "true" />
+
+    <RelativeLayout
+            android:id = "@+id/search_empty_background_layout"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:paddingBottom = "56dp"
+            android:gravity = "center">
+
+        <TextView
+                android:text = "@string/play_what_you_love"
+                android:textColor = "@color/white"
+                android:textSize = "23sp"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_centerHorizontal = "true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

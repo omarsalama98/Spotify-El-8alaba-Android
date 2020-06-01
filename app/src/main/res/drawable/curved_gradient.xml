@@ -3,14 +3,11 @@
     <item>
         <shape android:shape = "rectangle">
             <gradient
-                    android:type = "radial"
-                    android:gradientRadius = "950"
-                    android:centerColor = "@color/midGray"
-                    android:centerY = "0"
-                    android:centerX = "0"
-                    android:startColor = "@color/lightGray"
-                    android:endColor = "@color/darkGray" />
+                    android:angle = "270"
+                    android:type = "linear"
+                    android:centerColor = "@color/darkBlue"
+                    android:startColor = "@color/black"
+                    android:endColor = "@color/spotifyBlue" />
         </shape>
     </item>
-
 </layer-list>
