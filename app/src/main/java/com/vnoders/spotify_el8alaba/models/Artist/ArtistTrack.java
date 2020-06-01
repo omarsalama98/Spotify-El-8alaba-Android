@@ -1,10 +1,10 @@
-package com.vnoders.spotify_el8alaba.models.Search;
+package com.vnoders.spotify_el8alaba.models.Artist;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-public class SearchTrack {
+public class ArtistTrack {
 
     @SerializedName("artists")
     @Expose
@@ -14,31 +14,22 @@ public class SearchTrack {
     private Integer discNumber;
     @SerializedName("external_urls")
     @Expose
-    private List<String> externalUrls = null;
-    @SerializedName("played")
-    @Expose
-    private Integer played;
-    @SerializedName("created_at")
-    @Expose
-    private String createdAt;
+    private List<Object> externalUrls = null;
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("album")
+    @Expose
+    private String album;
     @SerializedName("duration_ms")
     @Expose
     private Integer durationMs;
     @SerializedName("explicit")
     @Expose
     private Boolean explicit;
-    @SerializedName("album")
-    @Expose
-    private String album;
     @SerializedName("track_number")
     @Expose
     private Integer trackNumber;
-    @SerializedName("active")
-    @Expose
-    private Boolean active;
     @SerializedName("__v")
     @Expose
     private Integer v;
@@ -51,7 +42,7 @@ public class SearchTrack {
     @SerializedName("href")
     @Expose
     private String href;
-    @SerializedName(value = "id", alternate = {"_id"})
+    @SerializedName("id")
     @Expose
     private String id;
 
@@ -71,28 +62,12 @@ public class SearchTrack {
         this.discNumber = discNumber;
     }
 
-    public List<String> getExternalUrls() {
+    public List<Object> getExternalUrls() {
         return externalUrls;
     }
 
-    public void setExternalUrls(List<String> externalUrls) {
+    public void setExternalUrls(List<Object> externalUrls) {
         this.externalUrls = externalUrls;
-    }
-
-    public Integer getPlayed() {
-        return played;
-    }
-
-    public void setPlayed(Integer played) {
-        this.played = played;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
     }
 
     public String getName() {
@@ -101,6 +76,14 @@ public class SearchTrack {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
     }
 
     public Integer getDurationMs() {
@@ -119,28 +102,12 @@ public class SearchTrack {
         this.explicit = explicit;
     }
 
-    public String getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-
     public Integer getTrackNumber() {
         return trackNumber;
     }
 
     public void setTrackNumber(Integer trackNumber) {
         this.trackNumber = trackNumber;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public Integer getV() {
@@ -184,4 +151,3 @@ public class SearchTrack {
     }
 
 }
-

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:orientation = "vertical"
+        android:paddingTop = "20dp"
+        android:paddingHorizontal = "10dp"
+        android:weightSum = "100"
+        android:background = "@drawable/curved_gradient"
+        tools:context = ".Artist.ArtistAddSongFragment">
+
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "13"
+            android:orientation = "horizontal"
+            android:weightSum = "100">
+
+        <TextView
+                android:layout_width = "wrap_content"
+                android:text = "@string/album_name"
+                android:textSize = "20sp"
+                android:paddingEnd = "5dp"
+                android:textColor = "@color/white"
+                android:gravity = "center_vertical"
+                android:layout_height = "match_parent" />
+
+        <EditText
+                android:id = "@+id/album_name_edit_text"
+                android:layout_width = "match_parent"
+                android:textSize = "20sp"
+                android:padding = "10dp"
+                android:textColor = "@color/white"
+                android:layout_height = "match_parent" />
+
+    </LinearLayout>
+
+    <TextView
+            android:id = "@+id/enter_album_name_error_text_view"
+            android:layout_width = "wrap_content"
+            android:layout_height = "0dp"
+            android:layout_weight = "5"
+            android:visibility = "gone"
+            android:text = "@string/please_enter_an_album_name"
+            android:textColor = "@color/red"
+            android:textSize = "20sp" />
+
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "13"
+            android:orientation = "horizontal"
+            android:weightSum = "100">
+
+        <TextView
+                android:layout_width = "wrap_content"
+                android:text = "@string/album_label"
+                android:textSize = "20sp"
+                android:paddingEnd = "5dp"
+                android:textColor = "@color/white"
+                android:gravity = "center_vertical"
+                android:layout_height = "match_parent" />
+
+        <EditText
+                android:id = "@+id/album_label_edit_text"
+                android:layout_width = "match_parent"
+                android:textSize = "20sp"
+                android:padding = "10dp"
+                android:textColor = "@color/white"
+                android:layout_height = "match_parent" />
+
+    </LinearLayout>
+
+    <TextView
+            android:id = "@+id/enter_album_label_error_text_view"
+            android:layout_width = "wrap_content"
+            android:layout_height = "0dp"
+            android:layout_weight = "5"
+            android:visibility = "gone"
+            android:text = "@string/please_enter_an_album_label"
+            android:textColor = "@color/red"
+            android:textSize = "20sp" />
+
+    <Button
+            android:id = "@+id/choose_album_picture_button"
+            android:layout_width = "wrap_content"
+            android:layout_height = "0dp"
+            android:layout_gravity = "center_horizontal"
+            android:layout_weight = "8"
+            android:text = "@string/upload_picture"
+            android:paddingHorizontal = "10dp"
+            android:layout_marginTop = "10dp"
+            android:background = "@drawable/rounded_corner_layout" />
+
+    <ImageView
+            android:id = "@+id/album_selected_image_image_view"
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "35"
+            android:visibility = "gone"
+            android:contentDescription = "@string/selected_album_image"
+            android:layout_marginVertical = "10dp" />
+
+    <RelativeLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "20"
+            android:padding = "15dp">
+        <Button
+                android:id = "@+id/add_album_confirm_button"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:text = "@string/add"
+                android:textColor = "@color/white"
+                android:textSize = "25sp"
+                android:paddingVertical = "15dp"
+                android:paddingHorizontal = "30dp"
+                android:background = "@drawable/cornered_button"
+                android:layout_centerVertical = "true"
+                android:layout_alignParentStart = "true" />
+
+        <Button
+                android:id = "@+id/add_album_cancel_button"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:text = "@string/cancel"
+                android:textColor = "@color/black"
+                android:textSize = "25sp"
+                android:textStyle = "italic"
+                android:paddingVertical = "15dp"
+                android:paddingHorizontal = "30dp"
+                android:layout_centerVertical = "true"
+                android:layout_alignParentEnd = "true"
+                android:backgroundTint = "@color/pressed_grey"
+                android:background = "@drawable/cornered_button" />
+
+    </RelativeLayout>
+
+</LinearLayout>

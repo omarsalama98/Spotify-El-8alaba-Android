@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:orientation = "horizontal"
+        android:weightSum = "100"
+        android:paddingVertical = "10dp"
+        android:foreground = "?android:attr/selectableItemBackground"
+        android:layout_width = "match_parent"
+        android:layout_height = "60dp">
+
+    <ImageView
+            android:id = "@+id/artist_song_item_image_view"
+            android:layout_width = "0dp"
+            android:layout_weight = "20"
+            android:layout_height = "match_parent"
+            android:src = "@drawable/ic_spotify_logo"
+            android:contentDescription = "@string/search_result_image"
+            android:layout_gravity = "center_vertical" />
+
+    <TextView
+            android:id = "@+id/artist_song_item_name_text_view"
+            android:layout_width = "0dp"
+            android:layout_height = "wrap_content"
+            android:layout_weight = "50"
+            android:text = "@string/title_placeholder"
+            android:textSize = "@dimen/search_list_item_title"
+            android:textColor = "@color/black" />
+    <TextView
+            android:id = "@+id/artist_song_item_streams_text_view"
+            android:layout_width = "0dp"
+            android:layout_height = "wrap_content"
+            android:layout_weight = "20"
+            android:gravity = "end"
+            android:text = "@string/title_placeholder"
+            android:textSize = "@dimen/search_list_item_title"
+            android:layout_gravity = "center_vertical"
+            android:textColor = "@color/black" />
+
+    <ImageView
+            android:id = "@+id/artist_song_item_arrow_image_view"
+            android:layout_width = "0dp"
+            android:layout_weight = "10"
+            android:layout_height = "wrap_content"
+            android:tint = "@color/pressed_grey"
+            android:src = "@drawable/ic_right"
+            android:contentDescription = "@string/right_arrow"
+            android:layout_gravity = "center_vertical" />
+
+</LinearLayout>

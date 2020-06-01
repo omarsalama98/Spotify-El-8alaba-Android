@@ -30,5 +30,6 @@
 
     <color name = "whitish_gray">#a0a0a0</color>
     <color name = "translucentDarkGray">#B0151515</color>
+    <color name = "red">#DD1000</color>
 
 </resources>

@@ -47,7 +47,7 @@
                 android:windowSoftInputMode = "adjustPan"
                 tools:ignore = "LockedOrientationActivity" />
         <activity
-                android:name = ".ArtistMainActivity"
+                android:name = ".Artist.ArtistMainActivity"
                 android:label = "@string/title_artist_activity_main"
                 android:launchMode = "singleTop"
                 android:screenOrientation = "portrait"

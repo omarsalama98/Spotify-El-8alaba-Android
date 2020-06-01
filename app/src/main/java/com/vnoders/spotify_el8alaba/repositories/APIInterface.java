@@ -1,7 +1,16 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import com.vnoders.spotify_el8alaba.models.Artist.AlbumTracks;
+import com.vnoders.spotify_el8alaba.models.Artist.Artist;
+import com.vnoders.spotify_el8alaba.models.Artist.ArtistAlbums;
+import com.vnoders.spotify_el8alaba.models.Artist.ArtistTrack;
+import com.vnoders.spotify_el8alaba.models.Artist.CreateATrackRequestBody;
+import com.vnoders.spotify_el8alaba.models.Artist.CreateAnAlbumRequestBody;
 import com.vnoders.spotify_el8alaba.models.Artist.TrackListens;
 import com.vnoders.spotify_el8alaba.models.Artist.TrackListensRequestBody;
+import com.vnoders.spotify_el8alaba.models.Artist.UpdateAlbumNameRequestBody;
+import com.vnoders.spotify_el8alaba.models.Artist.UpdateSongNameAndAlbumRequestBody;
+import com.vnoders.spotify_el8alaba.models.Artist.UpdateSongNameRequestBody;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.models.Search.Albums;
@@ -11,12 +20,19 @@ import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.Tracks;
 import com.vnoders.spotify_el8alaba.models.Search.Users;
 import com.vnoders.spotify_el8alaba.models.SearchResult;
+import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -93,13 +109,85 @@ public interface APIInterface {
     Call<List<TrackListens>> getTrackListens(@Body TrackListensRequestBody trackListensRequestBody);
 
     @GET("tracks/{id}")
-    Call<SearchTrack> getTrack(
+    Call<ArtistTrack> getTrack(
             @Path("id") String trackId
+    );
+
+    @GET("artists/{id}")
+    Call<Artist> getArtist(
+            @Path("id") String artistId
+    );
+
+    @GET("tracks?")
+    Call<List<ArtistTrack>> getTracks(
+            @Query("ids") String trackIds
     );
 
     @GET("artists/{id}/top-tracks")
     Call<List<Track>> getArtistTopTracks(
             @Path("id") String artistId
+    );
+
+    @GET("artists/{id}/albums")
+    Call<ArtistAlbums> getArtistAlbums(
+            @Path("id") String artistId
+    );
+
+    @GET("albums/{id}/tracks")
+    Call<AlbumTracks> getAlbumTracks(
+            @Path("id") String albumId
+    );
+
+    @PATCH("tracks/{id}")
+    Call<SearchTrack> updateTrack(
+            @Path("id") String trackId,
+            @Body UpdateSongNameAndAlbumRequestBody updateSongRequestBody
+    );
+
+    @PATCH("tracks/{id}")
+    Call<ArtistTrack> updateTrackName(
+            @Path("id") String trackId,
+            @Body UpdateSongNameRequestBody updateSongNameRequestBody
+    );
+
+    @POST("tracks")
+    Call<ArtistTrack> createTrack(
+            @Body CreateATrackRequestBody createATrackRequestBody
+    );
+
+    @POST("albums")
+    Call<com.vnoders.spotify_el8alaba.models.Search.Album> createAlbum(
+            @Body CreateAnAlbumRequestBody createAnAlbumRequestBody
+    );
+
+    @Multipart
+    @POST("albums/{id}/images")
+    Call<ResponseBody> uploadAlbumImage(
+            @Path("id") String albumId,
+            @Part MultipartBody.Part image
+    );
+
+    @Multipart
+    @POST("streaming")
+    Call<ResponseBody> uploadTrack(
+            @Part("trackId") String trackId,
+            @Part MultipartBody.Part track
+    );
+
+    @PATCH("albums/{id}")
+    Call<Album> updateAlbumName(
+            @Path("id") String albumId,
+            @Body UpdateAlbumNameRequestBody updateAlbumNameRequestBody
+    );
+
+    @DELETE("tracks/{id}")
+    Call<Void> deleteTrack(
+            @Path("id") String trackId
+    );
+
+    @DELETE("albums/{id}")
+    Call<Void> deleteAlbum(
+            @Path("id") String albumId
     );
 
 }

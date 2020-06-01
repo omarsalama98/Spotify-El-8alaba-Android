@@ -5,7 +5,7 @@
         android:layout_height = "match_parent"
         android:padding = "10dp"
         android:id = "@+id/home_fragment_container"
-        android:background = "@drawable/curved_gradient">
+        android:background = "@drawable/curved_gradient_black">
 
     <com.google.android.material.appbar.AppBarLayout
             android:paddingTop = "@dimen/appbar_padding_top"
