@@ -1,11 +1,13 @@
 package com.vnoders.spotify_el8alaba.ui.currentUserProfile;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.ui.currentUserProfile.FollowAdapter.FollowViewHolder;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,9 +43,10 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull FollowViewHolder holder, int position) {
     FollowItem currentItem = followList.get(position);
+    Log.d("FOLLOWER ADAPTER",currentItem.getmUserName());
     holder.userName.setText(currentItem.getmUserName());
     holder.followersNumber.setText(currentItem.getmFollowersNumber());
-    holder.userImage.setImageResource(currentItem.getmUserImageResource());
+    Picasso.get().load(currentItem.getmImageURL()).into(holder.userImage);
 
     }
 

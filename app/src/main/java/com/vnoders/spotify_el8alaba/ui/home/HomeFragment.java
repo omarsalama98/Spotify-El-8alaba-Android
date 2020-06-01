@@ -2,6 +2,9 @@ package com.vnoders.spotify_el8alaba.ui.home;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,17 +26,20 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.NotificationToken;
+import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
 import java.util.List;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
-
+    private SharedPreferences notificationTokenShared;
     private HomeViewModel homeViewModel;
     private ImageView settingsButton;
 
@@ -44,7 +50,7 @@ public class HomeFragment extends Fragment {
             ViewGroup container, Bundle savedInstanceState) {
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
+        notificationTokenShared=getActivity().getSharedPreferences("NOTIFICATION_TOKEN", Context.MODE_PRIVATE);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         settingsButton=root.findViewById(R.id.settings_image_view);
 
@@ -120,7 +126,28 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
             }
         });
+        String token=notificationTokenShared.getString("notification_token","token_not_found");
+        if (!token.equals("token_not_found")&&!token.equals("")) {
+            NotificationToken notificationToken = new NotificationToken(token);
+            Call<ResponseBody> notificationRequest = RetrofitClient.getInstance().getAPI(API.class)
+                    .addNotificationToken(notificationToken);
+            notificationRequest.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> notificationRequest, Response<ResponseBody> response) {
+                    if(response.code()==200){
+                        Editor editor=notificationTokenShared.edit();
+                        editor.clear();
+                        editor.commit();
+                    }
+                    Log.d("RESPONSE_ADD_NOTIF", response.toString());
+                }
 
+                @Override
+                public void onFailure(Call<ResponseBody> notificationRequest, Throwable t) {
+                    Log.d("RESPONSE_ADD_NOTIF", "FAILED");
+                }
+            });
+        }
     }
 
 }

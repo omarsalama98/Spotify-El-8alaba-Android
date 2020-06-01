@@ -5,10 +5,12 @@ import com.vnoders.spotify_el8alaba.models.FacebookToken;
 
 import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
+import com.vnoders.spotify_el8alaba.models.NotificationToken;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
 import com.vnoders.spotify_el8alaba.models.userProfile.GetUsersPlaylists;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
+import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -82,7 +84,7 @@ public interface API {
 
 
     @POST("users/notification-token")
-    Call<ResponseBody> addNotificationToken(@Body String token);
+    Call<ResponseBody> addNotificationToken(@Body NotificationToken token);
 
     @Multipart
     @POST("users/update-avatar")
@@ -93,4 +95,7 @@ public interface API {
      */
     @GET("me/playlists?limit=50")
     Call<GetUsersPlaylists> getCurrentUsersPlaylists();
+
+    @GET("me/following?limit=20")
+    Call<List<CurrentUserProfile>> getFollowers();
 }

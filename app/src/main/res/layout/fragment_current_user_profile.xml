@@ -179,6 +179,7 @@
                             android:textSize = "11sp" />
                 </LinearLayout>
                 <LinearLayout
+                        android:id="@+id/following_layout"
                         android:orientation = "vertical"
                         android:layout_width = "0dp"
                         android:layout_weight = "1"

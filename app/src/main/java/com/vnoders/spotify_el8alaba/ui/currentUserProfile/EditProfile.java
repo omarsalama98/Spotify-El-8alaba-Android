@@ -24,7 +24,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -90,6 +92,7 @@ public class EditProfile extends Fragment {
     private String imageUrl;
     private String name;
     private String absolutePath;
+    private ImageButton closeButton;
 
 
     private TextWatcher userNameTextWatcher = new TextWatcher() {
@@ -142,6 +145,8 @@ public class EditProfile extends Fragment {
         userName = view.findViewById(R.id.user_name);
         userImage = view.findViewById(R.id.user_image);
         userName.setText(name);
+        closeButton=view.findViewById(R.id.close);
+        closeButton.setOnClickListener(v -> getParentFragmentManager().popBackStackImmediate());
         Picasso.get().load(imageUrl).into(userImage);
         changeUserImage.setOnClickListener(new OnClickListener() {
             @Override
