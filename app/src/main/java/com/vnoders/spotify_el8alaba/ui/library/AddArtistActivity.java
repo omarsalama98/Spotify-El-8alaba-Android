@@ -37,7 +37,6 @@ public class AddArtistActivity extends AppCompatActivity {
         artists.add(new Artist("Artist 14 Name"));
         artists.add(new Artist("Artist 15 Name"));
 
-
         AddArtistAdapter artistAdapter = new AddArtistAdapter(artists);
 
         RecyclerView recyclerView = findViewById(R.id.add_artist_recycler_view);
@@ -45,6 +44,8 @@ public class AddArtistActivity extends AppCompatActivity {
         recyclerView.setAdapter(artistAdapter);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+
+        View search_layout = findViewById(R.id.search_text_layout);
 
         View done = findViewById(R.id.add_artist_done);
         done.setOnClickListener(new OnClickListener() {

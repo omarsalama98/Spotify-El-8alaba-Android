@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        android:id = "@+id/search_list_item_layout"
+        android:orientation = "horizontal"
+        android:weightSum = "100"
+        android:padding = "10dp"
+        android:foreground = "?android:attr/selectableItemBackground"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id = "@+id/search_item_image_view"
+            android:layout_width = "0dp"
+            android:layout_weight = "20"
+            android:layout_height = "60dp"
+            android:contentDescription = "@string/search_result_image"
+            android:layout_gravity = "center_vertical" />
+
+    <TextView
+            android:id = "@+id/search_item_name_text_view"
+            android:paddingHorizontal = "5dp"
+            android:layout_width = "0dp"
+            android:layout_height = "match_parent"
+            android:layout_weight = "65"
+            android:gravity = "center_vertical"
+            android:textStyle = "bold"
+            android:text = "Title"
+            android:textSize = "25sp"
+            android:textColor = "@color/white" />
+
+    <ImageView
+            android:id = "@+id/search_add_artist_image"
+            android:layout_width = "0dp"
+            android:layout_weight = "15"
+            android:layout_height = "wrap_content"
+            android:foreground = "?android:attr/selectableItemBackground"
+            android:src = "@drawable/ic_baseline_add_circle_outline_24"
+            android:layout_gravity = "center_vertical" />
+
+</LinearLayout>

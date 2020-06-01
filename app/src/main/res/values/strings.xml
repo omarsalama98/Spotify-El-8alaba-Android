@@ -188,4 +188,5 @@
     <string name = "please_enter_an_album_label">Please enter an album label.</string>
     <string name = "search_icon">Search Icon</string>
     <string name = "play_what_you_love">Play what you love</string>
+    <string name = "find_your_favorite_artists">Find your favorite artists</string>
 </resources>

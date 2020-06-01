@@ -24,6 +24,7 @@ import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -170,7 +171,7 @@ public interface APIInterface {
     @Multipart
     @POST("streaming")
     Call<ResponseBody> uploadTrack(
-            @Part("trackId") String trackId,
+            @Part("trackId") RequestBody trackId,
             @Part MultipartBody.Part track
     );
 

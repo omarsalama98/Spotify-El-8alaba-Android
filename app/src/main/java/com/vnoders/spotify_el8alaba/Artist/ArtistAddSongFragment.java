@@ -65,15 +65,22 @@ public class ArtistAddSongFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private void uploadTrack(String description, MultipartBody.Part body) {
+    private void uploadTrack(RequestBody description, MultipartBody.Part body) {
 
         Call<ResponseBody> call = apiService.uploadTrack(description, body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(getContext(), "Uploaded Song Successfully", Toast.LENGTH_LONG)
-                        .show();
-                getActivity().onBackPressed();
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Uploaded Song Successfully", Toast.LENGTH_LONG)
+                            .show();
+                    getActivity().onBackPressed();
+                } else {
+                    Toast.makeText(getContext(), "Something went wrong. Try again later",
+                            Toast.LENGTH_LONG)
+                            .show();
+                }
+
             }
 
             @Override
@@ -198,15 +205,15 @@ public class ArtistAddSongFragment extends Fragment {
                     songId = response.body().getId();
                     MultipartBody.Part body =
                             MultipartBody.Part.createFormData("track", file.getName(), requestFile);
-                    /*RequestBody description =
+                    RequestBody description =
                             RequestBody.create(
-                                    okhttp3.MultipartBody.FORM, songId);*/
+                                    okhttp3.MultipartBody.FORM, songId);
                     if (hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         ActivityCompat.requestPermissions(getActivity(),
                                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
                     } else {
-                        //uploadTrack(description, body);
-                        uploadTrack(songId, body);
+                        uploadTrack(description, body);
+                        //uploadTrack(songId, body);
                     }
                 }
                 @Override

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.AddTrackToPlaylistRequestBody;
+import com.vnoders.spotify_el8alaba.models.library.FollowArtistRequestBody;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
@@ -101,6 +102,9 @@ public interface LibraryApi {
     @GET("me/tracks?limit=0")
     Call<JsonObject> getNumberOfLikedTracks();
 
+
+    @PUT("me/following?type=artist")
+    Call<Void> followArtist(@Body FollowArtistRequestBody requestBody);
 
     @PUT("me/tracks")
     Call<Void> likeTrack(@Query("ids") String trackId);
