@@ -51,7 +51,7 @@ public class SearchTrack {
     @SerializedName("href")
     @Expose
     private String href;
-    @SerializedName("id")
+    @SerializedName(value = "id", alternate = {"_id"})
     @Expose
     private String id;
 
