@@ -3,7 +3,7 @@ package com.vnoders.spotify_el8alaba.repositories;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
-import com.vnoders.spotify_el8alaba.models.library.AddTrackToPlaylistRequestBody;
+import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
@@ -90,10 +90,12 @@ public interface LibraryApi {
     @GET("me/tracks")
     Call<TracksPagingWrapper> getLikedTracks();
 
+
     @POST("playlists/{playlist_id}/tracks")
     Call<Void> addTracksToPlaylist(
             @Path("playlist_id") String playlistId,
-            @Body AddTrackToPlaylistRequestBody requestBody);
+            @Body RequestBodyIds requestBody);
+
 
     // Used to check the number of liked tracks of the current user
     // because the backend API does not provide this endpoint

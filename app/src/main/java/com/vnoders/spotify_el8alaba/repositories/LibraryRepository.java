@@ -18,12 +18,14 @@ import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Owner;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -466,5 +468,26 @@ public class LibraryRepository {
         });
     }
 
+    public static void addTrackToPlaylist(String playlistId , String TrackId){
+
+        List<String> ids = Collections.singletonList(TrackId);
+        RequestBodyIds requestBodyIds = new RequestBodyIds(ids);
+
+        Call<Void> call = libraryApi.addTracksToPlaylist(playlistId, requestBodyIds);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(App.getInstance(),"Added to your playlist", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
+
+
+    }
 
 }

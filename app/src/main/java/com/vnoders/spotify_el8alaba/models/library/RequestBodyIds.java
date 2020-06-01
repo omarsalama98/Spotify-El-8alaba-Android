@@ -4,13 +4,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
-public class AddTrackToPlaylistRequestBody {
+public class RequestBodyIds {
 
     @SerializedName("ids")
     @Expose
     private List<String> ids;
 
-    public AddTrackToPlaylistRequestBody(List<String> ids) {
+    public RequestBodyIds(List<String> ids) {
         this.ids = ids;
     }
 }
