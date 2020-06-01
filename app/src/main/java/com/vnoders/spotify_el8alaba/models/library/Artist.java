@@ -16,7 +16,7 @@ public class Artist {
     @Expose
     private String biography;
 
-    @SerializedName("images")
+    @SerializedName(value = "image", alternate = "images")
     @Expose
     private List<Image> images;
 

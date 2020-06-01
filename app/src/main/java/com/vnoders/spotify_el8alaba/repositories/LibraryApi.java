@@ -115,14 +115,6 @@ public interface LibraryApi {
 
 
     @GET("me/following?type=artist")
-    Call<JsonArray> getUserFollowedArtistsIds();
-
-    /**
-     * @param artistsIds Comma-Separated Ids of the required artists
-     *
-     * @return List of requested artists wrapped in {@link Call} object
-     */
-    @GET("artists")
-    Call<List<Artist>> getMultipleArtists(@Query("ids")String artistsIds);
+    Call<List<Artist>> getUserFollowedArtists();
 
 }
