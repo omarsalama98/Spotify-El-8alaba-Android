@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba.models.library;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.vnoders.spotify_el8alaba.models.Image;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +11,14 @@ import java.util.Objects;
  * This class is used to model data parsed from json network response using {@link Gson} library
  */
 public class Artist {
+
+    @SerializedName("biography")
+    @Expose
+    private String biography;
+
+    @SerializedName("images")
+    @Expose
+    private List<Image> images;
 
     @SerializedName("genres")
     @Expose
@@ -98,6 +107,22 @@ public class Artist {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     @Override

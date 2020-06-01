@@ -8,21 +8,34 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil.ItemCallback;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryArtistAdapter.ArtistViewHolder;
 import de.hdodenhof.circleimageview.CircleImageView;
-import java.util.ArrayList;
-import java.util.List;
 
-public class LibraryArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
+public class LibraryArtistAdapter extends ListAdapter<Artist, ArtistViewHolder> {
 
-    private List<Artist> artists;
+    private static final ItemCallback<Artist> DIFF_COMPARE_CALLBACK = new ItemCallback<Artist>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Artist oldItem, @NonNull Artist newItem) {
+            return oldItem.getId().equals(newItem.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Artist oldItem, @NonNull Artist newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
 
     public LibraryArtistAdapter() {
-        this.artists = new ArrayList<>();
+        super(DIFF_COMPARE_CALLBACK);
     }
+
 
     @NonNull
     @Override
@@ -37,17 +50,11 @@ public class LibraryArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull ArtistViewHolder holder, int position) {
-        holder.artistName.setText(artists.get(position).getName());
+        if (getItem(position) != null) {
+            holder.bind(getItem(position));
+        }
     }
 
-    @Override
-    public int getItemCount() {
-        return artists.size();
-    }
-
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
-    }
 
     static class ArtistViewHolder extends RecyclerView.ViewHolder {
 
@@ -64,8 +71,28 @@ public class LibraryArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder>
 
             artistName = itemView.findViewById(R.id.library_artist_name);
 
+            artistBody.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Toast.makeText(v.getContext(),
+                            "Artist " + artistName.getText().toString() + " long click menu",
+                            Toast.LENGTH_SHORT).show();
+                    v.setPressed(false);
+                    return true;
+                }
+            });
+
         }
 
+        public void bind(Artist artist) {
+            artistName.setText(artist.getName());
+
+            if (artist.getImages() != null && !artist.getImages().isEmpty()) {
+                String imageUrl = artist.getImages().get(0).getUrl();
+                Picasso.get().load(imageUrl).placeholder(R.drawable.artist).into(artistImage);
+            }
+
+        }
     }
 
 }
