@@ -21,7 +21,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
+import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -45,6 +47,8 @@ public class PlaylistHomeFragment extends Fragment {
     private TextView tracksSummary;
     private NestedScrollView playlistBody;
     private ProgressBar progressBar;
+
+    private MediaPlaybackService mediaPlaybackService;
 
 
     // the fragment initialization parameters
@@ -116,6 +120,15 @@ public class PlaylistHomeFragment extends Fragment {
             playlistHomeViewModel.setPlaylistId(playlistId);
         }
 
+        mediaPlaybackService = ((MainActivity) requireActivity()).getService();
+
+        shuffle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String playlistId = playlistHomeViewModel.getPlaylistId();
+                mediaPlaybackService.playPlaylist(playlistId, true, true, null);
+            }
+        });
 
         playlistHomeViewModel.getFollowedState()
                 .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
@@ -169,6 +182,7 @@ public class PlaylistHomeFragment extends Fragment {
                     @Override
                     public void onChanged(Boolean finishedLoading) {
                         if (finishedLoading) {
+                            setProperData();
                             initializeViews();
                         }
                     }
@@ -176,6 +190,39 @@ public class PlaylistHomeFragment extends Fragment {
 
         playlistHomeViewModel.updateData();
 
+    }
+
+    /**
+     * Set proper data based on current playlist state as owner, size and collaboration
+     */
+    private void setProperData() {
+        Boolean isCollaborative = playlistHomeViewModel.isCollaborative().getValue();
+        Boolean isOwnedByMe = playlistHomeViewModel.isOwnedByMe().getValue();
+        Boolean isEmptyPlaylist = playlistHomeViewModel.isEmptyPlaylist().getValue();
+
+        if(isCollaborative != null && isOwnedByMe != null && isEmptyPlaylist != null){
+            if((isOwnedByMe || isCollaborative) && isEmptyPlaylist){
+                shuffle.setText("Add Songs");
+                editOrPreviewPlaylist.setVisibility(View.GONE);
+                tracksSummary.setVisibility(View.GONE);
+
+                shuffle.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String playlistId = playlistHomeViewModel.getPlaylistId();
+
+                        getParentFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment,
+                                        SearchTracksFragment.newInstance(playlistId))
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+
+            }else if (!isOwnedByMe && !isCollaborative){
+                editOrPreviewPlaylist.setText("Preview");
+            }
+        }
     }
 
     private void initializeViews() {

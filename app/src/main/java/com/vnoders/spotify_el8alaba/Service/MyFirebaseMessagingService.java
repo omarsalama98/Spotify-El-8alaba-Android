@@ -30,21 +30,10 @@ import retrofit2.Response;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private SharedPreferences notificationToken;
 
-    @Override
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        //Toast.makeText(MyFirebaseMessagingService.this,"DELIVERED",Toast.LENGTH_LONG).show();
-        super.onMessageReceived(remoteMessage);
-        if(remoteMessage.getData().isEmpty())
-            showNotification(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
-        else
-            showNotification(remoteMessage.getData());
-
-    }
-
     private void showNotification(Map<String, String> data) {
-        String title=data.get("title").toString();
+        String title = data.get("title");
         Toast.makeText(this,title,Toast.LENGTH_LONG).show();
-        String body=data.get("body").toString();
+        String body = data.get("body");
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID="com.vnoders.spotify_el8alaba.test";
         if(VERSION.SDK_INT>= Build.VERSION_CODES.O){
@@ -88,6 +77,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(body)
                 .setContentInfo("INFO");
         notificationManager.notify(new Random().nextInt(),notificationBuilder.build());
+    }
+
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        //Toast.makeText(MyFirebaseMessagingService.this,"DELIVERED",Toast.LENGTH_LONG).show();
+        super.onMessageReceived(remoteMessage);
+        if (remoteMessage.getData().isEmpty()) {
+            showNotification(remoteMessage.getNotification().getTitle(),
+                    remoteMessage.getNotification().getBody());
+        } else {
+            showNotification(remoteMessage.getData());
+        }
+
     }
 
     @Override

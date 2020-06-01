@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
@@ -11,18 +12,23 @@ import java.util.Objects;
 public class LibraryPlaylistPagingWrapper {
 
     @SerializedName("href")
+    @Expose
     private String href;
     
     @SerializedName("items")
+    @Expose
     private List<LibraryPlaylistItem> items = null;
     
     @SerializedName("limit")
+    @Expose
     private int limit;
 
     @SerializedName("offset")
+    @Expose
     private int offset;
 
     @SerializedName("total")
+    @Expose
     private int total;
 
     public String getHref() {

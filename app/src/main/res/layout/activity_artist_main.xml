@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id = "@+id/container"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:fitsSystemWindows = "false">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id = "@+id/artist_nav_view"
+                android:layout_width = "0dp"
+                android:layout_height = "wrap_content"
+                android:layout_marginStart = "0dp"
+                android:layout_marginEnd = "0dp"
+                android:background = "@color/midGray"
+                app:labelVisibilityMode = "labeled"
+                app:itemIconTint = "@color/white"
+                app:itemTextColor = "@color/white"
+                app:layout_constraintBottom_toBottomOf = "parent"
+                app:layout_constraintLeft_toLeftOf = "parent"
+                app:layout_constraintRight_toRightOf = "parent"
+                app:menu = "@menu/artist_bottom_nav_menu" />
+
+        <FrameLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "0dp"
+                app:layout_constraintLeft_toLeftOf = "parent"
+                app:layout_constraintRight_toRightOf = "parent"
+                app:layout_constraintBottom_toTopOf = "@id/artist_nav_view"
+                app:layout_constraintTop_toTopOf = "parent">
+
+            <androidx.fragment.app.FragmentContainerView
+                    android:id = "@+id/artist_nav_host_fragment"
+                    android:name = "androidx.navigation.fragment.NavHostFragment"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent"
+                    app:defaultNavHost = "true"
+                    app:navGraph = "@navigation/artist_mobile_navigation" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+            android:id = "@+id/going_artist_layout"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:background = "@drawable/curved_gradient_black">
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:text = "@string/going_to_spotify_artist_msg"
+                android:textStyle = "bold"
+                android:textSize = "30sp"
+                android:textColor = "@color/com_facebook_button_background_color"
+                android:layout_centerInParent = "true" />
+    </RelativeLayout>
+
+</FrameLayout>

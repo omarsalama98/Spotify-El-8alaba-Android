@@ -2,7 +2,6 @@ package com.vnoders.spotify_el8alaba.ui.signup;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,19 +17,11 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
-import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
-import com.vnoders.spotify_el8alaba.response.signup.SignUpResponse;
-import java.io.IOException;
 import okhttp3.ResponseBody;
-import org.json.JSONException;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,8 +98,8 @@ public class CreateAccount extends Fragment {
                     @Override
                     public void onResponse(Call<ResponseBody> call,
                             Response<ResponseBody> response) {
-                       // String jsonRespone = null;
-                       // try {
+                        // String jsonRespone = null;
+                        // try {
                             if (response.code() == 200) {
                                 ConfirmationEmailDialog dialog = new ConfirmationEmailDialog();
                                 dialog.show(getFragmentManager(), "CONFIRMATIONEMAILDIALOG");

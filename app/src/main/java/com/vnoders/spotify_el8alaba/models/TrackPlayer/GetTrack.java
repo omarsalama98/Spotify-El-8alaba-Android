@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -12,24 +13,31 @@ public class GetTrack {
 
 
     @SerializedName("id")
+    @Expose
     private String mId;
 
     @SerializedName("name")
+    @Expose
     private String mName;
 
     @SerializedName("duration_ms")
+    @Expose
     private double mDuration;
 
     @SerializedName("artists")
+    @Expose
     private List<String> mArtists;
 
     @SerializedName("album")
+    @Expose
     private String mAlbumId;
 
     @SerializedName("uri")
+    @Expose
     private String mUri;
 
     @SerializedName("href")
+    @Expose
     private String mHref;
 
     public String getId() {

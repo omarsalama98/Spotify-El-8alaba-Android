@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
@@ -10,24 +11,31 @@ import java.util.Objects;
 public class Owner {
 
     @SerializedName("external_urls")
+    @Expose
     private ExternalUrls externalUrls;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("href")
+    @Expose
     private String href;
 
     @SerializedName("id")
+    @Expose
     private String id;
 
     @SerializedName("type")
+    @Expose
     private String type;
 
     @SerializedName("followers")
+    @Expose
     private int followers;
 
     @SerializedName("uri")
+    @Expose
     private String uri;
 
     public ExternalUrls getExternalUrls() {

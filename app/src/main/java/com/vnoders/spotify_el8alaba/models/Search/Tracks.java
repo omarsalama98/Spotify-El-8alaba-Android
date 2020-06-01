@@ -8,13 +8,13 @@ public class Tracks {
 
     @SerializedName("tracks")
     @Expose
-    private List<Track> tracks = null;
+    private List<SearchTrack> tracks = null;
 
-    public List<Track> getTracks() {
+    public List<SearchTrack> getTracks() {
         return tracks;
     }
 
-    public void setTracks(List<Track> tracks) {
+    public void setTracks(List<SearchTrack> tracks) {
         this.tracks = tracks;
     }
 

@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
@@ -10,15 +11,19 @@ import java.util.Objects;
 public class TrackItem {
 
     @SerializedName("is_local")
+    @Expose
     private boolean isLocal;
 
     @SerializedName("added_at")
+    @Expose
     private String addedAt;
 
     @SerializedName("added_by")
+    @Expose
     private AddedBy addedBy;
 
     @SerializedName("track")
+    @Expose
     private Track track;
 
     public boolean isIsLocal() {
@@ -62,10 +67,7 @@ public class TrackItem {
             return false;
         }
         TrackItem trackItem = (TrackItem) obj;
-        return isLocal == trackItem.isLocal &&
-                Objects.equals(addedAt, trackItem.addedAt) &&
-                Objects.equals(addedBy, trackItem.addedBy) &&
-                Objects.equals(track, trackItem.track);
+        return Objects.equals(track, trackItem.track);
     }
 
 }

@@ -36,7 +36,7 @@ public class LibraryPagerAdapter extends FragmentStateAdapter {
             case 0:
                 return new LibraryPlaylistFragment();
             case 1:
-                return new ArtistFragment();
+                return new LibraryArtistFragment();
             case 2:
                 return new AlbumFragment();
             default:

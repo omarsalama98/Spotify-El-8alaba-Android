@@ -1,12 +1,15 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import android.os.AsyncTask;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -105,9 +108,19 @@ public class LibraryRepository {
                     Owner owner = playlist.getOwner();
                     if (owner != null) {
                         viewModel.setPlaylistOwnerName(owner.getName());
+
+                        String currentUserId = App.getInstance().getCurrentUserId();
+
+                        viewModel.setIsOwnedByMe(currentUserId != null &&
+                                currentUserId.equals(owner.getId()));
+
                     }
 
                     viewModel.setPlaylistName(playlist.getName());
+
+                    viewModel.setIsCollaborative(playlist.isCollaborative());
+
+                    viewModel.setIsEmpty(playlist.getTracks().getTrackItems().isEmpty());
 
                     viewModel.setFinishedLoading(true);
                 }
@@ -182,19 +195,11 @@ public class LibraryRepository {
             public void onResponse(@NotNull Call<TracksPagingWrapper> call,
                     @NotNull Response<TracksPagingWrapper> response) {
 
-                TracksPagingWrapper tracksWrapper = response.body();
-                if (response.isSuccessful() && tracksWrapper != null) {
+                if (response.isSuccessful() && response.body() != null) {
 
-                    ArrayList<Track> tracks = new ArrayList<>();
+                    List<TrackItem> trackItems = response.body().getTrackItems();
+                    updateLikedStatusInTracks(trackItems, viewModel);
 
-                    List<TrackItem> trackItems = tracksWrapper.getTrackItems();
-                    if (trackItems != null) {
-                        for (TrackItem trackItem : trackItems) {
-                            tracks.add(trackItem.getTrack());
-                        }
-                    }
-
-                    viewModel.setTracks(tracks);
                 }
 
             }
@@ -205,6 +210,48 @@ public class LibraryRepository {
             }
         });
 
+    }
+
+    // Request the liked tracks to know which of our tracks are liked or not
+    private static void updateLikedStatusInTracks(List<TrackItem> trackItems,
+            PlaylistTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> likedTracksRequest = libraryApi.getLikedTracks();
+
+        new AsyncTask<Void, Void, ArrayList<Track>>() {
+            @Override
+            protected ArrayList<Track> doInBackground(Void... voids) {
+                ArrayList<Track> tracks = new ArrayList<>();
+                try {
+                    Response<TracksPagingWrapper> response = likedTracksRequest.execute();
+
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<TrackItem> likedTracks = response.body().getTrackItems();
+
+                        if (trackItems != null) {
+                            for (TrackItem trackItem : trackItems) {
+                                boolean isLiked = likedTracks.contains(trackItem);
+                                Track track = trackItem.getTrack();
+                                if (track != null) {
+                                    track.setLiked(isLiked);
+                                    tracks.add(track);
+                                }
+                            }
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return tracks;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<Track> tracks) {
+                viewModel.setTracks(tracks);
+            }
+
+        }.execute();
     }
 
 
@@ -306,4 +353,118 @@ public class LibraryRepository {
     public static void unfollowPlaylist(String playlistId) {
         unfollowPlaylist(playlistId, null);
     }
+
+
+    public static void createPlaylist(String playlistName , MutableLiveData<String> playlistId){
+
+        Call<JsonObject> request = libraryApi.createPlaylist( new Playlist(playlistName));
+
+        request.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    JsonObject json = response.body();
+                    playlistId.setValue(json.get("id").getAsString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void getNumberOfLikedTracks(MutableLiveData<Integer> numberOfLikedSongs) {
+        Call<JsonObject> request = libraryApi.getNumberOfLikedTracks();
+
+        request.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonObject json = response.body();
+                    numberOfLikedSongs.setValue(json.get("total").getAsInt());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void updateLikedTracksList(PlaylistTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> request = libraryApi.getLikedTracks();
+
+        request.enqueue(new Callback<TracksPagingWrapper>() {
+            @Override
+            public void onResponse(@NotNull Call<TracksPagingWrapper> call,
+                    @NotNull Response<TracksPagingWrapper> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+
+                    List<TrackItem> trackItems = response.body().getTrackItems();
+                    ArrayList<Track> tracks = new ArrayList<>();
+
+                    if (trackItems != null) {
+                        for (TrackItem trackItem : trackItems) {
+                            Track track = trackItem.getTrack();
+                            if (track != null) {
+                                track.setLiked(true);
+                                tracks.add(track);
+                            }
+                        }
+                    }
+
+                    viewModel.setTracks(tracks);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<TracksPagingWrapper> call, @NotNull Throwable t) {
+
+            }
+        });
+
+    }
+
+
+    public static void likeTrack(String trackId) {
+        Call<Void> request = libraryApi.likeTrack(trackId);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(App.getInstance(),"Added to Liked Songs", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    public static void unlikeTrack(String trackId) {
+        Call<Void> request = libraryApi.unlikeTrack(trackId);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(App.getInstance(),"Removed from Liked Songs", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+
 }

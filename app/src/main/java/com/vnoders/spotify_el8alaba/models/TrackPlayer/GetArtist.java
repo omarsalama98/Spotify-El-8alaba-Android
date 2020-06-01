@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -9,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class GetArtist {
 
     @SerializedName("name")
+    @Expose
     private String mName;
 
     public GetArtist(String name) {

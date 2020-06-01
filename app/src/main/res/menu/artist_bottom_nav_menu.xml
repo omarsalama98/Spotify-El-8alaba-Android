@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android = "http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id = "@+id/navigation_artist_home"
+            android:icon = "@drawable/ic_home"
+            android:title = "@string/title_home" />
+
+    <item
+            android:id = "@+id/navigation_artist_library"
+            android:icon = "@drawable/ic_your_library"
+            android:title = "@string/title_your_library" />
+
+    <item
+            android:id = "@+id/navigation_artist_profile"
+            android:icon = "@drawable/ic_viral"
+            android:title = "@string/title_artist_profile" />
+
+</menu>

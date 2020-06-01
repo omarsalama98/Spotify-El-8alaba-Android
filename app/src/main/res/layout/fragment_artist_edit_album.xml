@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:background = "@color/white"
+        android:orientation = "vertical"
+        android:padding = "10dp"
+        android:weightSum = "100"
+        tools:context = ".Artist.ArtistEditAlbumFragment">
+
+    <ImageView
+            android:id = "@+id/edit_album_image_view"
+            android:layout_width = "wrap_content"
+            android:layout_gravity = "center_horizontal"
+            android:layout_height = "0dp"
+            android:layout_weight = "30"
+            android:contentDescription = "@string/album_image" />
+
+    <EditText
+            android:id = "@+id/edit_album_edit_text"
+            android:hint = "album"
+            android:layout_width = "wrap_content"
+            android:layout_height = "0dp"
+            android:layout_weight = "15"
+            android:inputType = "text"
+            android:drawableStart = "@drawable/ic_edit"
+            android:drawablePadding = "5dp"
+            android:textColor = "@color/black"
+            android:layout_gravity = "center_horizontal"
+            android:layout_marginTop = "30dp"
+            android:padding = "25dp"
+            android:textSize = "35sp"
+            android:textStyle = "bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id = "@+id/edit_album_songs_recycler_view"
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "40" />
+
+    <RelativeLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "15"
+            android:padding = "15dp">
+        <Button
+                android:id = "@+id/edit_album_save_button"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:text = "@string/save"
+                android:textColor = "@color/white"
+                android:textSize = "25sp"
+                android:paddingVertical = "15dp"
+                android:paddingHorizontal = "30dp"
+                android:background = "@drawable/cornered_button"
+                android:layout_alignParentStart = "true" />
+
+        <Button
+                android:id = "@+id/edit_album_delete_button"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:text = "@string/delete"
+                android:textColor = "@color/white"
+                android:textSize = "25sp"
+                android:textStyle = "italic"
+                android:paddingVertical = "15dp"
+                android:paddingHorizontal = "30dp"
+                android:layout_alignParentEnd = "true"
+                android:background = "@drawable/red_cornered_button" />
+
+    </RelativeLayout>
+
+</LinearLayout>

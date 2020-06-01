@@ -1,19 +1,15 @@
 package com.vnoders.spotify_el8alaba.ui.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.rtt.ResponderLocation;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -29,6 +25,7 @@ import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
 import com.vnoders.spotify_el8alaba.ui.signup.SignUpEmail;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackViewModel;
 import java.io.IOException;
 import java.util.Arrays;
 import okhttp3.ResponseBody;
@@ -37,7 +34,6 @@ import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.vnoders.spotify_el8alaba.ui.trackplayer.TrackViewModel;
 
 
 public class FirstScreen extends AppCompatActivity {
@@ -115,8 +111,8 @@ public class FirstScreen extends AppCompatActivity {
                                 JSONObject user = data.getJSONObject("user");
                                 JSONObject jsonCurrentlyPlayed = user
                                         .getJSONObject("currentlyPlaying");
-                                String id=user.getString("id");
-                                editor.putString("id",id).commit();
+                                String id = user.getString("id");
+                                editor.putString("id", id).commit();
                                 CurrentlyPlaying currentlyPlaying = gson.fromJson(
                                         jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
                                 RetrofitClient.getInstance().setToken(token);

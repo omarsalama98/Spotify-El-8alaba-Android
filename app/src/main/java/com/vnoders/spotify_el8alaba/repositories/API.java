@@ -2,10 +2,9 @@ package com.vnoders.spotify_el8alaba.repositories;
 
 import android.print.PrintAttributes.Resolution;
 import com.vnoders.spotify_el8alaba.models.FacebookToken;
-
-import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
 import com.vnoders.spotify_el8alaba.models.NotificationToken;
+import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
 import com.vnoders.spotify_el8alaba.models.userProfile.GetUsersPlaylists;
@@ -16,7 +15,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;

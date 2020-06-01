@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        tools:context = ".ui.library.AddArtistActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_height = "wrap_content"
+            android:layout_width = "match_parent"
+            android:paddingTop = "@dimen/appbar_padding"
+            android:background = "@android:color/black"
+            android:theme = "@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                app:title="Choose more artists you like."
+                app:titleEnabled="true"
+                app:layout_scrollFlags = "scroll|exitUntilCollapsed|enterAlways">
+
+            <LinearLayout
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent"
+                    android:orientation = "vertical">
+
+                <TextView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:minHeight = "?actionBarSize"
+                        android:padding = "@dimen/appbar_padding"
+                        android:textSize = "36sp"
+                        android:text = "Choose more artists you like."
+                        android:textAppearance = "@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
+
+
+            </LinearLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            app:layout_behavior = "@string/appbar_scrolling_view_behavior"
+            android:orientation = "vertical">
+        <LinearLayout
+                android:id = "@+id/search_text_layout"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:orientation = "horizontal"
+                android:padding = "5dp"
+                android:layout_marginHorizontal = "10dp"
+                android:layout_marginTop = "8dp"
+                android:background = "@color/lightGray">
+
+            <ImageView
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:src = "@drawable/ic_search"
+                    android:layout_gravity = "center_vertical" />
+
+            <TextView
+                    android:id = "@+id/search_bar_text_view"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:textSize = "16sp"
+                    android:textStyle = "bold"
+                    android:text = "@string/search"
+                    android:gravity = "center_vertical"
+                    android:textColor = "@color/white"
+                    android:padding = "4dp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id = "@+id/add_artist_recycler_view"
+                android:background = "@color/backgroundColor"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                tools:listitem = "@layout/add_artist_list_item"
+                android:paddingBottom = "@dimen/library_list_item"
+                android:clipToPadding = "false" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id = "@+id/add_artist_done"
+            android:theme = "@style/Theme.MaterialComponents"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:text = "Done"
+            app:layout_anchor = "@id/add_artist_recycler_view"
+            app:layout_anchorGravity = "bottom|center"
+            android:layout_marginHorizontal="118dp"
+            android:layout_marginBottom="16dp"
+            android:gravity = "center"
+            android:textAlignment="center"
+            app:textAllCaps = "true"
+            android:textSize = "16sp"
+            android:backgroundTint = "@color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

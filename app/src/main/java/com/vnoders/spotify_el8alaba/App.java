@@ -13,10 +13,16 @@ public class App extends Application {
         appInstance = this;
     }
 
-    public static Application getInstance() {
+    public static App getInstance() {
         return appInstance;
     }
 
+    public String getCurrentUserId() {
+
+        return getSharedPreferences(getString(R.string.access_token_preference),
+                MODE_PRIVATE)
+                .getString("id", null);
+    }
 
     public static int getDisplayHeight() {
         return Resources.getSystem().getDisplayMetrics().heightPixels;

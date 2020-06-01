@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.models.userProfile;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class GetUsersPlaylists {
 
     @SerializedName("items")
+    @Expose
     private List<UserPlaylistItem> mItems;
 
     public List<UserPlaylistItem> getItems() {

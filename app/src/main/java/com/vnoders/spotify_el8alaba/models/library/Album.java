@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.models.library;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
@@ -14,42 +15,51 @@ import java.util.Objects;
 public class Album {
 
     @SerializedName("album_type")
+    @Expose
     private String albumType;
 
-    @SerializedName("artists")
-    private List<Artist> artists = null;
-
     @SerializedName("genres")
+    @Expose
     private List<Object> genres = null;
 
     @SerializedName("href")
+    @Expose
     private String href;
 
     @SerializedName("id")
+    @Expose
     private String id;
 
     @SerializedName("images")
+    @Expose
     private List<TrackImage> images = null;
 
     @SerializedName("name")
+    @Expose
     private String name;
 
     @SerializedName("popularity")
+    @Expose
     private int popularity;
 
     @SerializedName("release_date")
+    @Expose
     private String releaseDate;
 
     @SerializedName("release_date_precision")
+    @Expose
     private String releaseDatePrecision;
 
     @SerializedName("tracks")
+    @Expose
     private ArrayList<Track> tracks;
 
     @SerializedName("type")
+    @Expose
     private String type;
 
     @SerializedName("uri")
+    @Expose
     private String uri;
 
     public String getAlbumType() {
@@ -60,13 +70,6 @@ public class Album {
         this.albumType = albumType;
     }
 
-    public List<Artist> getArtists() {
-        return artists;
-    }
-
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
-    }
 
     public List<Object> getGenres() {
         return genres;
@@ -188,16 +191,9 @@ public class Album {
             return false;
         }
         Album album = (Album) obj;
-        return Objects.equals(albumType, album.albumType) &&
-                Objects.equals(artists, album.artists) &&
-                Objects.equals(genres, album.genres) &&
-                Objects.equals(href, album.href) &&
-                Objects.equals(id, album.id) &&
-                Objects.equals(images, album.images) &&
+        return Objects.equals(id, album.id) &&
                 Objects.equals(name, album.name) &&
-                Objects.equals(releaseDate, album.releaseDate) &&
                 Objects.equals(tracks, album.tracks) &&
-                Objects.equals(type, album.type) &&
                 Objects.equals(uri, album.uri);
     }
 
