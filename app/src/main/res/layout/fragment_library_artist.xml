@@ -6,32 +6,55 @@
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         tools:context = ".ui.library.LibraryArtistFragment">
 
-
-    <LinearLayout
-            android:id = "@+id/add_artists"
+    <androidx.core.widget.NestedScrollView
+            android:id = "@+id/scrollView"
             android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:padding = "8dp"
-            android:backgroundTint = "@color/backgroundColor"
-            android:background = "@drawable/playlist_item_background_ripple">
+            android:layout_height = "wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width = "@dimen/track_list_item"
-                android:layout_height = "@dimen/track_list_item"
-                android:src = "@drawable/ic_plus"
-                app:civ_circle_background_color = "#424242" />
-
-        <TextView
+        <LinearLayout
                 android:layout_width = "match_parent"
-                android:layout_height = "wrap_content"
-                android:layout_gravity = "center"
-                android:text = "Add Artists"
-                android:textStyle = "bold"
-                android:textSize = "16sp"
-                android:textColor = "@color/white"
-                android:paddingHorizontal = "16dp" />
+                android:layout_height = "match_parent"
+                android:orientation = "vertical">
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id = "@+id/library_artist_recycler_view"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent"
+                    android:background = "@color/backgroundColor"
+                    android:overScrollMode = "never"
+                    tools:itemCount = "5"
+                    tools:listitem = "@layout/artist_list_item" />
+
+
+            <LinearLayout
+                    android:id = "@+id/add_artists"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:padding = "8dp"
+                    android:backgroundTint = "@color/backgroundColor"
+                    android:background = "@drawable/playlist_item_background_ripple">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width = "@dimen/track_list_item"
+                        android:layout_height = "@dimen/track_list_item"
+                        android:src = "@drawable/ic_plus"
+                        app:civ_circle_background_color = "#424242" />
+
+                <TextView
+                        android:layout_width = "match_parent"
+                        android:layout_height = "wrap_content"
+                        android:layout_gravity = "center"
+                        android:text = "Add Artists"
+                        android:textStyle = "bold"
+                        android:textSize = "16sp"
+                        android:textColor = "@color/white"
+                        android:paddingHorizontal = "16dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </FrameLayout>
