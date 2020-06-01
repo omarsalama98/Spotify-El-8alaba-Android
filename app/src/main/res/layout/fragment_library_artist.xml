@@ -6,10 +6,24 @@
         xmlns:app = "http://schemas.android.com/apk/res-auto"
         tools:context = ".ui.library.LibraryArtistFragment">
 
-    <androidx.core.widget.NestedScrollView
-            android:id = "@+id/scrollView"
+    <ProgressBar
+            android:id = "@+id/progress_bar"
+            android:elevation = "2dp"
             android:layout_width = "match_parent"
-            android:layout_height = "wrap_content">
+            android:layout_height = "match_parent"
+            android:padding = "150dp"
+            android:layout_gravity = "center" />
+
+
+    <!--    Using tools:visibility="visible" with android:visibility="gone"
+       in order to see the layout but it will be hidden on real device
+       (progress bar will be visible until loading finished then view will be visible)-->
+    <androidx.core.widget.NestedScrollView
+            android:id = "@+id/library_artist_container"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:visibility = "gone"
+            tools:visibility = "visible">
 
         <LinearLayout
                 android:layout_width = "match_parent"

@@ -1,11 +1,13 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,6 +19,9 @@ import java.util.List;
 
 public class LibraryArtistFragment extends Fragment {
 
+    private ProgressBar progressBar;
+    private View artistsContainer;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -25,6 +30,11 @@ public class LibraryArtistFragment extends Fragment {
                 .get(LibraryArtistViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_library_artist, container, false);
+
+        progressBar = root.findViewById(R.id.progress_bar);
+        progressBar.setBackgroundColor(Color.BLACK);
+
+        artistsContainer = root.findViewById(R.id.library_artist_container);
 
         LibraryArtistAdapter artistAdapter = new LibraryArtistAdapter();
 
@@ -40,6 +50,7 @@ public class LibraryArtistFragment extends Fragment {
             @Override
             public void onChanged(List<Artist> artists) {
                 artistAdapter.submitList(artists);
+                updateViewsVisibility();
             }
         });
 
@@ -55,4 +66,11 @@ public class LibraryArtistFragment extends Fragment {
 
         return root;
     }
+
+
+    private void updateViewsVisibility() {
+        progressBar.setVisibility(View.GONE);
+        artistsContainer.setVisibility(View.VISIBLE);
+    }
+
 }
