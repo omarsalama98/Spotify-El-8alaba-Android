@@ -40,6 +40,9 @@ import retrofit2.Response;
  */
 public class SearchTracksFragment extends Fragment implements TextWatcher {
 
+    // the fragment initialization parameters
+    private static final String ARGUMENT_PLAYLIST_ID = "id";
+
     private EditText searchQuery;
     private BottomNavigationView botNavView;
     private RelativeLayout searchTextViewLayout;
@@ -54,6 +57,14 @@ public class SearchTracksFragment extends Fragment implements TextWatcher {
     private ArrayList<SearchTrack> searchResults;
     private SearchTracksListAdapter searchListAdapter;
     private String playlistId;
+
+    public static SearchTracksFragment newInstance(String playlistId){
+        SearchTracksFragment fragment = new SearchTracksFragment();
+        Bundle args = new Bundle();
+        args.putString(ARGUMENT_PLAYLIST_ID, playlistId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     private void setupUI(View view, View root) {
         // Set up touch listener for non-text box views to hide keyboard.
@@ -110,14 +121,13 @@ public class SearchTracksFragment extends Fragment implements TextWatcher {
 
         apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        final View root = inflater.inflate(R.layout.fragment_search_tracks, container, false);
+        View root = inflater.inflate(R.layout.fragment_search_tracks, container, false);
 
-        playlistId = getArguments().getString("playlistId");
         searchTextView = root.findViewById(R.id.search_bar_text_view);
         resetSearch = root.findViewById(R.id.reset_search_image);
         backArrow = root.findViewById(R.id.search_bar_back_arrow);
         searchQuery = root.findViewById(R.id.search_bar_edit_text);
-        botNavView = getActivity().findViewById(R.id.nav_view);
+        botNavView = requireActivity().findViewById(R.id.nav_view);
         searchListRecyclerView = root.findViewById(R.id.search_tracks_list_recycler_view);
         searchEmptyBackground = root.findViewById(R.id.search_empty_background_layout);
         searchEditTextLayout = root.findViewById(R.id.search_edit_text_layout);
@@ -131,6 +141,10 @@ public class SearchTracksFragment extends Fragment implements TextWatcher {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (getArguments() != null) {
+            playlistId = getArguments().getString(ARGUMENT_PLAYLIST_ID);
+        }
+
         setupUI(view, view);
         searchQuery.requestFocus();
         openKeyboard();
@@ -143,7 +157,7 @@ public class SearchTracksFragment extends Fragment implements TextWatcher {
 
         backArrow.setOnClickListener(v -> {
             closeKeyboard(view);
-            getActivity().onBackPressed();
+            requireActivity().onBackPressed();
         });
 
         searchTextView.setOnClickListener((v -> {
@@ -156,7 +170,7 @@ public class SearchTracksFragment extends Fragment implements TextWatcher {
         resetSearch.setOnClickListener(v -> searchQuery.setText(""));
 
         KeyboardVisibilityEvent.setEventListener(
-                getActivity(),
+                requireActivity(),
                 isOpen -> {
                     if (isOpen) {
                         botNavView.setVisibility(View.GONE);
@@ -196,8 +210,7 @@ public class SearchTracksFragment extends Fragment implements TextWatcher {
             Call<Tracks> call = apiService.getTracksOfSearch(s.toString());
             call.enqueue(new Callback<Tracks>() {
                 @Override
-                public void onResponse(Call<Tracks> call,
-                        Response<Tracks> response) {
+                public void onResponse(Call<Tracks> call, Response<Tracks> response) {
                     searchResults.clear();
                     searchResults.addAll(response.body().getTracks());
                     searchListAdapter.notifyDataSetChanged();
