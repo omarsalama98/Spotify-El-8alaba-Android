@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
+import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
 import java.util.List;
 
 
@@ -21,6 +22,10 @@ public class LibraryArtistViewModel extends ViewModel {
 
     public void setUserArtists(List<Artist> userArtists) {
         this.userArtists.setValue(userArtists);
+    }
+
+    void requestUserFollowedArtists() {
+        LibraryRepository.getUserFollowedArtists(userArtists);
     }
 
 }

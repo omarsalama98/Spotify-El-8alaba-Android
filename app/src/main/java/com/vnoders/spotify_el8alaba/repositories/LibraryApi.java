@@ -1,9 +1,11 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
+import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
@@ -111,5 +113,16 @@ public interface LibraryApi {
     @DELETE("me/tracks")
     Call<Void> unlikeTrack(@Query("ids") String trackId);
 
+
+    @GET("me/following?type=artist")
+    Call<JsonArray> getUserFollowedArtistsIds();
+
+    /**
+     * @param artistsIds Comma-Separated Ids of the required artists
+     *
+     * @return List of requested artists wrapped in {@link Call} object
+     */
+    @GET("artists")
+    Call<List<Artist>> getMultipleArtists(@Query("ids")String artistsIds);
 
 }

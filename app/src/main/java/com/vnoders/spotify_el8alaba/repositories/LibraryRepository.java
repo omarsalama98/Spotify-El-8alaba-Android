@@ -5,10 +5,13 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
@@ -478,7 +481,8 @@ public class LibraryRepository {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(App.getInstance(),"Added to your playlist", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(App.getInstance(), "Added to your playlist", Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
 
@@ -487,6 +491,58 @@ public class LibraryRepository {
             }
         });
 
+    }
+
+    public static void getMultipleArtists(List<String> artistsIds,
+            MutableLiveData<List<Artist>> artists) {
+
+        String ids = TextUtils.join(",", artistsIds);
+
+        Call<List<Artist>> request = libraryApi.getMultipleArtists(ids);
+
+        request.enqueue(new Callback<List<Artist>>() {
+            @Override
+            public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    artists.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Artist>> call, Throwable t) {
+                int x = 0;
+
+            }
+        });
+
+    }
+
+
+    public static void getUserFollowedArtists(MutableLiveData<List<Artist>> artists) {
+        Call<JsonArray> request = libraryApi.getUserFollowedArtistsIds();
+
+        request.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    JsonArray json = response.body();
+
+                    List<String> artistsIds = new ArrayList<>();
+                    for (JsonElement artistJson : json) {
+                        String id = artistJson.getAsJsonObject().get("id").getAsString();
+                        artistsIds.add(id);
+                    }
+
+                    getMultipleArtists(artistsIds, artists);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
 
     }
 
