@@ -12,7 +12,7 @@ public class ArtistViewModel extends ViewModel {
 
     private String artistId;
     private MutableLiveData<String> artistName;
-    private MutableLiveData<Spanned> tracksSummary;
+    private MutableLiveData<String> tracksSummary;
     private MutableLiveData<String> imageUrl;
     private MutableLiveData<Boolean> isFollowed;
     private MutableLiveData<Boolean> finishedLoading;
@@ -37,7 +37,7 @@ public class ArtistViewModel extends ViewModel {
     /**
      * @param tracksSummary The summary of the tracks in this artist (e.g. Song_Name • Song_Name2 )
      */
-    public void setTracksSummary(Spanned tracksSummary) {
+    public void setTracksSummary(String tracksSummary) {
         this.tracksSummary.setValue(tracksSummary);
     }
 
@@ -59,7 +59,7 @@ public class ArtistViewModel extends ViewModel {
      * @return The summary of the tracks in this artist (e.g. Song_Name • Song_Name2 ) ,
      * wrapped in a {@link LiveData} object.
      */
-    public LiveData<Spanned> getTracksSummary() {
+    public LiveData<String> getTracksSummary() {
         return tracksSummary;
     }
 
@@ -124,6 +124,7 @@ public class ArtistViewModel extends ViewModel {
     public void updateData() {
         LibraryRepository.updateArtistFollowState(this);
         LibraryRepository.updateRelatedArtists(this);
+        LibraryRepository.updateArtistTracksSummary(this);
         LibraryRepository.updateArtist(this);
     }
 

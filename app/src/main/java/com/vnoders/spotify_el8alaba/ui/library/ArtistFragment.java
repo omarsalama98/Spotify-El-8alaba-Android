@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -162,13 +161,12 @@ public class ArtistFragment extends Fragment {
                     }
                 });
 
-        artistViewModel.getTracksSummary().observe(getViewLifecycleOwner(),
-                new Observer<Spanned>() {
-                    @Override
-                    public void onChanged(Spanned summary) {
-                        tracksSummary.setText(summary);
-                    }
-                });
+        artistViewModel.getTracksSummary().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String summary) {
+                tracksSummary.setText(summary);
+            }
+        });
 
         artistViewModel.getFinishedLoadingState().observe(getViewLifecycleOwner(),
                 new Observer<Boolean>() {

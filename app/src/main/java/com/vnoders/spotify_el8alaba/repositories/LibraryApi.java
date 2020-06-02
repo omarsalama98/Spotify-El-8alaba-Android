@@ -7,6 +7,7 @@ import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
+import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import java.util.Collections;
 import java.util.List;
@@ -136,5 +137,8 @@ public interface LibraryApi {
 
     @GET("artists/{artist_id}/related-artists")
     Call<List<Artist>> getRelatedArtists(@Path("artist_id") String artistId);
+
+    @GET("artists/{artist_id}/top-tracks")
+    Call<List<Track>> getArtistTopTracks(@Path("artist_id") String artistId);
 
 }

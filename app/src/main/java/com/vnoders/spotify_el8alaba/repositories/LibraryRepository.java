@@ -626,4 +626,37 @@ public class LibraryRepository {
 
 
     }
+
+
+    public static void updateArtistTracksSummary(ArtistViewModel artistViewModel) {
+        Call<List<Track>> request = libraryApi.getArtistTopTracks(artistViewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Track>>() {
+            @Override
+            public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Track> tracks = response.body();
+
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    for (Track track : tracks) {
+                        if (track != null) {
+                            stringBuilder.append(track.getName());
+                            stringBuilder.append("  •  ");
+                        }
+                    }
+
+                    stringBuilder.append("and more");
+                    artistViewModel.setTracksSummary(stringBuilder.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Track>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 }
