@@ -204,8 +204,9 @@
                     android:layout_height = "wrap_content"
                     android:textColor = "@color/white"
                     android:padding = "8dp"
+                    android:textSize="16sp"
                     android:layout_gravity = "start"
-                    android:text = "This artist is great man" />
+                    android:text = "No biography" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -48,6 +48,7 @@ public class ArtistFragment extends Fragment {
     private View artistBody;
     private ProgressBar progressBar;
     private RecyclerView relatedArtistsRecyclerView;
+    private TextView biography;
 
     private MediaPlaybackService mediaPlaybackService;
 
@@ -86,6 +87,7 @@ public class ArtistFragment extends Fragment {
         shuffle = root.findViewById(R.id.artist_shuffle_button);
         tracksSummary = root.findViewById(R.id.artist_tracks);
         relatedArtistsRecyclerView = root.findViewById(R.id.related_artists_recycler_view);
+        biography = root.findViewById(R.id.artist_biography);
 
         progressBar = root.findViewById(R.id.progress_bar);
         progressBar.setBackgroundColor(Color.BLACK);
@@ -177,6 +179,13 @@ public class ArtistFragment extends Fragment {
                         }
                     }
                 });
+
+        artistViewModel.getBiography().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String bio) {
+                biography.setText(bio);
+            }
+        });
 
         artistViewModel.updateData();
 

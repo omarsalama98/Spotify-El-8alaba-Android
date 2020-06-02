@@ -556,6 +556,7 @@ public class LibraryRepository {
                         }
 
                         artistViewModel.setImageUrl(imageUrl);
+                        artistViewModel.setBiography(artist.getBiography());
                     }
                     artistViewModel.finishedRequest();
                 }

@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
@@ -16,6 +17,7 @@ public class ArtistViewModel extends ViewModel {
     private MutableLiveData<Boolean> isFollowed;
     private MutableLiveData<Boolean> finishedLoading;
     private MutableLiveData<List<Artist>> relatedArtists;
+    private MutableLiveData<String> biography;
 
     int numberOfFinishedRequests = 0 ;
     int numberOfRequests;
@@ -27,6 +29,7 @@ public class ArtistViewModel extends ViewModel {
         isFollowed = new MutableLiveData<>();
         finishedLoading = new MutableLiveData<>(false);
         relatedArtists = new MutableLiveData<>();
+        biography = new MediatorLiveData<>();
     }
 
     /**
@@ -111,13 +114,21 @@ public class ArtistViewModel extends ViewModel {
         this.relatedArtists.setValue(relatedArtists);
     }
 
+    public LiveData<String> getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography.setValue(biography);
+    }
+
     public LiveData<Boolean> getFinishedLoadingState() {
         return finishedLoading;
     }
 
-    public void finishedRequest(){
+    public void finishedRequest() {
         numberOfFinishedRequests++;
-        if(numberOfFinishedRequests == numberOfRequests){
+        if (numberOfFinishedRequests == numberOfRequests) {
             numberOfFinishedRequests = 0;
             finishedLoading.setValue(true);
         }
