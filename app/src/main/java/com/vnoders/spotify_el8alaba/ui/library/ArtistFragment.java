@@ -67,7 +67,7 @@ public class ArtistFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_library_artist, container, false);
+        View root = inflater.inflate(R.layout.fragment_artist, container, false);
 
         appBar = root.findViewById(R.id.app_bar);
 
@@ -104,8 +104,9 @@ public class ArtistFragment extends Fragment {
         shuffle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                String playlistId = artistViewModel.getArtistId();
-                mediaPlaybackService.playPlaylist(playlistId, true, true, null);
+//                TODO:
+//                String artistId = artistViewModel.getArtistId();
+//                mediaPlaybackService.playArtist(artistId, true, true, null);
             }
         });
 
