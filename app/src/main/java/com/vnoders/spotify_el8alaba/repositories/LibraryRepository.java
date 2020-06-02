@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
@@ -512,19 +513,98 @@ public class LibraryRepository {
     }
 
     public static void updateArtistFollowState(ArtistViewModel artistViewModel) {
-        //TODO
+        Call<List<Boolean>> request = libraryApi
+                .doesCurrentUserFollowArtist(artistViewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Boolean>>() {
+            @Override
+            public void onResponse(Call<List<Boolean>> call, Response<List<Boolean>> response) {
+                List<Boolean> followStates = response.body();
+                if (response.isSuccessful() && followStates != null && followStates.size() > 0) {
+                    artistViewModel.setFollowedState(followStates.get(0));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Boolean>> call, Throwable t) {
+
+            }
+        });
+
     }
 
     public static void updateArtist(ArtistViewModel artistViewModel) {
-        //TODO
+        Call<List<Artist>> request = libraryApi.getArtist(artistViewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Artist>>() {
+            @Override
+            public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (!response.body().isEmpty()) {
+                        Artist artist = response.body().get(0);
+                        artistViewModel.setArtistName(artist.getName());
+
+                        String imageUrl = null;
+                        if (artist.getImages() != null && !artist.getImages().isEmpty()) {
+                            imageUrl = artist.getImages().get(0).getUrl();
+                        } else if (artist.getUserInfo() != null) {
+                            List<Image> images = artist.getUserInfo().getImages();
+                            if (images != null && !images.isEmpty()) {
+                                imageUrl = images.get(0).getUrl();
+                            }
+                        }
+
+                        artistViewModel.setImageUrl(imageUrl);
+                        artistViewModel.setFinishedLoading(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Artist>> call, Throwable t) {
+
+            }
+        });
+
     }
 
     public static void followArtist(ArtistViewModel artistViewModel) {
-        //TODO
+        RequestBodyIds id = new RequestBodyIds(artistViewModel.getArtistId());
+        Call<Void> request = libraryApi.followArtists(id);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    artistViewModel.setFollowedState(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
     }
 
     public static void unfollowArtist(ArtistViewModel artistViewModel) {
-        //TODO
+        RequestBodyIds id = new RequestBodyIds(artistViewModel.getArtistId());
+        Call<Void> request = libraryApi.unfollowArtists(id);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    artistViewModel.setFollowedState(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
     }
 
 }

@@ -1,13 +1,12 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
-import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import java.util.Collections;
 import java.util.List;
@@ -116,5 +115,22 @@ public interface LibraryApi {
 
     @GET("me/following?type=artist")
     Call<List<Artist>> getUserFollowedArtists();
+
+
+    // Return list of ONLY ONE artist
+    @GET("artists/{artist_id}")
+    Call<List<Artist>> getArtist(@Path("artist_id") String artistId);
+
+
+    @GET("me/following/contains")
+    Call<List<Boolean>> doesCurrentUserFollowArtist(@Query("ids") String artistId);
+
+
+    @PUT("me/following?type=artist")
+    Call<Void> followArtists(@Body RequestBodyIds requestBodyIds);
+
+
+    @DELETE("me/following?type=artist")
+    Call<Void> unfollowArtists(@Body RequestBodyIds requestBodyIds);
 
 }

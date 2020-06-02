@@ -20,6 +20,10 @@ public class Artist {
     @Expose
     private List<Image> images;
 
+    @SerializedName("userInfo")
+    @Expose
+    private ArtistUserInfo userInfo;
+
     @SerializedName("genres")
     @Expose
     private List<String> genres = null;
@@ -124,6 +128,15 @@ public class Artist {
     public void setImages(List<Image> images) {
         this.images = images;
     }
+
+    public ArtistUserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(ArtistUserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
