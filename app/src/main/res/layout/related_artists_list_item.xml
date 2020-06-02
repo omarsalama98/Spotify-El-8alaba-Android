@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_margin = "8dp"
+        tools:background = "@color/backgroundColor"
+        android:orientation = "vertical"
+        android:layout_width = "wrap_content"
+        android:layout_height = "wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:id = "@+id/related_artist_image"
+            android:layout_width = "@dimen/library_add_artist_list_item"
+            android:layout_height = "@dimen/library_add_artist_list_item"
+            android:src = "@drawable/artist" />
+
+    <TextView
+            android:id = "@+id/related_artist_name"
+            android:textSize = "12sp"
+            android:textStyle = "bold"
+            android:layout_gravity = "center_horizontal|fill_vertical"
+            android:gravity = "center|clip_horizontal|clip_vertical"
+            android:textColor = "@color/colorPrimaryText"
+            android:layout_width = "@dimen/library_add_artist_list_item"
+            android:layout_height = "36dp"
+            android:ellipsize = "end"
+            android:text = "I am omar Mostafa mahmoud"
+            android:maxLines = "2" />
+
+
+</LinearLayout>

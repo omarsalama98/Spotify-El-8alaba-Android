@@ -22,6 +22,7 @@ import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
+import com.vnoders.spotify_el8alaba.ui.library.ArtistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
@@ -508,6 +509,22 @@ public class LibraryRepository {
             }
         });
 
+    }
+
+    public static void updateArtistFollowState(ArtistViewModel artistViewModel) {
+        //TODO
+    }
+
+    public static void updateArtist(ArtistViewModel artistViewModel) {
+        //TODO
+    }
+
+    public static void followArtist(ArtistViewModel artistViewModel) {
+        //TODO
+    }
+
+    public static void unfollowArtist(ArtistViewModel artistViewModel) {
+        //TODO
     }
 
 }

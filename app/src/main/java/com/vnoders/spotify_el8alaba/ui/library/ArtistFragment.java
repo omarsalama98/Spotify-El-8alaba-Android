@@ -1,25 +1,235 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.Target;
+import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
+import org.jetbrains.annotations.NotNull;
 
 
 public class ArtistFragment extends Fragment {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private ArtistViewModel artistViewModel;
+
+    private AppBarLayout appBar;
+    private ImageView upButton;
+    private TextView title;
+    private ImageView follow;
+    private ImageView menu;
+    private TextView artistName;
+    private Button shuffle;
+    private TextView tracksSummary;
+    private View artistBody;
+    private ProgressBar progressBar;
+
+    private MediaPlaybackService mediaPlaybackService;
+
+
+    // the fragment initialization parameters
+    private static final String ARGUMENT_ARTIST_ID = "id";
+
+    public ArtistFragment() {
+        // Required empty public constructor
+    }
+
+    @NotNull
+    public static ArtistFragment newInstance(String artistId) {
+        ArtistFragment fragment = new ArtistFragment();
+        Bundle args = new Bundle();
+        args.putString(ARGUMENT_ARTIST_ID, artistId);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library_artist, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_library_artist, container, false);
+
+        appBar = root.findViewById(R.id.app_bar);
+
+        upButton = root.findViewById(R.id.artist_up);
+        title = root.findViewById(R.id.artist_title);
+        follow = root.findViewById(R.id.artist_follow);
+        menu = root.findViewById(R.id.artist_more_menu);
+
+        artistName = root.findViewById(R.id.artist_name);
+
+        artistBody = root.findViewById(R.id.artist_body);
+        shuffle = root.findViewById(R.id.artist_shuffle_button);
+        tracksSummary = root.findViewById(R.id.artist_tracks);
+
+        progressBar = root.findViewById(R.id.progress_bar);
+        progressBar.setBackgroundColor(Color.BLACK);
+
+        return root;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        artistViewModel = new ViewModelProvider(this).get(ArtistViewModel.class);
+
+        if (getArguments() != null) {
+            String artistId = getArguments().getString(ARGUMENT_ARTIST_ID);
+            artistViewModel.setArtistId(artistId);
+        }
+
+        mediaPlaybackService = ((MainActivity) requireActivity()).getService();
+
+        shuffle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String playlistId = artistViewModel.getArtistId();
+                mediaPlaybackService.playPlaylist(playlistId, true, true, null);
+            }
+        });
+
+        artistViewModel.getFollowedState()
+                .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean isFollowed) {
+                        if (isFollowed) {
+                            follow.setImageResource(R.drawable.like_track_liked);
+                        } else {
+                            follow.setImageResource(R.drawable.like_track_unliked_white);
+                        }
+                    }
+                });
+
+        artistViewModel.getImageUrl().observe(getViewLifecycleOwner(),
+                new Observer<String>() {
+                    @Override
+                    public void onChanged(String url) {
+                        loadArtistImage(url);
+                    }
+                });
+
+        artistViewModel.getArtistName().observe(getViewLifecycleOwner(),
+                new Observer<String>() {
+                    @Override
+                    public void onChanged(String name) {
+                        artistName.setText(name);
+                        title.setText(name);
+                    }
+                });
+
+        artistViewModel.getTracksSummary().observe(getViewLifecycleOwner(),
+                new Observer<Spanned>() {
+                    @Override
+                    public void onChanged(Spanned summary) {
+                        tracksSummary.setText(summary);
+                    }
+                });
+
+        artistViewModel.getFinishedLoadingState().observe(getViewLifecycleOwner(),
+                new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean finishedLoading) {
+                        if (finishedLoading) {
+                            initializeViews();
+                        }
+                    }
+                });
+
+        artistViewModel.updateData();
+
+    }
+
+    private void loadArtistImage(String url) {
+        Picasso.get().load(url).into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, LoadedFrom from) {
+                BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+                appBar.setBackground(drawable);
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                appBar.setBackground(placeHolderDrawable);
+            }
+        });
+    }
+
+
+    private void initializeViews() {
+
+        updateViewsVisibility();
+
+        upButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
+        follow.setOnClickListener(new OnClickListener() {
+            boolean isFollowed = true;
+
+            @Override
+            public void onClick(View view) {
+                Boolean followState = artistViewModel.getFollowedState().getValue();
+                if (followState != null) {
+                    // We are NOTing the followState value because this button toggles follow and unfollow states
+                    isFollowed = !followState;
+                }
+                if (isFollowed) {
+                    artistViewModel.followArtist();
+                } else {
+                    artistViewModel.unfollowArtist();
+                }
+            }
+        });
+
+        appBar.addOnOffsetChangedListener(new OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                // Title is fully transparent when the toolbar is expanded and fully visible
+                // when toolbar is collapsed and semi-visible between them
+                // visibility is calculated based on ratio between current toolbar height and the max height
+                // Negative sign in -1.0f because verticalOffset is negative
+                title.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
+            }
+        });
+
+    }
+
+    private void updateViewsVisibility() {
+
+        progressBar.setVisibility(View.GONE);
+
+        appBar.setVisibility(View.VISIBLE);
+
+        artistBody.setVisibility(View.VISIBLE);
+    }
+
 }

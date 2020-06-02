@@ -1,19 +1,117 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import android.text.Spanned;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.vnoders.spotify_el8alaba.models.library.Track;
-import java.util.List;
+import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
 
 public class ArtistViewModel extends ViewModel {
-    private MutableLiveData<List<Track>> tracks = new MutableLiveData<>();
 
-    public void setTracks(List<Track> tracks) {
-        this.tracks.setValue(tracks);
+    private String artistId;
+    private MutableLiveData<String> artistName;
+    private MutableLiveData<Spanned> tracksSummary;
+    private MutableLiveData<String> imageUrl;
+    private MutableLiveData<Boolean> isFollowed;
+    private MutableLiveData<Boolean> finishedLoading;
+
+    public ArtistViewModel() {
+        artistName = new MutableLiveData<>();
+        tracksSummary = new MutableLiveData<>();
+        imageUrl = new MutableLiveData<>();
+        isFollowed = new MutableLiveData<>();
+        finishedLoading = new MutableLiveData<>(false);
     }
 
-    public LiveData<List<Track>> getTracks() {
-        return tracks;
+    /**
+     * @param artistName The name of the artist
+     */
+    public void setArtistName(String artistName) {
+        this.artistName.setValue(artistName);
     }
+
+    /**
+     * @param tracksSummary The summary of the tracks in this artist (e.g. Song_Name • Song_Name2 )
+     */
+    public void setTracksSummary(Spanned tracksSummary) {
+        this.tracksSummary.setValue(tracksSummary);
+    }
+
+    /**
+     * @param imageUrl The URL of the artist's image
+     */
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl.setValue(imageUrl);
+    }
+
+    /**
+     * @return The name of the artist, wrapped in a {@link LiveData} object.
+     */
+    public LiveData<String> getArtistName() {
+        return artistName;
+    }
+
+    /**
+     * @return The summary of the tracks in this artist (e.g. Song_Name • Song_Name2 ) ,
+     * wrapped in a {@link LiveData} object.
+     */
+    public LiveData<Spanned> getTracksSummary() {
+        return tracksSummary;
+    }
+
+    /**
+     * @return The URL of the artist's image, wrapped in a {@link LiveData} object.
+     */
+    public LiveData<String> getImageUrl() {
+        return imageUrl;
+    }
+
+    /**
+     * @return The id of the artist
+     */
+    public String getArtistId() {
+        return artistId;
+    }
+
+    /**
+     * @param artistId The id of the artist
+     */
+    public void setArtistId(String artistId) {
+        this.artistId = artistId;
+    }
+
+
+    public LiveData<Boolean> getFollowedState() {
+        return isFollowed;
+    }
+
+    public void setFollowedState(boolean isFollowed) {
+        this.isFollowed.setValue(isFollowed);
+    }
+
+    public void followArtist() {
+        LibraryRepository.followArtist(this);
+    }
+
+    public void unfollowArtist() {
+        LibraryRepository.unfollowArtist(this);
+    }
+
+    public LiveData<Boolean> getFinishedLoadingState() {
+        return finishedLoading;
+    }
+
+    public void setFinishedLoading(boolean finishedLoading) {
+        this.finishedLoading.setValue(finishedLoading);
+    }
+
+    /**
+     * Make a call to {@link LibraryRepository#updateArtist} to update the info of this artist which
+     * apply a level of abstraction between UI and business logic and data.
+     */
+    public void updateData() {
+        LibraryRepository.updateArtistFollowState(this);
+        LibraryRepository.updateArtist(this);
+    }
+
 }
