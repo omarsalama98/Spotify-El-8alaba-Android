@@ -522,6 +522,7 @@ public class LibraryRepository {
                 List<Boolean> followStates = response.body();
                 if (response.isSuccessful() && followStates != null && followStates.size() > 0) {
                     artistViewModel.setFollowedState(followStates.get(0));
+                    artistViewModel.finishedRequest();
                 }
             }
 
@@ -555,8 +556,8 @@ public class LibraryRepository {
                         }
 
                         artistViewModel.setImageUrl(imageUrl);
-                        artistViewModel.setFinishedLoading(true);
                     }
+                    artistViewModel.finishedRequest();
                 }
             }
 
@@ -615,6 +616,7 @@ public class LibraryRepository {
             public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
                 if(response.isSuccessful() && response.body() != null){
                     artistViewModel.setRelatedArtists(response.body());
+                    artistViewModel.finishedRequest();
                 }
             }
 
@@ -648,6 +650,7 @@ public class LibraryRepository {
 
                     stringBuilder.append("and more");
                     artistViewModel.setTracksSummary(stringBuilder.toString());
+                    artistViewModel.finishedRequest();
                 }
             }
 

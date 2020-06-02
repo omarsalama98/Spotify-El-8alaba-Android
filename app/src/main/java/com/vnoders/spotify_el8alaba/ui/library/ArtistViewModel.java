@@ -1,6 +1,5 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
-import android.text.Spanned;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,6 +16,9 @@ public class ArtistViewModel extends ViewModel {
     private MutableLiveData<Boolean> isFollowed;
     private MutableLiveData<Boolean> finishedLoading;
     private MutableLiveData<List<Artist>> relatedArtists;
+
+    int numberOfFinishedRequests = 0 ;
+    int numberOfRequests;
 
     public ArtistViewModel() {
         artistName = new MutableLiveData<>();
@@ -113,8 +115,12 @@ public class ArtistViewModel extends ViewModel {
         return finishedLoading;
     }
 
-    public void setFinishedLoading(boolean finishedLoading) {
-        this.finishedLoading.setValue(finishedLoading);
+    public void finishedRequest(){
+        numberOfFinishedRequests++;
+        if(numberOfFinishedRequests == numberOfRequests){
+            numberOfFinishedRequests = 0;
+            finishedLoading.setValue(true);
+        }
     }
 
     /**
@@ -126,6 +132,7 @@ public class ArtistViewModel extends ViewModel {
         LibraryRepository.updateRelatedArtists(this);
         LibraryRepository.updateArtistTracksSummary(this);
         LibraryRepository.updateArtist(this);
+        numberOfRequests = 4; // update this as we add requests
     }
 
 }
