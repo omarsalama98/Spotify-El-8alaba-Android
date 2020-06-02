@@ -100,8 +100,10 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                myDataList.addAll(response.body());
-                adapter.notifyDataSetChanged();
+                if (response.body() != null) {
+                    myDataList.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
