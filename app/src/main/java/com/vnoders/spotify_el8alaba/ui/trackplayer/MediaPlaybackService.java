@@ -37,6 +37,7 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResp
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAdRequest;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtistTopTracksInfo;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtistTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetLikedTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylist;
@@ -1464,8 +1465,26 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                         }
                     }
 
+                    String artistName = null;
+                    if (track.getArtists() != null) {
+                        if (track.getArtists().size() > 0) {
+                            for (int j = 0; j < track.getArtists().size(); ++j) {
+                                GetArtistTopTracksInfo artist = track.getArtists().get(j);
+
+                                if (artist != null) {
+                                    if (artist.getId() != null) {
+                                        if (artist.getId().equals(artistId)) {
+                                            artistName = artist.getName();
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(),
-                            null, Track.TYPE_ARTIST, null, image, artistId, albumId, uri);
+                            artistName, Track.TYPE_ARTIST, artistName, image, artistId, albumId, uri);
 
                     mTracksList.add(addTrack);
                 }
