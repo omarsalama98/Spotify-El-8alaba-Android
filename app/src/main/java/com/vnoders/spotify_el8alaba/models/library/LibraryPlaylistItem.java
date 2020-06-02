@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is used to model data parsed from json network response using {@link Gson} library
@@ -140,14 +141,14 @@ public class LibraryPlaylistItem {
 
         return collaborative == that.collaborative &&
                 isPublic == that.isPublic &&
-                externalUrls.equals(that.externalUrls) &&
-                href.equals(that.href) &&
-                id.equals(that.id) &&
-                images.equals(that.images) &&
-                name.equals(that.name) &&
-                owner.equals(that.owner) &&
-                type.equals(that.type) &&
-                uri.equals(that.uri);
+                Objects.equals(externalUrls, that.externalUrls) &&
+                Objects.equals(href, that.href) &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(images, that.images) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(owner, that.owner) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(uri, that.uri);
     }
 
 }

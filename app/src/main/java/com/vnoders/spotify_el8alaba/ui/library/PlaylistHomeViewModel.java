@@ -102,14 +102,14 @@ public class PlaylistHomeViewModel extends ViewModel {
     }
 
     /**
-     * @return The URL of the playlist's cover image
+     * @return The id of the playlist
      */
     public String getPlaylistId() {
         return playlistId;
     }
 
     /**
-     * @param playlistId The URL of the playlist's cover image
+     * @param playlistId The id of the playlist
      */
     public void setPlaylistId(String playlistId) {
         this.playlistId = playlistId;
