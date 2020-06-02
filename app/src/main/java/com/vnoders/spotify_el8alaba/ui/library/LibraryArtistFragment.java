@@ -36,7 +36,8 @@ public class LibraryArtistFragment extends Fragment {
 
         artistsContainer = root.findViewById(R.id.library_artist_container);
 
-        LibraryArtistAdapter artistAdapter = new LibraryArtistAdapter();
+        LibraryArtistAdapter artistAdapter = new LibraryArtistAdapter(
+                requireActivity().getSupportFragmentManager());
 
         RecyclerView recyclerView = root.findViewById(R.id.library_artist_recycler_view);
 
