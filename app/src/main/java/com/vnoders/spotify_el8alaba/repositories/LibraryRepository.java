@@ -607,4 +607,23 @@ public class LibraryRepository {
         });
     }
 
+    public static void updateRelatedArtists(ArtistViewModel artistViewModel) {
+        Call<List<Artist>> request = libraryApi.getRelatedArtists(artistViewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Artist>>() {
+            @Override
+            public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    artistViewModel.setRelatedArtists(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Artist>> call, Throwable t) {
+
+            }
+        });
+
+
+    }
 }

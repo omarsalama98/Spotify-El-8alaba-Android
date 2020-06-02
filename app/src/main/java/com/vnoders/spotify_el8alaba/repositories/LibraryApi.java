@@ -133,4 +133,8 @@ public interface LibraryApi {
     @DELETE("me/following?type=artist")
     Call<Void> unfollowArtists(@Body RequestBodyIds requestBodyIds);
 
+
+    @GET("artists/{artist_id}/related-artists")
+    Call<List<Artist>> getRelatedArtists(@Path("artist_id") String artistId);
+
 }

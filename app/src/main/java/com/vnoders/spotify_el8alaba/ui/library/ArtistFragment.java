@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.squareup.picasso.Picasso;
@@ -26,7 +28,9 @@ import com.squareup.picasso.Picasso.LoadedFrom;
 import com.squareup.picasso.Target;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -44,6 +48,7 @@ public class ArtistFragment extends Fragment {
     private TextView tracksSummary;
     private View artistBody;
     private ProgressBar progressBar;
+    private RecyclerView relatedArtistsRecyclerView;
 
     private MediaPlaybackService mediaPlaybackService;
 
@@ -81,6 +86,7 @@ public class ArtistFragment extends Fragment {
         artistBody = root.findViewById(R.id.artist_body);
         shuffle = root.findViewById(R.id.artist_shuffle_button);
         tracksSummary = root.findViewById(R.id.artist_tracks);
+        relatedArtistsRecyclerView = root.findViewById(R.id.related_artists_recycler_view);
 
         progressBar = root.findViewById(R.id.progress_bar);
         progressBar.setBackgroundColor(Color.BLACK);
@@ -100,6 +106,23 @@ public class ArtistFragment extends Fragment {
         }
 
         mediaPlaybackService = ((MainActivity) requireActivity()).getService();
+
+        RelatedArtistsAdapter adapter = new RelatedArtistsAdapter(
+                requireActivity().getSupportFragmentManager());
+
+        relatedArtistsRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+
+        relatedArtistsRecyclerView.setAdapter(adapter);
+
+        artistViewModel.getRelatedArtists().observe(getViewLifecycleOwner(),
+                new Observer<List<Artist>>() {
+                    @Override
+                    public void onChanged(List<Artist> artists) {
+                        adapter.setRelatedArtists(artists);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
 
         shuffle.setOnClickListener(new OnClickListener() {
             @Override

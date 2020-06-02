@@ -4,7 +4,9 @@ import android.text.Spanned;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
+import java.util.List;
 
 public class ArtistViewModel extends ViewModel {
 
@@ -14,6 +16,7 @@ public class ArtistViewModel extends ViewModel {
     private MutableLiveData<String> imageUrl;
     private MutableLiveData<Boolean> isFollowed;
     private MutableLiveData<Boolean> finishedLoading;
+    private MutableLiveData<List<Artist>> relatedArtists;
 
     public ArtistViewModel() {
         artistName = new MutableLiveData<>();
@@ -21,6 +24,7 @@ public class ArtistViewModel extends ViewModel {
         imageUrl = new MutableLiveData<>();
         isFollowed = new MutableLiveData<>();
         finishedLoading = new MutableLiveData<>(false);
+        relatedArtists = new MutableLiveData<>();
     }
 
     /**
@@ -97,6 +101,14 @@ public class ArtistViewModel extends ViewModel {
         LibraryRepository.unfollowArtist(this);
     }
 
+    public LiveData<List<Artist>> getRelatedArtists() {
+        return relatedArtists;
+    }
+
+    public void setRelatedArtists(List<Artist> relatedArtists) {
+        this.relatedArtists.setValue(relatedArtists);
+    }
+
     public LiveData<Boolean> getFinishedLoadingState() {
         return finishedLoading;
     }
@@ -111,6 +123,7 @@ public class ArtistViewModel extends ViewModel {
      */
     public void updateData() {
         LibraryRepository.updateArtistFollowState(this);
+        LibraryRepository.updateRelatedArtists(this);
         LibraryRepository.updateArtist(this);
     }
 

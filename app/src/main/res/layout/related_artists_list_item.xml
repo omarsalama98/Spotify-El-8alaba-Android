@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:tools = "http://schemas.android.com/tools"
+        android:id="@+id/related_artist_body"
         android:layout_margin = "8dp"
         tools:background = "@color/backgroundColor"
         android:orientation = "vertical"
