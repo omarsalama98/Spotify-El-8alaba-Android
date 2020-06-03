@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Search.Artist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.repositories.LibraryApi;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -23,12 +23,12 @@ import retrofit2.Response;
 public class SearchArtistsListAdapter extends
         RecyclerView.Adapter<SearchArtistsListAdapter.MyViewHolder> {
 
-    private static ArrayList<Artist> mDataset;
+    private static ArrayList<SearchArtist> mDataset;
     private static LibraryApi apiService;
     private static Fragment fragment;
     private static String artistId = "";
 
-    public SearchArtistsListAdapter(ArrayList<Artist> myDataset, Fragment fragment) {
+    public SearchArtistsListAdapter(ArrayList<SearchArtist> myDataset, Fragment fragment) {
         mDataset = myDataset;
         SearchArtistsListAdapter.fragment = fragment;
         apiService = RetrofitClient.getInstance().getAPI(LibraryApi.class);
@@ -49,12 +49,12 @@ public class SearchArtistsListAdapter extends
     public void onBindViewHolder(
             SearchArtistsListAdapter.MyViewHolder holder, final int position) {
 
-        Artist result = mDataset.get(position);
+        SearchArtist result = mDataset.get(position);
         String artistName = result.getName();
         holder.name.setText(artistName);
         String artistImageUrl = "";
         if (mDataset.get(position).getImage() != null) {
-            artistImageUrl = mDataset.get(position).getImage().getUrl();
+            artistImageUrl = mDataset.get(position).getImage().get(0).getUrl();
         } else {
             artistImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
         }

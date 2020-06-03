@@ -3,10 +3,12 @@ package com.vnoders.spotify_el8alaba.models.Search;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.Artist.EnabledNotifications;
+import com.vnoders.spotify_el8alaba.models.Artist.FollowedPlaylist;
+import com.vnoders.spotify_el8alaba.models.Artist.Notification;
 import com.vnoders.spotify_el8alaba.models.Image;
 import java.util.List;
 
-public class User {
+public class SearchArtist {
 
     @SerializedName("type")
     @Expose
@@ -28,7 +30,7 @@ public class User {
     private Integer followers;
     @SerializedName("following")
     @Expose
-    private List<Object> following = null;
+    private List<String> following = null;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -38,9 +40,12 @@ public class User {
     @SerializedName("confirmed")
     @Expose
     private Boolean confirmed;
+    @SerializedName("enabledNotifications")
+    @Expose
+    private EnabledNotifications enabledNotifications;
     @SerializedName("image")
     @Expose
-    private Image image;
+    private List<Image> image = null;
     @SerializedName("name")
     @Expose
     private String name;
@@ -64,22 +69,28 @@ public class User {
     private List<Object> devices = null;
     @SerializedName("followedPlaylists")
     @Expose
-    private List<Object> followedPlaylists = null;
+    private List<FollowedPlaylist> followedPlaylists = null;
     @SerializedName("notifications")
     @Expose
-    private List<Object> notifications = null;
+    private List<Notification> notifications = null;
     @SerializedName("__v")
     @Expose
     private Integer v;
+    @SerializedName("emailConfirmationToken")
+    @Expose
+    private String emailConfirmationToken;
+    @SerializedName("premiumToken")
+    @Expose
+    private String premiumToken;
+    @SerializedName("premiumTokenExpireDate")
+    @Expose
+    private String premiumTokenExpireDate;
     @SerializedName("uri")
     @Expose
     private String uri;
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("enabledNotifications")
-    @Expose
-    private EnabledNotifications enabledNotifications;
 
     public String getType() {
         return type;
@@ -129,11 +140,11 @@ public class User {
         this.followers = followers;
     }
 
-    public List<Object> getFollowing() {
+    public List<String> getFollowing() {
         return following;
     }
 
-    public void setFollowing(List<Object> following) {
+    public void setFollowing(List<String> following) {
         this.following = following;
     }
 
@@ -161,11 +172,19 @@ public class User {
         this.confirmed = confirmed;
     }
 
-    public Image getImage() {
+    public EnabledNotifications getEnabledNotifications() {
+        return enabledNotifications;
+    }
+
+    public void setEnabledNotifications(EnabledNotifications enabledNotifications) {
+        this.enabledNotifications = enabledNotifications;
+    }
+
+    public List<Image> getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(List<Image> image) {
         this.image = image;
     }
 
@@ -225,19 +244,19 @@ public class User {
         this.devices = devices;
     }
 
-    public List<Object> getFollowedPlaylists() {
+    public List<FollowedPlaylist> getFollowedPlaylists() {
         return followedPlaylists;
     }
 
-    public void setFollowedPlaylists(List<Object> followedPlaylists) {
+    public void setFollowedPlaylists(List<FollowedPlaylist> followedPlaylists) {
         this.followedPlaylists = followedPlaylists;
     }
 
-    public List<Object> getNotifications() {
+    public List<Notification> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(List<Object> notifications) {
+    public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
 
@@ -247,6 +266,30 @@ public class User {
 
     public void setV(Integer v) {
         this.v = v;
+    }
+
+    public String getEmailConfirmationToken() {
+        return emailConfirmationToken;
+    }
+
+    public void setEmailConfirmationToken(String emailConfirmationToken) {
+        this.emailConfirmationToken = emailConfirmationToken;
+    }
+
+    public String getPremiumToken() {
+        return premiumToken;
+    }
+
+    public void setPremiumToken(String premiumToken) {
+        this.premiumToken = premiumToken;
+    }
+
+    public String getPremiumTokenExpireDate() {
+        return premiumTokenExpireDate;
+    }
+
+    public void setPremiumTokenExpireDate(String premiumTokenExpireDate) {
+        this.premiumTokenExpireDate = premiumTokenExpireDate;
     }
 
     public String getUri() {
@@ -263,14 +306,6 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public EnabledNotifications getEnabledNotifications() {
-        return enabledNotifications;
-    }
-
-    public void setEnabledNotifications(EnabledNotifications enabledNotifications) {
-        this.enabledNotifications = enabledNotifications;
     }
 
 }

@@ -201,15 +201,6 @@
                     android:layout_marginVertical = "10dp"
                     android:textSize = "@dimen/search_list_item_title" />
             <TextView
-                    android:id = "@+id/see_all_genres_and_moods_text_view"
-                    android:layout_width = "match_parent"
-                    android:layout_height = "wrap_content"
-                    android:text = "@string/search_all_genres_and_moods"
-                    android:textStyle = "bold"
-                    android:textColor = "@color/white"
-                    android:layout_marginVertical = "10dp"
-                    android:textSize = "@dimen/search_list_item_title" />
-            <TextView
                     android:id = "@+id/see_all_profiles_text_view"
                     android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"

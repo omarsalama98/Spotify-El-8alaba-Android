@@ -25,8 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Search.Artist;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class SearchArtistsFragment extends Fragment implements TextWatcher {
     private ImageView backArrow;
     private APIInterface apiService;
     private TextView searchTextView;
-    private ArrayList<Artist> searchResults;
+    private ArrayList<SearchArtist> searchResults;
     private SearchArtistsListAdapter searchListAdapter;
 
     private void setupUI(View view, View root) {
