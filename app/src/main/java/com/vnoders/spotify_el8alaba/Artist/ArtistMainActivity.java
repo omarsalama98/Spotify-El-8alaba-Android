@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.Artist;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,13 +38,14 @@ public class ArtistMainActivity extends AppCompatActivity {
     static APIInterface apiService;
     static ArrayList<MyTrack> mTracks;
     static ArrayList<ArtistAlbum> mAlbums;
-    private RelativeLayout goingArtistLayout;
-    private TrackListensRequestBody trackListensRequestBody;
+    static String followers, topSongStreams, allSongsStreams, topSongName;
+    @SuppressLint("StaticFieldLeak")
+    private static RelativeLayout goingArtistLayout;
     static String artistId;
-    private ArrayList<String> ids;
-    private List<Track> tracks;
-    private Artist mArtist;
-    static String followers, songTopStreams, allSongsStreams, topSongName;
+    private static TrackListensRequestBody trackListensRequestBody;
+    private static ArrayList<String> ids;
+    private static List<Track> tracks;
+    private static Artist mArtist;
 
     /**
      * @param fragment The fragment we want to load
@@ -63,40 +65,82 @@ public class ArtistMainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    private void getArtistAlbums() {
+    private static void getTrackListens(TrackListensRequestBody trackListensRequestBody) {
 
-        Call<ArtistAlbums> call = apiService.getArtistAlbums(artistId);
-        call.enqueue(new Callback<ArtistAlbums>() {
+        String endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, -7);
+        String startDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                .format(c.getTime());
+        trackListensRequestBody.setStartDate(startDate);
+        trackListensRequestBody.setEndDate(endDate);
+        trackListensRequestBody.setPeriod("day");
+
+        Call<List<TrackListens>> call = apiService.getTrackListens(trackListensRequestBody);
+        call.enqueue(new Callback<List<TrackListens>>() {
             @Override
-            public void onResponse(Call<ArtistAlbums> call, Response<ArtistAlbums> response) {
-                mAlbums.addAll(response.body().getAlbums());
-                if (ArtistLibraryFragment.albumsListAdapter != null) {
-                    ArtistLibraryFragment.albumsListAdapter.notifyDataSetChanged();
-                }
+            public void onResponse(Call<List<TrackListens>> call,
+                    Response<List<TrackListens>> response) {
+                setTracksStatisticsInAPeriod((ArrayList<TrackListens>) response.body());
             }
 
             @Override
-            public void onFailure(Call<ArtistAlbums> call, Throwable t) {
+            public void onFailure(Call<List<TrackListens>> call, Throwable t) {
 
             }
         });
     }
 
-    private void getArtistTopTracks() {
-        Call<List<Track>> call = apiService.getArtistTopTracks(artistId);
-        call.enqueue(new Callback<List<Track>>() {
-            @Override
-            public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
-                tracks.addAll(response.body());
-                for (int i = 0; i < tracks.size(); i++) {
-                    ids.add(tracks.get(i).getId());
+    private static void setTracksStatisticsInAPeriod(ArrayList<TrackListens> trackListens) {
+        int max = 0, maxPos = 0, totSum = 0, sum;
+        if (trackListens.isEmpty()) {
+            allSongsStreams = "0";
+            goingArtistLayout.setVisibility(View.GONE);
+            navView.setVisibility(View.VISIBLE);
+            ArtistHomeFragment.updateUI();
+            return;
+        }
+        for (int i = 0; i < trackListens.size(); i++) {
+            sum = 0;
+            if (trackListens.get(i).getTrack().getId() == null) {
+                continue;
+            }
+            for (int j = 0; j < trackListens.size(); j++) {
+                if (trackListens.get(i).getTrack().getId()
+                        .equals(trackListens.get(j).getTrack().getId())) {
+                    int played = trackListens.get(j).getPlayed();
+                    sum += played;
                 }
-                trackListensRequestBody.setIds(ids);
-                getTrackListens(trackListensRequestBody);
+            }
+            MyTrack myTrack = new MyTrack(trackListens.get(i).getTrack().getId(), sum);
+            myTrack.setName(trackListens.get(i).getTrack().getName());
+            if (!mTracks.contains(myTrack)) {
+                mTracks.add(myTrack);
+            }
+            totSum += trackListens.get(i).getPlayed();
+            if (sum >= max) {
+                max = sum;
+                maxPos = i;
+            }
+        }
+        final int played = max;
+        final int sumStreams = totSum;
+        String id = trackListens.get(maxPos).getTrack().getId();
+        Call<ArtistTrack> call = apiService.getTrack(id);
+        call.enqueue(new Callback<ArtistTrack>() {
+            @Override
+            public void onResponse(Call<ArtistTrack> call, Response<ArtistTrack> response) {
+                topSongName = response.body().getName();
+                topSongStreams = played + " streams";
+                allSongsStreams = sumStreams + " streams";
+                goingArtistLayout.setVisibility(View.GONE);
+                navView.setVisibility(View.VISIBLE);
+                ArtistHomeFragment.updateUI();
             }
 
             @Override
-            public void onFailure(Call<List<Track>> call, Throwable t) {
+            public void onFailure(Call<ArtistTrack> call, Throwable t) {
+                Log.d("d", "Failed" + t.getMessage());
             }
         });
     }
@@ -131,89 +175,58 @@ public class ArtistMainActivity extends AppCompatActivity {
         });
     }
 
-    private void getTrackListens(TrackListensRequestBody trackListensRequestBody) {
-
-        String endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -7);
-        String startDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                .format(c.getTime());
-        trackListensRequestBody.setStartDate(startDate);
-        trackListensRequestBody.setEndDate(endDate);
-        trackListensRequestBody.setPeriod("day");
-
-        Call<List<TrackListens>> call = apiService.getTrackListens(trackListensRequestBody);
-        call.enqueue(new Callback<List<TrackListens>>() {
+    private static void getArtistInfo() {
+        Call<List<Artist>> call1 = apiService.getArtist(artistId);
+        call1.enqueue(new Callback<List<Artist>>() {
             @Override
-            public void onResponse(Call<List<TrackListens>> call,
-                    Response<List<TrackListens>> response) {
-                setTracksStatisticsInAPeriod((ArrayList<TrackListens>) response.body());
-            }
-
-            @Override
-            public void onFailure(Call<List<TrackListens>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void setTracksStatisticsInAPeriod(ArrayList<TrackListens> trackListens) {
-        int max = 0, maxPos = 0, totSum = 0, sum;
-        for (int i = 0; i < trackListens.size(); i++) {
-            sum = 0;
-            if (trackListens.get(i).getTrack().getId() == null) {
-                continue;
-            }
-            for (int j = 0; j < trackListens.size(); j++) {
-                if (trackListens.get(i).getTrack().getId()
-                        .equals(trackListens.get(j).getTrack().getId())) {
-                    int played = trackListens.get(j).getPlayed();
-                    sum += played;
-                }
-            }
-            MyTrack myTrack = new MyTrack(trackListens.get(i).getTrack().getId(), sum);
-            myTrack.setName(trackListens.get(i).getTrack().getName());
-            if (!mTracks.contains(myTrack)) {
-                mTracks.add(myTrack);
-            }
-            totSum += trackListens.get(i).getPlayed();
-            if (sum >= max) {
-                max = sum;
-                maxPos = i;
-            }
-        }
-        final int played = max;
-        final int sumStreams = totSum;
-        String id = trackListens.get(maxPos).getTrack().getId();
-        Call<ArtistTrack> call = apiService.getTrack(id);
-        call.enqueue(new Callback<ArtistTrack>() {
-            @Override
-            public void onResponse(Call<ArtistTrack> call, Response<ArtistTrack> response) {
-                topSongName = response.body().getName();
-                songTopStreams = played + " streams";
-                allSongsStreams = sumStreams + " streams";
-                goingArtistLayout.setVisibility(View.GONE);
-                navView.setVisibility(View.VISIBLE);
+            public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
+                mArtist = response.body().get(0);
+                followers = mArtist.getFollowers().getTotal().toString() + " followers";
                 ArtistHomeFragment.updateUI();
             }
 
             @Override
-            public void onFailure(Call<ArtistTrack> call, Throwable t) {
-                Log.d("d", "Failed" + t.getMessage());
+            public void onFailure(Call<List<Artist>> call, Throwable t) {
+                Log.d("vd", t.getMessage());
             }
         });
     }
 
-    private void getArtistInfo() {
-        Call<Artist> call = apiService.getArtist(artistId);
-        call.enqueue(new Callback<Artist>() {
+    static void getArtistAlbums() {
+        Call<ArtistAlbums> call = apiService.getArtistAlbums(artistId);
+        call.enqueue(new Callback<ArtistAlbums>() {
             @Override
-            public void onResponse(Call<Artist> call, Response<Artist> response) {
-                mArtist = response.body();
-                followers = mArtist.getFollowers().getTotal() + " followers";
+            public void onResponse(Call<ArtistAlbums> call, Response<ArtistAlbums> response) {
+                mAlbums.clear();
+                mAlbums.addAll(response.body().getAlbums());
+                if (ArtistLibraryFragment.albumsListAdapter != null) {
+                    ArtistLibraryFragment.albumsListAdapter.notifyDataSetChanged();
+                }
             }
+
             @Override
-            public void onFailure(Call<Artist> call, Throwable t) {
+            public void onFailure(Call<ArtistAlbums> call, Throwable t) {
+
+            }
+        });
+    }
+
+    static void getArtistTopTracks() {
+        Call<List<Track>> call = apiService.getArtistTopTracks(artistId);
+        call.enqueue(new Callback<List<Track>>() {
+            @Override
+            public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
+                tracks.clear();
+                tracks.addAll(response.body());
+                for (int i = 0; i < tracks.size(); i++) {
+                    ids.add(tracks.get(i).getId());
+                }
+                trackListensRequestBody.setIds(ids);
+                getTrackListens(trackListensRequestBody);
+            }
+
+            @Override
+            public void onFailure(Call<List<Track>> call, Throwable t) {
             }
         });
     }
@@ -243,9 +256,9 @@ public class ArtistMainActivity extends AppCompatActivity {
         tracks = new ArrayList<>();
         mTracks = new ArrayList<>();
         mAlbums = new ArrayList<>();
-        getArtistInfo();
         getArtistTopTracks();
         getArtistAlbums();
+        getArtistInfo();
 
         StringBuilder tracksIds = new StringBuilder();
         for (int i = 0; i < mTracks.size(); i++) {
@@ -255,7 +268,9 @@ public class ArtistMainActivity extends AppCompatActivity {
             }
         }
 
-        getArtistsTracksNames(tracksIds.toString());
+        if (!mTracks.isEmpty()) {
+            getArtistsTracksNames(tracksIds.toString());
+        }
 
         navView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {

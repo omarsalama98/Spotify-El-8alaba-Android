@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-            android:id = "@+id/artist_home_fragment_container"
-            android:layout_width = "match_parent"
-            android:layout_height = "match_parent"
-            android:orientation = "vertical"
+        android:id = "@+id/artist_home_fragment_container"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:orientation = "vertical"
         android:weightSum = "100"
         android:paddingTop = "@dimen/status_bar_height">
 
-        <RelativeLayout
-                android:layout_width = "match_parent"
-                android:paddingHorizontal = "20dp"
-                android:background = "@color/darkBlue"
-                android:layout_height = "0dp"
-                android:layout_weight = "10">
-            <ImageView
-                    android:id = "@+id/spotify_user_image_view"
-                    android:layout_width = "50dp"
+    <RelativeLayout
+            android:layout_width = "match_parent"
+            android:paddingHorizontal = "20dp"
+            android:background = "@color/darkBlue"
+            android:layout_height = "0dp"
+            android:layout_weight = "10">
+        <ImageView
+                android:id = "@+id/spotify_user_image_view"
+                android:layout_width = "50dp"
                     android:layout_height = "match_parent"
                     android:src = "@drawable/spotify"
                     android:layout_alignParentStart = "true"
@@ -29,36 +29,34 @@
                 android:layout_height = "0dp"
                 android:layout_weight = "42"
                 android:background = "@color/darkBlue"
-                android:weightSum = "100"
                 android:padding = "20dp"
                 android:orientation = "vertical">
             <TextView
                     android:id = "@+id/artist_streams_text_view"
                     android:layout_width = "wrap_content"
-                    android:layout_height = "0dp"
-                    android:text = "3 streams"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/_3_streams"
                     android:textSize = "35sp"
+                    android:layout_marginVertical = "10dp"
                     android:gravity = "center_vertical"
-                    android:layout_weight = "30"
                     android:textColor = "@color/rosy"
                     android:textStyle = "bold" />
             <TextView
                     android:layout_width = "wrap_content"
-                    android:layout_height = "0dp"
-                    android:layout_weight = "20"
+                    android:layout_height = "wrap_content"
                     android:text = "@string/last_7_days"
                     android:textSize = "20sp"
+                    android:layout_marginBottom = "10dp"
                     android:textColor = "@color/rosy" />
             <TextView
                     android:id = "@+id/artist_followers_text_view"
                     android:layout_width = "wrap_content"
-                    android:layout_height = "0dp"
-                    android:layout_weight = "30"
-                    android:text = "1 followers"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/_1_follower"
+                    android:layout_marginTop = "20dp"
                     android:textSize = "35sp"
                     android:textColor = "@color/rosy"
                     android:textStyle = "bold" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -84,7 +82,21 @@
                     android:textColor = "@color/pressed_grey"
                     android:textSize = "20sp"
                     android:paddingVertical = "10dp" />
+
+            <TextView
+                    android:id = "@+id/artist_no_top_song_text"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent"
+                    android:paddingTop = "10dp"
+                    android:gravity = "center"
+                    android:text = "@string/no_one_played_your_songs_last_week"
+                    android:drawableTop = "@drawable/ic_sad_face"
+                    android:textSize = "25sp"
+                    android:textColor = "@color/black"
+                    android:textStyle = "italic"
+                    android:visibility = "gone" />
             <LinearLayout
+                    android:id = "@+id/artist_top_song_layout"
                     android:layout_width = "match_parent"
                     android:layout_height = "match_parent"
                     android:paddingTop = "10dp"
@@ -94,10 +106,11 @@
                         android:layout_width = "wrap_content"
                         android:layout_height = "match_parent"
                         android:paddingEnd = "20dp"
+                        android:contentDescription = "@string/top_song_image"
                         android:src = "@drawable/global_top_50" />
 
                 <LinearLayout
-                        android:layout_width = "wrap_content"
+                        android:layout_width = "match_parent"
                         android:layout_height = "match_parent"
                         android:orientation = "vertical"
                         android:gravity = "center_vertical">

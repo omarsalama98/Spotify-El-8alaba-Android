@@ -13,7 +13,7 @@
     <LinearLayout
             android:layout_width = "match_parent"
             android:layout_height = "0dp"
-            android:layout_weight = "13"
+            android:layout_weight = "10"
             android:orientation = "horizontal"
             android:weightSum = "100">
 
@@ -49,7 +49,7 @@
     <LinearLayout
             android:layout_width = "match_parent"
             android:layout_height = "0dp"
-            android:layout_weight = "13"
+            android:layout_weight = "10"
             android:orientation = "horizontal"
             android:weightSum = "100">
 
@@ -90,22 +90,131 @@
             android:layout_weight = "8"
             android:text = "@string/upload_picture"
             android:paddingHorizontal = "10dp"
-            android:layout_marginTop = "10dp"
+            android:layout_marginTop = "5dp"
             android:background = "@drawable/rounded_corner_layout" />
 
     <ImageView
             android:id = "@+id/album_selected_image_image_view"
             android:layout_width = "match_parent"
             android:layout_height = "0dp"
-            android:layout_weight = "35"
+            android:layout_weight = "24"
             android:visibility = "gone"
             android:contentDescription = "@string/selected_album_image"
             android:layout_marginVertical = "10dp" />
+    <TextView
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "6"
+            android:gravity = "center_vertical"
+            android:text = "Choose at least one genre:"
+            android:textStyle = "bold"
+            android:textSize = "27sp"
+            android:textColor = "@color/rosy" />
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight = "18">
+        <LinearLayout
+                android:layout_width = "wrap_content"
+                android:layout_height = "match_parent"
+                android:orientation = "vertical"
+                android:layout_marginEnd = "5dp">
+            <CheckBox
+                    android:id = "@+id/pop_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/pop"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white" />
+            <CheckBox
+                    android:id = "@+id/oriental_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/oriental"
+                    android:textColor = "@color/white"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold" />
+            <CheckBox
+                    android:id = "@+id/hiphop_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/hip_hop"
+                    android:textColor = "@color/white"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width = "wrap_content"
+                android:layout_height = "match_parent"
+                android:orientation = "vertical"
+                android:layout_marginHorizontal = "5dp">
+            <CheckBox
+                    android:id = "@+id/folk_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/folk"
+                    android:textColor = "@color/white"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold" />
+
+            <CheckBox
+                    android:id = "@+id/electronic_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/electronic"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white" />
+            <CheckBox
+                    android:id = "@+id/metal_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/metal"
+                    android:textColor = "@color/white"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width = "wrap_content"
+                android:layout_height = "match_parent"
+                android:orientation = "vertical"
+                android:layout_marginStart = "5dp">
+            <CheckBox
+                    android:id = "@+id/rock_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/rock"
+                    android:textColor = "@color/white"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold" />
+
+            <CheckBox
+                    android:id = "@+id/reggae_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/reggae"
+                    android:textColor = "@color/white"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold" />
+            <CheckBox
+                    android:id = "@+id/classical_genre_checkbox"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "@string/classical"
+                    android:textColor = "@color/white"
+                    android:textSize = "22sp"
+                    android:textStyle = "bold" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <RelativeLayout
             android:layout_width = "match_parent"
             android:layout_height = "0dp"
-            android:layout_weight = "20"
+            android:layout_weight = "17"
             android:padding = "15dp">
         <Button
                 android:id = "@+id/add_album_confirm_button"
@@ -114,7 +223,7 @@
                 android:text = "@string/add"
                 android:textColor = "@color/white"
                 android:textSize = "25sp"
-                android:paddingVertical = "15dp"
+                android:paddingVertical = "10dp"
                 android:paddingHorizontal = "30dp"
                 android:background = "@drawable/cornered_button"
                 android:layout_centerVertical = "true"
@@ -128,8 +237,8 @@
                 android:textColor = "@color/black"
                 android:textSize = "25sp"
                 android:textStyle = "italic"
-                android:paddingVertical = "15dp"
-                android:paddingHorizontal = "30dp"
+                android:paddingVertical = "10dp"
+                android:paddingHorizontal = "25dp"
                 android:layout_centerVertical = "true"
                 android:layout_alignParentEnd = "true"
                 android:backgroundTint = "@color/pressed_grey"

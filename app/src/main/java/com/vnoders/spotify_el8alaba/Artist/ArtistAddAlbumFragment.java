@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,7 +44,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ArtistAddAlbumFragment extends Fragment {
+public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeListener {
 
     private static int REQUEST_CODE = 9;
     private TextView enterAlbumNameError, enterAlbumLabelError;
@@ -51,7 +54,8 @@ public class ArtistAddAlbumFragment extends Fragment {
     private Uri imageUri = null;
     private APIInterface apiService;
     private File file;
-    private Boolean lol = false;
+    private Boolean imgFileExists = false;
+    private CheckBox popCB, rockCB, electronicCB, hipHopCB, metalCB, classicalCB, folkCB, orientalCB, reggaeCB;
 
     public ArtistAddAlbumFragment() {
         // Required empty public constructor
@@ -104,6 +108,16 @@ public class ArtistAddAlbumFragment extends Fragment {
         cancelBtn = root.findViewById(R.id.add_album_cancel_button);
         chooseAlbumPicBtn = root.findViewById(R.id.choose_album_picture_button);
         albumImage = root.findViewById(R.id.album_selected_image_image_view);
+        hipHopCB = root.findViewById(R.id.hiphop_genre_checkbox);
+        rockCB = root.findViewById(R.id.rock_genre_checkbox);
+        orientalCB = root.findViewById(R.id.oriental_genre_checkbox);
+        popCB = root.findViewById(R.id.pop_genre_checkbox);
+        electronicCB = root.findViewById(R.id.electronic_genre_checkbox);
+        reggaeCB = root.findViewById(R.id.reggae_genre_checkbox);
+        metalCB = root.findViewById(R.id.metal_genre_checkbox);
+        classicalCB = root.findViewById(R.id.classical_genre_checkbox);
+        folkCB = root.findViewById(R.id.folk_genre_checkbox);
+
         apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
         return root;
@@ -122,6 +136,17 @@ public class ArtistAddAlbumFragment extends Fragment {
             intent.setType("image/*");
             startActivityForResult(intent, REQUEST_CODE);
         });
+
+        popCB.setOnCheckedChangeListener(this);
+        hipHopCB.setOnCheckedChangeListener(this);
+        rockCB.setOnCheckedChangeListener(this);
+        electronicCB.setOnCheckedChangeListener(this);
+        orientalCB.setOnCheckedChangeListener(this);
+        metalCB.setOnCheckedChangeListener(this);
+        classicalCB.setOnCheckedChangeListener(this);
+        reggaeCB.setOnCheckedChangeListener(this);
+        folkCB.setOnCheckedChangeListener(this);
+        popCB.setChecked(true);
 
         addAlbumBtn.setOnClickListener(v -> {
             String albumName = albumNameEditText.getText().toString();
@@ -143,12 +168,39 @@ public class ArtistAddAlbumFragment extends Fragment {
             CreateAnAlbumRequestBody requestBody = new CreateAnAlbumRequestBody();
             requestBody.setAlbumName(albumName);
             requestBody.setLabel(albumLabel);
+            if (rockCB.isChecked()) {
+                requestBody.addGenre("rock");
+            }
+            if (popCB.isChecked()) {
+                requestBody.addGenre("pop");
+            }
+            if (hipHopCB.isChecked()) {
+                requestBody.addGenre("hip hop");
+            }
+            if (folkCB.isChecked()) {
+                requestBody.addGenre("folk");
+            }
+            if (metalCB.isChecked()) {
+                requestBody.addGenre("metal");
+            }
+            if (orientalCB.isChecked()) {
+                requestBody.addGenre("oriental");
+            }
+            if (classicalCB.isChecked()) {
+                requestBody.addGenre("classical");
+            }
+            if (reggaeCB.isChecked()) {
+                requestBody.addGenre("reggae");
+            }
+            if (electronicCB.isChecked()) {
+                requestBody.addGenre("electronic");
+            }
             Call<Album> call = apiService.createAlbum(requestBody);
             call.enqueue(new Callback<Album>() {
                 @Override
                 public void onResponse(Call<Album> call, Response<Album> response) {
                     Log.d("d", response.body().getName() + " -- " + response.body().getId());
-                    if (lol) {
+                    if (imgFileExists) {
                         file = new File(FileUtils.getPath(getContext(), imageUri));
                         RequestBody requestFile =
                                 RequestBody.create(
@@ -189,9 +241,18 @@ public class ArtistAddAlbumFragment extends Fragment {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 albumImage.setImageBitmap(myBitmap);
                 albumImage.setVisibility(View.VISIBLE);
-                lol = true;
+                imgFileExists = true;
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (!rockCB.isChecked() && !popCB.isChecked() && !hipHopCB.isChecked() &&
+                !electronicCB.isChecked() && !metalCB.isChecked() && !orientalCB.isChecked() &&
+                !reggaeCB.isChecked() && !classicalCB.isChecked() && !folkCB.isChecked()) {
+            buttonView.setChecked(true);
+        }
     }
 }

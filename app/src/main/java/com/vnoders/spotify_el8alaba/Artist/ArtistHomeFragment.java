@@ -2,8 +2,8 @@ package com.vnoders.spotify_el8alaba.Artist;
 
 import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.allSongsStreams;
 import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.followers;
-import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.songTopStreams;
 import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.topSongName;
+import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.topSongStreams;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -23,8 +23,28 @@ import com.vnoders.spotify_el8alaba.R;
 public class ArtistHomeFragment extends Fragment {
 
     @SuppressLint("StaticFieldLeak")
-    private static TextView artistFollowersTextView, artistStreamsTextView, artistTopSongStreamsTextView, artistTopSongTextView;
+    private static TextView artistFollowersTextView, artistStreamsTextView, artistTopSongStreamsTextView, artistTopSongTextView,
+            artistNoTopSong;
+    private static View artistTopSongLayout;
     private ImageView artistTopSongImageView, spotifyUserImageView;
+
+    static void updateUI() {
+        if (allSongsStreams != null) {
+            if (allSongsStreams.equals("0")) {
+                allSongsStreams += " streams";
+                artistStreamsTextView.setText(allSongsStreams);
+                artistNoTopSong.setVisibility(View.VISIBLE);
+                artistTopSongLayout.setVisibility(View.GONE);
+            } else {
+                artistStreamsTextView.setText(allSongsStreams);
+                artistTopSongStreamsTextView.setText(topSongStreams);
+                artistTopSongTextView.setText(topSongName);
+            }
+        }
+        if (followers != null) {
+            artistFollowersTextView.setText(followers);
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -36,15 +56,10 @@ public class ArtistHomeFragment extends Fragment {
         artistTopSongStreamsTextView = root.findViewById(R.id.artist_top_song_streams_text_view);
         artistTopSongTextView = root.findViewById(R.id.artist_top_song_text_view);
         spotifyUserImageView = root.findViewById(R.id.spotify_user_image_view);
+        artistNoTopSong = root.findViewById(R.id.artist_no_top_song_text);
+        artistTopSongLayout = root.findViewById(R.id.artist_top_song_layout);
 
         return root;
-    }
-
-    static void updateUI() {
-        artistStreamsTextView.setText(allSongsStreams);
-        artistTopSongStreamsTextView.setText(songTopStreams);
-        artistTopSongTextView.setText(topSongName);
-        artistFollowersTextView.setText(followers);
     }
 
     @Override
@@ -57,9 +72,11 @@ public class ArtistHomeFragment extends Fragment {
         }
 
         artistStreamsTextView.setText(allSongsStreams);
-        artistTopSongStreamsTextView.setText(songTopStreams);
+        artistTopSongStreamsTextView.setText(topSongStreams);
         artistTopSongTextView.setText(topSongName);
-        artistFollowersTextView.setText(followers);
+        if (followers != null) {
+            artistFollowersTextView.setText(followers);
+        }
 
         spotifyUserImageView.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), MainActivity.class));

@@ -13,6 +13,8 @@ import com.vnoders.spotify_el8alaba.models.Artist.UpdateSongNameAndAlbumRequestB
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateSongNameRequestBody;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.PlayContext;
+import com.vnoders.spotify_el8alaba.models.Search.Album;
 import com.vnoders.spotify_el8alaba.models.Search.Albums;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.Playlists;
@@ -20,7 +22,6 @@ import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.Tracks;
 import com.vnoders.spotify_el8alaba.models.Search.Users;
 import com.vnoders.spotify_el8alaba.models.SearchResult;
-import com.vnoders.spotify_el8alaba.models.library.Album;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import java.util.List;
 import okhttp3.MultipartBody;
@@ -105,6 +106,8 @@ public interface APIInterface {
     @GET("browse/categories/{category_id}/playlists")
     Call<List<HomePlaylist>> getCategoryPlaylists(@Path("category_id") String categoryId);
 
+    @GET("me/player/recently-played-contexts")
+    Call<List<PlayContext>> getRecentlyPlayedContexts();
 
     @POST("tracks/listens")
     Call<List<TrackListens>> getTrackListens(@Body TrackListensRequestBody trackListensRequestBody);
@@ -115,7 +118,7 @@ public interface APIInterface {
     );
 
     @GET("artists/{id}")
-    Call<Artist> getArtist(
+    Call<List<Artist>> getArtist(
             @Path("id") String artistId
     );
 

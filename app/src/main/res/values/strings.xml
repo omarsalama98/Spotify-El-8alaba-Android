@@ -189,4 +189,21 @@
     <string name = "search_icon">Search Icon</string>
     <string name = "play_what_you_love">Play what you love</string>
     <string name = "find_your_favorite_artists">Find your favorite artists</string>
+    <string name = "top_song_image">top song image</string>
+    <string name = "no_one_played_your_songs_last_week">No one played your songs last week</string>
+    <string name = "you_have_no_played_songs">You have no played songs</string>
+    <string name = "you_have_nt_added_any_albums_yet">You have\'nt added any albums yet</string>
+    <string name = "pop">Pop</string>
+    <string name = "rock">Rock</string>
+    <string name = "hip_hop">Hip Hop</string>
+    <string name = "jazz">Jazz</string>
+    <string name = "_1_follower">1 follower</string>
+    <string name = "_3_streams">3 streams</string>
+    <string name = "rap">Rap</string>
+    <string name = "oriental">Oriental</string>
+    <string name = "folk">Folk</string>
+    <string name = "metal">Metal</string>
+    <string name = "electronic">Electronic</string>
+    <string name = "reggae">Reggae</string>
+    <string name = "classical">Classical</string>
 </resources>

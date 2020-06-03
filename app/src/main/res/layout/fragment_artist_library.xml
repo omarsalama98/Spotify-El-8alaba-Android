@@ -73,10 +73,35 @@
             android:layout_height = "0dp"
             android:layout_weight = "45">
 
+        <TextView
+                android:id = "@+id/artist_no_songs_text"
+                android:padding = "20dp"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:text = "@string/you_have_no_played_songs"
+                android:gravity = "center_horizontal"
+                android:textSize = "25sp"
+                android:textColor = "@color/black"
+                android:drawablePadding = "20dp"
+                android:drawableTop = "@drawable/ic_sad_face"
+                android:visibility = "gone" />
         <androidx.recyclerview.widget.RecyclerView
                 android:id = "@+id/artist_songs_recycler_view"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content" />
+
+        <TextView
+                android:id = "@+id/artist_no_albums_text"
+                android:padding = "20dp"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                android:text = "@string/you_have_nt_added_any_albums_yet"
+                android:gravity = "center_horizontal"
+                android:textSize = "25sp"
+                android:textColor = "@color/black"
+                android:drawablePadding = "20dp"
+                android:drawableTop = "@drawable/ic_sad_face"
+                android:visibility = "gone" />
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id = "@+id/artist_albums_recycler_view"
@@ -108,13 +133,13 @@
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
                 android:text = "@string/new_album"
-                android:textColor = "@color/black"
+                android:textColor = "@color/white"
                 android:textSize = "20sp"
                 android:textStyle = "italic"
                 android:paddingVertical = "15dp"
                 android:paddingHorizontal = "20dp"
                 android:layout_alignParentEnd = "true"
-                android:backgroundTint = "@color/pressed_grey"
+                android:backgroundTint = "@color/colorAccent"
                 android:background = "@drawable/cornered_button" />
 
     </RelativeLayout>

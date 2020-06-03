@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.Artist;
 
 import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.apiService;
+import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.getArtistTopTracks;
 import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.mAlbums;
 
 import android.os.Bundle;
@@ -123,6 +124,7 @@ public class ArtistEditSongFragment extends Fragment {
                             Response<ArtistTrack> response) {
                         Toast.makeText(getContext(), "Song Edited successfully", Toast.LENGTH_LONG)
                                 .show();
+                        getArtistTopTracks();
                         getActivity().onBackPressed();
                     }
 
@@ -142,6 +144,7 @@ public class ArtistEditSongFragment extends Fragment {
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         Toast.makeText(getContext(), "Song Deleted successfully", Toast.LENGTH_LONG)
                                 .show();
+                        getArtistTopTracks();
                         getActivity().onBackPressed();
                     }
 

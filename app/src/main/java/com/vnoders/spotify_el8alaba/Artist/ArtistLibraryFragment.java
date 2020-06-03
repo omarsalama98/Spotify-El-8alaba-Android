@@ -25,7 +25,7 @@ public class ArtistLibraryFragment extends Fragment {
 
     static SongsListAdapter songsListAdapter;
     static AlbumsListAdapter albumsListAdapter;
-    private TextView songsTextView, albumsTextView;
+    private TextView songsTextView, albumsTextView, noSongsTextView, noAlbumsTextView;
     private RecyclerView songsRecyclerView, albumsRecyclerView;
     private Button addSongBtn, addAlbumBtn;
 
@@ -43,6 +43,8 @@ public class ArtistLibraryFragment extends Fragment {
         albumsRecyclerView = root.findViewById(R.id.artist_albums_recycler_view);
         addAlbumBtn = root.findViewById(R.id.artist_library_add_album);
         addSongBtn = root.findViewById(R.id.artist_library_add_song);
+        noAlbumsTextView = root.findViewById(R.id.artist_no_albums_text);
+        noSongsTextView = root.findViewById(R.id.artist_no_songs_text);
 
         return root;
     }
@@ -65,14 +67,28 @@ public class ArtistLibraryFragment extends Fragment {
             albumsTextView.setTextColor(getResources().getColor(R.color.pressed_grey));
             songsTextView.setTextColor(getResources().getColor(R.color.black));
             albumsRecyclerView.setVisibility(View.GONE);
-            songsRecyclerView.setVisibility(View.VISIBLE);
+            noAlbumsTextView.setVisibility(View.GONE);
+            if (mTracks.isEmpty()) {
+                songsRecyclerView.setVisibility(View.GONE);
+                noSongsTextView.setVisibility(View.VISIBLE);
+            } else {
+                songsRecyclerView.setVisibility(View.VISIBLE);
+                noSongsTextView.setVisibility(View.GONE);
+            }
         });
 
         albumsTextView.setOnClickListener(v -> {
             songsTextView.setTextColor(getResources().getColor(R.color.pressed_grey));
             albumsTextView.setTextColor(getResources().getColor(R.color.black));
             songsRecyclerView.setVisibility(View.GONE);
-            albumsRecyclerView.setVisibility(View.VISIBLE);
+            noSongsTextView.setVisibility(View.GONE);
+            if (mAlbums.isEmpty()) {
+                albumsRecyclerView.setVisibility(View.GONE);
+                noAlbumsTextView.setVisibility(View.VISIBLE);
+            } else {
+                albumsRecyclerView.setVisibility(View.VISIBLE);
+                noAlbumsTextView.setVisibility(View.GONE);
+            }
         });
 
         addSongBtn.setOnClickListener(v -> {

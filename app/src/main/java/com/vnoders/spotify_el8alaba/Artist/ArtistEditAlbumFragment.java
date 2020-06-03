@@ -1,5 +1,7 @@
 package com.vnoders.spotify_el8alaba.Artist;
 
+import static com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity.getArtistAlbums;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +24,7 @@ import com.vnoders.spotify_el8alaba.models.Artist.AlbumTracks;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistReTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.MyTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateAlbumNameRequestBody;
-import com.vnoders.spotify_el8alaba.models.library.Album;
+import com.vnoders.spotify_el8alaba.models.Search.Album;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
@@ -126,6 +128,7 @@ public class ArtistEditAlbumFragment extends Fragment {
                 public void onResponse(Call<Album> call, Response<Album> response) {
                     Toast.makeText(getContext(), "Album Edited successfully", Toast.LENGTH_LONG)
                             .show();
+                    getArtistAlbums();
                 }
 
                 @Override
@@ -155,6 +158,7 @@ public class ArtistEditAlbumFragment extends Fragment {
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         Toast.makeText(getContext(), "Album Deleted successfully",
                                 Toast.LENGTH_LONG).show();
+                        getArtistAlbums();
                         getActivity().onBackPressed();
                     }
 

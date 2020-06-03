@@ -2,7 +2,6 @@ package com.vnoders.spotify_el8alaba.models.Artist;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vnoders.spotify_el8alaba.response.signup.UserInfo;
 import java.util.List;
 
 public class Artist {

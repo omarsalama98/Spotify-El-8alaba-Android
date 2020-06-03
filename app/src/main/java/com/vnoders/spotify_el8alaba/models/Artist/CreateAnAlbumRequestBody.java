@@ -28,7 +28,10 @@ public class CreateAnAlbumRequestBody {
         this.albumName = "albumName";
         this.albumType = "album";
         this.genres = new ArrayList<>();
-        this.genres.add("pop");
+    }
+
+    public void addGenre(String genre) {
+        this.genres.add(genre);
     }
 
     public void setLabel(String label) {
