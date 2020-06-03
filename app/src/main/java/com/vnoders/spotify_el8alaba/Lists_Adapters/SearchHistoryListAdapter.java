@@ -103,11 +103,10 @@ public class SearchHistoryListAdapter extends
                             targetFragment = new AlbumFragment();
                             break;
                         case SearchByTypeConstantsHelper.ARTIST:
-                            targetFragment = new ArtistFragment();
+                            targetFragment = ArtistFragment.newInstance(itemId);
                             break;
                         case SearchByTypeConstantsHelper.PLAYLIST:
-                            targetFragment = PlaylistHomeFragment
-                                    .newInstance(itemId);
+                            targetFragment = PlaylistHomeFragment.newInstance(itemId);
                             break;
                         default:
                             targetFragment = new PlaylistTracksFragment();

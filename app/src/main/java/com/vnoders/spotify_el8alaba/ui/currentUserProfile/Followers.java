@@ -87,10 +87,6 @@ public class Followers extends Fragment {
         backButton=view.findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> getParentFragmentManager().popBackStackImmediate());
         followersList=new ArrayList<FollowItem>();
-//        followersList.add(new FollowItem("smsm","5",R.drawable.artist_mock));
-//        followersList.add(new FollowItem("smasm","14",R.drawable.artist_mock));
-//        followersList.add(new FollowItem("samy","10",R.drawable.artist_mock));
-
 
         Call<List<CurrentUserProfile>> call= RetrofitClient.getInstance().getAPI(API.class).getFollowers();
         call.enqueue(new Callback<List<CurrentUserProfile>>() {
@@ -111,7 +107,6 @@ public class Followers extends Fragment {
                         String name=response.body().get(i).getName();
                         String followers=response.body().get(i).getFollowers().toString();
                         followersList.add(new FollowItem(name,followers,URL,id,type));
-                        Log.d("FOLLOWER NAME",name);
                     }
                     RecyclerView.Adapter adapter= new FollowAdapter(followersList);
                     followersRecyclerView.swapAdapter(adapter,false);

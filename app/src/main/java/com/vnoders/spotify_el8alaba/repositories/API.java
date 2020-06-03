@@ -1,9 +1,9 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
-import android.print.PrintAttributes.Resolution;
 import com.vnoders.spotify_el8alaba.models.FacebookToken;
 import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
-import com.vnoders.spotify_el8alaba.models.NotificationToken;
+import com.vnoders.spotify_el8alaba.models.Notifications.NotificationStatus;
+import com.vnoders.spotify_el8alaba.models.Notifications.NotificationToken;
 import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
@@ -96,4 +96,8 @@ public interface API {
 
     @GET("me/following?limit=20")
     Call<List<CurrentUserProfile>> getFollowers();
+    @GET("users/notification-status")
+    Call<ResponseBody> getNotificationStatus();
+    @POST("users/notification-toggle")
+    Call<ResponseBody> setNotificationStatus(@Body NotificationStatus notificationStatus);
 }

@@ -1,7 +1,9 @@
 package com.vnoders.spotify_el8alaba.models;
 
-public class FacebookToken {
+import com.google.gson.annotations.Expose;
 
+public class FacebookToken {
+    @Expose
     private String access_token;
 
     public FacebookToken(String access_token) {

@@ -16,16 +16,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompat.Builder;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.NotificationToken;
-import com.vnoders.spotify_el8alaba.repositories.API;
-import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.Map;
 import java.util.Random;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private SharedPreferences notificationToken;
@@ -97,9 +89,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationToken=getSharedPreferences("NOTIFICATION_TOKEN",Context.MODE_PRIVATE);
         Editor editor=notificationToken.edit();
         editor.putString("notification_token",s);
-        editor.commit();
+        editor.apply();
         Log.d("EL TOKEN",s);
         super.onNewToken(s);
-
     }
 }
