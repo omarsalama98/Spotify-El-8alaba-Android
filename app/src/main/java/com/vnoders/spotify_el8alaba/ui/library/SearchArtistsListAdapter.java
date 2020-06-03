@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.Artist;
-import com.vnoders.spotify_el8alaba.models.library.FollowArtistRequestBody;
+import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.repositories.LibraryApi;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
@@ -83,8 +83,8 @@ public class SearchArtistsListAdapter extends
                 artistId = mDataset.get(getAdapterPosition()).getId();
                 List<String> artistIds = new ArrayList<>();
                 artistIds.add(artistId);
-                FollowArtistRequestBody requestBody = new FollowArtistRequestBody(artistIds);
-                Call<Void> call = apiService.followArtist(requestBody);
+                RequestBodyIds requestBody = new RequestBodyIds(artistIds);
+                Call<Void> call = apiService.followArtists(requestBody);
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
