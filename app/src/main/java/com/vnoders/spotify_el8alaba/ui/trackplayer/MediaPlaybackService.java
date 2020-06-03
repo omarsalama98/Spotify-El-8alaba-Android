@@ -37,6 +37,8 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResp
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAdRequest;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtistTopTracksInfo;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtistTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetLikedTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylistItem;
@@ -365,6 +367,25 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         setRepeatState(mRepeat);
 
         getPlaylist(playlistId, shuffle, trackId);
+    }
+
+    /**
+     * Start playing an artist top tracks
+     * @param artistId id of artist
+     * @param shuffle shuffle status of list
+     * @param repeat repeat status of list
+     * @param trackId (optional) ID of track to start playing in (put as null if want to start
+     *                list from beginning)
+     */
+    public void playArtistTopTracks(String artistId, boolean shuffle, boolean repeat, String trackId) {
+        if (TextUtils.isEmpty(artistId)) {
+            return;
+        }
+
+        mRepeat = repeat;
+        setRepeatState(mRepeat);
+
+        getArtistTopTracks(artistId, shuffle, trackId);
     }
 
     /**
@@ -1026,9 +1047,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                     getPlaylist(id, shuffleState, currentTrack.getId());
                 }
                 else {
-                    mCurrentTrackIndex = 0;
-                    destroyMediaPlayer();
-                    initMediaPlayer(currentTrack);
+                    getArtistTopTracks(id, shuffleState, currentTrack.getId());
                 }
             }
 
@@ -1350,17 +1369,15 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                         continue;
 
                     String artistId = null;
-                    if (track != null) {
-                        if (track.getArtists().size() > 0) {
-                            artistId = track.getArtists().get(0).getId();
-                        }
-
-                        Track addTrack = new Track(track.getId(), track.getName(),
-                                track.getDuration(),
-                                null, Track.TYPE_PLAYLIST, response.body().getName(),
-                                null, artistId, track.getAlbum().getId(), uri);
-                        mTracksList.add(addTrack);
+                    if (track.getArtists().size() > 0) {
+                        artistId = track.getArtists().get(0).getId();
                     }
+
+                    Track addTrack = new Track(track.getId(), track.getName(),
+                            track.getDuration(),
+                            null, Track.TYPE_PLAYLIST, response.body().getName(),
+                            null, artistId, track.getAlbum().getId(), uri);
+                    mTracksList.add(addTrack);
                 }
 
                 // shuffles the list of shuffle is on and sets the variable
@@ -1394,6 +1411,115 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
             @Override
             public void onFailure(Call<GetPlaylist> call, Throwable t) {
+            }
+        });
+    }
+
+    /**
+     * Play the artist top tracks that id is passed
+     * @param artistId id of artist
+     * @param shuffle shuffle stat to use
+     * @param trackId id of track to start playing at (starts at beginning of null)
+     */
+    private void getArtistTopTracks(String artistId, boolean shuffle, String trackId) {
+        Call<List<GetArtistTrack>> request = RetrofitClient.getInstance()
+                .getAPI(TrackPlayerApi.class).getArtistTopTracks(artistId);
+
+        request.enqueue(new Callback<List<GetArtistTrack>>() {
+            @Override
+            public void onResponse(Call<List<GetArtistTrack>> call, Response<List<GetArtistTrack>> response) {
+                if ((!response.isSuccessful()) || (response.code() != 200)) {
+                    return;
+                }
+
+                if (response.body() == null) {
+                    return;
+                }
+
+                List<GetArtistTrack> items = response.body();
+
+                if (items.size() < 1) {
+                    Toast.makeText(MediaPlaybackService.this,
+                            getString(R.string.artist_no_tracks), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mTracksList = new ArrayList<>();
+                String uri = CONTEXT_ARTIST_PREFIX + artistId;
+
+                // read all tracks
+                for (int i = 0; i < items.size(); ++i) {
+                    GetArtistTrack track = items.get(i);
+
+                    if (track == null)
+                        continue;
+
+                    String albumId = null;
+                    String image = null;
+                    if (track.getAlbum() != null) {
+                        albumId = track.getAlbum().getId();
+                        if (track.getAlbum().getImages() != null) {
+                            if (track.getAlbum().getImages().size() > 0) {
+                                image = track.getAlbum().getImages().get(0).getUrl();
+                            }
+                        }
+                    }
+
+                    String artistName = null;
+                    if (track.getArtists() != null) {
+                        if (track.getArtists().size() > 0) {
+                            for (int j = 0; j < track.getArtists().size(); ++j) {
+                                GetArtistTopTracksInfo artist = track.getArtists().get(j);
+
+                                if (artist != null) {
+                                    if (artist.getId() != null) {
+                                        if (artist.getId().equals(artistId)) {
+                                            artistName = artist.getName();
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(),
+                            artistName, Track.TYPE_ARTIST, artistName, image, artistId, albumId, uri);
+
+                    mTracksList.add(addTrack);
+                }
+
+                // shuffles the list of shuffle is on and sets the variable
+                mShuffle = shuffle;
+                if (shuffle) {
+                    mTracksListOriginal = new ArrayList<>();
+                    mTracksListOriginal.addAll(mTracksList);
+                    Collections.shuffle(mTracksList);
+                }
+
+                setShuffleState(shuffle);
+
+                mCurrentTrackIndex = 0;
+
+                // if trackId is not null then finds the track and starts at it
+                if (!TextUtils.isEmpty(trackId)) {
+                    for (int i = 0; i < mTracksList.size(); ++i) {
+                        if (mTracksList.get(i).getId().equals(trackId)) {
+                            mCurrentTrackIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                destroyMediaPlayer();
+                initMediaPlayer(mTracksList.get(mCurrentTrackIndex));
+
+                // check if list has liked tracks
+                checkLikedTracks();
+            }
+
+            @Override
+            public void onFailure(Call<List<GetArtistTrack>> call, Throwable t) {
             }
         });
     }

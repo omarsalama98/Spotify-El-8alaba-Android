@@ -3,10 +3,11 @@ package com.vnoders.spotify_el8alaba.repositories;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
-import com.vnoders.spotify_el8alaba.models.library.AddTrackToPlaylistRequestBody;
-import com.vnoders.spotify_el8alaba.models.library.FollowArtistRequestBody;
+import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
+import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import java.util.Collections;
 import java.util.List;
@@ -91,10 +92,12 @@ public interface LibraryApi {
     @GET("me/tracks")
     Call<TracksPagingWrapper> getLikedTracks();
 
+
     @POST("playlists/{playlist_id}/tracks")
     Call<Void> addTracksToPlaylist(
             @Path("playlist_id") String playlistId,
-            @Body AddTrackToPlaylistRequestBody requestBody);
+            @Body RequestBodyIds requestBody);
+
 
     // Used to check the number of liked tracks of the current user
     // because the backend API does not provide this endpoint
@@ -103,9 +106,6 @@ public interface LibraryApi {
     Call<JsonObject> getNumberOfLikedTracks();
 
 
-    @PUT("me/following?type=artist")
-    Call<Void> followArtist(@Body FollowArtistRequestBody requestBody);
-
     @PUT("me/tracks")
     Call<Void> likeTrack(@Query("ids") String trackId);
 
@@ -113,5 +113,32 @@ public interface LibraryApi {
     @DELETE("me/tracks")
     Call<Void> unlikeTrack(@Query("ids") String trackId);
 
+
+    @GET("me/following?type=artist")
+    Call<List<Artist>> getUserFollowedArtists();
+
+
+    // Return list of ONLY ONE artist
+    @GET("artists/{artist_id}")
+    Call<List<Artist>> getArtist(@Path("artist_id") String artistId);
+
+
+    @GET("me/following/contains")
+    Call<List<Boolean>> doesCurrentUserFollowArtist(@Query("ids") String artistId);
+
+
+    @PUT("me/following?type=artist")
+    Call<Void> followArtists(@Body RequestBodyIds requestBodyIds);
+
+
+    @DELETE("me/following?type=artist")
+    Call<Void> unfollowArtists(@Body RequestBodyIds requestBodyIds);
+
+
+    @GET("artists/{artist_id}/related-artists")
+    Call<List<Artist>> getRelatedArtists(@Path("artist_id") String artistId);
+
+    @GET("artists/{artist_id}/top-tracks")
+    Call<List<Track>> getArtistTopTracks(@Path("artist_id") String artistId);
 
 }

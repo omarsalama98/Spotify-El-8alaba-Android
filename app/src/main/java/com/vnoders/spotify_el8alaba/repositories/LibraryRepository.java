@@ -12,18 +12,22 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Owner;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
+import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
+import com.vnoders.spotify_el8alaba.ui.library.ArtistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
@@ -466,5 +470,197 @@ public class LibraryRepository {
         });
     }
 
+    public static void addTrackToPlaylist(String playlistId , String TrackId){
+
+        List<String> ids = Collections.singletonList(TrackId);
+        RequestBodyIds requestBodyIds = new RequestBodyIds(ids);
+
+        Call<Void> call = libraryApi.addTracksToPlaylist(playlistId, requestBodyIds);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(App.getInstance(), "Added to your playlist", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
+
+    }
+
+
+    public static void getUserFollowedArtists(MutableLiveData<List<Artist>> artists) {
+        Call<List<Artist>> request = libraryApi.getUserFollowedArtists();
+
+        request.enqueue(new Callback<List<Artist>>() {
+            @Override
+            public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    artists.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Artist>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    public static void updateArtistFollowState(ArtistViewModel artistViewModel) {
+        Call<List<Boolean>> request = libraryApi
+                .doesCurrentUserFollowArtist(artistViewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Boolean>>() {
+            @Override
+            public void onResponse(Call<List<Boolean>> call, Response<List<Boolean>> response) {
+                List<Boolean> followStates = response.body();
+                if (response.isSuccessful() && followStates != null && followStates.size() > 0) {
+                    artistViewModel.setFollowedState(followStates.get(0));
+                    artistViewModel.finishedRequest();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Boolean>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    public static void updateArtist(ArtistViewModel artistViewModel) {
+        Call<List<Artist>> request = libraryApi.getArtist(artistViewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Artist>>() {
+            @Override
+            public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (!response.body().isEmpty()) {
+                        Artist artist = response.body().get(0);
+                        artistViewModel.setArtistName(artist.getName());
+
+                        String imageUrl = null;
+                        if (artist.getImages() != null && !artist.getImages().isEmpty()) {
+                            imageUrl = artist.getImages().get(0).getUrl();
+                        } else if (artist.getUserInfo() != null) {
+                            List<Image> images = artist.getUserInfo().getImages();
+                            if (images != null && !images.isEmpty()) {
+                                imageUrl = images.get(0).getUrl();
+                            }
+                        }
+
+                        artistViewModel.setImageUrl(imageUrl);
+                        artistViewModel.setBiography(artist.getBiography());
+                    }
+                    artistViewModel.finishedRequest();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Artist>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    public static void followArtist(ArtistViewModel artistViewModel) {
+        RequestBodyIds id = new RequestBodyIds(artistViewModel.getArtistId());
+        Call<Void> request = libraryApi.followArtists(id);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    artistViewModel.setFollowedState(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    public static void unfollowArtist(ArtistViewModel artistViewModel) {
+        RequestBodyIds id = new RequestBodyIds(artistViewModel.getArtistId());
+        Call<Void> request = libraryApi.unfollowArtists(id);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+                    artistViewModel.setFollowedState(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void updateRelatedArtists(ArtistViewModel artistViewModel) {
+        Call<List<Artist>> request = libraryApi.getRelatedArtists(artistViewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Artist>>() {
+            @Override
+            public void onResponse(Call<List<Artist>> call, Response<List<Artist>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    artistViewModel.setRelatedArtists(response.body());
+                    artistViewModel.finishedRequest();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Artist>> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+
+    public static void updateArtistTracksSummary(ArtistViewModel artistViewModel) {
+        Call<List<Track>> request = libraryApi.getArtistTopTracks(artistViewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Track>>() {
+            @Override
+            public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Track> tracks = response.body();
+
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    for (Track track : tracks) {
+                        if (track != null) {
+                            stringBuilder.append(track.getName());
+                            stringBuilder.append("  •  ");
+                        }
+                    }
+
+                    stringBuilder.append("and more");
+                    artistViewModel.setTracksSummary(stringBuilder.toString());
+                    artistViewModel.finishedRequest();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Track>> call, Throwable t) {
+
+            }
+        });
+
+    }
 
 }

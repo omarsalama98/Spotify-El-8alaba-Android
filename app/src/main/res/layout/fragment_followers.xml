@@ -6,6 +6,15 @@
 
         android:background="@color/backgroundColor"
         tools:context = ".ui.currentUserProfile.Followers">
+    <ProgressBar
+            android:id="@+id/followers_progress_bar"
+            android:layout_below="@id/back_button"
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
     <ImageButton
             android:layout_marginTop="20dp"
             android:layout_marginRight="8dp"
@@ -26,13 +35,13 @@
             android:textStyle = "bold"
             android:layout_centerHorizontal="true"
             />
+
     <ScrollView
 
             android:layout_width = "match_parent"
             android:layout_height = "match_parent">
     <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="50dp"
-
             android:id="@+id/followers_recycle_view"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"

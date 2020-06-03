@@ -5,7 +5,18 @@ public class FollowItem {
 
     private String mUserName;
     private String mFollowersNumber;
-    private int mUserImageResource;
+    private String mImageURL;
+    private String mid;
+    private String mType;
+
+    public FollowItem(String mUserName, String mFollowersNumber, String mImageURL, String mid,
+            String mType) {
+        this.mUserName = mUserName;
+        this.mFollowersNumber = mFollowersNumber;
+        this.mImageURL = mImageURL;
+        this.mid = mid;
+        this.mType = mType;
+    }
 
     public String getmUserName() {
         return mUserName;
@@ -23,20 +34,27 @@ public class FollowItem {
         this.mFollowersNumber = mFollowersNumber;
     }
 
-    public int getmUserImageResource() {
-        return mUserImageResource;
+    public String getmImageURL() {
+        return mImageURL;
     }
 
-    public void setmUserImageResource(int mUserImageResource) {
-        this.mUserImageResource = mUserImageResource;
+    public void setmImageURL(String mImageURL) {
+        this.mImageURL = mImageURL;
     }
 
+    public String getMid() {
+        return mid;
+    }
 
+    public void setMid(String mid) {
+        this.mid = mid;
+    }
 
+    public String getmType() {
+        return mType;
+    }
 
-    public FollowItem(String mUserName, String mFollowersNumber, int mUserImageResource) {
-        this.mUserName = mUserName;
-        this.mFollowersNumber = mFollowersNumber;
-        this.mUserImageResource = mUserImageResource;
+    public void setmType(String mType) {
+        this.mType = mType;
     }
 }

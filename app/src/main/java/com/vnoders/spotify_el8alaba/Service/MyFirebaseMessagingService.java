@@ -4,6 +4,8 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -15,6 +17,7 @@ import androidx.core.app.NotificationCompat.Builder;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.NotificationToken;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.Map;
@@ -25,6 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    private SharedPreferences notificationToken;
 
     private void showNotification(Map<String, String> data) {
         String title = data.get("title");
@@ -90,19 +94,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(@NonNull String s) {
+        notificationToken=getSharedPreferences("NOTIFICATION_TOKEN",Context.MODE_PRIVATE);
+        Editor editor=notificationToken.edit();
+        editor.putString("notification_token",s);
+        editor.commit();
         Log.d("EL TOKEN",s);
-        Call<ResponseBody> call = RetrofitClient.getInstance().getAPI(API.class).addNotificationToken(s);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d("RESPONSE_ADD_NOTIF",response.toString());
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.d("RESPONSE_ADD_NOTIF","FAILED");
-            }
-        });
         super.onNewToken(s);
 
     }

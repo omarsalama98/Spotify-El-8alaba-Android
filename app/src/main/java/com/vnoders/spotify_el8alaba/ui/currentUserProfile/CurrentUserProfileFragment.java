@@ -54,6 +54,7 @@ public class CurrentUserProfileFragment extends Fragment {
     private Button editProfileButton;
     private Bundle bundle;
     private LinearLayout followersLayout;
+    private LinearLayout followingLayout;
     private View playListWrap;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -113,6 +114,7 @@ public class CurrentUserProfileFragment extends Fragment {
         }
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_current_user_profile, container, false);
+        followingLayout=root.findViewById(R.id.following_layout);
         followersLayout=root.findViewById(R.id.followers_layout);
         userNameToolbar=root.findViewById(R.id.user_name_toobar);
         userName=root.findViewById(R.id.user_name);
@@ -133,11 +135,23 @@ public class CurrentUserProfileFragment extends Fragment {
         userName.setText(currentUserProfile.getName());
         userNameToolbar.setText(currentUserProfile.getName());
         followingNumber.setText(String.valueOf(currentUserProfile.getFollowing().size()));
+//        if(currentUserProfile.getFollowers()==0){
+//            followersLayout.setEnabled(false);
+//        }
+        if(currentUserProfile.getFollowing().size()==0){
+            followingLayout.setEnabled(false);
+        }
+
+
         appBarLayout.addOnOffsetChangedListener(new OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 userNameToolbar.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
-
+            }
+        });
+        followingLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
             }
         });

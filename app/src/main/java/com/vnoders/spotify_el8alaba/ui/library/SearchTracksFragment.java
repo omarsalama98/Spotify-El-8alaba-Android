@@ -152,7 +152,7 @@ public class SearchTracksFragment extends Fragment implements TextWatcher {
         searchResults = new ArrayList<>();
 
         searchListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        searchListAdapter = new SearchTracksListAdapter(searchResults, this, playlistId);
+        searchListAdapter = new SearchTracksListAdapter(searchResults, playlistId);
         searchListRecyclerView.setAdapter(searchListAdapter);
 
         backArrow.setOnClickListener(v -> {

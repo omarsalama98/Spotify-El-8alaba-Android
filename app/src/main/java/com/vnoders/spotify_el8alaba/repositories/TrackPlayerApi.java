@@ -2,10 +2,10 @@ package com.vnoders.spotify_el8alaba.repositories;
 
 
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrackResponse;
-import com.vnoders.spotify_el8alaba.models.TrackPlayer.AdItem;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAdRequest;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetAlbum;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtist;
+import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetArtistTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetLikedTracks;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.GetSeveralTracks;
@@ -64,6 +64,9 @@ public interface TrackPlayerApi {
 
     @GET("playlists/{playlistId}")
     Call<GetPlaylist> getPlaylist(@Path("playlistId") String playlistId);
+
+    @GET("artists/{artistId}/top-tracks")
+    Call<List<GetArtistTrack>> getArtistTopTracks(@Path("artistId") String artistId);
 
     @GET("tracks/share/{trackId}")
     Call<ShareTrackResponse> getShareUrl(@Path("trackId") String trackId);
