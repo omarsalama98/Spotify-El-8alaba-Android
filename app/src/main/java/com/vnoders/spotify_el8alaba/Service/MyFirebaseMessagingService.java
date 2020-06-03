@@ -89,6 +89,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationToken=getSharedPreferences("NOTIFICATION_TOKEN",Context.MODE_PRIVATE);
         Editor editor=notificationToken.edit();
         editor.putString("notification_token",s);
+        editor.putString("notSent","true");
         editor.apply();
         Log.d("EL TOKEN",s);
         super.onNewToken(s);

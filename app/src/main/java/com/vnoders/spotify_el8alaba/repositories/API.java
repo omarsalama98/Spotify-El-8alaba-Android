@@ -14,12 +14,14 @@ import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 /**
  * This interface will include all the back-end functions which will handle the API requests
@@ -96,8 +98,13 @@ public interface API {
 
     @GET("me/following?limit=20")
     Call<List<CurrentUserProfile>> getFollowers();
+
     @GET("users/notification-status")
     Call<ResponseBody> getNotificationStatus();
+
     @POST("users/notification-toggle")
     Call<ResponseBody> setNotificationStatus(@Body NotificationStatus notificationStatus);
+
+    @DELETE("users/notification-token/{token}")
+    Call<ResponseBody> deleteNotificationToken(@Path("token") String token);
 }
