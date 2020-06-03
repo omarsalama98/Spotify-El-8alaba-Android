@@ -128,9 +128,8 @@ public class ArtistFragment extends Fragment {
         shuffle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-//                TODO:
-//                String artistId = artistViewModel.getArtistId();
-//                mediaPlaybackService.playArtist(artistId, true, true, null);
+                String artistId = artistViewModel.getArtistId();
+                mediaPlaybackService.playArtistTopTracks(artistId, true, true, null);
             }
         });
 

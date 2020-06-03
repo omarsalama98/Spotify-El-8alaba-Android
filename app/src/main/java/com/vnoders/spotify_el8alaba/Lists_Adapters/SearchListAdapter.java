@@ -14,8 +14,8 @@ import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.Album;
-import com.vnoders.spotify_el8alaba.models.Search.Artist;
 import com.vnoders.spotify_el8alaba.models.Search.Playlist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -66,18 +66,19 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                 itemImageUrl = images.get(0).getUrl();
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
-        } else if (result instanceof Artist) {
-            itemName = ((Artist) result).getName();
+        } else if (result instanceof SearchArtist) {
+            itemName = ((SearchArtist) result).getName();
             holder.name.setText(itemName);
-            Image image = ((Artist) result).getImage();
-            itemInfo = "Artist " + ((Artist) result).getName();
+            List<Image> images = ((SearchArtist) result).getImage();
+            itemInfo = "Artist " + ((SearchArtist) result).getName();
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-            if (image != null) {
-                itemImageUrl = image.getUrl();
+            if (images != null) {
+                if (!images.isEmpty()) {
+                    itemImageUrl = images.get(0).getUrl();
+                }
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
-
         }
         if(result instanceof User){
             itemName = ((User) result).getName();
@@ -150,12 +151,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     if (!images.isEmpty()) {
                         itemImageUrl = images.get(0).getUrl();
                     }
-                } else if (result instanceof Artist) {
+                } else if (result instanceof SearchArtist) {
                     itemType = SearchByTypeConstantsHelper.ARTIST;
-                    itemId = ((Artist) result).getId();
-                    itemName = ((Artist) result).getName();
+                    itemId = ((SearchArtist) result).getId();
+                    itemName = ((SearchArtist) result).getName();
                     itemInfo = "Artist";
-                    Image image = ((Artist) result).getImage();
+                    Image image = ((SearchArtist) result).getImage().get(0);
                     if (image != null) {
                         itemImageUrl = image.getUrl();
                     }
@@ -203,11 +204,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                         targetFragment = new AlbumFragment();
                         break;
                     case SearchByTypeConstantsHelper.ARTIST:
-                        targetFragment = new ArtistFragment();
+                        targetFragment = ArtistFragment.newInstance(itemId);
                         break;
                     case SearchByTypeConstantsHelper.PLAYLIST:
-                        targetFragment = PlaylistHomeFragment
-                                .newInstance(itemId);
+                        targetFragment = PlaylistHomeFragment.newInstance(itemId);
                         break;
                     default:
                         targetFragment = new PlaylistTracksFragment();

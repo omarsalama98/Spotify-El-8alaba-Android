@@ -35,8 +35,8 @@ import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.Album;
-import com.vnoders.spotify_el8alaba.models.Search.Artist;
 import com.vnoders.spotify_el8alaba.models.Search.Playlist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
 import com.vnoders.spotify_el8alaba.models.SearchResult;
@@ -72,7 +72,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
     private TextView searchTextView, searchAllArtistsTextView,
             searchAllSongsTextView,
             searchAllPlaylistsTextView, searchAllAlbumsTextView,
-            searchAllGenresAndMoodsTextView, searchAllProfilesTextView;
+            searchAllProfilesTextView; //searchAllGenresAndMoodsTextView
     private ArrayList<Object> searchResults;
     private SearchListAdapter searchListAdapter;
 
@@ -125,7 +125,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
             mSearchResult.add(albums.get(0));
             mSearchResult.add(albums.get(1));
         }
-        List<Artist> artists = searchListResults.getArtists();
+        List<SearchArtist> artists = searchListResults.getArtists();
         if (artists.size() == 1) {
             mSearchResult.add(artists.get(0));
         } else if (artists.size() > 1) {
@@ -182,6 +182,31 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         searchEmptyBackground.setVisibility(View.GONE);
     }
 
+    /**
+     * Sets TextViews OnClickListeners and their transition names
+     */
+    private void handleTextViewsActions() {
+        searchAllArtistsTextView.setTransitionName(SearchByTypeConstantsHelper.ARTISTS);
+        searchAllArtistsTextView.setOnClickListener(this);
+        searchAllSongsTextView.setTransitionName(SearchByTypeConstantsHelper.SONGS);
+        searchAllSongsTextView.setOnClickListener(this);
+        searchAllPlaylistsTextView.setTransitionName(SearchByTypeConstantsHelper.PLAYLISTS);
+        searchAllPlaylistsTextView.setOnClickListener(this);
+        searchAllAlbumsTextView.setTransitionName(SearchByTypeConstantsHelper.ALBUMS);
+        searchAllAlbumsTextView.setOnClickListener(this);
+        /*searchAllGenresAndMoodsTextView
+                .setTransitionName(SearchByTypeConstantsHelper.GENRES_AND_MOODS);
+        searchAllGenresAndMoodsTextView.setOnClickListener(this);
+         */
+        searchAllProfilesTextView.setTransitionName(SearchByTypeConstantsHelper.PROFILES);
+        searchAllProfilesTextView.setOnClickListener(this);
+    }
+
+    public static void removeSearchHistoryList() {
+        searchHistoryListLayout.setVisibility(View.GONE);
+        searchEmptyBackground.setVisibility(View.VISIBLE);
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
 
@@ -210,8 +235,9 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         searchAllAlbumsTextView = root.findViewById(R.id.see_all_albums_text_view);
         searchMainBackground = root.findViewById(R.id.search_main_background_layout);
 
-        searchAllGenresAndMoodsTextView = root
+       /* searchAllGenresAndMoodsTextView = root
                 .findViewById(R.id.see_all_genres_and_moods_text_view);
+        */
         searchAllProfilesTextView = root.findViewById(R.id.see_all_profiles_text_view);
 
         searchViewModel.getText().observe(getViewLifecycleOwner(), s -> {
@@ -219,30 +245,6 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
 
         mySearchHistory = new ArrayList<>();
         return root;
-    }
-
-    public static void removeSearchHistoryList() {
-        searchHistoryListLayout.setVisibility(View.GONE);
-        searchEmptyBackground.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Sets TextViews OnClickListeners and their transition names
-     */
-    private void handleTextViewsActions() {
-        searchAllArtistsTextView.setTransitionName(SearchByTypeConstantsHelper.ARTISTS);
-        searchAllArtistsTextView.setOnClickListener(this);
-        searchAllSongsTextView.setTransitionName(SearchByTypeConstantsHelper.SONGS);
-        searchAllSongsTextView.setOnClickListener(this);
-        searchAllPlaylistsTextView.setTransitionName(SearchByTypeConstantsHelper.PLAYLISTS);
-        searchAllPlaylistsTextView.setOnClickListener(this);
-        searchAllAlbumsTextView.setTransitionName(SearchByTypeConstantsHelper.ALBUMS);
-        searchAllAlbumsTextView.setOnClickListener(this);
-        searchAllGenresAndMoodsTextView
-                .setTransitionName(SearchByTypeConstantsHelper.GENRES_AND_MOODS);
-        searchAllGenresAndMoodsTextView.setOnClickListener(this);
-        searchAllProfilesTextView.setTransitionName(SearchByTypeConstantsHelper.PROFILES);
-        searchAllProfilesTextView.setOnClickListener(this);
     }
 
     /**
