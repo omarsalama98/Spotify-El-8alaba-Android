@@ -30,6 +30,7 @@ public class SettingsList extends Fragment {
     private Bundle bundle;
     private TextView logout;
     SharedPreferences sharedPreferences;
+    private TextView notificationSettings;
 
 
     @Override
@@ -46,6 +47,16 @@ public class SettingsList extends Fragment {
         View view= inflater.inflate(R.layout.fragment_settings_list, container, false);
         mCurrentUserProfile=view.findViewById(R.id.current_user_profile);
         logout=view.findViewById(R.id.logout);
+        notificationSettings=view.findViewById(R.id.notification_settings);
+        notificationSettings.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotificationSettings notificationSettings=new NotificationSettings();
+                mFragmentManager=getActivity().getSupportFragmentManager();
+                mFragmentTransaction=mFragmentManager.beginTransaction();
+                mFragmentTransaction.replace(R.id.nav_host_fragment,notificationSettings,"Notification_Settings").addToBackStack(null).commit();
+            }
+        });
         mCurrentUserProfile.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

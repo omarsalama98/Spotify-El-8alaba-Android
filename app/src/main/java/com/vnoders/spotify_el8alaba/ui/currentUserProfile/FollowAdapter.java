@@ -43,7 +43,6 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull FollowViewHolder holder, int position) {
     FollowItem currentItem = followList.get(position);
-    Log.d("FOLLOWER ADAPTER",currentItem.getmUserName());
     holder.userName.setText(currentItem.getmUserName());
     holder.followersNumber.setText(currentItem.getmFollowersNumber());
     Picasso.get().load(currentItem.getmImageURL()).into(holder.userImage);

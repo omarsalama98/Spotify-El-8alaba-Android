@@ -207,4 +207,15 @@
     <string name = "electronic">Electronic</string>
     <string name = "reggae">Reggae</string>
     <string name = "classical">Classical</string>
+    <string name = "notification_settings">Notification Settings</string>
+    <string name = "notif_profile_follows">Profile Follows</string>
+    <string name = "notif_profile_follows_description">Receive a notification when a user follows you.</string>
+    <string name = "notif_playlist_follows">Playlist Follows</string>
+    <string name = "notif_playlist_follows_description">Receive a notification when someone follows \nyour playlist.</string>
+    <string name = "notif_new_track">New Tracks</string>
+    <string name = "notif_new_track_descriptin">Receive a notification when a followed artist \nposts a track.</string>
+    <string name = "notif_new_albums">New Albums</string>
+    <string name = "notif_new_albums_description">Receive a notification when a followed artist \nposts an album.</string>
+    <string name = "save_changes">save Changes</string>
+
 </resources>

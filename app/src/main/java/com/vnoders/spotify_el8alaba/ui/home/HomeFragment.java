@@ -7,13 +7,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,7 +31,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
-import com.vnoders.spotify_el8alaba.models.NotificationToken;
+import com.vnoders.spotify_el8alaba.models.Notifications.NotificationToken;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -155,6 +155,7 @@ public class HomeFragment extends Fragment {
             NotificationToken notificationToken = new NotificationToken(token);
             Call<ResponseBody> notificationRequest = RetrofitClient.getInstance().getAPI(API.class)
                     .addNotificationToken(notificationToken);
+            //Toast.makeText(getActivity(),notificationToken.getToken(),Toast.LENGTH_LONG).show();
             notificationRequest.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> notificationRequest, Response<ResponseBody> response) {

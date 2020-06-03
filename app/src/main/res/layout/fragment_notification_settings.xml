@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        tools:context = ".NotificationSettings"
+        android:orientation="vertical"
+        android:background="@color/endColor"
+        android:weightSum="10"
+        >
+    <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "0dp"
+            android:layout_weight="0.8"
+            >
+        <ImageButton
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:id = "@+id/back_button"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:src = "@drawable/ic_left_arrow"
+                android:background = "@android:color/transparent" />
+        <TextView
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:gravity = "center_horizontal"
+                android:text = "@string/notification_settings"
+                android:textColor = "@color/white"
+                android:textSize = "15sp"
+                android:layout_centerInParent = "true" />
+    </RelativeLayout>
+    <LinearLayout
+            android:layout_width = "match_parent"
+            android:layout_weight= "9.2"
+            android:layout_height = "0dp"
+            android:orientation="vertical"
+            android:background="@color/black"
+            >
+        <RelativeLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop="20dp"
+                >
+            <TextView
+                    android:id="@+id/profile_follows"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text="@string/notif_profile_follows"
+                    android:textColor="@color/white"
+                    />
+            <TextView
+                    android:textSize="12sp"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_alignTop="@id/profile_follows"
+                    android:text="@string/notif_profile_follows_description"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginStart="10dp"
+                    />
+            <Switch
+                    android:id="@+id/switch_profile_follows"
+                    android:layout_marginEnd="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width = "wrap_content"
+                    android:checked="true"
+                    android:thumb="@drawable/ic_baseline_brightness_1_24"
+                    android:track="@drawable/custom_switch"
+                    android:layout_height = "wrap_content"
+                    android:background="@android:color/transparent"
+                    />
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop="20dp"
+                >
+            <TextView
+                    android:id="@+id/playlist_follows"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text="@string/notif_playlist_follows"
+                    android:textColor="@color/white"
+                    />
+            <TextView
+                    android:textSize="12sp"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_alignTop="@id/playlist_follows"
+                    android:text="@string/notif_playlist_follows_description"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginStart="10dp"
+                    />
+            <Switch
+                    android:id="@+id/switch_playlist_follows"
+                    android:layout_marginEnd="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width = "wrap_content"
+                    android:checked="true"
+                    android:thumb="@drawable/ic_baseline_brightness_1_24"
+                    android:track="@drawable/custom_switch"
+                    android:layout_height = "wrap_content"
+                    android:background="@android:color/transparent"
+                    />
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop="20dp"
+                >
+            <TextView
+                    android:id="@+id/new_track"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text="@string/notif_new_track"
+                    android:textColor="@color/white"
+                    />
+            <TextView
+                    android:textSize="12sp"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_alignTop="@id/new_track"
+                    android:text="@string/notif_new_track_descriptin"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginStart="10dp"
+                    />
+            <Switch
+                    android:id="@+id/switch_new_track"
+                    android:layout_marginEnd="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width = "wrap_content"
+                    android:checked="true"
+                    android:thumb="@drawable/ic_baseline_brightness_1_24"
+                    android:track="@drawable/custom_switch"
+                    android:layout_height = "wrap_content"
+                    android:background="@android:color/transparent"
+                    />
+        </RelativeLayout>
+        <RelativeLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:layout_marginTop="20dp"
+                >
+            <TextView
+                    android:id="@+id/new_album"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text="@string/notif_new_albums"
+                    android:textColor="@color/white"
+                    />
+            <TextView
+                    android:textSize="12sp"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_alignTop="@id/new_album"
+                    android:text="@string/notif_new_albums_description"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginStart="10dp"
+                    />
+            <Switch
+                    android:id="@+id/switch_new_album"
+                    android:layout_marginEnd="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width = "wrap_content"
+                    android:checked="true"
+                    android:thumb="@drawable/ic_baseline_brightness_1_24"
+                    android:track="@drawable/custom_switch"
+                    android:layout_height = "wrap_content"
+                    android:background="@android:color/transparent"
+                    />
+        </RelativeLayout>
+        <Button
+                android:id="@+id/submit_changes"
+                android:layout_width = "150dp"
+                android:layout_height = "wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="35dp"
+                android:background = "@drawable/custom_face"
+                android:text="@string/save_changes"
+                android:textColor="@color/white"
+            />
+    </LinearLayout>
+</LinearLayout>
