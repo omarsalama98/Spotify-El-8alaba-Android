@@ -156,9 +156,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     itemId = ((SearchArtist) result).getId();
                     itemName = ((SearchArtist) result).getName();
                     itemInfo = "Artist";
-                    Image image = ((SearchArtist) result).getImage().get(0);
-                    if (image != null) {
-                        itemImageUrl = image.getUrl();
+                    List<Image> images = ((SearchArtist) result).getImage();
+                    if (images != null) {
+                        itemImageUrl = images.get(0).getUrl();
                     }
                 }
                 if (result instanceof User) {
