@@ -24,7 +24,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void showNotification(Map<String, String> data) {
         String title = data.get("title");
-        Toast.makeText(this,title,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,title,Toast.LENGTH_LONG).show();
         String body = data.get("body");
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID="com.vnoders.spotify_el8alaba.test";
@@ -50,7 +50,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void showNotification(String title, String body) {
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID="com.vnoders.spotify_el8alaba.test";
-        Toast.makeText(this,title,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,title,Toast.LENGTH_LONG).show();
         if(VERSION.SDK_INT>=Build.VERSION_CODES.O){
             NotificationChannel notificationChannel=new NotificationChannel(NOTIFICATION_CHANNEL_ID,"NOTIFICATION",NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.setDescription("test description");
