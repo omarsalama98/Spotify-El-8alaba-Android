@@ -8,20 +8,37 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil.ItemCallback;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Search.Artist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.ui.library.AddArtistAdapter.ArtistViewHolder;
 import de.hdodenhof.circleimageview.CircleImageView;
-import java.util.ArrayList;
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
-class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
+class AddArtistAdapter extends ListAdapter<SearchArtist, ArtistViewHolder> {
 
-    private List<Artist> artists;
+    private AddArtistsViewModel viewModel;
 
-    public AddArtistAdapter(ArrayList<Artist> artists) {
-        this.artists = artists;
+    private static final ItemCallback<SearchArtist> DIFF_COMPARE_CALLBACK = new ItemCallback<SearchArtist>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull SearchArtist oldItem,
+                @NonNull SearchArtist newItem) {
+            return oldItem.getId().equals(newItem.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull SearchArtist oldItem,
+                @NonNull SearchArtist newItem) {
+            return oldItem.getId().equals(newItem.getId());
+        }
+    };
+
+    public AddArtistAdapter(AddArtistsViewModel addArtistsViewModel) {
+        super(DIFF_COMPARE_CALLBACK);
+        this.viewModel = addArtistsViewModel;
     }
 
     @NonNull
@@ -37,20 +54,16 @@ class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ArtistViewHolder holder, int position) {
-        holder.artistName.setText(artists.get(position).getName());
+        holder.bind(getItem(position));
     }
 
-    @Override
-    public int getItemCount() {
-        return artists.size();
-    }
-
-    static class ArtistViewHolder extends RecyclerView.ViewHolder {
+    class ArtistViewHolder extends RecyclerView.ViewHolder {
 
         View artistBody;
         CircleImageView artistImage;
         TextView artistName;
         ImageView checkedIcon;
+        String artistId;
 
         ArtistViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,13 +74,14 @@ class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
             checkedIcon = itemView.findViewById(R.id.add_artist_checked);
 
             artistBody.setOnClickListener(new OnClickListener() {
-                boolean checked = false;
-
                 @Override
                 public void onClick(View v) {
-                    checked = !checked;
-                    if (checked) {
+                    SearchArtist artist = getItem(getAdapterPosition());
+                    artist.toggleSelection();
+
+                    if (artist.isSelected()) {
                         // TODO: actually add this artist to favorites
+                        viewModel.requestRelatedArtists(artistId);
                         checkedIcon.setVisibility(View.VISIBLE);
                     } else {
                         checkedIcon.setVisibility(View.INVISIBLE);
@@ -77,6 +91,24 @@ class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
 
         }
 
+        public void bind(@NotNull SearchArtist artist) {
+            artistName.setText(artist.getName());
+
+            artistId = artist.getId();
+
+            String imageUrl = null;
+            if (artist.getImages() != null && !artist.getImages().isEmpty()) {
+                imageUrl = artist.getImages().get(0).getUrl();
+            }
+
+            Picasso.get().load(imageUrl).placeholder(R.drawable.artist).into(artistImage);
+
+            if (artist.isSelected()) {
+                checkedIcon.setVisibility(View.VISIBLE);
+            } else {
+                checkedIcon.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
 }

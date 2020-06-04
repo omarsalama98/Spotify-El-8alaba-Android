@@ -20,6 +20,8 @@ public class SearchArtist {
     @Expose
     private String id;
 
+    private boolean isSelected = false;
+
     public List<Image> getImages() {
         return images;
     }
@@ -42,6 +44,18 @@ public class SearchArtist {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public void toggleSelection(){
+        isSelected = !isSelected;
     }
 
     @Override
