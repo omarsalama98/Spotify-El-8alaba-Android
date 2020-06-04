@@ -40,7 +40,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                //.setSmallIcon(R.drawable.ic_message_black_24dp)
+                .setSmallIcon(R.drawable.spotify)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setContentInfo("INFO");
@@ -74,13 +74,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         //Toast.makeText(MyFirebaseMessagingService.this,"DELIVERED",Toast.LENGTH_LONG).show();
         super.onMessageReceived(remoteMessage);
-        if (remoteMessage.getData().isEmpty()) {
+        //if (remoteMessage.getData().isEmpty()) {
             showNotification(remoteMessage.getNotification().getTitle(),
                     remoteMessage.getNotification().getBody());
 
-        } else {
-            showNotification(remoteMessage.getData());
-        }
+//        } else {
+//            showNotification(remoteMessage.getData());
+//        }
 
     }
 
