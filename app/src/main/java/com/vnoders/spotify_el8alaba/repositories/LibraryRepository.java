@@ -13,6 +13,8 @@ import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Image;
+import com.vnoders.spotify_el8alaba.models.Search.Artists;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
@@ -23,6 +25,7 @@ import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
+import com.vnoders.spotify_el8alaba.ui.library.AddArtistsViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
@@ -660,6 +663,47 @@ public class LibraryRepository {
 
             }
         });
+
+    }
+
+    public static void getRandomArtists(AddArtistsViewModel viewModel) {
+        Call<Artists> request = libraryApi.getRandomArtists();
+
+        request.enqueue(new Callback<Artists>() {
+            @Override
+            public void onResponse(Call<Artists> call, Response<Artists> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    viewModel.setArtists(response.body().getArtists());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Artists> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
+    public static void updateRelatedArtists(String artistId, AddArtistsViewModel viewModel) {
+        Call<List<SearchArtist>> request = libraryApi.getRelatedSearchArtists(artistId);
+
+        request.enqueue(new Callback<List<SearchArtist>>() {
+            @Override
+            public void onResponse(Call<List<SearchArtist>> call,
+                    Response<List<SearchArtist>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    viewModel.setRelatedArtists(artistId, response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<SearchArtist>> call, Throwable t) {
+
+            }
+        });
+
 
     }
 

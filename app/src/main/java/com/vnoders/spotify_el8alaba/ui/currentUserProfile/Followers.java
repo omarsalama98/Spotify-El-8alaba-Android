@@ -100,9 +100,16 @@ public class Followers extends Fragment {
                     for (int i = 0; i < response.body().size(); i++) {
                         String type=response.body().get(i).getType();
                         if(response.body().get(i).getImage()!=null) {
-                            URL =response.body().get(i).getImage().get(0).getUrl();
-                        }
-                        else{URL=imageUrl;}
+                            if(response.body().get(i).getImage().size()!=0) {
+                                Log.d("FINDING CRASHING", String.valueOf(i));
+                                URL = response.body().get(i).getImage().get(0).getUrl();
+                            }
+                            else{
+                                URL=imageUrl;
+                            }
+                            }
+                        else{
+                            URL=imageUrl;}
                         String id=response.body().get(i).getId();
                         String name=response.body().get(i).getName();
                         String followers=response.body().get(i).getFollowers().toString();

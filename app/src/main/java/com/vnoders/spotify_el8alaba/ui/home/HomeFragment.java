@@ -120,10 +120,11 @@ public class HomeFragment extends Fragment {
 
         settingsButton.setOnClickListener(v -> {
 
-            SettingsList settingsList =new SettingsList();
-            FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment,settingsList,"SETTINGS_LIST").addToBackStack(null).commit();
+            SettingsList settingsList = new SettingsList();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.nav_host_fragment, settingsList, "SETTINGS_LIST")
+                    .addToBackStack(null).commit();
         });
 
         Call<List<HomePlaylist>> call2 = apiService
@@ -150,21 +151,24 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
             }
         });
-        String token=notificationTokenShared.getString("notification_token","token_not_found");
-        if (!token.equals("token_not_found")&&!token.equals("")) {
+        String token = notificationTokenShared.getString("notification_token", "token_not_found");
+        //Toast.makeText(getActivity(), token, Toast.LENGTH_LONG).show();
+        String notSendFlag = notificationTokenShared.getString("notSent", "");
+        if (notSendFlag.equals("true")) {
             NotificationToken notificationToken = new NotificationToken(token);
             Call<ResponseBody> notificationRequest = RetrofitClient.getInstance().getAPI(API.class)
                     .addNotificationToken(notificationToken);
             //Toast.makeText(getActivity(),notificationToken.getToken(),Toast.LENGTH_LONG).show();
             notificationRequest.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<ResponseBody> notificationRequest, Response<ResponseBody> response) {
-                    if(response.code()==200){
-                        Editor editor=notificationTokenShared.edit();
-                        editor.clear();
-                        editor.commit();
-                    }
+                public void onResponse(Call<ResponseBody> notificationRequest,
+                        Response<ResponseBody> response) {
                     Log.d("RESPONSE_ADD_NOTIF", response.toString());
+                    if (response.code() == 201) {
+                        Editor editor = notificationTokenShared.edit();
+                        editor.putString("notSent", "false");
+                        editor.apply();
+                    }
                 }
 
                 @Override
@@ -172,7 +176,7 @@ public class HomeFragment extends Fragment {
                     Log.d("RESPONSE_ADD_NOTIF", "FAILED");
                 }
             });
+
         }
     }
-
 }

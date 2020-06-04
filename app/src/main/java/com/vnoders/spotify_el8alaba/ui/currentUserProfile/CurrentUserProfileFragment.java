@@ -28,6 +28,7 @@ import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -143,6 +144,8 @@ public class CurrentUserProfileFragment extends Fragment {
         }
 
 
+
+
         appBarLayout.addOnOffsetChangedListener(new OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -152,6 +155,14 @@ public class CurrentUserProfileFragment extends Fragment {
         followingLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            Following following=new Following();
+                ArrayList<String> followingIds=new ArrayList<String>(currentUserProfile.getFollowing());
+                bundle=new Bundle();
+                bundle.putStringArrayList("FOLLOWING_IDS",followingIds);
+                following.setArguments(bundle);
+                fragmentManager=getActivity().getSupportFragmentManager();
+                fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment,following,"FOLLOWING").addToBackStack(null).commit();
 
             }
         });

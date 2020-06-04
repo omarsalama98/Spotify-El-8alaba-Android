@@ -12,7 +12,7 @@ public class CurrentUserProfile implements Serializable {
 
     @SerializedName("following")
     @Expose
-    private List<Object> following = null;
+    private List<String> following = null;
     @SerializedName("followedPlaylists")
     @Expose
     private List<Playlist> followedPlaylists = null;
@@ -115,11 +115,11 @@ public class CurrentUserProfile implements Serializable {
             List<Playlist> followedPlaylists) {
         this.followedPlaylists = followedPlaylists;
     }
-    public List<Object> getFollowing() {
+    public List<String> getFollowing() {
         return following;
     }
 
-    public void setFollowing(List<Object> following) {
+    public void setFollowing(List<String> following) {
         this.following = following;
     }
 }
