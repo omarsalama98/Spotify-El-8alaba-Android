@@ -393,16 +393,14 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
                 public void onResponse(Call<SearchResult> call,
                         Response<SearchResult> response) {
 
-                    Log.d("Meh", "doll");
                     searchResults.clear();
                     searchResults.addAll(getTwosOfEach(response.body()));
                             searchListAdapter.notifyDataSetChanged();
-                    Log.d("Meh", "d");
                 }
 
                         @Override
                         public void onFailure(Call<SearchResult> call, Throwable t) {
-                            Log.d(TAG, "failed to retrieve playlists" + t.getMessage());
+                            Log.d(TAG, "failed to retrieve search items" + t.getMessage());
                         }
                     });
             //setSearchMainBackgroundColor(colorOfFirstSearchResultImage);
