@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompat.Builder;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.vnoders.spotify_el8alaba.R;
 import java.util.Map;
 import java.util.Random;
 
@@ -24,7 +25,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void showNotification(Map<String, String> data) {
         String title = data.get("title");
-        Toast.makeText(this,title,Toast.LENGTH_LONG).show();
         String body = data.get("body");
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID="com.vnoders.spotify_el8alaba.test";
@@ -33,7 +33,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationChannel.setDescription("test description");
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.GREEN);
-            //notificationChannel.setVibrationPattern(new long[]{0,1000,500,1000});
+            notificationChannel.setVibrationPattern(new long[]{0,1000,500,1000});
             notificationManager.createNotificationChannel(notificationChannel);
         }
         NotificationCompat.Builder notificationBuilder=new Builder(this,NOTIFICATION_CHANNEL_ID);
@@ -50,7 +50,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void showNotification(String title, String body) {
         NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID="com.vnoders.spotify_el8alaba.test";
-        Toast.makeText(this,title,Toast.LENGTH_LONG).show();
         if(VERSION.SDK_INT>=Build.VERSION_CODES.O){
             NotificationChannel notificationChannel=new NotificationChannel(NOTIFICATION_CHANNEL_ID,"NOTIFICATION",NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.setDescription("test description");
@@ -60,11 +59,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(notificationChannel);
 
         }
-        NotificationCompat.Builder notificationBuilder=new Builder(this,NOTIFICATION_CHANNEL_ID);
+        NotificationCompat.Builder notificationBuilder=new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID);
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                //.setSmallIcon(R.drawable.ic_message_black_24dp)
+                .setSmallIcon(R.drawable.spotify)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setContentInfo("INFO");
@@ -78,6 +77,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().isEmpty()) {
             showNotification(remoteMessage.getNotification().getTitle(),
                     remoteMessage.getNotification().getBody());
+
         } else {
             showNotification(remoteMessage.getData());
         }
