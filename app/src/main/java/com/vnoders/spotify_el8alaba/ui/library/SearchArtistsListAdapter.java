@@ -53,8 +53,8 @@ public class SearchArtistsListAdapter extends
         String artistName = result.getName();
         holder.name.setText(artistName);
         String artistImageUrl = "";
-        if (mDataset.get(position).getImage() != null) {
-            artistImageUrl = mDataset.get(position).getImage().get(0).getUrl();
+        if (mDataset.get(position).getImages() != null) {
+            artistImageUrl = mDataset.get(position).getImages().get(0).getUrl();
         } else {
             artistImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
         }

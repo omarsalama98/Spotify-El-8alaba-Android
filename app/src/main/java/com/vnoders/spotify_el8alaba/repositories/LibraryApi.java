@@ -15,6 +15,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -131,12 +132,13 @@ public interface LibraryApi {
     Call<Void> followArtists(@Body RequestBodyIds requestBodyIds);
 
 
-    @DELETE("me/following?type=artist")
+    @HTTP(method = "DELETE", path = "me/following?type=artist", hasBody = true)
     Call<Void> unfollowArtists(@Body RequestBodyIds requestBodyIds);
 
 
     @GET("artists/{artist_id}/related-artists")
     Call<List<Artist>> getRelatedArtists(@Path("artist_id") String artistId);
+
 
     @GET("artists/{artist_id}/top-tracks")
     Call<List<Track>> getArtistTopTracks(@Path("artist_id") String artistId);
