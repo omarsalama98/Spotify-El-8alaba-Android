@@ -217,5 +217,4 @@
     <string name = "notif_new_albums">New Albums</string>
     <string name = "notif_new_albums_description">Receive a notification when a followed artist \nposts an album.</string>
     <string name = "save_changes">save Changes</string>
-
 </resources>

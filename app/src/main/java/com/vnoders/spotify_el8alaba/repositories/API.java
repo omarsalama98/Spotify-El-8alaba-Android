@@ -9,6 +9,7 @@ import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
 import com.vnoders.spotify_el8alaba.models.userProfile.GetUsersPlaylists;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
+import com.vnoders.spotify_el8alaba.response.UserProfile;
 import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -107,4 +108,7 @@ public interface API {
 
     @DELETE("users/notification-token/{token}")
     Call<ResponseBody> deleteNotificationToken(@Path("token") String token);
+
+    @GET("users/{id}")
+    Call<UserProfile> getUserProfileData(@Path("id") String id);
 }
