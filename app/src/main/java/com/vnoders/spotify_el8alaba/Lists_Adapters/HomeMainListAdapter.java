@@ -1,9 +1,6 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +15,6 @@ import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
-import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapter.MyViewHolder> {
 
@@ -59,9 +52,6 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
 
         APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        Call<List<HomePlaylist>> call = apiService
-                .getCategoryPlaylists(backDataset.get(position).getId());
-
         holder.innerList.setLayoutManager(
                 new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
@@ -71,19 +61,8 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
         holder.innerList.addItemDecoration(
                 new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
 
-        call.enqueue(new Callback<List<HomePlaylist>>() {
-            @Override
-            public void onResponse(Call<List<HomePlaylist>> call,
-                    Response<List<HomePlaylist>> response) {
-                myDataList.addAll(response.body());
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<List<HomePlaylist>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
-            }
-        });
+        myDataList.addAll(backDataset.get(position).getPlaylists());
+        adapter.notifyDataSetChanged();
 
     }
 
