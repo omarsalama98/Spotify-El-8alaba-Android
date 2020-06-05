@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +37,15 @@ public class AddArtistActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
-        View search_layout = findViewById(R.id.search_text_layout);
+        View searchBar = findViewById(R.id.search_text_layout);
+
+        searchBar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddArtistActivity.this , SearchArtistsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         View done = findViewById(R.id.add_artist_done);
         done.setOnClickListener(new OnClickListener() {
