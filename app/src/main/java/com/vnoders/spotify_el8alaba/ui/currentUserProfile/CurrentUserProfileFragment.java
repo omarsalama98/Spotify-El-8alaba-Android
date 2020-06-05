@@ -28,6 +28,7 @@ import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 
+import com.vnoders.spotify_el8alaba.response.Notifications.RecentActivities;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,9 +111,10 @@ public class CurrentUserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         List<Image> userImages =currentUserProfile.getImage();
-        if(userImages!=null) {
+        if(userImages!=null&&userImages.size()>0) {
              imageUrl = userImages.get(1).getUrl();
         }
+
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_current_user_profile, container, false);
         followingLayout=root.findViewById(R.id.following_layout);
@@ -136,9 +138,9 @@ public class CurrentUserProfileFragment extends Fragment {
         userName.setText(currentUserProfile.getName());
         userNameToolbar.setText(currentUserProfile.getName());
         followingNumber.setText(String.valueOf(currentUserProfile.getFollowing().size()));
-//        if(currentUserProfile.getFollowers()==0){
-//            followersLayout.setEnabled(false);
-//        }
+        if(currentUserProfile.getFollowers()==0){
+            followersLayout.setEnabled(false);
+        }
         if(currentUserProfile.getFollowing().size()==0){
             followingLayout.setEnabled(false);
         }
@@ -169,7 +171,11 @@ public class CurrentUserProfileFragment extends Fragment {
         followersLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<String> followingIds=new ArrayList<String>(currentUserProfile.getFollowing());
+                bundle=new Bundle();
+                bundle.putStringArrayList("FOLLOWING_IDS",followingIds);
                 Followers followers=new Followers();
+                followers.setArguments(bundle);
                 fragmentManager=getActivity().getSupportFragmentManager();
                 fragmentTransaction=fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.nav_host_fragment,followers,"FOLLOWERS").addToBackStack(null).commit();
@@ -214,6 +220,8 @@ public class CurrentUserProfileFragment extends Fragment {
             }
         });
 
+        getRecentActivities();
+
         // make request to display the owned playlists correctly
         setPlaylistsNumber();
 
@@ -229,6 +237,25 @@ public class CurrentUserProfileFragment extends Fragment {
         });
 
         return root;
+    }
+
+    public void getRecentActivities(){
+            Call<RecentActivities>getCurrentUserNotifications=RetrofitClient.getInstance().getAPI(API.class).getRecentActivities();
+            getCurrentUserNotifications.enqueue(new Callback<RecentActivities>() {
+                @Override
+                public void onResponse(Call<RecentActivities> call,
+                        Response<RecentActivities> response) {
+                    if(response.code()==200){
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RecentActivities> call, Throwable t) {
+
+                }
+            });
+
     }
 
     /**

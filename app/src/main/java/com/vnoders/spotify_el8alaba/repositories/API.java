@@ -9,6 +9,7 @@ import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
 import com.vnoders.spotify_el8alaba.models.userProfile.GetUsersPlaylists;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
+import com.vnoders.spotify_el8alaba.response.Notifications.RecentActivities;
 import com.vnoders.spotify_el8alaba.response.UserProfile;
 import java.util.List;
 import okhttp3.MultipartBody;
@@ -98,7 +99,7 @@ public interface API {
     Call<GetUsersPlaylists> getCurrentUsersPlaylists();
 
     @GET("me/following?limit=20")
-    Call<List<CurrentUserProfile>> getFollowers();
+    Call<List<CurrentUserProfile>> getFollowing();
 
     @GET("users/notification-status")
     Call<ResponseBody> getNotificationStatus();
@@ -111,4 +112,11 @@ public interface API {
 
     @GET("users/{id}")
     Call<UserProfile> getUserProfileData(@Path("id") String id);
+
+    @GET("me/followers?limit=20&offset=0")
+    Call<List<CurrentUserProfile>> getFollowers();
+
+    @GET("users/notifications")
+    Call<RecentActivities> getRecentActivities();
+
 }
