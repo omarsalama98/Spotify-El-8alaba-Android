@@ -13,13 +13,16 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Image;
-import com.vnoders.spotify_el8alaba.models.Search.Album;
+import com.vnoders.spotify_el8alaba.models.Search.AlbumForTrack;
 import com.vnoders.spotify_el8alaba.models.Search.Playlist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
+import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
@@ -27,17 +30,22 @@ import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
 
     private static ArrayList<Object> mDataset;
     private static Fragment fragment;
+    private static APIInterface apiService;
     private static String itemInfo = "", itemName = "", itemImageUrl = "", itemId = "", itemType = "";
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public SearchListAdapter(ArrayList<Object> myDataset, Fragment fragment) {
         mDataset = myDataset;
         SearchListAdapter.fragment = fragment;
+        apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
     }
 
     // Create new views (invoked by the layout manager)
@@ -55,10 +63,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         Object result = mDataset.get(position);
-        if (result instanceof Album) {
-            itemName = ((Album) result).getName();
+        if (result instanceof SearchAlbum) {
+            itemName = ((SearchAlbum) result).getName();
             holder.name.setText(itemName);
-            List<TrackImage> images = ((Album) result).getImages();
+            List<TrackImage> images = ((SearchAlbum) result).getImages();
             itemInfo = "Album";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
@@ -80,15 +88,17 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
         }
-        if(result instanceof User){
+        if(result instanceof User) {
             itemName = ((User) result).getName();
             holder.name.setText(itemName);
-            Image image = ((User) result).getImage();
+            List<Image> images = ((User) result).getImages();
             itemInfo = "User";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-            if (image != null) {
-                itemImageUrl = image.getUrl();
+            if (images != null) {
+                if (!images.isEmpty()) {
+                    itemImageUrl = images.get(0).getUrl();
+                }
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
         } else if (result instanceof Playlist) {
@@ -98,25 +108,44 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
             List<TrackImage> images = ((Playlist) result).getImages();
-            if (!images.isEmpty()) {
-                itemImageUrl = images.get(0).getUrl();
+            if (images != null) {
+                if (!images.isEmpty()) {
+                    itemImageUrl = images.get(0).getUrl();
+                }
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
         } else if (result instanceof SearchTrack) {
             itemName = ((SearchTrack) result).getName();
             holder.name.setText(itemName);
-            List<String> artistsIds = ((SearchTrack) result).getArtists();
-            //TODO: Tracks should have images (Not added in backend)
-            itemInfo = "Track";
-            // TODO: Maybe request the artists from the server by their ids and show them here
-            /*if (!artistsIds.isEmpty()) {
-                itemInfo += artistsIds.get(0);
-            }*/
-            holder.info.setText(itemInfo);
-            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-            Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
-        }
+            Call<AlbumForTrack> call = apiService.getAlbum(((SearchTrack) result).getAlbum());
+            call.enqueue(new Callback<AlbumForTrack>() {
+                @Override
+                public void onResponse(Call<AlbumForTrack> call, Response<AlbumForTrack> response) {
+                    if (response.body() != null) {
+                        itemInfo = "";
+                        for (int i = 0; i < response.body().getArtists().size(); i++) {
+                            itemInfo += response.body().getArtists().get(i).getName() + " ";
+                        }
+                        List<TrackImage> images = response.body().getImages();
+                        if (images != null) {
+                            if (!images.isEmpty()) {
+                                itemImageUrl = images.get(0).getUrl();
+                            }
+                        }
+                    } else {
+                        itemInfo = "Track";
+                        itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+                    }
+                    holder.info.setText(itemInfo);
+                    Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify)
+                            .into(holder.image);
+                }
 
+                @Override
+                public void onFailure(Call<AlbumForTrack> call, Throwable t) {
+                }
+            });
+        }
     }
 
     @Override
@@ -142,12 +171,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
 
                 Object result = mDataset.get(getAdapterPosition());
                 itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-                if (result instanceof Album) {
+                if (result instanceof SearchAlbum) {
                     itemType = SearchByTypeConstantsHelper.ALBUM;
-                    itemId = ((Album) result).getId();
-                    itemName = ((Album) result).getName();
+                    itemId = ((SearchAlbum) result).getId();
+                    itemName = ((SearchAlbum) result).getName();
                     itemInfo = "Album";
-                    List<TrackImage> images = ((Album) result).getImages();
+                    List<TrackImage> images = ((SearchAlbum) result).getImages();
                     if (!images.isEmpty()) {
                         itemImageUrl = images.get(0).getUrl();
                     }
@@ -156,9 +185,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     itemId = ((SearchArtist) result).getId();
                     itemName = ((SearchArtist) result).getName();
                     itemInfo = "Artist";
-                    Image image = ((SearchArtist) result).getImages().get(0);
-                    if (image != null) {
-                        itemImageUrl = image.getUrl();
+                    List<Image> images = ((SearchArtist) result).getImages();
+                    if (images != null) {
+                        if(!images.isEmpty())
+                            itemImageUrl = images.get(0).getUrl();
                     }
                 }
                 if (result instanceof User) {
@@ -166,9 +196,11 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     itemId = ((User) result).getId();
                     itemName = ((User) result).getName();
                     itemInfo = "User";
-                    Image image = ((User) result).getImage();
-                    if (image != null) {
-                        itemImageUrl = image.getUrl();
+                    List<Image> images = ((User) result).getImages();
+                    if (images != null) {
+                        if (!images.isEmpty()) {
+                            itemImageUrl = images.get(0).getUrl();
+                        }
                     }
                 } else if (result instanceof Playlist) {
                     itemType = SearchByTypeConstantsHelper.PLAYLIST;

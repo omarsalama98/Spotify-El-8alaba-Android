@@ -24,14 +24,14 @@
                 android:id = "@+id/search_item_name_text_view"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
-                android:text = "Title"
+                android:text = ""
                 android:textSize = "@dimen/search_list_item_title"
                 android:textColor = "@color/white" />
         <TextView
                 android:id = "@+id/search_item_info_text_view"
                 android:layout_width = "match_parent"
                 android:layout_height = "wrap_content"
-                android:text = "Title"
+                android:text = ""
                 android:textSize = "15sp"
                 android:textColor = "@color/colorSecondaryText" />
 

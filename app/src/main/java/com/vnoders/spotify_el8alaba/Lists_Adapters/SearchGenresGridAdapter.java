@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -71,6 +72,9 @@ public class SearchGenresGridAdapter extends
 
                         }
                     });
+        } else {
+            BitmapDrawable bD = (BitmapDrawable) (holder.genreImage.getDrawable());
+            GradientUtils.generate(bD.getBitmap(), holder.genreLayout);
         }
         holder.genreTitle.setText(backGenresList.get(position).getName());
 

@@ -24,7 +24,7 @@ import com.vnoders.spotify_el8alaba.models.Artist.AlbumTracks;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistReTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.MyTrack;
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateAlbumNameRequestBody;
-import com.vnoders.spotify_el8alaba.models.Search.Album;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
@@ -120,19 +120,19 @@ public class ArtistEditAlbumFragment extends Fragment {
                     }
                 });
             }
-            Call<Album> calls =
+            Call<SearchAlbum> calls =
                     apiService.updateAlbumName(albumId,
                             new UpdateAlbumNameRequestBody(albumNameEditText.getText().toString()));
-            calls.enqueue(new Callback<Album>() {
+            calls.enqueue(new Callback<SearchAlbum>() {
                 @Override
-                public void onResponse(Call<Album> call, Response<Album> response) {
+                public void onResponse(Call<SearchAlbum> call, Response<SearchAlbum> response) {
                     Toast.makeText(getContext(), "Album Edited successfully", Toast.LENGTH_LONG)
                             .show();
                     getArtistAlbums();
                 }
 
                 @Override
-                public void onFailure(Call<Album> call, Throwable t) {
+                public void onFailure(Call<SearchAlbum> call, Throwable t) {
                 }
             });
         });

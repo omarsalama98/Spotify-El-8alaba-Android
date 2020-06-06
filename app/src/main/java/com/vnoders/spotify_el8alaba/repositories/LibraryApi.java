@@ -2,6 +2,8 @@ package com.vnoders.spotify_el8alaba.repositories;
 
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
+import com.vnoders.spotify_el8alaba.models.Search.Artists;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
@@ -140,7 +142,15 @@ public interface LibraryApi {
     Call<List<Artist>> getRelatedArtists(@Path("artist_id") String artistId);
 
 
+    @GET("artists/{artist_id}/related-artists")
+    Call<List<SearchArtist>> getRelatedSearchArtists(@Path("artist_id") String artistId);
+
+
     @GET("artists/{artist_id}/top-tracks")
     Call<List<Track>> getArtistTopTracks(@Path("artist_id") String artistId);
+
+
+    @GET("search?q=&type=artist&limit=20&offset=0")
+    Call<Artists> getRandomArtists();
 
 }
