@@ -136,6 +136,13 @@ public class Followers extends Fragment {
                                         .newInstance(followersList.get(position).getMid()))
                                         .addToBackStack(null).commit();
                             }
+                            else{
+                                fragmentManager = getActivity().getSupportFragmentManager();
+                                fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.nav_host_fragment, UserProfile
+                                        .newInstance(followersList.get(position).getMid()))
+                                        .addToBackStack(null).commit();
+                            }
                         }
                     });
                 }
@@ -143,6 +150,7 @@ public class Followers extends Fragment {
 
             @Override
             public void onFailure(Call<List<CurrentUserProfile>> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 ConnectionDialog dialog = new ConnectionDialog();
                 dialog.show(getActivity().getFragmentManager(), "connection_dialog");
             }

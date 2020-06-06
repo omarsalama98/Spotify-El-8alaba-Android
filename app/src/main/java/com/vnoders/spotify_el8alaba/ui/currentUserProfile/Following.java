@@ -22,7 +22,6 @@ import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
-import com.vnoders.spotify_el8alaba.response.UserProfile;
 import retrofit2.Callback;
 import retrofit2.Response;
 

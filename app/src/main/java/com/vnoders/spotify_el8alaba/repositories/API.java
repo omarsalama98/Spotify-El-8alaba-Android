@@ -7,10 +7,11 @@ import com.vnoders.spotify_el8alaba.models.Notifications.NotificationToken;
 import com.vnoders.spotify_el8alaba.models.LoginInfo;
 import com.vnoders.spotify_el8alaba.models.SignUpInfo;
 import com.vnoders.spotify_el8alaba.models.UpdateUserInfo;
+import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.models.userProfile.GetUsersPlaylists;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 import com.vnoders.spotify_el8alaba.response.Notifications.RecentActivities;
-import com.vnoders.spotify_el8alaba.response.UserProfile;
+import com.vnoders.spotify_el8alaba.response.UserProfileData;
 import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -18,12 +19,15 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * This interface will include all the back-end functions which will handle the API requests
@@ -111,7 +115,7 @@ public interface API {
     Call<ResponseBody> deleteNotificationToken(@Path("token") String token);
 
     @GET("users/{id}")
-    Call<UserProfile> getUserProfileData(@Path("id") String id);
+    Call<UserProfileData> getUserProfileData(@Path("id") String id);
 
     @GET("me/followers?limit=20&offset=0")
     Call<List<CurrentUserProfile>> getFollowers();
@@ -119,4 +123,12 @@ public interface API {
     @GET("users/notifications")
     Call<RecentActivities> getRecentActivities();
 
+    @GET("me/following/contains")
+    Call<List<Boolean>> checkFollowing(@Query("ids") String id);
+
+    @PUT("me/following")
+    Call<Void> followUser(@Body RequestBodyIds requestBodyIds);
+
+    @HTTP(method = "DELETE",path = "me/following?type=user",hasBody = true)
+    Call<Void> unFollowUser(@Body RequestBodyIds requestBodyIds);
 }
