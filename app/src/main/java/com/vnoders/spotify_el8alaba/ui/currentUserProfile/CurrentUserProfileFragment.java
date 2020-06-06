@@ -270,7 +270,6 @@ public class CurrentUserProfileFragment extends Fragment {
                                         .getTimestamp();
                                 dateSting=dateSting.substring(0,10)+" "+dateSting.substring(11,19);
                                 Timestamp ts=Timestamp.valueOf(dateSting);
-                                Log.d("FUCKINDATE",ts.toString());
                                 Date myDate=new Date(ts.getTime());
                                 String date=myDate.toString();
                                 date=date.substring(0,10)+" at "+date.substring(11,19);
