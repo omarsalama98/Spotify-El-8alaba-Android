@@ -1090,7 +1090,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
                 // add all tracks to liked tracks list
                 for (int i = 0; i < likedTracks.size(); ++i) {
-                    mLikedTracks.add(likedTracks.get(i).getLikedTrack().getId());
+                    if (likedTracks.get(i) != null) {
+                        if (likedTracks.get(i).getLikedTrack() != null) {
+                            if (!(TextUtils.isEmpty(likedTracks.get(i).getLikedTrack().getId()))) {
+                                mLikedTracks.add(likedTracks.get(i).getLikedTrack().getId());
+                            }
+                        }
+                    }
                 }
 
                 // check list of tracks to mark liked ones
