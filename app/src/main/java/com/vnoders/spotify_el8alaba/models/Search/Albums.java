@@ -8,13 +8,13 @@ public class Albums {
 
     @SerializedName("albums")
     @Expose
-    private List<Album> albums = null;
+    private List<SearchAlbum> albums = null;
 
-    public List<Album> getAlbums() {
+    public List<SearchAlbum> getAlbums() {
         return albums;
     }
 
-    public void setAlbums(List<Album> albums) {
+    public void setAlbums(List<SearchAlbum> albums) {
         this.albums = albums;
     }
 

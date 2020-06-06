@@ -28,7 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Artist.CreateAnAlbumRequestBody;
-import com.vnoders.spotify_el8alaba.models.Search.Album;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.FileUtils;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -195,10 +195,10 @@ public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeL
             if (electronicCB.isChecked()) {
                 requestBody.addGenre("electronic");
             }
-            Call<Album> call = apiService.createAlbum(requestBody);
-            call.enqueue(new Callback<Album>() {
+            Call<SearchAlbum> call = apiService.createAlbum(requestBody);
+            call.enqueue(new Callback<SearchAlbum>() {
                 @Override
-                public void onResponse(Call<Album> call, Response<Album> response) {
+                public void onResponse(Call<SearchAlbum> call, Response<SearchAlbum> response) {
                     Log.d("d", response.body().getName() + " -- " + response.body().getId());
                     if (imgFileExists) {
                         file = new File(FileUtils.getPath(getContext(), imageUri));
@@ -222,7 +222,7 @@ public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeL
                 }
 
                 @Override
-                public void onFailure(Call<Album> call, Throwable t) {
+                public void onFailure(Call<SearchAlbum> call, Throwable t) {
                 }
             });
         });

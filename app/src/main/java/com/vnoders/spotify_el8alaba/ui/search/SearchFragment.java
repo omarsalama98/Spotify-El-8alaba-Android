@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba.ui.search;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.vnoders.spotify_el8alaba.MainActivity.db;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,8 +35,8 @@ import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Search.Album;
 import com.vnoders.spotify_el8alaba.models.Search.Playlist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
@@ -118,7 +119,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
             mSearchResult.add(playlists.get(0));
             mSearchResult.add(playlists.get(1));
         }
-        List<Album> albums = searchListResults.getAlbums();
+        List<SearchAlbum> albums = searchListResults.getAlbums();
         if (albums.size() == 1) {
             mSearchResult.add(albums.get(0));
         } else if (albums.size() > 1) {
@@ -158,23 +159,16 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         super.onPause();
     }
 
-    private void setupUI(View view, View root) {
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupUI() {
         // Set up touch listener for non-text box views to hide keyboard.
-        if (!(view instanceof EditText)) {
-            view.setOnTouchListener(new OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    closeKeyboard(root);
-                    return false;
-                }
-            });
-        }
-        //If a layout container, iterate over children and seed recursion.
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                View innerView = ((ViewGroup) view).getChildAt(i);
-                setupUI(innerView, root);
+        searchResultListLayout.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                closeKeyboard();
+                return false;
             }
-        }
+        });
     }
 
     private static void showSearchHistoryList() {
@@ -200,6 +194,28 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
          */
         searchAllProfilesTextView.setTransitionName(SearchByTypeConstantsHelper.PROFILES);
         searchAllProfilesTextView.setOnClickListener(this);
+    }
+
+    private void showTextViews() {
+        searchAllArtistsTextView.setVisibility(View.VISIBLE);
+        searchAllSongsTextView.setVisibility(View.VISIBLE);
+        searchAllPlaylistsTextView.setVisibility(View.VISIBLE);
+        searchAllAlbumsTextView.setVisibility(View.VISIBLE);
+        /*
+        searchAllGenresAndMoodsTextView.setVisibility(View.VISIBLE);
+         */
+        searchAllProfilesTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideTextViews() {
+        searchAllArtistsTextView.setVisibility(View.GONE);
+        searchAllSongsTextView.setVisibility(View.GONE);
+        searchAllPlaylistsTextView.setVisibility(View.GONE);
+        searchAllAlbumsTextView.setVisibility(View.GONE);
+        /*
+        searchAllGenresAndMoodsTextView.setVisibility(View.GONE);
+         */
+        searchAllProfilesTextView.setVisibility(View.GONE);
     }
 
     public static void removeSearchHistoryList() {
@@ -257,16 +273,11 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
-    /**
-     * Hides Soft Keyboard
-     *
-     * @param view the current view where the keyboard is open
-     */
-    private void closeKeyboard(View view) {
+    private void closeKeyboard() {
         InputMethodManager imm = (InputMethodManager) getActivity()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         assert imm != null;
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
     }
 
     private void setSearchMainBackgroundColor() {
@@ -286,7 +297,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setupUI(view, view);
+        setupUI();
         getData();
         searchQuery.requestFocus();
         openKeyboard();
@@ -311,7 +322,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
         });
 
         backArrow.setOnClickListener(v -> {
-            closeKeyboard(view);
+            closeKeyboard();
             getActivity().onBackPressed();
         });
 
@@ -384,6 +395,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
             searchHistoryListLayout.setVisibility(View.GONE);
             resetSearch.setVisibility(View.VISIBLE);
             cameraInEditText.setVisibility(View.GONE);
+            hideTextViews();
 
             //*******  This populates the list every time the user types a letter inside search bar  ********/
 
@@ -392,19 +404,18 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
                 @Override
                 public void onResponse(Call<SearchResult> call,
                         Response<SearchResult> response) {
-
                     searchResults.clear();
                     searchResults.addAll(getTwosOfEach(response.body()));
-                            searchListAdapter.notifyDataSetChanged();
+                    searchListAdapter.notifyDataSetChanged();
+                    showTextViews();
                 }
 
-                        @Override
-                        public void onFailure(Call<SearchResult> call, Throwable t) {
-                            Log.d(TAG, "failed to retrieve search items" + t.getMessage());
-                        }
-                    });
+                @Override
+                public void onFailure(Call<SearchResult> call, Throwable t) {
+                    Log.d(TAG, "failed to retrieve search items" + t.getMessage());
+                }
+            });
             //setSearchMainBackgroundColor(colorOfFirstSearchResultImage);
-
 
         } else {
             searchResultListLayout.setVisibility(View.GONE);

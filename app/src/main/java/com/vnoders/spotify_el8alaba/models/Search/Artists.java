@@ -14,8 +14,4 @@ public class Artists {
         return artists;
     }
 
-    public void setArtists(List<SearchArtist> artists) {
-        this.artists = artists;
-    }
-
 }

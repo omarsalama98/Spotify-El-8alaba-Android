@@ -5,14 +5,11 @@ import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
 
-public class Playlist {
+public class SearchAlbum {
 
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("description")
-    @Expose
-    private String description;
     @SerializedName("images")
     @Expose
     private List<TrackImage> images = null;
@@ -26,14 +23,6 @@ public class Playlist {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public List<TrackImage> getImages() {

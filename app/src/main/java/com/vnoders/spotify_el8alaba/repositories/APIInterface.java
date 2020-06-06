@@ -14,10 +14,11 @@ import com.vnoders.spotify_el8alaba.models.Artist.UpdateSongNameRequestBody;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.HomePlaylist;
 import com.vnoders.spotify_el8alaba.models.PlayContext;
-import com.vnoders.spotify_el8alaba.models.Search.Album;
+import com.vnoders.spotify_el8alaba.models.Search.AlbumForTrack;
 import com.vnoders.spotify_el8alaba.models.Search.Albums;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.Playlists;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.Tracks;
 import com.vnoders.spotify_el8alaba.models.Search.Users;
@@ -122,6 +123,11 @@ public interface APIInterface {
             @Path("id") String artistId
     );
 
+    @GET("albums/{id}")
+    Call<AlbumForTrack> getAlbum(
+            @Path("id") String albumId
+    );
+
     @GET("tracks?")
     Call<List<ArtistTrack>> getTracks(
             @Query("ids") String trackIds
@@ -160,7 +166,7 @@ public interface APIInterface {
     );
 
     @POST("albums")
-    Call<com.vnoders.spotify_el8alaba.models.Search.Album> createAlbum(
+    Call<SearchAlbum> createAlbum(
             @Body CreateAnAlbumRequestBody createAnAlbumRequestBody
     );
 
@@ -179,7 +185,7 @@ public interface APIInterface {
     );
 
     @PATCH("albums/{id}")
-    Call<Album> updateAlbumName(
+    Call<SearchAlbum> updateAlbumName(
             @Path("id") String albumId,
             @Body UpdateAlbumNameRequestBody updateAlbumNameRequestBody
     );
