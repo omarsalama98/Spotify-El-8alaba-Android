@@ -1,6 +1,7 @@
 package com.vnoders.spotify_el8alaba.ui.currentUserProfile;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
 import com.squareup.picasso.Picasso;
@@ -28,8 +31,11 @@ import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 
+import com.vnoders.spotify_el8alaba.response.Notifications.Data;
 import com.vnoders.spotify_el8alaba.response.Notifications.RecentActivities;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -52,6 +58,7 @@ public class CurrentUserProfileFragment extends Fragment {
     private TextView playlistNumber;
     private TextView followingNumber;
     private TextView followerNumber;
+    private TextView emptyActivities;
     private ImageView bottomSheetButton;
     private Button editProfileButton;
     private Bundle bundle;
@@ -61,6 +68,11 @@ public class CurrentUserProfileFragment extends Fragment {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private  String imageUrl ="https://i.pinimg.com/originals/94/ac/a9/94aca9b1ffb963a97e68ea11bcd188cb.jpg";
+    private RecyclerView recentActivitiesRV;
+    private RecentActivitiesAdapter recentActivitiesAdapter;
+    private RecyclerView.LayoutManager recentActivitiesLayoutManager;
+    private ArrayList<NotificationItem> recentActivitesArrayList;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -114,12 +126,14 @@ public class CurrentUserProfileFragment extends Fragment {
         if(userImages!=null&&userImages.size()>0) {
              imageUrl = userImages.get(1).getUrl();
         }
-
+        recentActivitesArrayList=new ArrayList<NotificationItem>();
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_current_user_profile, container, false);
         followingLayout=root.findViewById(R.id.following_layout);
         followersLayout=root.findViewById(R.id.followers_layout);
         userNameToolbar=root.findViewById(R.id.user_name_toobar);
+        emptyActivities=root.findViewById(R.id.no_recent_activities);
+        emptyActivities.setVisibility(View.GONE);
         userName=root.findViewById(R.id.user_name);
         backArrowImage = root.findViewById(R.id.back_button);
         toolbar=root.findViewById(R.id.toolbar);
@@ -144,9 +158,7 @@ public class CurrentUserProfileFragment extends Fragment {
         if(currentUserProfile.getFollowing().size()==0){
             followingLayout.setEnabled(false);
         }
-
-
-
+        recentActivitiesRV=root.findViewById(R.id.recent_activities_recycler_view);
 
         appBarLayout.addOnOffsetChangedListener(new OnOffsetChangedListener() {
             @Override
@@ -235,7 +247,10 @@ public class CurrentUserProfileFragment extends Fragment {
                 fragmentTransaction.replace(R.id.nav_host_fragment, ownedPlaylistsFragment,"OWNED_PLAYLISTS").addToBackStack(null).commit();
             }
         });
-
+        recentActivitiesAdapter=new RecentActivitiesAdapter(recentActivitesArrayList);
+        recentActivitiesLayoutManager = new LinearLayoutManager(getContext());
+        recentActivitiesRV.setLayoutManager(recentActivitiesLayoutManager);
+        recentActivitiesRV.setAdapter(recentActivitiesAdapter);
         return root;
     }
 
@@ -245,8 +260,31 @@ public class CurrentUserProfileFragment extends Fragment {
                 @Override
                 public void onResponse(Call<RecentActivities> call,
                         Response<RecentActivities> response) {
-                    if(response.code()==200){
+                    if(response.code()==200) {
+                        if (response.body().getNotifications().size() != 0) {
+                            emptyActivities.setVisibility(View.GONE);
+                            for (int i = 0; i < response.body().getNotifications().size(); i++) {
+                                String title = response.body().getNotifications().get(i).getTitle();
+                                String body = response.body().getNotifications().get(i).getBody();
+                                String dateSting = response.body().getNotifications().get(i)
+                                        .getTimestamp();
+                                dateSting=dateSting.substring(0,10)+" "+dateSting.substring(11,19);
+                                Timestamp ts=Timestamp.valueOf(dateSting);
+                                Log.d("FUCKINDATE",ts.toString());
+                                Date myDate=new Date(ts.getTime());
+                                String date=myDate.toString();
+                                date=date.substring(0,10)+" at "+date.substring(11,19);
+                                recentActivitesArrayList
+                                        .add(new NotificationItem(title, body, date));
+                            }
+                            RecentActivitiesAdapter updatedAdapter = new RecentActivitiesAdapter(
+                                    recentActivitesArrayList);
+                            recentActivitiesRV.swapAdapter(updatedAdapter, false);
 
+                        }
+                        else{
+                            emptyActivities.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
 
