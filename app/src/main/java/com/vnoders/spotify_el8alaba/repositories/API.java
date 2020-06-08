@@ -1,5 +1,6 @@
 package com.vnoders.spotify_el8alaba.repositories;
 
+import com.vnoders.spotify_el8alaba.models.ChangePasswordData;
 import com.vnoders.spotify_el8alaba.models.FacebookToken;
 import com.vnoders.spotify_el8alaba.models.ForgotPasswordInfo;
 import com.vnoders.spotify_el8alaba.models.Notifications.NotificationStatus;
@@ -131,4 +132,12 @@ public interface API {
 
     @HTTP(method = "DELETE",path = "me/following?type=user",hasBody = true)
     Call<Void> unFollowUser(@Body RequestBodyIds requestBodyIds);
+
+    @GET("users/{id}/followers?limit=20&offset=0")
+    Call<List<CurrentUserProfile>> getUserFollowers(@Path("id") String id);
+
+    @PATCH("authentication/updatePassword")
+    Call<ResponseBody> changePassword(@Body ChangePasswordData changePasswordData);
+
+
 }

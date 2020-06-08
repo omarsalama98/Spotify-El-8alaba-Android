@@ -142,8 +142,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<HomePlaylist>> call,
                     Response<List<HomePlaylist>> response) {
-                recentlyPlayedList.addAll(response.body());
-                recentlyPlayedListAdapter.notifyDataSetChanged();
+                    recentlyPlayedList.addAll(response.body());
+                    recentlyPlayedListAdapter.notifyDataSetChanged();
+
             }
 
             @Override

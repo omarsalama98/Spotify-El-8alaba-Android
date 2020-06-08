@@ -120,6 +120,13 @@ public class Following extends Fragment {
                                         .newInstance(followingList.get(position).getMid()))
                                         .addToBackStack(null).commit();
                             }
+                            else{
+                                fragmentManager = getActivity().getSupportFragmentManager();
+                                fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.nav_host_fragment, UserProfile
+                                        .newInstance(followingList.get(position).getMid()))
+                                        .addToBackStack(null).commit();
+                            }
                         }
                     });
                 }

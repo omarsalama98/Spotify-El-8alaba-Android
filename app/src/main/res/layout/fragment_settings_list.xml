@@ -66,26 +66,47 @@
                 />
 <TextView
         android:id="@+id/current_user_profile"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:background="@color/darkGray"
         android:layout_marginTop="20dp"
-        android:layout_width = "wrap_content"
-        android:layout_height = "wrap_content"
+        android:layout_width = "match_parent"
+        android:layout_height = "50dp"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/white"
         android:text="@string/edit_profile"
         />
         <TextView
+                android:textSize="17sp"
+                android:gravity="center"
                 android:id = "@+id/notification_settings"
+                android:background="@color/darkGray"
                 android:layout_marginTop = "20dp"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
+                android:layout_width = "match_parent"
+                android:layout_height = "50dp"
                 android:text = "@string/notification_settings"
                 android:textColor = "@color/white"
                 android:layout_gravity = "center_horizontal" />
         <TextView
+                android:textSize="17sp"
+                android:layout_width = "match_parent"
+                android:layout_height = "50dp"
+                android:layout_marginTop = "20dp"
+                android:text="@string/change_password"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:background="@color/darkGray"
+                android:id="@+id/change_password"
+            />
+
+        <TextView
+                android:textSize="17sp"
                 android:id="@+id/logout"
                 android:layout_marginTop="20dp"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
+                android:layout_width = "match_parent"
+                android:layout_height = "50dp"
+                android:gravity="center"
+                android:background="@color/darkGray"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/white"
                 android:text="LOGOUT"

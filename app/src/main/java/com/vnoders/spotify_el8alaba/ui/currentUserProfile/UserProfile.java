@@ -134,8 +134,28 @@ public class UserProfile extends Fragment {
                 }
             }
         });
+        if(followerNumber.getText()=="0"){
+            followersLayout.setEnabled(false);
+        }
+        if(followingNumber.getText()=="0"){
+            followingLayout.setEnabled(false);
+        }
+        followersLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        followingLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return view;
     }
+
+
 
     public void getUserDate() {
         Call<UserProfileData> userData = RetrofitClient.getInstance().getAPI(API.class)

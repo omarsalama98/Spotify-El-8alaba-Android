@@ -207,7 +207,7 @@
     <string name = "electronic">Electronic</string>
     <string name = "reggae">Reggae</string>
     <string name = "classical">Classical</string>
-    <string name = "notification_settings">Notification Settings</string>
+    <string name = "notification_settings">NOTIFICATIONS SETTINGS</string>
     <string name = "notif_profile_follows">Profile Follows</string>
     <string name = "notif_profile_follows_description">Receive a notification when a user follows you.</string>
     <string name = "notif_playlist_follows">Playlist Follows</string>
@@ -217,4 +217,8 @@
     <string name = "notif_new_albums">New Albums</string>
     <string name = "notif_new_albums_description">Receive a notification when a followed artist \nposts an album.</string>
     <string name = "save_changes">save Changes</string>
+    <string name = "change_password">CHANGE PASSWORD</string>
+    <string name = "current_password">Enter your current password</string>
+    <string name = "new_password">New password</string>
+    <string name = "confirm_new_password">confirm your new password</string>
 </resources>

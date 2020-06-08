@@ -35,6 +35,7 @@ public class SettingsList extends Fragment {
     SharedPreferences notificationShared;
     SharedPreferences sharedPreferences;
     private TextView notificationSettings;
+    private TextView changePassword;
 
 
     @Override
@@ -53,6 +54,7 @@ public class SettingsList extends Fragment {
         mCurrentUserProfile=view.findViewById(R.id.current_user_profile);
         logout=view.findViewById(R.id.logout);
         notificationSettings=view.findViewById(R.id.notification_settings);
+        changePassword=view.findViewById(R.id.change_password);
         notificationSettings.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +89,15 @@ public class SettingsList extends Fragment {
                     }
                 });
 
+            }
+        });
+        changePassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangePassword changePasswordFragment=new ChangePassword();
+            mFragmentManager=getActivity().getSupportFragmentManager();
+            mFragmentTransaction=mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.nav_host_fragment,changePasswordFragment,"CHANGE_PASSWORD").addToBackStack(null).commit();
             }
         });
         logout.setOnClickListener(new OnClickListener() {

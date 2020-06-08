@@ -134,7 +134,12 @@ public class NotificationSettings extends Fragment {
         sendNotificationStatus.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+            if(response.code()==200){
+                Toast.makeText(getActivity(),"Changes are saved successfully",Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_LONG).show();
+            }
             }
 
             @Override
