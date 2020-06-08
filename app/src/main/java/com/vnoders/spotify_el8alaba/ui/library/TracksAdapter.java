@@ -23,7 +23,7 @@ import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHolder;
+import com.vnoders.spotify_el8alaba.ui.library.TracksAdapter.TrackViewHolder;
 import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +32,19 @@ import java.util.List;
  * This class is the recycler view adapter in the {@link PlaylistTracksFragment} which holds the
  * list of tracks in the playlist to be displayed and how to recycle them.
  */
-public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
+public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
+
+    enum TRACKS_TYPE {
+        PLAYLIST_TRACKS, LIKED_TRACKS
+    }
 
     private List<Track> tracks;
 
-    public PlaylistTracksAdapter(String playlistId, MediaPlaybackService mediaPlaybackService) {
+    public TracksAdapter(String playlistId, TRACKS_TYPE type, MediaPlaybackService mediaPlayer) {
         this.tracks = new ArrayList<>();
-        TrackViewHolder.playlistId = playlistId;
-        TrackViewHolder.mediaPlaybackService = mediaPlaybackService;
+        TrackViewHolder.collectionId = playlistId;
+        TrackViewHolder.mediaPlaybackService = mediaPlayer;
+        TrackViewHolder.type = type;
     }
 
 
@@ -129,8 +134,9 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
         Button othersMenu;
 
         private String trackId;
-        static String playlistId;
+        static String collectionId; // playlist id , artist id ...
         static List<String> tracksIds;
+        static TRACKS_TYPE type;
         static MediaPlaybackService mediaPlaybackService;
 
 
@@ -157,10 +163,13 @@ public class PlaylistTracksAdapter extends RecyclerView.Adapter<TrackViewHolder>
             trackBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (playlistId != null) {
-                        mediaPlaybackService.playPlaylist(playlistId, true, true, trackId);
-                    } else {
-                        mediaPlaybackService.playList(tracksIds, true, true, trackId);
+                    switch (type) {
+                        case PLAYLIST_TRACKS:
+                            mediaPlaybackService.playPlaylist(collectionId, true, true, trackId);
+                            break;
+                        case LIKED_TRACKS:
+                            mediaPlaybackService.playList(tracksIds, true, true, trackId);
+                            break;
                     }
                 }
             });

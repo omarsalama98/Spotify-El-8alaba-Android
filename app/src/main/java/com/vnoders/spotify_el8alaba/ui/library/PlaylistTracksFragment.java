@@ -1,5 +1,8 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import static com.vnoders.spotify_el8alaba.ui.library.TracksAdapter.TRACKS_TYPE.LIKED_TRACKS;
+import static com.vnoders.spotify_el8alaba.ui.library.TracksAdapter.TRACKS_TYPE.PLAYLIST_TRACKS;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +23,7 @@ import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.library.Track;
+import com.vnoders.spotify_el8alaba.ui.library.TracksAdapter.TRACKS_TYPE;
 import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,8 +97,9 @@ public class PlaylistTracksFragment extends Fragment {
             title.setText(getArguments().getString(ARGUMENT_PLAYLIST_NAME));
         }
 
-        PlaylistTracksAdapter playlistAdapter = new PlaylistTracksAdapter(
-                playlistId, mediaPlaybackService);
+        TRACKS_TYPE type = (playlistId == null) ? LIKED_TRACKS : PLAYLIST_TRACKS;
+
+        TracksAdapter playlistAdapter = new TracksAdapter(playlistId, type, mediaPlaybackService);
 
         recyclerView.setAdapter(playlistAdapter);
 
