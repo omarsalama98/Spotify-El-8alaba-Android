@@ -42,7 +42,7 @@ class RelatedArtistsAdapter extends RecyclerView.Adapter<RelatedArtistViewHolder
      * @param viewType The type of the created view holder in case the list has multiple types of
      *                 views. In our case it is not used because we have only one type of views
      *
-     * @return A new {@link com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksAdapter.TrackViewHolder}
+     * @return A new {@link RelatedArtistViewHolder}
      * that holds a View of the given view type.
      */
     @NonNull
