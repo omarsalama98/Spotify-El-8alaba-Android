@@ -84,19 +84,8 @@
             android:background = "@drawable/like_track_unliked"
             app:layout_constraintTop_toTopOf = "parent"
             app:layout_constraintBottom_toBottomOf = "parent"
-            app:layout_constraintEnd_toStartOf = "@+id/playlist_hide_track" />
-    <ToggleButton
-            android:id = "@+id/playlist_hide_track"
-            android:layout_width = "@dimen/playlist_icon"
-            android:layout_height = "@dimen/playlist_icon"
-            android:layout_gravity = "center"
-            android:layout_margin = "@dimen/margin_small"
-            android:textOff = ""
-            android:textOn = ""
-            android:background = "@drawable/hide_track_visible"
-            app:layout_constraintEnd_toStartOf = "@+id/playlist_others_menu"
-            app:layout_constraintTop_toTopOf = "parent"
-            app:layout_constraintBottom_toBottomOf = "parent" />
+            app:layout_constraintEnd_toStartOf = "@+id/playlist_others_menu" />
+
     <Button
             android:id = "@+id/playlist_others_menu"
             android:layout_width = "@dimen/playlist_icon"

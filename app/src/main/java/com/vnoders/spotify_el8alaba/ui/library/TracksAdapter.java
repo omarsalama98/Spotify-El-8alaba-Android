@@ -130,7 +130,6 @@ public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
         TextView artistName;
 
         ToggleButton likeTrack;
-        ToggleButton hideTrack;
         Button othersMenu;
 
         private String trackId;
@@ -157,7 +156,6 @@ public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
             artistName = itemView.findViewById(R.id.playlist_artist_name);
 
             likeTrack = itemView.findViewById(R.id.playlist_like_track);
-            hideTrack = itemView.findViewById(R.id.playlist_hide_track);
             othersMenu = itemView.findViewById(R.id.playlist_others_menu);
 
             trackBody.setOnClickListener(new OnClickListener() {
@@ -218,16 +216,6 @@ public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
                 }
             });
 
-            hideTrack.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        buttonView.setBackgroundResource(R.drawable.hide_track_hidden);
-                    } else {
-                        buttonView.setBackgroundResource(R.drawable.hide_track_visible);
-                    }
-                }
-            });
 
             othersMenu.setOnClickListener(new OnClickListener() {
                 @Override
