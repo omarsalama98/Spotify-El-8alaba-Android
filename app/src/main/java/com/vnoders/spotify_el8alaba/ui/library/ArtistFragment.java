@@ -133,6 +133,19 @@ public class ArtistFragment extends Fragment {
             }
         });
 
+        tracksSummary.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArtistTracksFragment artistTracksFragment = ArtistTracksFragment
+                        .newInstance(artistViewModel.getArtistId(), title.getText().toString());
+
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment, artistTracksFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
         artistViewModel.getFollowedState()
                 .observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                     @Override
