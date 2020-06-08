@@ -27,7 +27,8 @@ public class AddArtistActivity extends AppCompatActivity {
         viewModel.getArtists().observe(this, new Observer<List<SearchArtist>>() {
             @Override
             public void onChanged(List<SearchArtist> artists) {
-                artistAdapter.submitList(artists);
+                artistAdapter.setArtists(artists);
+                artistAdapter.notifyDataSetChanged();
             }
         });
 

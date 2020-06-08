@@ -5,15 +5,21 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
+import com.vnoders.spotify_el8alaba.ui.library.AddArtistAdapter.RelatedArtistsCallback;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 public class AddArtistsViewModel extends ViewModel {
 
     private MutableLiveData<List<SearchArtist>> artists;
+    private Map<String, RelatedArtistsCallback> relatedArtistsCallbacks;
 
     public AddArtistsViewModel() {
         artists = new MutableLiveData<>(new ArrayList<>());
+        relatedArtistsCallbacks = new HashMap<>();
     }
 
     public LiveData<List<SearchArtist>> getArtists() {
@@ -24,8 +30,11 @@ public class AddArtistsViewModel extends ViewModel {
         this.artists.setValue(artists);
     }
 
-    public void requestRelatedArtists(String artistId) {
-        LibraryRepository.updateRelatedArtists(artistId, this);
+    public void requestRelatedArtists(String artistId, @NotNull RelatedArtistsCallback callback) {
+        if (!relatedArtistsCallbacks.containsKey(artistId)) {
+            relatedArtistsCallbacks.put(artistId, callback);
+            LibraryRepository.updateRelatedArtists(artistId, this);
+        }
     }
 
     public void requestRandomArtists() {
@@ -33,37 +42,9 @@ public class AddArtistsViewModel extends ViewModel {
     }
 
     public void setRelatedArtists(String artistId, List<SearchArtist> relatedArtists) {
-
-        List<SearchArtist> newArtistList = new ArrayList<>();
-
-        if (artists.getValue() != null) {
-            newArtistList = new ArrayList<>(artists.getValue());
-        }
-
-        int indexOfArtist = 0;
-        for (int i = 0; i < newArtistList.size(); i++) {
-            if (newArtistList.get(i).getId().equals(artistId)) {
-                indexOfArtist = i;
-                break;
-            }
-        }
-
-        int numberOfRelatedArtists = 5;
-        if (relatedArtists.size() > numberOfRelatedArtists) {
-            relatedArtists = relatedArtists.subList(0, numberOfRelatedArtists);
-        }
-
-        for (SearchArtist artist : newArtistList) {
-            int index = relatedArtists.indexOf(artist);
-            if(index != -1){
-                relatedArtists.remove(index);
-            }
-        }
-
-        newArtistList.addAll(indexOfArtist, relatedArtists);
-
-        artists.setValue(newArtistList);
+        RelatedArtistsCallback callback = relatedArtistsCallbacks.get(artistId);
+        callback.onResponse(artistId, relatedArtists);
+        relatedArtistsCallbacks.remove(artistId);
     }
-
 
 }

@@ -8,37 +8,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil.ItemCallback;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.ui.library.AddArtistAdapter.ArtistViewHolder;
 import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-class AddArtistAdapter extends ListAdapter<SearchArtist, ArtistViewHolder> {
+class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
 
     private AddArtistsViewModel viewModel;
-
-    private static final ItemCallback<SearchArtist> DIFF_COMPARE_CALLBACK = new ItemCallback<SearchArtist>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull SearchArtist oldItem,
-                @NonNull SearchArtist newItem) {
-            return oldItem.getId().equals(newItem.getId());
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull SearchArtist oldItem,
-                @NonNull SearchArtist newItem) {
-            return oldItem.getId().equals(newItem.getId());
-        }
-    };
+    private List<SearchArtist> artists;
 
     public AddArtistAdapter(AddArtistsViewModel addArtistsViewModel) {
-        super(DIFF_COMPARE_CALLBACK);
         this.viewModel = addArtistsViewModel;
+    }
+
+    public void setArtists(List<SearchArtist> artists) {
+        this.artists = artists;
     }
 
     @NonNull
@@ -54,7 +43,12 @@ class AddArtistAdapter extends ListAdapter<SearchArtist, ArtistViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ArtistViewHolder holder, int position) {
-        holder.bind(getItem(position));
+        holder.bind(artists.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return artists.size();
     }
 
     class ArtistViewHolder extends RecyclerView.ViewHolder {
@@ -76,12 +70,12 @@ class AddArtistAdapter extends ListAdapter<SearchArtist, ArtistViewHolder> {
             artistBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SearchArtist artist = getItem(getAdapterPosition());
+                    SearchArtist artist = artists.get(getAdapterPosition());
                     artist.toggleSelection();
 
                     if (artist.isSelected()) {
                         // TODO: actually add this artist to favorites
-                        viewModel.requestRelatedArtists(artistId);
+                        viewModel.requestRelatedArtists(artistId, new RelatedArtistsCallback());
                         checkedIcon.setVisibility(View.VISIBLE);
                     } else {
                         checkedIcon.setVisibility(View.INVISIBLE);
@@ -109,6 +103,37 @@ class AddArtistAdapter extends ListAdapter<SearchArtist, ArtistViewHolder> {
                 checkedIcon.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+
+    class RelatedArtistsCallback {
+
+        void onResponse(String artistId, List<SearchArtist> relatedArtists) {
+
+            int indexOfArtist = 0;
+            for (int i = 0; i < artists.size(); i++) {
+                if (artists.get(i).getId().equals(artistId)) {
+                    indexOfArtist = i;
+                    break;
+                }
+            }
+
+            for (SearchArtist artist : artists) {
+                int index = relatedArtists.indexOf(artist);
+                if (index != -1) {
+                    relatedArtists.remove(index);
+                }
+            }
+
+            int numberOfRelatedArtists = 5;
+            if (relatedArtists.size() > numberOfRelatedArtists) {
+                relatedArtists = relatedArtists.subList(0, numberOfRelatedArtists);
+            }
+
+            artists.addAll(indexOfArtist, relatedArtists);
+            notifyItemRangeInserted(indexOfArtist, relatedArtists.size());
+        }
+
     }
 
 }
