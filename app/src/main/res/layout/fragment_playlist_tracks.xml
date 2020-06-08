@@ -6,24 +6,14 @@
         android:orientation = "vertical"
         android:layout_height = "match_parent">
 
-    <ProgressBar
+    <include
             android:id = "@+id/progress_bar"
-            android:elevation = "2dp"
-            android:layout_width = "match_parent"
-            android:layout_height = "match_parent"
-            android:padding = "150dp"
-            android:layout_gravity = "center" />
+            layout = "@layout/progress_bar_screen" />
 
-
-    <!--    Using tools:visibility="visible" with android:visibility="gone"
-        in order to see the layout but it will be hidden on real device
-        (progress bar will be visible until loading finished then view will be visible)-->
     <com.google.android.material.appbar.AppBarLayout
             android:id = "@+id/app_bar"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
-            android:visibility = "gone"
-            tools:visibility = "visible"
             android:background = "@drawable/toolbar_gradient">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -93,16 +83,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <!--    Using tools:visibility="visible" with android:visibility="gone"
-        in order to see the layout but it will be hidden on real device
-        (progress bar will be visible until loading finished then view will be visible)-->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/playlist_tracks_shuffle"
             android:theme = "@style/Theme.MaterialComponents"
             android:layout_width = "match_parent"
             android:layout_height = "wrap_content"
-            android:visibility = "gone"
-            tools:visibility = "visible"
             android:text = "Shuffle"
             app:layout_anchor = "@id/collapsing_toolbar"
 
@@ -115,15 +100,10 @@
             android:textColor = "@android:color/white"
             app:backgroundTint = "@color/green" />
 
-    <!--    Using tools:visibility="visible" with android:visibility="gone"
-        in order to see the layout but it will be hidden on real device
-        (progress bar will be visible until loading finished then view will be visible)-->
     <androidx.recyclerview.widget.RecyclerView
             android:id = "@+id/playlist_recycler_view"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
-            android:visibility = "gone"
-            tools:visibility = "visible"
             android:background = "@color/black"
             app:layout_behavior = "@string/appbar_scrolling_view_behavior"
             tools:listitem = "@layout/track_list_item" />
