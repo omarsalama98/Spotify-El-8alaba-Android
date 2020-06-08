@@ -27,6 +27,7 @@ import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.ui.library.AddArtistsViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistViewModel;
+import com.vnoders.spotify_el8alaba.ui.library.LibraryArtistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
@@ -705,6 +706,35 @@ public class LibraryRepository {
         });
 
 
+    }
+
+
+    public static void followArtists(List<String> artistsIds) {
+        followArtists(artistsIds, null);
+    }
+
+    public static void followArtists(List<String> artistsIds, LibraryArtistViewModel viewModel) {
+        if (artistsIds == null || artistsIds.isEmpty()) {
+            return;
+        }
+
+        RequestBodyIds ids = new RequestBodyIds(artistsIds);
+        Call<Void> request = libraryApi.followArtists(ids);
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    if (viewModel != null) {
+                        viewModel.requestUserFollowedArtists();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+            }
+        });
     }
 
 }

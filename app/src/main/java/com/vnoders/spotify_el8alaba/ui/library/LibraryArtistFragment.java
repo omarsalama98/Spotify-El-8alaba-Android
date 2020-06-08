@@ -1,5 +1,7 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,15 +22,18 @@ import java.util.List;
 
 public class LibraryArtistFragment extends Fragment {
 
+    private static final int REQUEST_ADD_ARTISTS = 1;
+    public static final String INTENT_DATA_FOLLOWED_ARTISTS_IDS = "ids";
+
     private ProgressBar progressBar;
     private View artistsContainer;
+    private LibraryArtistViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        LibraryArtistViewModel viewModel = new ViewModelProvider(requireActivity())
-                .get(LibraryArtistViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(LibraryArtistViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_library_artist, container, false);
 
@@ -45,8 +51,6 @@ public class LibraryArtistFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        viewModel.requestUserFollowedArtists();
-
         viewModel.getUserArtists().observe(getViewLifecycleOwner(), new Observer<List<Artist>>() {
             @Override
             public void onChanged(List<Artist> artists) {
@@ -61,7 +65,7 @@ public class LibraryArtistFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddArtistActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_ADD_ARTISTS);
             }
         });
 
@@ -74,4 +78,19 @@ public class LibraryArtistFragment extends Fragment {
         artistsContainer.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        viewModel.requestUserFollowedArtists();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_ADD_ARTISTS && resultCode == RESULT_OK && data != null) {
+            List<String> followedArtistsIds = data
+                    .getStringArrayListExtra(INTENT_DATA_FOLLOWED_ARTISTS_IDS);
+            viewModel.followArtists(followedArtistsIds);
+        }
+    }
 }

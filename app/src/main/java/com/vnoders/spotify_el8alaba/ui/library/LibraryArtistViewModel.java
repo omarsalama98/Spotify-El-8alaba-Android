@@ -24,8 +24,11 @@ public class LibraryArtistViewModel extends ViewModel {
         this.userArtists.setValue(userArtists);
     }
 
-    void requestUserFollowedArtists() {
+    public void requestUserFollowedArtists() {
         LibraryRepository.getUserFollowedArtists(userArtists);
     }
 
+    public void followArtists(List<String> artistsIds){
+        LibraryRepository.followArtists(artistsIds , this);
+    }
 }

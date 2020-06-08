@@ -1,5 +1,7 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import static com.vnoders.spotify_el8alaba.ui.library.LibraryArtistFragment.INTENT_DATA_FOLLOWED_ARTISTS_IDS;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.google.gson.Gson;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddArtistActivity extends AppCompatActivity {
@@ -22,7 +25,6 @@ public class AddArtistActivity extends AppCompatActivity {
     public static final String INTENT_DATA_ARTIST = "artist";
 
     private AddArtistAdapter artistAdapter;
-    private AddArtistsViewModel viewModel;
     private RecyclerView recyclerView;
 
     @Override
@@ -30,7 +32,7 @@ public class AddArtistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_artist_to_library);
 
-        viewModel = new ViewModelProvider(this).get(AddArtistsViewModel.class);
+        AddArtistsViewModel viewModel = new ViewModelProvider(this).get(AddArtistsViewModel.class);
 
         artistAdapter = new AddArtistAdapter(viewModel);
 
@@ -62,6 +64,10 @@ public class AddArtistActivity extends AppCompatActivity {
         done.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<String> followedArtistsIds = artistAdapter.getSelectedArtistsIds();
+                Intent data = new Intent();
+                data.putStringArrayListExtra(INTENT_DATA_FOLLOWED_ARTISTS_IDS, followedArtistsIds);
+                setResult(RESULT_OK, data);
                 finish();
             }
         });

@@ -14,6 +14,8 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.ui.library.AddArtistAdapter.ArtistViewHolder;
 import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,9 +23,12 @@ class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
 
     private AddArtistsViewModel viewModel;
     private List<SearchArtist> artists;
+    private HashSet<String> selectedArtistsIds;
 
     public AddArtistAdapter(AddArtistsViewModel addArtistsViewModel) {
         this.viewModel = addArtistsViewModel;
+        this.artists = new ArrayList<>();
+        this.selectedArtistsIds = new HashSet<>();
     }
 
     public void setArtists(List<SearchArtist> artists) {
@@ -40,6 +45,10 @@ class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
         }
         artists.add(0, artist);
         notifyItemInserted(0);
+    }
+
+    public ArrayList<String> getSelectedArtistsIds() {
+        return new ArrayList<>(selectedArtistsIds);
     }
 
     @NonNull
@@ -86,10 +95,11 @@ class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
                     artist.toggleSelection();
 
                     if (artist.isSelected()) {
-                        // TODO: actually add this artist to favorites
+                        selectedArtistsIds.add(artistId);
                         viewModel.requestRelatedArtists(artistId, new RelatedArtistsCallback());
                         checkedIcon.setVisibility(View.VISIBLE);
                     } else {
+                        selectedArtistsIds.remove(artistId);
                         checkedIcon.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -110,8 +120,10 @@ class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
             Picasso.get().load(imageUrl).placeholder(R.drawable.artist).into(artistImage);
 
             if (artist.isSelected()) {
+                selectedArtistsIds.add(artistId);
                 checkedIcon.setVisibility(View.VISIBLE);
             } else {
+                selectedArtistsIds.remove(artistId);
                 checkedIcon.setVisibility(View.INVISIBLE);
             }
         }
