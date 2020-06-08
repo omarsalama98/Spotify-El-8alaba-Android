@@ -116,14 +116,13 @@ public class ArtistTracksFragment extends Fragment {
         recyclerView = root.findViewById(R.id.artist_tracks_recycler_view);
 
         progressBar = root.findViewById(R.id.progress_bar);
-        progressBar.setBackgroundColor(Color.BLACK);
 
         return root;
     }
 
     private void initializeViews() {
 
-        updateViewsVisibility();
+        progressBar.setVisibility(View.GONE);
 
         appBar.addOnOffsetChangedListener(new OnOffsetChangedListener() {
             @Override
@@ -136,14 +135,6 @@ public class ArtistTracksFragment extends Fragment {
             }
         });
 
-    }
-
-    private void updateViewsVisibility() {
-
-        progressBar.setVisibility(View.GONE);
-
-        appBar.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
     }
 
 }

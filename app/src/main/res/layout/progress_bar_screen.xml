@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--    Making tools:background transparent while android:background is black
+        in order to see the layouts in preview window but it will be hidden on real device-->
+<ProgressBar xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        android:elevation = "20dp"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:padding = "150dp"
+        android:layout_gravity = "center"
+        android:background = "@color/black"
+        tools:background = "@android:color/transparent" />

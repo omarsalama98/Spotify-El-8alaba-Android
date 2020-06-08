@@ -26,7 +26,6 @@ public class LibraryArtistFragment extends Fragment {
     public static final String INTENT_DATA_FOLLOWED_ARTISTS_IDS = "ids";
 
     private ProgressBar progressBar;
-    private View artistsContainer;
     private LibraryArtistViewModel viewModel;
 
     @Override
@@ -38,9 +37,6 @@ public class LibraryArtistFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_library_artist, container, false);
 
         progressBar = root.findViewById(R.id.progress_bar);
-        progressBar.setBackgroundColor(Color.BLACK);
-
-        artistsContainer = root.findViewById(R.id.library_artist_container);
 
         LibraryArtistAdapter artistAdapter = new LibraryArtistAdapter(
                 requireActivity().getSupportFragmentManager());
@@ -55,7 +51,7 @@ public class LibraryArtistFragment extends Fragment {
             @Override
             public void onChanged(List<Artist> artists) {
                 artistAdapter.submitList(artists);
-                updateViewsVisibility();
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -72,11 +68,6 @@ public class LibraryArtistFragment extends Fragment {
         return root;
     }
 
-
-    private void updateViewsVisibility() {
-        progressBar.setVisibility(View.GONE);
-        artistsContainer.setVisibility(View.VISIBLE);
-    }
 
     @Override
     public void onStart() {

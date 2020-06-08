@@ -156,7 +156,6 @@ public class PlaylistTracksFragment extends Fragment {
         recyclerView = root.findViewById(R.id.playlist_recycler_view);
 
         progressBar = root.findViewById(R.id.progress_bar);
-        progressBar.setBackgroundColor(Color.BLACK);
 
         shuffle.setOnClickListener(new OnClickListener() {
             @Override
@@ -175,7 +174,7 @@ public class PlaylistTracksFragment extends Fragment {
 
     private void initializeViews(){
 
-        updateViewsVisibility();
+        progressBar.setVisibility(View.GONE);
 
         appBar.addOnOffsetChangedListener(new OnOffsetChangedListener() {
             @Override
@@ -196,16 +195,6 @@ public class PlaylistTracksFragment extends Fragment {
 
             }
         });
-
-    }
-
-    private void updateViewsVisibility(){
-
-        progressBar.setVisibility(View.GONE);
-
-        appBar.setVisibility(View.VISIBLE);
-        shuffle.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
 
     }
 

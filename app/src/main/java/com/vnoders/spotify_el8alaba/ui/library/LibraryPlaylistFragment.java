@@ -33,7 +33,6 @@ public class LibraryPlaylistFragment extends Fragment {
     static final String REQUEST_DATA_CREATED_PLAYLIST_ID = "id";
 
     private ProgressBar progressBar;
-    private NestedScrollView playlistsContainer;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -58,9 +57,7 @@ public class LibraryPlaylistFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_library_playlist, container, false);
 
         progressBar = root.findViewById(R.id.progress_bar);
-        progressBar.setBackgroundColor(Color.BLACK);
 
-        playlistsContainer = root.findViewById(R.id.library_playlist_container);
         View createPlaylist = root.findViewById(R.id.create_playlist);
 
         createPlaylist.setOnClickListener(new OnClickListener() {
@@ -86,7 +83,7 @@ public class LibraryPlaylistFragment extends Fragment {
                 new Observer<List<LibraryPlaylistItem>>() {
                     @Override
                     public void onChanged(List<LibraryPlaylistItem> libraryPlaylistItems) {
-                        updateViewsVisibility();
+                        progressBar.setVisibility(View.GONE);
                         playlistAdapter.submitList(libraryPlaylistItems);
                     }
                 });
@@ -124,8 +121,4 @@ public class LibraryPlaylistFragment extends Fragment {
         return root;
     }
 
-    private void updateViewsVisibility() {
-        progressBar.setVisibility(View.GONE);
-        playlistsContainer.setVisibility(View.VISIBLE);
-    }
 }
