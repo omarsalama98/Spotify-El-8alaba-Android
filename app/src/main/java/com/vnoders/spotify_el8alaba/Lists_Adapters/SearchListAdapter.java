@@ -23,6 +23,7 @@ import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
+import com.vnoders.spotify_el8alaba.ui.currentUserProfile.UserProfile;
 import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
@@ -78,7 +79,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             itemName = ((SearchArtist) result).getName();
             holder.name.setText(itemName);
             List<Image> images = ((SearchArtist) result).getImages();
-            itemInfo = "Artist " + ((SearchArtist) result).getName();
+            itemInfo = "Artist";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
             if (images != null) {
@@ -115,9 +116,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
         } else if (result instanceof SearchTrack) {
-            itemName = ((SearchTrack) result).getName();
+            SearchTrack mTrack = (SearchTrack) result;
+            itemName = mTrack.getName();
             holder.name.setText(itemName);
-            Call<AlbumForTrack> call = apiService.getAlbum(((SearchTrack) result).getAlbum());
+            Call<AlbumForTrack> call = apiService.getAlbum(mTrack.getAlbum());
             call.enqueue(new Callback<AlbumForTrack>() {
                 @Override
                 public void onResponse(Call<AlbumForTrack> call, Response<AlbumForTrack> response) {
@@ -137,6 +139,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                         itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
                     }
                     holder.info.setText(itemInfo);
+                    mTrack.setArtistsNames(itemInfo);
+                    mTrack.setImageUrl(itemImageUrl);
+                    mDataset.remove(position);
+                    mDataset.add(position, mTrack);
                     Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify)
                             .into(holder.image);
                 }
@@ -212,10 +218,14 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                         itemImageUrl = images.get(0).getUrl();
                     }
                 } else if (result instanceof SearchTrack) {
+                    SearchTrack mTrack = (SearchTrack) result;
                     itemType = SearchByTypeConstantsHelper.TRACK;
-                    itemId = ((SearchTrack) result).getId();
-                    itemName = ((SearchTrack) result).getName();
-                    itemInfo = "Track";
+                    itemId = mTrack.getId();
+                    itemName = mTrack.getName();
+                    itemInfo = mTrack.getArtistsNames();
+                    if (mTrack.getImageUrl() != null) {
+                        itemImageUrl = mTrack.getImageUrl();
+                    }
                 }
 
                 RecentSearches recentSearches = new RecentSearches();
@@ -228,8 +238,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     db.recentSearchesDao().insertAll(recentSearches);
                 }
 
-                //TODO: Replace the Name Key with an ID one and pass the selected item id
-                //TODO: User should have a fragment to go to
+                //TODO: Adjust Album and Track when album fragment is finished
                 Fragment targetFragment;
                 switch (itemType) {
                     case SearchByTypeConstantsHelper.ALBUM:
@@ -240,6 +249,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                         break;
                     case SearchByTypeConstantsHelper.PLAYLIST:
                         targetFragment = PlaylistHomeFragment.newInstance(itemId);
+                        break;
+                    case SearchByTypeConstantsHelper.USER:
+                        targetFragment = UserProfile.newInstance(itemId);
                         break;
                     default:
                         targetFragment = new PlaylistTracksFragment();

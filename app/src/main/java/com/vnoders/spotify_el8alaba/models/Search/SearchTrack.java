@@ -2,13 +2,9 @@ package com.vnoders.spotify_el8alaba.models.Search;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.List;
 
 public class SearchTrack {
 
-    @SerializedName("artists")
-    @Expose
-    private List<String> artists = null;
     @SerializedName("name")
     @Expose
     private String name;
@@ -22,9 +18,9 @@ public class SearchTrack {
     @Expose
     private String id;
 
-    public List<String> getArtists() {
-        return artists;
-    }
+    private String imageUrl;
+
+    private String artistsNames;
 
     public String getName() {
         return name;
@@ -41,5 +37,22 @@ public class SearchTrack {
     public String getAlbum() {
         return album;
     }
+
+    public String getArtistsNames() {
+        return artistsNames;
+    }
+
+    public void setArtistsNames(String artistsNames) {
+        this.artistsNames = artistsNames;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 }
 
