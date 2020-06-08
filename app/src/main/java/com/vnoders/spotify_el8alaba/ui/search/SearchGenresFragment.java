@@ -91,12 +91,14 @@ public class SearchGenresFragment extends Fragment {
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                Log.d(TAG, response.body().get(0).getName());
-                topGenresGridView
-                        .setAdapter(
-                                new SearchGenresGridAdapter((ArrayList<Category>) response.body(),
-                                        SearchGenresFragment.this));
+                if (response.body() != null) {
+                    topGenresGridView
+                            .setAdapter(
+                                    new SearchGenresGridAdapter(
+                                            (ArrayList<Category>) response.body(),
+                                            SearchGenresFragment.this));
                     // topCategories[0] will be put in the adapter
+                }
             }
 
             @Override
@@ -113,12 +115,14 @@ public class SearchGenresFragment extends Fragment {
         call2.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                Log.d(TAG, response.body().get(0).getName());
-                browseAllGenresGridView
-                        .setAdapter(
-                                new SearchGenresGridAdapter((ArrayList<Category>) response.body(),
-                                        SearchGenresFragment.this));
+                if (response.body() != null) {
+                    browseAllGenresGridView
+                            .setAdapter(
+                                    new SearchGenresGridAdapter(
+                                            (ArrayList<Category>) response.body(),
+                                            SearchGenresFragment.this));
                     // allCategories[0] will be put in the adapter
+                }
             }
 
             @Override

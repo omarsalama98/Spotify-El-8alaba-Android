@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -41,6 +43,7 @@ public class PlaylistTracksFragment extends Fragment {
     private RecyclerView recyclerView;
     private ExtendedFloatingActionButton shuffle;
     private ProgressBar progressBar;
+    private Toolbar toolbar;
 
     private List<String> tracksIds;
     private String playlistId;
@@ -148,6 +151,7 @@ public class PlaylistTracksFragment extends Fragment {
         title = root.findViewById(R.id.playlist_tracks_title);
         playlistName = root.findViewById(R.id.playlist_tracks_name);
         appBar = root.findViewById(R.id.app_bar);
+        toolbar = root.findViewById(R.id.toolbar);
         shuffle = root.findViewById(R.id.playlist_tracks_shuffle);
         recyclerView = root.findViewById(R.id.playlist_recycler_view);
 
@@ -181,6 +185,15 @@ public class PlaylistTracksFragment extends Fragment {
                 // visibility is calculated based on ratio between current toolbar height and the max height
                 // Negative sign in -1.0f because verticalOffset is negative
                 title.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
+
+                int topBoundary = toolbar.getMeasuredHeight()
+                        + ((MarginLayoutParams) toolbar.getLayoutParams()).topMargin;
+
+                int margin = appBarLayout.getBottom() - shuffle.getMeasuredHeight();
+
+                MarginLayoutParams layoutParams = (MarginLayoutParams) shuffle.getLayoutParams();
+                layoutParams.topMargin = Math.max(margin, topBoundary);
+
             }
         });
 

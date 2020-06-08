@@ -26,6 +26,7 @@ import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.ui.library.AddArtistsViewModel;
+import com.vnoders.spotify_el8alaba.ui.library.ArtistTracksViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryArtistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeViewModel;
@@ -737,4 +738,22 @@ public class LibraryRepository {
         });
     }
 
+    public static void updateArtistTopTracks(ArtistTracksViewModel viewModel) {
+        Call<List<Track>> request = libraryApi.getArtistTopTracks(viewModel.getArtistId());
+
+        request.enqueue(new Callback<List<Track>>() {
+            @Override
+            public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    viewModel.setTracks(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Track>> call, Throwable t) {
+
+            }
+        });
+
+    }
 }

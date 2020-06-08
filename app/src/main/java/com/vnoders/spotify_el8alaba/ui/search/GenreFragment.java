@@ -93,8 +93,10 @@ public class GenreFragment extends Fragment {
             @Override
             public void onResponse(Call<List<HomePlaylist>> call,
                     Response<List<HomePlaylist>> response) {
-                myDataList.addAll(response.body());
-                adapter.notifyDataSetChanged();
+                if (response.body() != null && !response.body().isEmpty()) {
+                    myDataList.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override

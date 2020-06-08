@@ -1005,11 +1005,21 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                         .getCurrentTrackWrapper().getCurrentTrack();
                 String type = response.body().getCurrentTrackWrapper().getTrackContext().getType();
                 String artistName = " ";
-                if (track.getArtists().size() > 0)
-                    artistName = track.getArtists().get(0).getUserInfo().getName();
+                if (track.getArtists() != null) {
+                    if (track.getArtists().size() > 0) {
+                        artistName = track.getArtists().get(0).getUserInfo().getName();
+                    }
+                }
                 String songImageUrl = null;
-                if (track.getAlbum().getImages().size() > 0)
-                    songImageUrl = track.getAlbum().getImages().get(0).getUrl();
+                if (track.getAlbum() != null) {
+                    if (track.getAlbum().getImages() != null) {
+                        if (track.getAlbum().getImages().size() > 0) {
+                            if (!(TextUtils.isEmpty(track.getAlbum().getImages().get(0).getUrl()))) {
+                                songImageUrl = track.getAlbum().getImages().get(0).getUrl();
+                            }
+                        }
+                    }
+                }
 
 
                 Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(),
