@@ -15,7 +15,6 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
-import com.vnoders.spotify_el8alaba.repositories.LibraryApi;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.library.SearchArtistsListAdapter.SearchArtistViewHolder;
 import java.util.ArrayList;
@@ -24,14 +23,11 @@ import org.jetbrains.annotations.NotNull;
 public class SearchArtistsListAdapter extends RecyclerView.Adapter<SearchArtistViewHolder> {
 
     private static ArrayList<SearchArtist> mDataset;
-    private static LibraryApi apiService;
-    private static String artistId = "";
-    private static Activity activity;
+    private Activity activity;
 
     public SearchArtistsListAdapter(ArrayList<SearchArtist> myDataset, Activity activity) {
         mDataset = myDataset;
-        SearchArtistsListAdapter.activity = activity;
-        apiService = RetrofitClient.getInstance().getAPI(LibraryApi.class);
+        this.activity = activity;
     }
 
     // Create new views (invoked by the layout manager)
@@ -66,7 +62,7 @@ public class SearchArtistsListAdapter extends RecyclerView.Adapter<SearchArtistV
         return mDataset.size();
     }
 
-    public static class SearchArtistViewHolder extends RecyclerView.ViewHolder {
+    public class SearchArtistViewHolder extends RecyclerView.ViewHolder {
 
         public View searchItemBody;
         public TextView name;
