@@ -50,6 +50,7 @@ public class RetrofitClient {
     private Retrofit.Builder retrofitBuilder;
     private OkHttpClient.Builder httpClientBuilder;
     private HeadersInterceptor headers;
+    private Gson gson;
 
 
     /**
@@ -73,7 +74,7 @@ public class RetrofitClient {
         // in order to log other interceptors
         enableLogging();
 
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
         retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -108,6 +109,11 @@ public class RetrofitClient {
      */
     public <T> T getAPI(final Class<T> API) {
         return retrofitBuilder.build().create(API);
+    }
+
+
+    public Gson getGson() {
+        return gson;
     }
 
 

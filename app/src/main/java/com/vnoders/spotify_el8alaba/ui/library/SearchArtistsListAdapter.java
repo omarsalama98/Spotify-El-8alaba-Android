@@ -1,26 +1,25 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
+import static com.vnoders.spotify_el8alaba.ui.library.AddArtistActivity.INTENT_DATA_ARTIST;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
-import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
 import com.vnoders.spotify_el8alaba.repositories.LibraryApi;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.library.SearchArtistsListAdapter.SearchArtistViewHolder;
 import java.util.ArrayList;
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchArtistsListAdapter extends RecyclerView.Adapter<SearchArtistViewHolder> {
 
@@ -79,27 +78,19 @@ public class SearchArtistsListAdapter extends RecyclerView.Adapter<SearchArtistV
             name = v.findViewById(R.id.search_item_name_text_view);
             image = v.findViewById(R.id.search_item_image_view);
 
-            searchItemBody.setOnClickListener(v12 -> {
-                artistId = mDataset.get(getAdapterPosition()).getId();
-                List<String> artistIds = new ArrayList<>();
-                artistIds.add(artistId);
-                RequestBodyIds requestBody = new RequestBodyIds(artistIds);
-                Call<Void> call = apiService.followArtists(requestBody);
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(activity, mDataset.get(getAdapterPosition()).getName()
-                                    + " added to your artists", Toast.LENGTH_LONG).show();
-                        }
-                    }
+            searchItemBody.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Gson gson = RetrofitClient.getInstance().getGson();
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    SearchArtist artist = mDataset.get(getAdapterPosition());
 
-                    }
-                });
+                    Intent intent = new Intent();
+                    intent.putExtra(INTENT_DATA_ARTIST, gson.toJson(artist));
 
+                    activity.setResult(Activity.RESULT_OK, intent);
+                    activity.finish();
+                }
             });
         }
     }

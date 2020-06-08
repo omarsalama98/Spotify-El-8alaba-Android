@@ -30,6 +30,18 @@ class AddArtistAdapter extends RecyclerView.Adapter<ArtistViewHolder> {
         this.artists = artists;
     }
 
+    public void insertAtBeginning(SearchArtist artist) {
+        for (int i = 0; i < artists.size(); i++) {
+            if (artist.equals(artists.get(i))) {
+                artists.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+        artists.add(0, artist);
+        notifyItemInserted(0);
+    }
+
     @NonNull
     @Override
     public ArtistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
