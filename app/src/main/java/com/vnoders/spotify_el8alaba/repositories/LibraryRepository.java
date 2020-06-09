@@ -17,6 +17,8 @@ import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
+import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumItem;
+import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumsPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Owner;
@@ -755,5 +757,25 @@ public class LibraryRepository {
             }
         });
 
+    }
+
+    public static void updateLibraryAlbums(MutableLiveData<List<LibraryAlbumItem>> userAlbums) {
+        Call<LibraryAlbumsPagingWrapper> request = libraryApi.getUserAlbums();
+
+        request.enqueue(new Callback<LibraryAlbumsPagingWrapper>() {
+            @Override
+            public void onResponse(Call<LibraryAlbumsPagingWrapper> call,
+                    Response<LibraryAlbumsPagingWrapper> response) {
+
+                if (response.isSuccessful() && response.body() != null) {
+                    userAlbums.setValue(response.body().getItems());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LibraryAlbumsPagingWrapper> call, Throwable t) {
+
+            }
+        });
     }
 }

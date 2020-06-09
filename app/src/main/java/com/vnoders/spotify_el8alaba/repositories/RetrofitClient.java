@@ -74,7 +74,8 @@ public class RetrofitClient {
         // in order to log other interceptors
         enableLogging();
 
-        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
 
         retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

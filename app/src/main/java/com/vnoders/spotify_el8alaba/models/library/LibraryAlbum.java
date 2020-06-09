@@ -5,7 +5,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +12,7 @@ import java.util.Objects;
 /**
  * This class is used to model data parsed from json network response using {@link Gson} library
  */
-public class Album {
+public class LibraryAlbum {
 
     @SerializedName("album_type")
     @Expose
@@ -39,21 +38,17 @@ public class Album {
     @Expose
     private String name;
 
-    @SerializedName("popularity")
-    @Expose
-    private int popularity;
-
     @SerializedName("release_date")
     @Expose
     private Date releaseDate;
 
     @SerializedName("tracks")
     @Expose
-    private ArrayList<Track> tracks;
+    private ArrayList<AlbumTrack> tracks;
 
-    @SerializedName("type")
+    @SerializedName("artists")
     @Expose
-    private String type;
+    private ArrayList<Artist> artists;
 
     @SerializedName("uri")
     @Expose
@@ -107,14 +102,6 @@ public class Album {
         this.name = name;
     }
 
-    public int getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(int popularity) {
-        this.popularity = popularity;
-    }
-
     public Date getReleaseDate() {
         return releaseDate;
     }
@@ -123,20 +110,12 @@ public class Album {
         this.releaseDate = releaseDate;
     }
 
-    public ArrayList<Track> getTracks() {
+    public ArrayList<AlbumTrack> getTracks() {
         return tracks;
     }
 
-    public void addTrack(Track track) {
+    public void addTrack(AlbumTrack track) {
         this.tracks.add(track);
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getUri() {
@@ -147,26 +126,13 @@ public class Album {
         this.uri = uri;
     }
 
-    public static final Comparator<Album> SORT_BY_NAME = new Comparator<Album>() {
-        @Override
-        public int compare(Album album1, Album album2) {
-            return album1.name.compareTo(album2.name);
-        }
-    };
+    public ArrayList<Artist> getArtists() {
+        return artists;
+    }
 
-    public static final Comparator<Album> SORT_BY_RELEASE_DATE = new Comparator<Album>() {
-        @Override
-        public int compare(Album album1, Album album2) {
-            return album1.releaseDate.compareTo(album2.releaseDate);
-        }
-    };
-
-    public static final Comparator<Album> SORT_BY_POPULARITY = new Comparator<Album>() {
-        @Override
-        public int compare(Album album1, Album album2) {
-            return Integer.compare(album1.popularity, album2.popularity);
-        }
-    };
+    public void setArtists(ArrayList<Artist> artists) {
+        this.artists = artists;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -176,7 +142,7 @@ public class Album {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        Album album = (Album) obj;
+        LibraryAlbum album = (LibraryAlbum) obj;
         return Objects.equals(id, album.id) &&
                 Objects.equals(name, album.name) &&
                 Objects.equals(tracks, album.tracks) &&
