@@ -35,9 +35,9 @@ import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchHistoryListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchListAdapter;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Search.Playlist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
 import com.vnoders.spotify_el8alaba.models.SearchResult;
@@ -112,7 +112,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
     private ArrayList<Object> getTwosOfEach(SearchResult searchListResults) {
 
         ArrayList<Object> mSearchResult = new ArrayList<>();
-        List<Playlist> playlists = searchListResults.getPlaylists();
+        List<SearchPlaylist> playlists = searchListResults.getPlaylists();
         if (playlists.size() == 1) {
             mSearchResult.add(playlists.get(0));
         } else if (playlists.size() > 1) {

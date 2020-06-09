@@ -14,9 +14,9 @@ import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.AlbumForTrack;
-import com.vnoders.spotify_el8alaba.models.Search.Playlist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -102,13 +102,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                 }
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
-        } else if (result instanceof Playlist) {
-            itemName = ((Playlist) result).getName();
+        } else if (result instanceof SearchPlaylist) {
+            itemName = ((SearchPlaylist) result).getName();
             holder.name.setText(itemName);
             itemInfo = "Playlist";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-            List<TrackImage> images = ((Playlist) result).getImages();
+            List<TrackImage> images = ((SearchPlaylist) result).getImages();
             if (images != null) {
                 if (!images.isEmpty()) {
                     itemImageUrl = images.get(0).getUrl();
@@ -119,38 +119,45 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             SearchTrack mTrack = (SearchTrack) result;
             itemName = mTrack.getName();
             holder.name.setText(itemName);
-            Call<AlbumForTrack> call = apiService.getAlbum(mTrack.getAlbum());
-            call.enqueue(new Callback<AlbumForTrack>() {
-                @Override
-                public void onResponse(Call<AlbumForTrack> call, Response<AlbumForTrack> response) {
-                    if (response.body() != null) {
-                        itemInfo = "";
-                        for (int i = 0; i < response.body().getArtists().size(); i++) {
-                            itemInfo += response.body().getArtists().get(i).getName() + " ";
-                        }
-                        List<TrackImage> images = response.body().getImages();
-                        if (images != null) {
-                            if (!images.isEmpty()) {
-                                itemImageUrl = images.get(0).getUrl();
+            if (mTrack.getArtistsNames() != null) {
+                holder.info.setText(mTrack.getArtistsNames());
+                Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify)
+                        .into(holder.image);
+            } else {
+                Call<AlbumForTrack> call = apiService.getAlbum(mTrack.getAlbum());
+                call.enqueue(new Callback<AlbumForTrack>() {
+                    @Override
+                    public void onResponse(Call<AlbumForTrack> call,
+                            Response<AlbumForTrack> response) {
+                        if (response.body() != null) {
+                            itemInfo = "Song . ";
+                            for (int i = 0; i < response.body().getArtists().size(); i++) {
+                                itemInfo += response.body().getArtists().get(i).getName() + " ";
                             }
+                            List<TrackImage> images = response.body().getImages();
+                            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+                            if (images != null) {
+                                if (!images.isEmpty()) {
+                                    itemImageUrl = images.get(0).getUrl();
+                                }
+                            }
+                        } else {
+                            itemInfo = "Song";
+                            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
                         }
-                    } else {
-                        itemInfo = "Track";
-                        itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+                        holder.info.setText(itemInfo);
+                        mTrack.setArtistsNames(itemInfo);
+                        mTrack.setImageUrl(itemImageUrl);
+                        Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify)
+                                .into(holder.image);
                     }
-                    holder.info.setText(itemInfo);
-                    mTrack.setArtistsNames(itemInfo);
-                    mTrack.setImageUrl(itemImageUrl);
-                    mDataset.remove(position);
-                    mDataset.add(position, mTrack);
-                    Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify)
-                            .into(holder.image);
-                }
 
-                @Override
-                public void onFailure(Call<AlbumForTrack> call, Throwable t) {
-                }
-            });
+                    @Override
+                    public void onFailure(Call<AlbumForTrack> call, Throwable t) {
+                    }
+                });
+            }
+
         }
     }
 
@@ -208,12 +215,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                             itemImageUrl = images.get(0).getUrl();
                         }
                     }
-                } else if (result instanceof Playlist) {
+                } else if (result instanceof SearchPlaylist) {
                     itemType = SearchByTypeConstantsHelper.PLAYLIST;
-                    itemId = ((Playlist) result).getId();
-                    itemName = ((Playlist) result).getName();
+                    itemId = ((SearchPlaylist) result).getId();
+                    itemName = ((SearchPlaylist) result).getName();
                     itemInfo = "Playlist";
-                    List<TrackImage> images = ((Playlist) result).getImages();
+                    List<TrackImage> images = ((SearchPlaylist) result).getImages();
                     if (!images.isEmpty()) {
                         itemImageUrl = images.get(0).getUrl();
                     }

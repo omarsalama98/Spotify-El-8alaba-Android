@@ -92,15 +92,16 @@ public class LoginActivit extends AppCompatActivity {
                             JSONObject jsonCurrentlyPlayed = userInfo
                                     .getJSONObject("currentlyPlaying");
                             String id=userInfo.getString("id");
-                            editor.putString("id",id).commit();
+                            editor.putString("id", id).commit();
+                            editor.putString("type", userInfo.getString("type")).commit();
                             CurrentlyPlaying currentlyPlaying = gson.fromJson(
                                     jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
                         } else {
                             JSONObject jsonCurrentlyPlayed = user
                                     .getJSONObject("currentlyPlaying");
                             String id=user.getString("id");
-                            editor.putString("id",id).commit();
-                            editor.putString("type", user.getString("type"));
+                            editor.putString("id", id).commit();
+                            editor.putString("type", user.getString("type")).commit();
                             CurrentlyPlaying currentlyPlaying = gson.fromJson(
                                     jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
                         }

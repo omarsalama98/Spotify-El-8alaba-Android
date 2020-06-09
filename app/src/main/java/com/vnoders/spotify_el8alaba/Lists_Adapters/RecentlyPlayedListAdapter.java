@@ -8,7 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.Image;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -19,14 +22,14 @@ public class RecentlyPlayedListAdapter extends
         RecyclerView.Adapter<RecentlyPlayedListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private static ArrayList<HomePlaylist> backDataset;
+    private static ArrayList<Object> backDataset;
 
     /**
      * @param myDataset List Of Items in this RecyclerView
      * @param fragment  The fragment where this list is in (Used to load another fragment)
      */
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecentlyPlayedListAdapter(Fragment fragment, ArrayList<HomePlaylist> myDataset) {
+    public RecentlyPlayedListAdapter(Fragment fragment, ArrayList<Object> myDataset) {
         backDataset = myDataset;
         RecentlyPlayedListAdapter.fragment = fragment;
     }
@@ -45,22 +48,43 @@ public class RecentlyPlayedListAdapter extends
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        String imageUrl;
-        holder.title.setText(backDataset.get(position).getName());
-
-        List<TrackImage> images = backDataset.get(position).getImages();
-        if (!images.isEmpty()) {
-            imageUrl = images.get(0).getUrl();
-        } else {
-            imageUrl = "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba";
-        }
-
-        Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
-        //TODO: Change The image circularity according to type of list item
-        if (!backDataset.get(position).getType().equals("Artist"))
+        Object result = backDataset.get(position);
+        if (result instanceof SearchArtist) {
+            SearchArtist mArtist = (SearchArtist) result;
+            String imageUrl;
+            holder.title.setText(mArtist.getName());
+            List<Image> images = mArtist.getImages();
+            if (!images.isEmpty()) {
+                imageUrl = images.get(0).getUrl();
+            } else {
+                imageUrl = "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba";
+            }
+            Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
+        } else if (result instanceof SearchAlbum) {
+            SearchAlbum mAlbum = (SearchAlbum) result;
+            String imageUrl;
+            holder.title.setText(mAlbum.getName());
+            List<TrackImage> images = mAlbum.getImages();
+            if (!images.isEmpty()) {
+                imageUrl = images.get(0).getUrl();
+            } else {
+                imageUrl = "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba";
+            }
+            Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
             holder.image.setDisableCircularTransformation(true);
-
-
+        } else if (result instanceof SearchPlaylist) {
+            SearchPlaylist mPlaylist = (SearchPlaylist) result;
+            String imageUrl;
+            holder.title.setText(mPlaylist.getName());
+            List<TrackImage> images = mPlaylist.getImages();
+            if (!images.isEmpty()) {
+                imageUrl = images.get(0).getUrl();
+            } else {
+                imageUrl = "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba";
+            }
+            Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
+            holder.image.setDisableCircularTransformation(true);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -86,15 +110,34 @@ public class RecentlyPlayedListAdapter extends
             image = v.findViewById(R.id.home_recently_played_list_item_image);
 
             v.setOnClickListener(v1 -> {
-                Fragment targetFragment = PlaylistHomeFragment
-                        .newInstance(backDataset.get(getAdapterPosition()).getId());
-                fragment.getParentFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
-                                R.anim.fade_out)
-                        .replace(R.id.nav_host_fragment, targetFragment)
-                        .addToBackStack(null)
-                        .commit();
+                Fragment targetFragment;
+                Object result = backDataset.get(getAdapterPosition());
+                if (result instanceof SearchArtist) {
+                    SearchArtist mArtist = (SearchArtist) result;
+                    targetFragment = PlaylistHomeFragment
+                            .newInstance(mArtist.getId());
+                } else if (result instanceof SearchAlbum) {
+                    SearchAlbum mAlbum = (SearchAlbum) result;
+                    targetFragment = PlaylistHomeFragment
+                            .newInstance(mAlbum.getId());
+
+                } else if (result instanceof SearchPlaylist) {
+                    SearchPlaylist mPlaylist = (SearchPlaylist) result;
+                    targetFragment = PlaylistHomeFragment
+                            .newInstance(mPlaylist.getId());
+                } else {
+                    targetFragment = null;
+                }
+
+                if (targetFragment != null) {
+                    fragment.getParentFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                                    R.anim.fade_out)
+                            .replace(R.id.nav_host_fragment, targetFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
             });
         }
     }

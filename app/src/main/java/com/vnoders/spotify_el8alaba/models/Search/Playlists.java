@@ -8,13 +8,13 @@ public class Playlists {
 
     @SerializedName("playlists")
     @Expose
-    private List<Playlist> playlists = null;
+    private List<SearchPlaylist> playlists = null;
 
-    public List<Playlist> getPlaylists() {
+    public List<SearchPlaylist> getPlaylists() {
         return playlists;
     }
 
-    public void setPlaylists(List<Playlist> playlists) {
+    public void setPlaylists(List<SearchPlaylist> playlists) {
         this.playlists = playlists;
     }
 

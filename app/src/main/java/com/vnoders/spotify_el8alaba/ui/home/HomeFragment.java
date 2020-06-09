@@ -23,14 +23,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity;
+import com.vnoders.spotify_el8alaba.ConstantsHelper.RecentlyPlayedConstantsHelper;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.HomeMainListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.Home.PlayContext;
+import com.vnoders.spotify_el8alaba.models.Home.RecentlyPlayed;
 import com.vnoders.spotify_el8alaba.models.Notifications.NotificationToken;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -43,6 +48,7 @@ import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
+
     private SharedPreferences notificationTokenShared;
     private HomeViewModel homeViewModel;
     private ImageView settingsButton;
@@ -52,24 +58,95 @@ public class HomeFragment extends Fragment {
     private RecyclerView mainListRecyclerView;
     private SharedPreferences sharedPreferences;
     private String accType;
+    private APIInterface apiService;
+    private RecentlyPlayedListAdapter recentlyPlayedListAdapter;
+    private ArrayList<Object> recentlyPlayedList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
 
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        notificationTokenShared=getActivity().getSharedPreferences("NOTIFICATION_TOKEN", Context.MODE_PRIVATE);
+        notificationTokenShared = getActivity()
+                .getSharedPreferences("NOTIFICATION_TOKEN", Context.MODE_PRIVATE);
         sharedPreferences = getActivity().getSharedPreferences(
                 getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
         accType = sharedPreferences.getString("type", "");
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        settingsButton=root.findViewById(R.id.settings_image_view);
+        settingsButton = root.findViewById(R.id.settings_image_view);
         spotifyArtistButton = root.findViewById(R.id.spotify_artist_image_view);
 
         mainListRecyclerView = root.findViewById(R.id.home_main_list_recycler_view);
         recentlyPlayedRecyclerView = root.findViewById(R.id.home_recently_played_recycler_view);
 
         return root;
+    }
+
+    private void populateRecentlyPlayed(RecentlyPlayed recentlyPlayed) {
+        ArrayList<PlayContext> mContexts = (ArrayList<PlayContext>) recentlyPlayed
+                .getPlayContexts();
+        //recentlyPlayedList.clear();
+        for (int i = 0; i < mContexts.size(); i++) {
+            String type = mContexts.get(i).getUri().split(":")[1];
+            String id = mContexts.get(i).getUri().split(":")[2];
+
+            switch (type) {
+                case RecentlyPlayedConstantsHelper
+                        .ALBUM:
+                    Call<SearchAlbum> call = apiService.getSimpleAlbum(id);
+                    call.enqueue(new Callback<SearchAlbum>() {
+                        @Override
+                        public void onResponse(Call<SearchAlbum> call,
+                                Response<SearchAlbum> response) {
+                            if (response.body() != null) {
+                                recentlyPlayedList.add(response.body());
+                                recentlyPlayedListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<SearchAlbum> call, Throwable t) {
+                        }
+                    });
+                    break;
+                case RecentlyPlayedConstantsHelper
+                        .ARTIST:
+                    Call<List<SearchArtist>> call2 = apiService.getSimpleArtist(id);
+                    call2.enqueue(new Callback<List<SearchArtist>>() {
+                        @Override
+                        public void onResponse(Call<List<SearchArtist>> call,
+                                Response<List<SearchArtist>> response) {
+                            if (response.body() != null) {
+                                recentlyPlayedList.add(response.body());
+                                recentlyPlayedListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<SearchArtist>> call, Throwable t) {
+                        }
+                    });
+                    break;
+                case RecentlyPlayedConstantsHelper
+                        .PLAYLIST:
+                    Call<SearchPlaylist> call3 = apiService.getSimplePlaylist(id);
+                    call3.enqueue(new Callback<SearchPlaylist>() {
+                        @Override
+                        public void onResponse(Call<SearchPlaylist> call,
+                                Response<SearchPlaylist> response) {
+                            if (response.body() != null) {
+                                recentlyPlayedList.add(response.body());
+                                recentlyPlayedListAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<SearchPlaylist> call, Throwable t) {
+                        }
+                    });
+                    break;
+            }
+        }
     }
 
     @Override
@@ -84,7 +161,7 @@ public class HomeFragment extends Fragment {
         if (accType.equals("artist")) {
             spotifyArtistButton.setVisibility(View.VISIBLE);
         }
-        APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
+        apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
         ArrayList<Category> myDataList = new ArrayList<>();
         HomeMainListAdapter adapter = new HomeMainListAdapter(getContext(), HomeFragment.this,
@@ -126,30 +203,28 @@ public class HomeFragment extends Fragment {
                     .addToBackStack(null).commit();
         });
 
-        Call<List<HomePlaylist>> call2 = apiService
-                .getCategoryPlaylists("5ec455f01bf12b31fcfc18c2");
+        Call<RecentlyPlayed> call2 = apiService
+                .getRecentlyPlayed();
 
         recentlyPlayedRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        ArrayList<HomePlaylist> recentlyPlayedList = new ArrayList<>();
-        RecentlyPlayedListAdapter recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
+        recentlyPlayedList = new ArrayList<>();
+        recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
                 HomeFragment.this, recentlyPlayedList);
         recentlyPlayedRecyclerView.setAdapter(recentlyPlayedListAdapter);
 
-        call2.enqueue(new Callback<List<HomePlaylist>>() {
+        call2.enqueue(new Callback<RecentlyPlayed>() {
             @Override
-            public void onResponse(Call<List<HomePlaylist>> call,
-                    Response<List<HomePlaylist>> response) {
-
+            public void onResponse(Call<RecentlyPlayed> call,
+                    Response<RecentlyPlayed> response) {
                 if (response.body() != null) {
-                    recentlyPlayedList.addAll(response.body());
-                    recentlyPlayedListAdapter.notifyDataSetChanged();
+                    populateRecentlyPlayed(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<HomePlaylist>> call, Throwable t) {
+            public void onFailure(Call<RecentlyPlayed> call, Throwable t) {
                 Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
             }
         });
@@ -182,3 +257,11 @@ public class HomeFragment extends Fragment {
         }
     }
 }
+
+
+
+
+
+
+
+
