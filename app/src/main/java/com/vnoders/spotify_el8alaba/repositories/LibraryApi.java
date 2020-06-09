@@ -6,6 +6,7 @@ import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
+import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumsPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
@@ -154,7 +155,25 @@ public interface LibraryApi {
     @GET("search?q=&type=artist&limit=20&offset=0")
     Call<Artists> getRandomArtists();
 
+
     @GET("me/albums")
     Call<LibraryAlbumsPagingWrapper> getUserAlbums();
+
+
+    @GET("albums/{album_id}")
+    Call<LibraryAlbum> getAlbum(@Path("album_id") String albumId);
+
+
+    @GET("me/albums/contains")
+    Call<List<Boolean>> doesCurrentUserFollowAlbum(@Query("ids") String albumId);
+
+
+    @PUT("me/albums")
+    Call<Void> followAlbum(@Query("ids") String albumId);
+
+
+    @DELETE("me/albums")
+    Call<Void> unfollowAlbum(@Query("ids") String albumId);
+
 
 }

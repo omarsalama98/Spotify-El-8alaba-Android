@@ -101,7 +101,7 @@ public class LibraryAlbumAdapter extends ListAdapter<LibraryAlbumItem, AlbumView
      * A ViewHolder describes an item in the list of the adapter and metadata about its place within
      * the RecyclerView.
      */
-    static class AlbumViewHolder extends RecyclerView.ViewHolder {
+    class AlbumViewHolder extends RecyclerView.ViewHolder {
 
         ConstraintLayout albumBody;
 
@@ -128,7 +128,12 @@ public class LibraryAlbumAdapter extends ListAdapter<LibraryAlbumItem, AlbumView
             albumBody.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO:
+                    AlbumFragment fragment = AlbumFragment.newInstance(albumId);
+
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.nav_host_fragment, fragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
 

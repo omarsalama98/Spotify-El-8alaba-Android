@@ -17,6 +17,7 @@ import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
+import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumItem;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumsPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
@@ -28,6 +29,7 @@ import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.ui.library.AddArtistsViewModel;
+import com.vnoders.spotify_el8alaba.ui.library.AlbumViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistTracksViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryArtistViewModel;
@@ -778,4 +780,112 @@ public class LibraryRepository {
             }
         });
     }
+
+    public static void updateAlbumFollowState(@NotNull AlbumViewModel viewModel) {
+        Call<List<Boolean>> request = libraryApi.doesCurrentUserFollowAlbum(viewModel.getAlbumId());
+
+        request.enqueue(new Callback<List<Boolean>>() {
+            @Override
+            public void onResponse(Call<List<Boolean>> call, Response<List<Boolean>> response) {
+
+                List<Boolean> followStates = response.body();
+                if (response.isSuccessful() && followStates != null && followStates.size() > 0) {
+                    viewModel.setFollowedState(followStates.get(0));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Boolean>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void updateAlbum(@NotNull AlbumViewModel viewModel) {
+        Call<LibraryAlbum> request = libraryApi.getAlbum(viewModel.getAlbumId());
+
+        request.enqueue(new Callback<LibraryAlbum>() {
+            @Override
+            public void onResponse(Call<LibraryAlbum> call, Response<LibraryAlbum> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                    LibraryAlbum album = response.body();
+
+                    viewModel.setAlbumName(album.getName());
+                    viewModel.setReleaseDate(album.getReleaseDate());
+                    viewModel.setTracksSummary(album.getTracks());
+
+                    List<TrackImage> albumImages = album.getImages();
+                    if (albumImages != null && !albumImages.isEmpty()) {
+                        viewModel.setImageUrl(albumImages.get(0).getUrl());
+                    }
+
+                    ArrayList<Artist> artists = album.getArtists();
+                    if (artists != null && !artists.isEmpty()) {
+                        Artist artist = artists.get(0);
+                        viewModel.setArtistId(artist.getId());
+                        viewModel.setArtistName(artist.getName());
+
+                        String artistImageUrl = null;
+                        if (artist.getImages() != null && !artist.getImages().isEmpty()) {
+                            artistImageUrl = artist.getImages().get(0).getUrl();
+                        } else if (artist.getUserInfo() != null) {
+                            List<Image> images = artist.getUserInfo().getImages();
+                            if (images != null && !images.isEmpty()) {
+                                artistImageUrl = images.get(0).getUrl();
+                            }
+                        }
+                        viewModel.setArtistImageUrl(artistImageUrl);
+                    }
+
+                    viewModel.setFinishedLoading();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LibraryAlbum> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void followAlbum(@NotNull AlbumViewModel viewModel) {
+        Call<Void> request = libraryApi.followAlbum(viewModel.getAlbumId());
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(App.getInstance(), "Album Followed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void unfollowAlbum(AlbumViewModel viewModel) {
+        Call<Void> request = libraryApi.unfollowAlbum(viewModel.getAlbumId());
+
+        request.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(App.getInstance(), "Album UnFollowed", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+
 }

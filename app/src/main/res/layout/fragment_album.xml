@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+        xmlns:tools = "http://schemas.android.com/tools"
+        xmlns:app = "http://schemas.android.com/apk/res-auto"
+        android:layout_width = "match_parent"
+        android:orientation = "vertical"
+        android:layout_height = "match_parent">
+
+    <include
+            android:id = "@+id/progress_bar"
+            layout = "@layout/progress_bar_screen"
+            tools:visibility = "gone" />
+
+    <androidx.appcompat.widget.Toolbar
+            android:id = "@+id/toolbar"
+            android:layout_width = "match_parent"
+            android:layout_height = "?attr/actionBarSize"
+            android:layout_marginTop = "@dimen/status_bar_height"
+            app:layout_collapseMode = "pin"
+            app:layout_scrollFlags = "scroll">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent">
+
+            <ImageView
+                    android:id = "@+id/album_up"
+                    android:layout_width = "@dimen/icon_size"
+                    android:layout_height = "@dimen/icon_size"
+                    android:padding = "@dimen/icon_padding"
+                    android:src = "@drawable/ic_left_arrow"
+                    app:layout_constraintTop_toTopOf = "parent"
+                    app:layout_constraintStart_toStartOf = "parent"
+                    app:layout_constraintBottom_toBottomOf = "parent" />
+
+            <TextView
+                    android:id = "@+id/album_title"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:textAlignment = "center"
+                    android:textSize = "20sp"
+                    android:textStyle = "bold"
+                    android:textColor = "@color/white"
+                    tools:text = "Album Name"
+                    app:layout_constraintTop_toTopOf = "parent"
+                    android:layout_centerVertical = "true"
+                    android:layout_centerHorizontal = "true"
+                    app:layout_constraintBottom_toBottomOf = "parent"
+                    app:layout_constraintLeft_toLeftOf = "parent"
+                    app:layout_constraintRight_toRightOf = "parent" />
+
+            <ImageView
+                    android:id = "@+id/album_follow"
+                    android:layout_width = "@dimen/icon_size"
+                    android:layout_height = "@dimen/icon_size"
+                    android:padding = "@dimen/icon_padding"
+                    android:src = "@drawable/like_track_liked"
+                    app:layout_constraintTop_toTopOf = "parent"
+                    app:layout_constraintEnd_toStartOf = "@+id/album_more_menu"
+                    app:layout_constraintBottom_toBottomOf = "parent" />
+
+            <ImageView
+                    android:id = "@+id/album_more_menu"
+                    android:layout_width = "@dimen/icon_size"
+                    android:layout_height = "@dimen/icon_size"
+                    android:padding = "@dimen/icon_padding"
+                    android:src = "@drawable/ic_more_vert_white_24dp"
+                    app:layout_constraintTop_toTopOf = "parent"
+                    app:layout_constraintBottom_toBottomOf = "parent"
+                    app:layout_constraintEnd_toEndOf = "parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:paddingBottom = "16dp"
+            android:background = "@color/black">
+
+        <LinearLayout
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:gravity = "center"
+                android:orientation = "vertical">
+
+            <LinearLayout
+                    android:id = "@+id/album_container"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:gravity = "center"
+                    android:paddingTop = "?attr/actionBarSize"
+                    android:orientation = "vertical"
+                    tools:background = "@drawable/toolbar_gradient">
+
+                <ImageView
+                        android:id = "@+id/album_image"
+                        android:layout_width = "192dp"
+                        android:layout_height = "192dp"
+                        tools:src = "@drawable/spotify_el8alaba" />
+
+                <TextView
+                        android:id = "@+id/album_name"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:textStyle = "bold"
+                        android:textColor = "@color/white"
+                        android:textSize = "30sp"
+                        android:layout_margin = "@dimen/appbar_padding"
+                        tools:text = "Album Name" />
+
+                <TextView
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:drawableStart = "@drawable/ic_shuffle"
+                        android:paddingHorizontal = "@dimen/margin_small"
+                        android:drawablePadding = "8dp"
+                        android:textSize = "12sp"
+                        android:background = "@drawable/rounded_corner_layout"
+                        android:backgroundTint = "#858585"
+                        android:textAllCaps = "true"
+                        android:text = "Listen in Shuffle" />
+
+                <TextView
+                        android:id = "@+id/album_artist_info"
+                        android:layout_width = "wrap_content"
+                        android:layout_height = "wrap_content"
+                        android:padding = "16sp"
+                        android:textSize = "16sp"
+                        android:textColor = "#A5A5A5"
+                        tools:text = "Album by Omar Mostafa • 2020 " />
+
+            </LinearLayout>
+
+
+            <Button
+                    android:id = "@+id/album_shuffle_button"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:text = "Shuffle Play"
+                    android:textSize = "20sp"
+                    android:textColor = "@color/white"
+                    android:textAllCaps = "true"
+                    android:paddingHorizontal = "48dp"
+                    android:layout_marginVertical = "@dimen/appbar_padding"
+                    android:background = "@drawable/custom_signup" />
+
+            <TextView
+                    android:id = "@+id/album_tracks"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:textColor = "#A5A5A5"
+                    android:layout_margin = "@dimen/appbar_padding"
+                    android:textSize = "16sp"
+                    android:fontFamily = "sans-serif-medium"
+                    android:lineSpacingMultiplier = "1.4"
+                    android:textAlignment = "center"
+                    tools:text = "Omar Mostafa Happy Song • Omar Mostafa Happy Song • Omar Mostafa Happy Song" />
+
+            <TextView
+                    android:id = "@+id/album_release_date"
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_gravity = "start"
+                    android:textSize = "16sp"
+                    android:fontFamily = "sans-serif-medium"
+                    android:textColor = "@color/white"
+                    android:padding = "16dp"
+                    tools:text = "September 4,1999" />
+
+            <LinearLayout
+                    android:id = "@+id/album_artist_body"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:backgroundTint = "@color/black"
+                    android:background = "@drawable/playlist_item_background_ripple">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                        android:id = "@+id/album_artist_image"
+                        android:layout_width = "64dp"
+                        android:layout_height = "64dp"
+                        android:layout_margin = "16dp"
+                        tools:src = "@drawable/artist" />
+
+                <TextView
+                        android:id = "@+id/album_artist_name"
+                        android:layout_width = "match_parent"
+                        android:layout_height = "match_parent"
+                        android:textSize = "16sp"
+                        android:fontFamily = "sans-serif-medium"
+                        android:textColor = "@color/white"
+                        tools:text = "Artist Name"
+                        android:gravity = "center_vertical" />
+
+            </LinearLayout>
+
+            <TextView
+                    android:layout_width = "wrap_content"
+                    android:layout_height = "wrap_content"
+                    android:layout_gravity = "start"
+                    android:textSize = "16sp"
+                    android:fontFamily = "sans-serif-medium"
+                    android:textColor = "@color/white"
+                    android:padding = "16dp"
+                    android:text = "© ℗ Spotify El Ghalaba 2020" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
