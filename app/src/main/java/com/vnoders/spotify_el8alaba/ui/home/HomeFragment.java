@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.RecentlyPlayedConstantsHelper;
@@ -59,8 +62,90 @@ public class HomeFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private String accType;
     private APIInterface apiService;
+    private View loadingView;
+    private ProgressBar loadingIcon;
     private RecentlyPlayedListAdapter recentlyPlayedListAdapter;
     private ArrayList<Object> recentlyPlayedList;
+    private int REQUESTS_TBD = 2;
+    private int requestsDone = 0;
+
+    private void populateRecentlyPlayed(RecentlyPlayed recentlyPlayed) {
+        ArrayList<PlayContext> mContexts = (ArrayList<PlayContext>) recentlyPlayed
+                .getPlayContexts();
+        //recentlyPlayedList.clear();
+        REQUESTS_TBD += mContexts.size();
+        for (int i = 0; i < mContexts.size(); i++) {
+            String type = mContexts.get(i).getUri().split(":")[1];
+            String id = mContexts.get(i).getUri().split(":")[2];
+
+            switch (type) {
+                case RecentlyPlayedConstantsHelper
+                        .ALBUM:
+                    Call<SearchAlbum> call = apiService.getSimpleAlbum(id);
+                    call.enqueue(new Callback<SearchAlbum>() {
+                        @Override
+                        public void onResponse(Call<SearchAlbum> call,
+                                Response<SearchAlbum> response) {
+                            requestsDone += 1;
+                            if (response.body() != null) {
+                                recentlyPlayedList.add(response.body());
+                                recentlyPlayedListAdapter.notifyDataSetChanged();
+                            }
+                            if (requestsDone == REQUESTS_TBD) {
+                                loadingView.setVisibility(View.GONE);
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<SearchAlbum> call, Throwable t) {
+                        }
+                    });
+                    break;
+                case RecentlyPlayedConstantsHelper
+                        .ARTIST:
+                    Call<List<SearchArtist>> call2 = apiService.getSimpleArtist(id);
+                    call2.enqueue(new Callback<List<SearchArtist>>() {
+                        @Override
+                        public void onResponse(Call<List<SearchArtist>> call,
+                                Response<List<SearchArtist>> response) {
+                            requestsDone += 1;
+                            if (response.body() != null) {
+                                recentlyPlayedList.add(response.body());
+                                recentlyPlayedListAdapter.notifyDataSetChanged();
+                            }
+                            if (requestsDone == REQUESTS_TBD) {
+                                loadingView.setVisibility(View.GONE);
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<List<SearchArtist>> call, Throwable t) {
+                        }
+                    });
+                    break;
+                case RecentlyPlayedConstantsHelper
+                        .PLAYLIST:
+                    Call<SearchPlaylist> call3 = apiService.getSimplePlaylist(id);
+                    call3.enqueue(new Callback<SearchPlaylist>() {
+                        @Override
+                        public void onResponse(Call<SearchPlaylist> call,
+                                Response<SearchPlaylist> response) {
+                            requestsDone += 1;
+                            if (response.body() != null) {
+                                recentlyPlayedList.add(response.body());
+                                recentlyPlayedListAdapter.notifyDataSetChanged();
+                            }
+                            if (requestsDone == REQUESTS_TBD) {
+                                loadingView.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<SearchPlaylist> call, Throwable t) {
+                        }
+                    });
+                    break;
+            }
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -75,78 +160,17 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         settingsButton = root.findViewById(R.id.settings_image_view);
         spotifyArtistButton = root.findViewById(R.id.spotify_artist_image_view);
+        loadingView = root.findViewById(R.id.loading_view);
+        loadingIcon = root.findViewById(R.id.spin_kit);
+
+        Sprite circle = new FadingCircle();
+        circle.setAnimationDelay(100);
+        loadingIcon.setIndeterminateDrawable(circle);
 
         mainListRecyclerView = root.findViewById(R.id.home_main_list_recycler_view);
         recentlyPlayedRecyclerView = root.findViewById(R.id.home_recently_played_recycler_view);
 
         return root;
-    }
-
-    private void populateRecentlyPlayed(RecentlyPlayed recentlyPlayed) {
-        ArrayList<PlayContext> mContexts = (ArrayList<PlayContext>) recentlyPlayed
-                .getPlayContexts();
-        //recentlyPlayedList.clear();
-        for (int i = 0; i < mContexts.size(); i++) {
-            String type = mContexts.get(i).getUri().split(":")[1];
-            String id = mContexts.get(i).getUri().split(":")[2];
-
-            switch (type) {
-                case RecentlyPlayedConstantsHelper
-                        .ALBUM:
-                    Call<SearchAlbum> call = apiService.getSimpleAlbum(id);
-                    call.enqueue(new Callback<SearchAlbum>() {
-                        @Override
-                        public void onResponse(Call<SearchAlbum> call,
-                                Response<SearchAlbum> response) {
-                            if (response.body() != null) {
-                                recentlyPlayedList.add(response.body());
-                                recentlyPlayedListAdapter.notifyDataSetChanged();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<SearchAlbum> call, Throwable t) {
-                        }
-                    });
-                    break;
-                case RecentlyPlayedConstantsHelper
-                        .ARTIST:
-                    Call<List<SearchArtist>> call2 = apiService.getSimpleArtist(id);
-                    call2.enqueue(new Callback<List<SearchArtist>>() {
-                        @Override
-                        public void onResponse(Call<List<SearchArtist>> call,
-                                Response<List<SearchArtist>> response) {
-                            if (response.body() != null) {
-                                recentlyPlayedList.add(response.body());
-                                recentlyPlayedListAdapter.notifyDataSetChanged();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<SearchArtist>> call, Throwable t) {
-                        }
-                    });
-                    break;
-                case RecentlyPlayedConstantsHelper
-                        .PLAYLIST:
-                    Call<SearchPlaylist> call3 = apiService.getSimplePlaylist(id);
-                    call3.enqueue(new Callback<SearchPlaylist>() {
-                        @Override
-                        public void onResponse(Call<SearchPlaylist> call,
-                                Response<SearchPlaylist> response) {
-                            if (response.body() != null) {
-                                recentlyPlayedList.add(response.body());
-                                recentlyPlayedListAdapter.notifyDataSetChanged();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<SearchPlaylist> call, Throwable t) {
-                        }
-                    });
-                    break;
-            }
-        }
     }
 
     @Override
@@ -176,9 +200,13 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                requestsDone += 1;
                 if (response.body() != null) {
                     myDataList.addAll(response.body());
                     adapter.notifyDataSetChanged();
+                }
+                if (requestsDone == REQUESTS_TBD) {
+                    loadingView.setVisibility(View.GONE);
                 }
             }
 
@@ -218,8 +246,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<RecentlyPlayed> call,
                     Response<RecentlyPlayed> response) {
+                requestsDone += 1;
                 if (response.body() != null) {
                     populateRecentlyPlayed(response.body());
+                }
+                if (requestsDone == REQUESTS_TBD) {
+                    loadingView.setVisibility(View.GONE);
                 }
             }
 
