@@ -144,11 +144,19 @@ public class UserProfile extends Fragment {
             @Override
             public void onClick(View v) {
 
+                fragmentManager=getActivity().getSupportFragmentManager();
+                fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment, Followers.newInstance(true,mUserId))
+                        .addToBackStack(null).commit();
+
             }
         });
         followingLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                fragmentManager=getActivity().getSupportFragmentManager();
+                fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.nav_host_fragment,Following.newInstance(true,mUserId)).addToBackStack(null).commit();
 
             }
         });

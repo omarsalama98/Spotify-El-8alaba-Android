@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba.ui.currentUserProfile;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
+import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -45,15 +46,10 @@ public class Followers extends Fragment {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private ArrayList<String>followingList;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private boolean isUser=false;
+    private static final String IS_USER ="is_user";
+    private static final String ID ="id";
+    private String userID;
     public Followers() {
         // Required empty public constructor
     }
@@ -62,17 +58,15 @@ public class Followers extends Fragment {
      * Use this factory method to create a new instance of this fragment using the provided
      * parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      *
      * @return A new instance of fragment followers.
      */
     // TODO: Rename and change types and number of parameters
-    public static Followers newInstance(String param1, String param2) {
+    public static Followers newInstance(boolean flagUser,String id) {
         Followers fragment = new Followers();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ID,id);
+        args.putBoolean(IS_USER, flagUser);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,6 +76,8 @@ public class Followers extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             followingList=getArguments().getStringArrayList("FOLLOWING_IDS");
+            isUser=getArguments().getBoolean(IS_USER,false);
+            userID=getArguments().getString(ID,"noID");
         }
     }
 
@@ -92,12 +88,83 @@ public class Followers extends Fragment {
         View view = inflater.inflate(R.layout.fragment_followers, container, false);
         progressBar = view.findViewById(R.id.followers_progress_bar);
         progressBar.setVisibility(View.VISIBLE);
-        backButton = view.findViewById(R.id.back_button);
+        backButton = view.findViewById(R.id.back_button_followers);
         backButton.setOnClickListener(v -> getParentFragmentManager().popBackStackImmediate());
         followersList = new ArrayList<FollowItem>();
+        if(!isUser) {
+            Call<List<CurrentUserProfile>> call = RetrofitClient.getInstance().getAPI(API.class)
+                    .getFollowers();
+            call.enqueue(new Callback<List<CurrentUserProfile>>() {
+                @Override
+                public void onResponse(Call<List<CurrentUserProfile>> call,
+                        Response<List<CurrentUserProfile>> response) {
+                    progressBar.setVisibility(View.GONE);
+                    if (response.code() == 200 && response.body() != null) {
+                        followersList = new ArrayList<FollowItem>();
+                        String URL = null;
+                        for (int i = 0; i < response.body().size(); i++) {
+                            String type = response.body().get(i).getType();
+                            if (response.body().get(i).getImage() != null) {
+                                if (response.body().get(i).getImage().size() != 0) {
+                                    URL = response.body().get(i).getImage().get(0).getUrl();
+                                } else {
+                                    URL = imageUrl;
+                                }
+                            } else {
+                                URL = imageUrl;
+                            }
+                            String id = response.body().get(i).getId();
+                            String name = response.body().get(i).getName();
+                            String followers = response.body().get(i).getFollowers().toString();
+                            followersList.add(new FollowItem(name, followers, URL, id, type));
+                        }
+                        FollowAdapter adapter = new FollowAdapter(followersList, followingList);
+                        followersRecyclerView.swapAdapter(adapter, false);
+                        adapter.setOnFollowClickListener(new onFollowClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                String type = followersList.get(position).getmType();
+                                if (type.equals("artist")) {
+                                    fragmentManager = getActivity().getSupportFragmentManager();
+                                    fragmentTransaction = fragmentManager.beginTransaction();
+                                    fragmentTransaction
+                                            .replace(R.id.nav_host_fragment, ArtistFragment
+                                                    .newInstance(
+                                                            followersList.get(position).getMid()))
+                                            .addToBackStack(null).commit();
+                                } else {
+                                    fragmentManager = getActivity().getSupportFragmentManager();
+                                    fragmentTransaction = fragmentManager.beginTransaction();
+                                    fragmentTransaction.replace(R.id.nav_host_fragment, UserProfile
+                                            .newInstance(followersList.get(position).getMid()))
+                                            .addToBackStack(null).commit();
+                                }
+                            }
+                        });
+                    }
+                }
 
-        Call<List<CurrentUserProfile>> call = RetrofitClient.getInstance().getAPI(API.class)
-                .getFollowers();
+                @Override
+                public void onFailure(Call<List<CurrentUserProfile>> call, Throwable t) {
+                    progressBar.setVisibility(View.GONE);
+                    ConnectionDialog dialog = new ConnectionDialog();
+                    dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                }
+            });
+        }
+        else{
+            getUserFollowers();
+        }
+        followersAdapter = new FollowAdapter(followersList,followingList);
+        followersRecyclerView = view.findViewById(R.id.followers_recycle_view);
+        followersLayoutManager = new LinearLayoutManager(getContext());
+        followersRecyclerView.setLayoutManager(followersLayoutManager);
+        followersRecyclerView.setAdapter(followersAdapter);
+
+        return view;
+    }
+    public void getUserFollowers(){
+        Call<List<CurrentUserProfile>> call =RetrofitClient.getInstance().getAPI(API.class).getUserFollowers(userID);
         call.enqueue(new Callback<List<CurrentUserProfile>>() {
             @Override
             public void onResponse(Call<List<CurrentUserProfile>> call,
@@ -110,7 +177,6 @@ public class Followers extends Fragment {
                         String type = response.body().get(i).getType();
                         if (response.body().get(i).getImage() != null) {
                             if (response.body().get(i).getImage().size() != 0) {
-                                Log.d("FINDING CRASHING", String.valueOf(i));
                                 URL = response.body().get(i).getImage().get(0).getUrl();
                             } else {
                                 URL = imageUrl;
@@ -123,7 +189,7 @@ public class Followers extends Fragment {
                         String followers = response.body().get(i).getFollowers().toString();
                         followersList.add(new FollowItem(name, followers, URL, id, type));
                     }
-                    FollowAdapter adapter = new FollowAdapter(followersList,followingList);
+                    FollowAdapter adapter = new FollowAdapter(followersList, followingList);
                     followersRecyclerView.swapAdapter(adapter, false);
                     adapter.setOnFollowClickListener(new onFollowClickListener() {
                         @Override
@@ -132,11 +198,12 @@ public class Followers extends Fragment {
                             if (type.equals("artist")) {
                                 fragmentManager = getActivity().getSupportFragmentManager();
                                 fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.replace(R.id.nav_host_fragment, ArtistFragment
-                                        .newInstance(followersList.get(position).getMid()))
+                                fragmentTransaction
+                                        .replace(R.id.nav_host_fragment, ArtistFragment
+                                                .newInstance(
+                                                        followersList.get(position).getMid()))
                                         .addToBackStack(null).commit();
-                            }
-                            else{
+                            } else {
                                 fragmentManager = getActivity().getSupportFragmentManager();
                                 fragmentTransaction = fragmentManager.beginTransaction();
                                 fragmentTransaction.replace(R.id.nav_host_fragment, UserProfile
@@ -147,21 +214,12 @@ public class Followers extends Fragment {
                     });
                 }
             }
-
             @Override
             public void onFailure(Call<List<CurrentUserProfile>> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
-                ConnectionDialog dialog = new ConnectionDialog();
-                dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+
             }
         });
-        followersAdapter = new FollowAdapter(followersList,followingList);
-        followersRecyclerView = view.findViewById(R.id.followers_recycle_view);
-        followersLayoutManager = new LinearLayoutManager(getContext());
-        followersRecyclerView.setLayoutManager(followersLayoutManager);
-        followersRecyclerView.setAdapter(followersAdapter);
 
-        return view;
     }
 
 

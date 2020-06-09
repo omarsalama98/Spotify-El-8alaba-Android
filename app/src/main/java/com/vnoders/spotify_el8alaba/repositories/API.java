@@ -139,5 +139,7 @@ public interface API {
     @PATCH("authentication/updatePassword")
     Call<ResponseBody> changePassword(@Body ChangePasswordData changePasswordData);
 
+    @GET("users/{id}/following?limit=20&offset")
+    Call<List<CurrentUserProfile>> getUserFollowing(@Path("id") String id);
 
 }

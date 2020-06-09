@@ -20,6 +20,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowView
     private ArrayList<FollowItem> followList;
     private onFollowClickListener mlistener;
     private ArrayList<String> followingIds=null;
+    private boolean followers;
 
     public interface onFollowClickListener{
         void onItemClick(int position);
@@ -58,14 +59,20 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowView
 
     public FollowAdapter(ArrayList<FollowItem> followItems,ArrayList<String> following) {
         followList=followItems;
+        if(following!=null){
         if(following.size()>0){
         followingIds=following;
         }
         else {followingIds=null;}
+        }
+        else {followingIds=null;}
+        followers=true;
     }
     public FollowAdapter(ArrayList<FollowItem> followItems) {
     followList=followItems;
     followingIds=null;
+    followers=false;
+
     }
     @NonNull
     @Override
@@ -87,7 +94,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowView
             }
         }
     }
-    else{holder.followSign.setImageResource(R.drawable.ic_baseline_check_24);}
+    else if(!followers){holder.followSign.setImageResource(R.drawable.ic_baseline_check_24);}
     holder.userName.setText(currentItem.getmUserName());
     holder.followersNumber.setText(currentItem.getmFollowersNumber());
     Picasso.get().load(currentItem.getmImageURL()).into(holder.userImage);
