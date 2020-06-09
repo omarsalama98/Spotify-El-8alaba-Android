@@ -17,6 +17,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.vnoders.spotify_el8alaba.ConnectionDialog;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
@@ -31,6 +32,8 @@ import java.util.Arrays;
 import okhttp3.ResponseBody;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,6 +98,10 @@ public class FirstScreen extends AppCompatActivity {
                         String jsonRespone = null;
                         try {
                             if (response.code() == 200) {
+                                AndroidThreeTen.init(getApplication());
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                                LocalDateTime now = LocalDateTime.now();
+                                String loginDate=now.format(formatter);
                                 Gson gson = new Gson();
                                 try {
                                     jsonRespone = response.body().string();
@@ -106,6 +113,7 @@ public class FirstScreen extends AppCompatActivity {
                                 String token = jsonObject.getString("token");
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("token", token);
+                                editor.putString("loginDate",loginDate);
                                 editor.commit();
                                 JSONObject data = jsonObject.getJSONObject("data");
                                 JSONObject user = data.getJSONObject("user");
