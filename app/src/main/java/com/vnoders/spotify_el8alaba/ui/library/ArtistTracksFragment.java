@@ -2,11 +2,12 @@ package com.vnoders.spotify_el8alaba.ui.library;
 
 import static com.vnoders.spotify_el8alaba.ui.library.TracksAdapter.TRACKS_TYPE.ARTIST_TRACKS;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
@@ -114,8 +115,16 @@ public class ArtistTracksFragment extends Fragment {
         artistName = root.findViewById(R.id.artist_tracks_name);
         appBar = root.findViewById(R.id.app_bar);
         recyclerView = root.findViewById(R.id.artist_tracks_recycler_view);
+        ImageView upButton = root.findViewById(R.id.artist_tracks_up);
 
         progressBar = root.findViewById(R.id.progress_bar);
+
+        upButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
 
         return root;
     }
