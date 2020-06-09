@@ -49,7 +49,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ArtistAddSongFragment extends Fragment implements ImageUploadCallback {
+public class ArtistAddSongFragment extends Fragment {
 
     public static String selectedAlbumId;
     private static int REQUEST_CODE = 7;
@@ -62,12 +62,17 @@ public class ArtistAddSongFragment extends Fragment implements ImageUploadCallba
     private APIInterface apiService;
     private String songId;
     private ProgressBar uploadingProgress;
+    private TextView uploadingText;
+    private boolean isUploading = false;
 
     public ArtistAddSongFragment() {
         // Required empty public constructor
     }
 
     private void uploadTrack(RequestBody description, MultipartBody.Part body) {
+        isUploading = true;
+        uploadingProgress.setVisibility(View.VISIBLE);
+        uploadingText.setVisibility(View.VISIBLE);
 
         Call<ResponseBody> call = apiService.uploadTrack(description, body);
         call.enqueue(new Callback<ResponseBody>() {
@@ -93,17 +98,17 @@ public class ArtistAddSongFragment extends Fragment implements ImageUploadCallba
         });
     }
 
-    private static boolean hasPermissions(Context context, String... permissions) {
+    private static boolean hasNoPermissions(Context context, String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null
                 && permissions != null) {
             for (String permission : permissions) {
                 if (ActivityCompat.checkSelfPermission(context, permission)
                         != PackageManager.PERMISSION_GRANTED) {
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -123,6 +128,7 @@ public class ArtistAddSongFragment extends Fragment implements ImageUploadCallba
         albumsListRecyclerView = root.findViewById(R.id.add_song_albums_recycler_view);
         explicit = root.findViewById(R.id.explicit_check);
         uploadingProgress = root.findViewById(R.id.uploading_progress_bar);
+        uploadingText = root.findViewById(R.id.uploading_text);
         apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
         return root;
@@ -150,7 +156,7 @@ public class ArtistAddSongFragment extends Fragment implements ImageUploadCallba
         albumsListRecyclerView.setAdapter(adapter);
 
         chooseSongBtn.setOnClickListener(v -> {
-            if (!hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (hasNoPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 // Permission ask
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
@@ -163,6 +169,9 @@ public class ArtistAddSongFragment extends Fragment implements ImageUploadCallba
         cancelBtn.setOnClickListener(v -> getActivity().onBackPressed());
 
         addSongBtn.setOnClickListener(v -> {
+            if (isUploading) {
+                return;
+            }
             String songName = songNameEditText.getText().toString();
             String songPath = songPathTextView.getText().toString();
 
@@ -186,13 +195,10 @@ public class ArtistAddSongFragment extends Fragment implements ImageUploadCallba
             }
             File file = new File(FileUtils.getPath(getContext(), audioUri));
 
-            ProgressRequestBody requestFile =
-                    new ProgressRequestBody(
-                            file,
-                            MediaType.parse(getActivity().getContentResolver().getType(audioUri))
-                                    .toString(),
-                            this
-                    );
+            RequestBody requestFile =
+                    RequestBody.create(
+                            MediaType.parse(getActivity().getContentResolver().getType(audioUri)),
+                            file);
             CreateATrackRequestBody requestBody = new CreateATrackRequestBody(songName,
                     selectedAlbumId, explicit.isChecked());
 
@@ -212,7 +218,8 @@ public class ArtistAddSongFragment extends Fragment implements ImageUploadCallba
                     RequestBody description =
                             RequestBody.create(
                                     okhttp3.MultipartBody.FORM, songId);
-                    if (!hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (hasNoPermissions(getContext(),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         ActivityCompat.requestPermissions(getActivity(),
                                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
                     } else {
@@ -237,19 +244,4 @@ public class ArtistAddSongFragment extends Fragment implements ImageUploadCallba
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
-    @Override
-    public void onProgressUpdate(int percentage) {
-        uploadingProgress.setProgress(percentage);
-    }
-
-    @Override
-    public void onError(String message) {
-
-    }
-
-    @Override
-    public void onSuccess(String message) {
-
-    }
 }

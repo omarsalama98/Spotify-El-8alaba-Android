@@ -28,6 +28,7 @@ import com.vnoders.spotify_el8alaba.ConstantsHelper.RecentlyPlayedConstantsHelpe
 import com.vnoders.spotify_el8alaba.Lists_Adapters.HomeMainListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.MainActivity;
+import com.vnoders.spotify_el8alaba.Mock;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.SettingsList;
 import com.vnoders.spotify_el8alaba.models.Category;
@@ -179,7 +180,7 @@ public class HomeFragment extends Fragment {
         }
         apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        ArrayList<Category> myDataList = new ArrayList<>();
+        ArrayList<Category> myDataList = Mock.getHomeList();
         HomeMainListAdapter adapter = new HomeMainListAdapter(getContext(), HomeFragment.this,
                 myDataList);
 

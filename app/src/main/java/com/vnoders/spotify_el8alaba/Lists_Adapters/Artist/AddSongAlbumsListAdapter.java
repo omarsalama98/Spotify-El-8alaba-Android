@@ -17,26 +17,24 @@ public class AddSongAlbumsListAdapter extends
         RecyclerView.Adapter<AddSongAlbumsListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private static ArrayList<MyAlbum> mockDataset;
-    private static ArrayList<MyAlbum> backDataset;
+    private static ArrayList<MyAlbum> mDataset;
 
     //               The difference between these two constructors is that one uses mock data and the other
     //                  uses data retrieved from the server and the mock data one will be removed later on.
 
     /**
-     * @param myDataset List Of Playlists in the home Category lists
-     * @param fragment  The fragment where this list is in (Used to load another fragment)
+     * //@param myDataset List Of Playlists in the home Category lists
+     *
+     * @param fragment The fragment where this list is in (Used to load another fragment)
      */
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AddSongAlbumsListAdapter(ArrayList<MyAlbum> myDataset, Fragment fragment) {
+    /*public AddSongAlbumsListAdapter(ArrayList<MyAlbum> myDataset, Fragment fragment) {
         backDataset = new ArrayList<>();
         mockDataset = myDataset;
         AddSongAlbumsListAdapter.fragment = fragment;
-    }
-
-    public AddSongAlbumsListAdapter(Fragment fragment, ArrayList<MyAlbum> backDataset) {
-        mockDataset = new ArrayList<>();
-        AddSongAlbumsListAdapter.backDataset = backDataset;
+    }*/
+    public AddSongAlbumsListAdapter(Fragment fragment, ArrayList<MyAlbum> mDataset) {
+        AddSongAlbumsListAdapter.mDataset = mDataset;
         AddSongAlbumsListAdapter.fragment = fragment;
     }
 
@@ -55,36 +53,36 @@ public class AddSongAlbumsListAdapter extends
     public void onBindViewHolder(
             AddSongAlbumsListAdapter.MyViewHolder holder, final int position) {
 
-        holder.title.setText(backDataset.get(position).getName());
-        holder.addSongImage.setImageResource(R.drawable.add_song);
+        holder.title.setText(mDataset.get(position).getName());
+        holder.addSongImage.setVisibility(View.GONE);
         String imageUrl;
-        String imgUrl = backDataset.get(position).getImgUrl();
+        String imgUrl = mDataset.get(position).getImgUrl();
         if (imgUrl != null) {
             imageUrl = imgUrl;
         } else {
             imageUrl = "https://getdrawings.com/free-icon-bw/black-music-icons-23.png";
         }
         Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
-        if (backDataset.get(position).getSelected()) {
+        if (mDataset.get(position).getSelected()) {
             holder.v.setBackground(fragment.getResources().getDrawable(R.drawable.cornered_button));
         } else {
             holder.v.setBackground(null);
         }
 
         holder.v.setOnClickListener(v -> {
-            for (int i = 0; i < backDataset.size(); i++) {
-                backDataset.get(i).setSelected(false);
+            for (int i = 0; i < mDataset.size(); i++) {
+                mDataset.get(i).setSelected(false);
             }
-            backDataset.get(position).setSelected(true);
+            mDataset.get(position).setSelected(true);
             notifyDataSetChanged();
-            ArtistAddSongFragment.selectedAlbumId = backDataset.get(position).getId();
+            ArtistAddSongFragment.selectedAlbumId = mDataset.get(position).getId();
         });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return backDataset.size();
+        return mDataset.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {

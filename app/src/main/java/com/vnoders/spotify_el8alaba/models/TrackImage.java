@@ -22,6 +22,10 @@ public class TrackImage {
     @Expose
     private String url;
 
+    public TrackImage(String url) {
+        this.url = url;
+    }
+
     public int getHeight() {
         return height;
     }

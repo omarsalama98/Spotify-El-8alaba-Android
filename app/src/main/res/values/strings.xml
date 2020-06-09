@@ -221,4 +221,5 @@
     <string name = "current_password">Enter your current password</string>
     <string name = "new_password">New password</string>
     <string name = "confirm_new_password">confirm your new password</string>
+    <string name = "uploading">Uploading...</string>
 </resources>

@@ -23,6 +23,11 @@ public class Category {
     @Expose
     private Integer v;
 
+    public Category(List<HomePlaylist> playlists, String name) {
+        this.playlists = playlists;
+        this.name = name;
+    }
+
     public List<HomePlaylist> getPlaylists() {
         return playlists;
     }

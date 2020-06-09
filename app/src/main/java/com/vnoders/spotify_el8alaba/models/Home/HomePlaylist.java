@@ -65,6 +65,14 @@ public class HomePlaylist {
     @Expose
     private String id;
 
+    public HomePlaylist(String name, String description,
+            List<TrackImage> images, String id) {
+        this.name = name;
+        this.description = description;
+        this.images = images;
+        this.id = id;
+    }
+
     public Tracks getTracks() {
         return tracks;
     }

@@ -4,10 +4,11 @@ package com.vnoders.spotify_el8alaba;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import androidx.fragment.app.Fragment;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeMainListItem;
 import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
+import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.Genre;
+import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
 
 /**
@@ -15,32 +16,38 @@ import java.util.ArrayList;
  */
 public class Mock {
 
-    public static ArrayList<HomeMainListItem> getMainHomeList() {
+    public static ArrayList<Category> getHomeList() {
 
-        ArrayList<HomeInnerListItem> innerListItems;
-        ArrayList<HomeMainListItem> mainListItems;
+        ArrayList<HomePlaylist> innerListItems;
+        ArrayList<Category> mainListItems;
 
         mainListItems = new ArrayList<>();
         innerListItems = new ArrayList<>();
+        ArrayList<TrackImage> images = new ArrayList<>();
+        images.add(
+                new TrackImage("https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
 
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
-        innerListItems.add(new HomeInnerListItem("Akpa", "Akpro",
-                "https://i.scdn.co/image/ab67706f0000000265af49474d91827160b56b27"));
+        innerListItems.add(new HomePlaylist("Akpa", "Akpro",
+                images
+                , "194"));
+        innerListItems.add(new HomePlaylist("Akpa", "Akpro",
+                images
+                , "194"));
+        innerListItems.add(new HomePlaylist("Akpa", "Akpro",
+                images
+                , "194"));
+        innerListItems.add(new HomePlaylist("Akpa", "Akpro",
+                images
+                , "194"));
+        innerListItems.add(new HomePlaylist("Akpa", "Akpro",
+                images
+                , "194"));
 
-        mainListItems.add(new HomeMainListItem("A7la sho8l", innerListItems));
-        mainListItems.add(new HomeMainListItem("A7la kalam", innerListItems));
-        mainListItems.add(new HomeMainListItem("zeft yaba", innerListItems));
+        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
+        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
+        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
+        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
+        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
 
         return mainListItems;
     }
