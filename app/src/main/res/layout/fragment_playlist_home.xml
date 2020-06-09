@@ -169,9 +169,11 @@
                     android:id = "@+id/playlist_home_tracks"
                     android:layout_width = "match_parent"
                     android:layout_height = "wrap_content"
-                    android:textColor = "@color/colorSecondaryText"
+                    android:textColor = "#A5A5A5"
                     android:layout_margin = "@dimen/appbar_padding"
                     android:textSize = "16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:lineSpacingMultiplier="1.4"
                     android:textAlignment = "center"
                     tools:text = "Omar Mostafa Happy Song • Omar Mostafa Happy Song • Omar Mostafa Happy Song" />
 
