@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.vnoders.spotify_el8alaba.ConnectionDialog;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
@@ -22,9 +24,11 @@ import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.signup.CurrentlyPlaying;
 import java.io.IOException;
+import org.threeten.bp.LocalDateTime;
 import okhttp3.ResponseBody;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.threeten.bp.format.DateTimeFormatter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,6 +77,11 @@ public class LoginActivit extends AppCompatActivity {
                 String jsonRespone = null;
                 try {
                     if (response.code() == 200) {
+                        AndroidThreeTen.init(getApplication());
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                        LocalDateTime now = LocalDateTime.now();
+                        String loginDate=now.format(formatter);
+                        Log.d("LOGINDATE",loginDate);
                         Gson gson = new Gson();
                         try {
                             jsonRespone = response.body().string();
@@ -84,6 +93,7 @@ public class LoginActivit extends AppCompatActivity {
                         String token = jsonObject.getString("token");
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("token", token);
+                        editor.putString("loginDate",loginDate);
                         editor.commit();
                         JSONObject data = jsonObject.getJSONObject("data");
                         JSONObject user = data.getJSONObject("user");

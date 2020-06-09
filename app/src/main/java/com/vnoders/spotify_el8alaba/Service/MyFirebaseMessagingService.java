@@ -91,7 +91,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         editor.putString("notification_token",s);
         editor.putString("notSent","true");
         editor.apply();
-        Log.d("EL TOKEN",s);
+        Log.d("!!!!!",s);
         super.onNewToken(s);
     }
 }

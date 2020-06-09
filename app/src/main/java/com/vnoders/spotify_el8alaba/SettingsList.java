@@ -124,7 +124,7 @@ public class SettingsList extends Fragment {
         return view;
     }
     public void removeNotificationToken(){
-        String token=notificationShared.getString("notification_token","");
+        String token=notificationShared.getString("notification_token","token_not_found");
         NotificationToken notificationToken=new NotificationToken(token);
         Call<ResponseBody>call=RetrofitClient.getInstance().getAPI(API.class).deleteNotificationToken(token);
         call.enqueue(new Callback<ResponseBody>() {

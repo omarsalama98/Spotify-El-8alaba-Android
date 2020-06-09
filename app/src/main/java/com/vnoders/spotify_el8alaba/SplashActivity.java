@@ -1,7 +1,9 @@
 package com.vnoders.spotify_el8alaba;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,10 +14,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.jakewharton.threetenabp.AndroidThreeTen;
+import com.vnoders.spotify_el8alaba.models.Notifications.NotificationToken;
+import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
+import okhttp3.ResponseBody;
+import org.threeten.bp.Duration;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.Period;
+import org.threeten.bp.format.DateTimeFormatter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SplashActivity extends AppCompatActivity {
+    SharedPreferences notificationShared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +50,34 @@ public class SplashActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 String tokenVal=sharedPreferences.getString("token","token not found");
                 if (!tokenVal.equals("")&&!tokenVal.equals("token not found")) {
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    // set the token that was in the preferences before to retrofit client
-                    RetrofitClient.getInstance().setToken(tokenVal);
-                    startActivity(intent);
+                    AndroidThreeTen.init(getApplication());
+                    String loginDate=sharedPreferences.getString("loginDate","noDate");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    LocalDateTime checkLoginDate = LocalDateTime.parse(loginDate, formatter);
+                    LocalDateTime now = LocalDateTime.now();
+                    Duration duration=Duration.between(now,checkLoginDate);
+                    long diff=Math.abs(duration.toDays());
+                    Log.d("PERIOD",String.valueOf(diff));
+                    if(diff<80) {
+                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                        // set the token that was in the preferences before to retrofit client
+                        RetrofitClient.getInstance().setToken(tokenVal);
+                        startActivity(intent);
+                    }
+                    else{
+                        notificationShared = getSharedPreferences("NOTIFICATION_TOKEN", Context.MODE_PRIVATE);
+                        Editor notificationTokenEditor=notificationShared.edit();
+                        notificationTokenEditor.putString("notSent","true");
+                        notificationTokenEditor.commit();
+                        sharedPreferences =getSharedPreferences(
+                                getResources().getString(R.string.access_token_preference), MODE_PRIVATE);
+                        SharedPreferences.Editor editorShared = sharedPreferences.edit();
+                        editorShared.putString("token", "");
+                        editorShared.putString("id","");
+                        editorShared.commit();
+                        Intent intent = new Intent(SplashActivity.this, FirstScreen.class);
+                        startActivity(intent);
+                    }
                 } else {
                     Intent intent = new Intent(SplashActivity.this, FirstScreen.class);
                     startActivity(intent);
@@ -67,4 +105,5 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }
