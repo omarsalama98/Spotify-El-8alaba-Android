@@ -20,11 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.GridSpacingItemDecoration;
-import com.vnoders.spotify_el8alaba.Lists_Adapters.RecentlyPlayedListAdapter;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.models.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
@@ -102,7 +101,7 @@ public class SpecialGenresFragment extends Fragment {
                 .getCategoryPlaylists(id);
 
         ArrayList<HomePlaylist> recentlyPlayedList = new ArrayList<>();
-
+/*
         RecentlyPlayedListAdapter recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
                 SpecialGenresFragment.this, recentlyPlayedList);
 
@@ -121,7 +120,7 @@ public class SpecialGenresFragment extends Fragment {
                 Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
             }
         });
-
+*/
         int spacingInPixels = getGridSpacing();
 
         categoriesGridRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));

@@ -2,6 +2,7 @@ package com.vnoders.spotify_el8alaba.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
 import java.util.List;
 
 public class Category {

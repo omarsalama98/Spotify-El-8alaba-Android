@@ -88,13 +88,12 @@
                     android:layout_width = "match_parent"
                     android:layout_height = "match_parent"
                     android:paddingTop = "10dp"
-                    android:gravity = "center"
+                    android:gravity = "center_horizontal"
                     android:text = "@string/no_one_played_your_songs_last_week"
                     android:drawableTop = "@drawable/ic_sad_face"
                     android:textSize = "25sp"
                     android:textColor = "@color/black"
-                    android:textStyle = "italic"
-                    android:visibility = "gone" />
+                    android:textStyle = "italic" />
             <LinearLayout
                     android:id = "@+id/artist_top_song_layout"
                     android:layout_width = "match_parent"

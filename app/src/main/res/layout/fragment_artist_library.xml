@@ -95,7 +95,7 @@
                 android:padding = "20dp"
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent"
-                android:text = "@string/you_have_nt_added_any_albums_yet"
+                android:text = "@string/you_haven_t_added_any_albums_yet"
                 android:gravity = "center_horizontal"
                 android:textSize = "25sp"
                 android:textColor = "@color/black"

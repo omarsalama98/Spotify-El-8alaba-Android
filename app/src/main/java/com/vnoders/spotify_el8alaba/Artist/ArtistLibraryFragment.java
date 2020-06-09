@@ -63,6 +63,11 @@ public class ArtistLibraryFragment extends Fragment {
         albumsRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 
+        if (mTracks.isEmpty()) {
+            songsRecyclerView.setVisibility(View.GONE);
+            noSongsTextView.setVisibility(View.VISIBLE);
+        }
+
         songsTextView.setOnClickListener(v -> {
             albumsTextView.setTextColor(getResources().getColor(R.color.pressed_grey));
             songsTextView.setTextColor(getResources().getColor(R.color.black));

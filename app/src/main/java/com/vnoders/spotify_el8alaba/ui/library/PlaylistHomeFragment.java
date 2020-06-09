@@ -45,7 +45,6 @@ public class PlaylistHomeFragment extends Fragment {
     private Button shuffle;
     private Button editOrPreviewPlaylist;
     private TextView tracksSummary;
-    private NestedScrollView playlistBody;
     private ProgressBar progressBar;
 
     private MediaPlaybackService mediaPlaybackService;
@@ -98,13 +97,11 @@ public class PlaylistHomeFragment extends Fragment {
         playlistName = root.findViewById(R.id.playlist_home_playlist_name);
         playlistOwner = root.findViewById(R.id.playlist_home_playlist_owner);
 
-        playlistBody = root.findViewById(R.id.playlist_home_body);
         shuffle = root.findViewById(R.id.playlist_home_shuffle_button);
         editOrPreviewPlaylist = root.findViewById(R.id.playlist_home_edit_playlist);
         tracksSummary = root.findViewById(R.id.playlist_home_tracks);
 
         progressBar = root.findViewById(R.id.progress_bar);
-        progressBar.setBackgroundColor(Color.BLACK);
 
         return root;
     }
@@ -227,7 +224,7 @@ public class PlaylistHomeFragment extends Fragment {
 
     private void initializeViews() {
 
-        updateViewsVisibility();
+        progressBar.setVisibility(View.GONE);
 
         OnClickListener openTracksClickListener = new OnClickListener() {
             @Override
@@ -282,15 +279,6 @@ public class PlaylistHomeFragment extends Fragment {
             }
         });
 
-    }
-
-    private void updateViewsVisibility() {
-
-        progressBar.setVisibility(View.GONE);
-
-        appBar.setVisibility(View.VISIBLE);
-
-        playlistBody.setVisibility(View.VISIBLE);
     }
 
 }

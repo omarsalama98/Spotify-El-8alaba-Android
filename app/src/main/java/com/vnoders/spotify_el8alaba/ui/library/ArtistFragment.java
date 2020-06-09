@@ -45,7 +45,6 @@ public class ArtistFragment extends Fragment {
     private TextView artistName;
     private Button shuffle;
     private TextView tracksSummary;
-    private View artistBody;
     private ProgressBar progressBar;
     private RecyclerView relatedArtistsRecyclerView;
     private TextView biography;
@@ -83,14 +82,12 @@ public class ArtistFragment extends Fragment {
 
         artistName = root.findViewById(R.id.artist_name);
 
-        artistBody = root.findViewById(R.id.artist_body);
         shuffle = root.findViewById(R.id.artist_shuffle_button);
         tracksSummary = root.findViewById(R.id.artist_tracks);
         relatedArtistsRecyclerView = root.findViewById(R.id.related_artists_recycler_view);
         biography = root.findViewById(R.id.artist_biography);
 
         progressBar = root.findViewById(R.id.progress_bar);
-        progressBar.setBackgroundColor(Color.BLACK);
 
         return root;
     }
@@ -226,7 +223,7 @@ public class ArtistFragment extends Fragment {
 
     private void initializeViews() {
 
-        updateViewsVisibility();
+        progressBar.setVisibility(View.GONE);
 
         upButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -264,15 +261,6 @@ public class ArtistFragment extends Fragment {
             }
         });
 
-    }
-
-    private void updateViewsVisibility() {
-
-        progressBar.setVisibility(View.GONE);
-
-        appBar.setVisibility(View.VISIBLE);
-
-        artistBody.setVisibility(View.VISIBLE);
     }
 
 }

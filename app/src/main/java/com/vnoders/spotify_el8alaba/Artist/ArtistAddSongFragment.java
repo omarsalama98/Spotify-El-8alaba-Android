@@ -74,15 +74,14 @@ public class ArtistAddSongFragment extends Fragment {
                 if (response.isSuccessful()) {
                     Toast.makeText(getContext(), "Uploaded Song Successfully", Toast.LENGTH_LONG)
                             .show();
+                    ArtistMainActivity.getArtistTopTracks();
                     getActivity().onBackPressed();
                 } else {
                     Toast.makeText(getContext(), "Something went wrong. Try again later",
                             Toast.LENGTH_LONG)
                             .show();
                 }
-
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getContext(), "Something went wrong. Try again later",
@@ -213,7 +212,6 @@ public class ArtistAddSongFragment extends Fragment {
                                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
                     } else {
                         uploadTrack(description, body);
-                        //uploadTrack(songId, body);
                     }
                 }
                 @Override

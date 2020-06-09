@@ -12,13 +12,15 @@ import com.vnoders.spotify_el8alaba.models.Artist.UpdateAlbumNameRequestBody;
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateSongNameAndAlbumRequestBody;
 import com.vnoders.spotify_el8alaba.models.Artist.UpdateSongNameRequestBody;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.models.HomePlaylist;
-import com.vnoders.spotify_el8alaba.models.PlayContext;
+import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.Home.RecentlyPlayed;
 import com.vnoders.spotify_el8alaba.models.Search.AlbumForTrack;
 import com.vnoders.spotify_el8alaba.models.Search.Albums;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.Playlists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
+import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.Tracks;
 import com.vnoders.spotify_el8alaba.models.Search.Users;
@@ -98,7 +100,6 @@ public interface APIInterface {
     @GET("browse/categories?limit=10&offset=5")
     Call<List<Category>> getHomeCategories();
 
-
     /**
      * @param categoryId The id of the category we want to retrieve its playlists
      *
@@ -108,7 +109,7 @@ public interface APIInterface {
     Call<List<HomePlaylist>> getCategoryPlaylists(@Path("category_id") String categoryId);
 
     @GET("me/player/recently-played-contexts")
-    Call<List<PlayContext>> getRecentlyPlayedContexts();
+    Call<RecentlyPlayed> getRecentlyPlayed();
 
     @POST("tracks/listens")
     Call<List<TrackListens>> getTrackListens(@Body TrackListensRequestBody trackListensRequestBody);
@@ -125,6 +126,21 @@ public interface APIInterface {
 
     @GET("albums/{id}")
     Call<AlbumForTrack> getAlbum(
+            @Path("id") String albumId
+    );
+
+    @GET("artists/{id}")
+    Call<List<SearchArtist>> getSimpleArtist(
+            @Path("id") String artistId
+    );
+
+    @GET("albums/{id}")
+    Call<SearchAlbum> getSimpleAlbum(
+            @Path("id") String albumId
+    );
+
+    @GET("playlists/{id}")
+    Call<SearchPlaylist> getSimplePlaylist(
             @Path("id") String albumId
     );
 

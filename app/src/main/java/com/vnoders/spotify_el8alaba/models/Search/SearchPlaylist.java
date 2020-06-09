@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
 
-public class Playlist {
+public class SearchPlaylist {
 
     @SerializedName("name")
     @Expose
