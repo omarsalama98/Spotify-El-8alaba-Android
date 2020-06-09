@@ -62,13 +62,13 @@ public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeL
     }
 
     private void uploadAlbumImage(String albumId, MultipartBody.Part body) {
-        Log.d("LOL", "XD");
         Call<ResponseBody> call1 = apiService.uploadAlbumImage(albumId, body);
         call1.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Toast.makeText(getContext(), "Created Album Successfully", Toast.LENGTH_LONG)
                         .show();
+                ArtistMainActivity.getArtistAlbums();
                 getActivity().onBackPressed();
             }
 
