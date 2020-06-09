@@ -51,10 +51,6 @@ public class Album {
     @Expose
     private ArrayList<Track> tracks;
 
-    @SerializedName("artists")
-    @Expose
-    private ArrayList<String> artistsIds;
-
     @SerializedName("type")
     @Expose
     private String type;
@@ -149,14 +145,6 @@ public class Album {
 
     public void setUri(String uri) {
         this.uri = uri;
-    }
-
-    public ArrayList<String> getArtistsIds() {
-        return artistsIds;
-    }
-
-    public void setArtistsIds(ArrayList<String> artistsIds) {
-        this.artistsIds = artistsIds;
     }
 
     public static final Comparator<Album> SORT_BY_NAME = new Comparator<Album>() {
