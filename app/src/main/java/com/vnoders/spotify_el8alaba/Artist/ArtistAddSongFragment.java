@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -48,7 +49,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ArtistAddSongFragment extends Fragment {
+public class ArtistAddSongFragment extends Fragment implements ImageUploadCallback {
 
     public static String selectedAlbumId;
     private static int REQUEST_CODE = 7;
@@ -60,6 +61,7 @@ public class ArtistAddSongFragment extends Fragment {
     private Uri audioUri;
     private APIInterface apiService;
     private String songId;
+    private ProgressBar uploadingProgress;
 
     public ArtistAddSongFragment() {
         // Required empty public constructor
@@ -97,11 +99,11 @@ public class ArtistAddSongFragment extends Fragment {
             for (String permission : permissions) {
                 if (ActivityCompat.checkSelfPermission(context, permission)
                         != PackageManager.PERMISSION_GRANTED) {
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -120,6 +122,7 @@ public class ArtistAddSongFragment extends Fragment {
         chooseSongBtn = root.findViewById(R.id.choose_song_button);
         albumsListRecyclerView = root.findViewById(R.id.add_song_albums_recycler_view);
         explicit = root.findViewById(R.id.explicit_check);
+        uploadingProgress = root.findViewById(R.id.uploading_progress_bar);
         apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
         return root;
@@ -147,7 +150,7 @@ public class ArtistAddSongFragment extends Fragment {
         albumsListRecyclerView.setAdapter(adapter);
 
         chooseSongBtn.setOnClickListener(v -> {
-            if (hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (!hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 // Permission ask
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
@@ -183,10 +186,12 @@ public class ArtistAddSongFragment extends Fragment {
             }
             File file = new File(FileUtils.getPath(getContext(), audioUri));
 
-            RequestBody requestFile =
-                    RequestBody.create(
-                            MediaType.parse(getActivity().getContentResolver().getType(audioUri)),
-                            file
+            ProgressRequestBody requestFile =
+                    new ProgressRequestBody(
+                            file,
+                            MediaType.parse(getActivity().getContentResolver().getType(audioUri))
+                                    .toString(),
+                            this
                     );
             CreateATrackRequestBody requestBody = new CreateATrackRequestBody(songName,
                     selectedAlbumId, explicit.isChecked());
@@ -207,7 +212,7 @@ public class ArtistAddSongFragment extends Fragment {
                     RequestBody description =
                             RequestBody.create(
                                     okhttp3.MultipartBody.FORM, songId);
-                    if (hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    if (!hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         ActivityCompat.requestPermissions(getActivity(),
                                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
                     } else {
@@ -233,4 +238,18 @@ public class ArtistAddSongFragment extends Fragment {
     }
 
 
+    @Override
+    public void onProgressUpdate(int percentage) {
+        uploadingProgress.setProgress(percentage);
+    }
+
+    @Override
+    public void onError(String message) {
+
+    }
+
+    @Override
+    public void onSuccess(String message) {
+
+    }
 }

@@ -90,6 +90,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
     implementation "androidx.room:room-runtime:2.2.5"
     implementation 'com.google.firebase:firebase-messaging:20.1.7'
     annotationProcessor "androidx.room:room-compiler:2.2.5"

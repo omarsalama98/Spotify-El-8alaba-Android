@@ -22,8 +22,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.Artist.ArtistMainActivity;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.RecentlyPlayedConstantsHelper;
@@ -137,7 +135,6 @@ public class HomeFragment extends Fragment {
                                 loadingView.setVisibility(View.GONE);
                             }
                         }
-
                         @Override
                         public void onFailure(Call<SearchPlaylist> call, Throwable t) {
                         }
@@ -149,7 +146,6 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         notificationTokenShared = getActivity()
                 .getSharedPreferences("NOTIFICATION_TOKEN", Context.MODE_PRIVATE);
@@ -161,11 +157,7 @@ public class HomeFragment extends Fragment {
         settingsButton = root.findViewById(R.id.settings_image_view);
         spotifyArtistButton = root.findViewById(R.id.spotify_artist_image_view);
         loadingView = root.findViewById(R.id.loading_view);
-        loadingIcon = root.findViewById(R.id.spin_kit);
-
-        Sprite circle = new FadingCircle();
-        circle.setAnimationDelay(100);
-        loadingIcon.setIndeterminateDrawable(circle);
+        loadingIcon = root.findViewById(R.id.loading_home_progress);
 
         mainListRecyclerView = root.findViewById(R.id.home_main_list_recycler_view);
         recentlyPlayedRecyclerView = root.findViewById(R.id.home_recently_played_recycler_view);
