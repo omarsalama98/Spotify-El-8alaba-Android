@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android = "http://schemas.android.com/apk/res/android"
         xmlns:tools = "http://schemas.android.com/tools"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
-        tools:context = ".ui.library.AlbumFragment">
+        android:orientation = "vertical">
 
-    <!-- TODO: Update fragment layout -->
-    <TextView
+    <include
+            android:id = "@+id/progress_bar"
+            layout = "@layout/progress_bar_screen" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id = "@+id/library_album_recycler_view"
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
-            android:text = "Album" />
+            android:background = "@color/backgroundColor"
+            android:overScrollMode = "never"
+            tools:listitem = "@layout/playlist_list_item" />
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

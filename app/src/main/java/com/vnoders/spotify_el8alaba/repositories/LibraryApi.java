@@ -6,6 +6,7 @@ import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
+import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumsPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
@@ -152,5 +153,8 @@ public interface LibraryApi {
 
     @GET("search?q=&type=artist&limit=20&offset=0")
     Call<Artists> getRandomArtists();
+
+    @GET("me/albums")
+    Call<LibraryAlbumsPagingWrapper> getUserAlbums();
 
 }
