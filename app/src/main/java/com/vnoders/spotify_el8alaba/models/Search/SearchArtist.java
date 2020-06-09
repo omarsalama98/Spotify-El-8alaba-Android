@@ -3,18 +3,23 @@ package com.vnoders.spotify_el8alaba.models.Search;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.Image;
+import com.vnoders.spotify_el8alaba.models.library.ArtistUserInfo;
 import java.util.List;
 import java.util.Objects;
 
 public class SearchArtist {
 
-    @SerializedName("image")
+    @SerializedName(value = "image", alternate = "images")
     @Expose
     private List<Image> images = null;
 
     @SerializedName("name")
     @Expose
     private String name;
+
+    @SerializedName("userInfo")
+    @Expose
+    private ArtistUserInfo userInfo;
 
     @SerializedName("id")
     @Expose
@@ -23,7 +28,7 @@ public class SearchArtist {
     private boolean isSelected = false;
 
     public List<Image> getImages() {
-        return images;
+        return (userInfo != null && userInfo.getImages() != null) ? userInfo.getImages() : images;
     }
 
     public void setImages(List<Image> images) {
@@ -39,7 +44,7 @@ public class SearchArtist {
     }
 
     public String getId() {
-        return id;
+        return userInfo != null ? userInfo.getId() : id;
     }
 
     public void setId(String id) {
@@ -68,7 +73,7 @@ public class SearchArtist {
         }
         SearchArtist that = (SearchArtist) obj;
         return Objects.equals(name, that.name) &&
-                Objects.equals(id, that.id);
+                Objects.equals(getId(), that.getId());
     }
 
 }

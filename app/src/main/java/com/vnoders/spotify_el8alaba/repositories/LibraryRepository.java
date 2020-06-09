@@ -12,7 +12,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -557,11 +556,6 @@ public class LibraryRepository {
                         String imageUrl = null;
                         if (artist.getImages() != null && !artist.getImages().isEmpty()) {
                             imageUrl = artist.getImages().get(0).getUrl();
-                        } else if (artist.getUserInfo() != null) {
-                            List<Image> images = artist.getUserInfo().getImages();
-                            if (images != null && !images.isEmpty()) {
-                                imageUrl = images.get(0).getUrl();
-                            }
                         }
 
                         artistViewModel.setImageUrl(imageUrl);
@@ -829,11 +823,6 @@ public class LibraryRepository {
                         String artistImageUrl = null;
                         if (artist.getImages() != null && !artist.getImages().isEmpty()) {
                             artistImageUrl = artist.getImages().get(0).getUrl();
-                        } else if (artist.getUserInfo() != null) {
-                            List<Image> images = artist.getUserInfo().getImages();
-                            if (images != null && !images.isEmpty()) {
-                                artistImageUrl = images.get(0).getUrl();
-                            }
                         }
                         viewModel.setArtistImageUrl(artistImageUrl);
                     }
