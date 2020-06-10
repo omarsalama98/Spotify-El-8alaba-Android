@@ -208,7 +208,18 @@ public class AlbumFragment extends Fragment {
         tracksSummary.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:
+                String albumId = albumViewModel.getAlbumId();
+                String albumName = albumViewModel.getAlbumName().getValue();
+                String albumImageUrl = albumViewModel.getImageUrl().getValue();
+                String artistName = albumViewModel.getArtistName().getValue();
+
+                AlbumTracksFragment fragment = AlbumTracksFragment
+                        .newInstance(albumId, albumName, artistName, albumImageUrl);
+
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

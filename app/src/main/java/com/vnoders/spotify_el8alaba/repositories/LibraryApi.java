@@ -5,6 +5,7 @@ import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.library.AlbumTracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumsPagingWrapper;
@@ -175,5 +176,8 @@ public interface LibraryApi {
     @DELETE("me/albums")
     Call<Void> unfollowAlbum(@Query("ids") String albumId);
 
+
+    @GET("albums/{album_id}/tracks")
+    Call<AlbumTracksPagingWrapper> getAlbumTracks(@Path("album_id") String albumId);
 
 }

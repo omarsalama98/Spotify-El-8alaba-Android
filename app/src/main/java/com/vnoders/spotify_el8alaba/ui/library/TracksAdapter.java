@@ -35,7 +35,7 @@ import java.util.List;
 public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
 
     enum TRACKS_TYPE {
-        PLAYLIST_TRACKS, LIKED_TRACKS, ARTIST_TRACKS
+        PLAYLIST_TRACKS, LIKED_TRACKS, ARTIST_TRACKS, ALBUM_TRACKS
     }
 
     private List<Track> tracks;
