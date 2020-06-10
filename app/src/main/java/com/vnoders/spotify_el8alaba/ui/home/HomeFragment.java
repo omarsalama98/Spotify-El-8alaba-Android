@@ -180,7 +180,14 @@ public class HomeFragment extends Fragment {
         }
         apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        ArrayList<Category> myDataList = Mock.getHomeList();
+        ArrayList<Category> myDataList;
+        if (MainActivity.mock) {
+            myDataList = Mock.getHomeList();
+            loadingView.setVisibility(View.GONE);
+        } else {
+            myDataList = new ArrayList<>();
+        }
+
         HomeMainListAdapter adapter = new HomeMainListAdapter(getContext(), HomeFragment.this,
                 myDataList);
 
@@ -188,26 +195,28 @@ public class HomeFragment extends Fragment {
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mainListRecyclerView.setHasFixedSize(true);
         mainListRecyclerView.setAdapter(adapter);
-        loadingView.setVisibility(View.GONE);
-        Call<List<Category>> call = apiService.getHomeCategories();
-        call.enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                requestsDone += 1;
-                if (response.body() != null) {
-                    myDataList.addAll(response.body());
-                    adapter.notifyDataSetChanged();
+        if (!MainActivity.mock) {
+            Call<List<Category>> call = apiService.getHomeCategories();
+            call.enqueue(new Callback<List<Category>>() {
+                @Override
+                public void onResponse(Call<List<Category>> call,
+                        Response<List<Category>> response) {
+                    requestsDone += 1;
+                    if (response.body() != null) {
+                        myDataList.addAll(response.body());
+                        adapter.notifyDataSetChanged();
+                    }
+                    if (requestsDone == REQUESTS_TBD) {
+                        loadingView.setVisibility(View.GONE);
+                    }
                 }
-                if (requestsDone == REQUESTS_TBD) {
-                    loadingView.setVisibility(View.GONE);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve Categories" + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Category>> call, Throwable t) {
+                    Log.d(TAG, "failed to retrieve Categories" + t.getMessage());
+                }
+            });
+        }
 
         //spotifyArtistButton.setVisibility(View.VISIBLE);
         spotifyArtistButton.setOnClickListener(v -> {
@@ -229,30 +238,36 @@ public class HomeFragment extends Fragment {
         recentlyPlayedRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        //recentlyPlayedList = new ArrayList<>();
-        recentlyPlayedList = Mock.getRecentlyPlayed();
+        if (MainActivity.mock) {
+            recentlyPlayedList = Mock.getRecentlyPlayed();
+        } else {
+            recentlyPlayedList = new ArrayList<>();
+        }
+
         recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
                 HomeFragment.this, recentlyPlayedList);
         recentlyPlayedRecyclerView.setAdapter(recentlyPlayedListAdapter);
 
-        call2.enqueue(new Callback<RecentlyPlayed>() {
-            @Override
-            public void onResponse(Call<RecentlyPlayed> call,
-                    Response<RecentlyPlayed> response) {
-                requestsDone += 1;
-                if (response.body() != null) {
-                    populateRecentlyPlayed(response.body());
+        if (!MainActivity.mock) {
+            call2.enqueue(new Callback<RecentlyPlayed>() {
+                @Override
+                public void onResponse(Call<RecentlyPlayed> call,
+                        Response<RecentlyPlayed> response) {
+                    requestsDone += 1;
+                    if (response.body() != null) {
+                        populateRecentlyPlayed(response.body());
+                    }
+                    if (requestsDone == REQUESTS_TBD) {
+                        loadingView.setVisibility(View.GONE);
+                    }
                 }
-                if (requestsDone == REQUESTS_TBD) {
-                    loadingView.setVisibility(View.GONE);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<RecentlyPlayed> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<RecentlyPlayed> call, Throwable t) {
+                    Log.d(TAG, "failed to retrieve Playlists" + t.getLocalizedMessage());
+                }
+            });
+        }
         String token = notificationTokenShared.getString("notification_token", "token_not_found");
         //Toast.makeText(getActivity(), token, Toast.LENGTH_LONG).show();
         String notSendFlag = notificationTokenShared.getString("notSent", "");

@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private static int prevFragment = R.id.navigation_home;
     private BottomNavigationView navView;
     public static LocalDatabase db;
+    public static boolean mock = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

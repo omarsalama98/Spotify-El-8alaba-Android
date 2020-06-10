@@ -27,7 +27,6 @@ import com.vnoders.spotify_el8alaba.ui.currentUserProfile.UserProfile;
 import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 import java.util.List;
@@ -249,7 +248,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                 Fragment targetFragment;
                 switch (itemType) {
                     case SearchByTypeConstantsHelper.ALBUM:
-                        targetFragment = new AlbumFragment();
+                        targetFragment = AlbumFragment.newInstance(itemId);
                         break;
                     case SearchByTypeConstantsHelper.ARTIST:
                         targetFragment = ArtistFragment.newInstance(itemId);
@@ -261,7 +260,8 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                         targetFragment = UserProfile.newInstance(itemId);
                         break;
                     default:
-                        targetFragment = new PlaylistTracksFragment();
+                        targetFragment = AlbumFragment
+                                .newInstance(((SearchTrack) result).getAlbum());
                         break;
                 }
 

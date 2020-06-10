@@ -12,6 +12,8 @@ import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
+import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
@@ -113,17 +115,13 @@ public class RecentlyPlayedListAdapter extends
                 Object result = backDataset.get(getAdapterPosition());
                 if (result instanceof SearchArtist) {
                     SearchArtist mArtist = (SearchArtist) result;
-                    targetFragment = PlaylistHomeFragment
-                            .newInstance(mArtist.getId());
+                    targetFragment = ArtistFragment.newInstance(mArtist.getId());
                 } else if (result instanceof SearchAlbum) {
                     SearchAlbum mAlbum = (SearchAlbum) result;
-                    targetFragment = PlaylistHomeFragment
-                            .newInstance(mAlbum.getId());
-
+                    targetFragment = AlbumFragment.newInstance(mAlbum.getId());
                 } else if (result instanceof SearchPlaylist) {
                     SearchPlaylist mPlaylist = (SearchPlaylist) result;
-                    targetFragment = PlaylistHomeFragment
-                            .newInstance(mPlaylist.getId());
+                    targetFragment = PlaylistHomeFragment.newInstance(mPlaylist.getId());
                 } else {
                     targetFragment = null;
                 }
