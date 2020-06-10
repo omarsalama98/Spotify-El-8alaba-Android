@@ -890,19 +890,10 @@ public class LibraryRepository {
                     @NotNull Response<AlbumTracksPagingWrapper> response) {
                 if (response.isSuccessful() && response.body() != null) {
 
-                    List<SimpleAlbumTrack> items = response.body().getItems();
-                    List<Track> tracks = new ArrayList<>();
-                    if (items != null && !items.isEmpty()) {
-                        String albumName = viewModel.getAlbumName();
-                        String albumImageUrl = viewModel.getAlbumImageUrl();
-                        String artistName = viewModel.getArtistName();
-
-                        for (SimpleAlbumTrack simpleTrack : items) {
-                            tracks.add(Track.createFromSimpleAlbumTrack(simpleTrack,
-                                    albumName, albumImageUrl, artistName));
-                        }
+                    List<SimpleAlbumTrack> albumTracks = response.body().getItems();
+                    if (albumTracks != null) {
+                        updateLikedStatusInTracks(albumTracks, viewModel);
                     }
-                    viewModel.setTracks(tracks);
                 }
             }
 
@@ -941,6 +932,60 @@ public class LibraryRepository {
 
                             track.setLiked(isLiked);
                         }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return tracks;
+            }
+
+            @Override
+            protected void onPostExecute(List<Track> tracks) {
+                viewModel.setTracks(tracks);
+            }
+
+        }.execute();
+    }
+
+
+    public static void updateLikedStatusInTracks(List<SimpleAlbumTrack> albumTracks,
+            AlbumTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> likedTracksRequest = libraryApi.getLikedTracks();
+
+        String albumName = viewModel.getAlbumName();
+        String albumImageUrl = viewModel.getAlbumImageUrl();
+        String artistName = viewModel.getArtistName();
+
+        new AsyncTask<Void, Void, List<Track>>() {
+            @Override
+            protected List<Track> doInBackground(Void... voids) {
+                List<Track> tracks = new ArrayList<>();
+                try {
+                    Response<TracksPagingWrapper> response = likedTracksRequest.execute();
+
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<TrackItem> likedTracks = response.body().getTrackItems();
+
+                        for (SimpleAlbumTrack albumTrack : albumTracks) {
+                            Track track = Track.createFromSimpleAlbumTrack(albumTrack,
+                                    albumName, albumImageUrl, artistName);
+
+                            boolean isLiked = false;
+
+                            for (TrackItem likedTrack : likedTracks) {
+                                if (Objects.equals(likedTrack.getTrack().getId(), track.getId())) {
+                                    isLiked = true;
+                                    break;
+                                }
+                            }
+
+                            track.setLiked(isLiked);
+
+                            tracks.add(track);
+                        }
+
                     }
 
                 } catch (Exception e) {
