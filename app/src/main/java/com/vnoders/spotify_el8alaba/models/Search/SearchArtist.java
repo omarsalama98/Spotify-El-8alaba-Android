@@ -34,7 +34,7 @@ public class SearchArtist {
     private boolean isSelected = false;
 
     public List<Image> getImages() {
-        return images;
+        return (userInfo != null && userInfo.getImages() != null) ? userInfo.getImages() : images;
     }
 
     public void setImages(List<Image> images) {
@@ -68,11 +68,6 @@ public class SearchArtist {
     public void toggleSelection() {
         isSelected = !isSelected;
     }
-
-    public ArtistUserInfo getUserInfo() {
-        return userInfo;
-    }
-
 
     @Override
     public boolean equals(Object obj) {

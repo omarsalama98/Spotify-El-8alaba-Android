@@ -12,7 +12,6 @@ import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
-import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
@@ -55,7 +54,7 @@ public class RecentlyPlayedListAdapter extends
             SearchArtist mArtist = (SearchArtist) result;
             String imageUrl;
             holder.title.setText(mArtist.getName());
-            List<Image> images = mArtist.getUserInfo().getImages();
+            List<Image> images = mArtist.getImages();
             if (!images.isEmpty()) {
                 imageUrl = images.get(0).getUrl();
             } else {
