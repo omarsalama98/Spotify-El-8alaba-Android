@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
+import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.AlbumForTrack;
@@ -19,7 +20,6 @@ import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
-import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -36,7 +36,7 @@ import retrofit2.Response;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
 
-    private static ArrayList<Object> mDataset;
+    private ArrayList<Object> mDataset;
     private static Fragment fragment;
     private static APIInterface apiService;
     private static String itemInfo = "", itemName = "", itemImageUrl = "", itemId = "", itemType = "";
@@ -63,13 +63,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         Object result = mDataset.get(position);
+        itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
         if (result instanceof SearchAlbum) {
             itemName = ((SearchAlbum) result).getName();
             holder.name.setText(itemName);
             List<Image> images = ((SearchAlbum) result).getImages();
             itemInfo = "Album";
             holder.info.setText(itemInfo);
-            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
             if (!images.isEmpty()) {
                 itemImageUrl = images.get(0).getUrl();
             }
@@ -80,7 +80,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             List<Image> images = ((SearchArtist) result).getImages();
             itemInfo = "Artist";
             holder.info.setText(itemInfo);
-            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
             if (images != null) {
                 if (!images.isEmpty()) {
                     itemImageUrl = images.get(0).getUrl();
@@ -88,13 +87,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             }
             Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify).into(holder.image);
         }
-        if(result instanceof User) {
+        if (result instanceof User) {
             itemName = ((User) result).getName();
             holder.name.setText(itemName);
             List<Image> images = ((User) result).getImages();
             itemInfo = "User";
             holder.info.setText(itemInfo);
-            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
             if (images != null) {
                 if (!images.isEmpty()) {
                     itemImageUrl = images.get(0).getUrl();
@@ -106,7 +104,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             holder.name.setText(itemName);
             itemInfo = "Playlist";
             holder.info.setText(itemInfo);
-            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
             List<Image> images = ((SearchPlaylist) result).getImages();
             if (images != null) {
                 if (!images.isEmpty()) {
@@ -120,6 +117,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             holder.name.setText(itemName);
             if (mTrack.getArtistsNames() != null) {
                 holder.info.setText(mTrack.getArtistsNames());
+                itemImageUrl = mTrack.getImageUrl();
                 Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify)
                         .into(holder.image);
             } else {
@@ -134,7 +132,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                                 itemInfo += response.body().getArtists().get(i).getName() + " ";
                             }
                             List<Image> images = response.body().getImages();
-                            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
                             if (images != null) {
                                 if (!images.isEmpty()) {
                                     itemImageUrl = images.get(0).getUrl();
@@ -142,13 +139,16 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                             }
                         } else {
                             itemInfo = "Song";
-                            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
                         }
                         holder.info.setText(itemInfo);
                         mTrack.setArtistsNames(itemInfo);
                         mTrack.setImageUrl(itemImageUrl);
                         Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify)
                                 .into(holder.image);
+                        GradientUtils.generate(itemImageUrl,
+                                fragment.getView().findViewById(R.id.search_main_background_layout),
+                                GradientUtils.GRADIENT_LINEAR);
+
                     }
 
                     @Override
@@ -156,15 +156,107 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     }
                 });
             }
-
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            Object result1 = mDataset.get(position);
+            itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
+            if (result1 instanceof SearchAlbum) {
+                itemType = SearchByTypeConstantsHelper.ALBUM;
+                itemId = ((SearchAlbum) result1).getId();
+                itemName = ((SearchAlbum) result1).getName();
+                itemInfo = "Album";
+                List<Image> images = ((SearchAlbum) result1).getImages();
+                if (!images.isEmpty()) {
+                    itemImageUrl = images.get(0).getUrl();
+                }
+            } else if (result1 instanceof SearchArtist) {
+                itemType = SearchByTypeConstantsHelper.ARTIST;
+                itemId = ((SearchArtist) result1).getId();
+                itemName = ((SearchArtist) result1).getName();
+                itemInfo = "Artist";
+                List<Image> images = ((SearchArtist) result1).getImages();
+                if (images != null) {
+                    if (!images.isEmpty()) {
+                        itemImageUrl = images.get(0).getUrl();
+                    }
+                }
+            }
+            if (result1 instanceof User) {
+                itemType = SearchByTypeConstantsHelper.USER;
+                itemId = ((User) result1).getId();
+                itemName = ((User) result1).getName();
+                itemInfo = "User";
+                List<Image> images = ((User) result1).getImages();
+                if (images != null) {
+                    if (!images.isEmpty()) {
+                        itemImageUrl = images.get(0).getUrl();
+                    }
+                }
+            } else if (result1 instanceof SearchPlaylist) {
+                itemType = SearchByTypeConstantsHelper.PLAYLIST;
+                itemId = ((SearchPlaylist) result1).getId();
+                itemName = ((SearchPlaylist) result1).getName();
+                itemInfo = "Playlist";
+                List<Image> images = ((SearchPlaylist) result1).getImages();
+                if (!images.isEmpty()) {
+                    itemImageUrl = images.get(0).getUrl();
+                }
+            } else if (result1 instanceof SearchTrack) {
+                SearchTrack mTrack = (SearchTrack) result1;
+                itemType = SearchByTypeConstantsHelper.TRACK;
+                itemId = mTrack.getId();
+                itemName = mTrack.getName();
+                itemInfo = mTrack.getArtistsNames();
+                if (mTrack.getImageUrl() != null) {
+                    itemImageUrl = mTrack.getImageUrl();
+                }
+            }
+
+            RecentSearches recentSearches = new RecentSearches();
+            recentSearches.itemName = itemName;
+            recentSearches.itemInfo = itemInfo;
+            recentSearches.itemImageUrl = itemImageUrl;
+            recentSearches.itemType = itemType;
+            recentSearches.itemId = itemId;
+            if (!SearchFragment.mySearchHistory.contains(recentSearches)) {
+                db.recentSearchesDao().insertAll(recentSearches);
+            }
+
+            Fragment targetFragment;
+            switch (itemType) {
+                case SearchByTypeConstantsHelper.ALBUM:
+                    targetFragment = AlbumFragment.newInstance(itemId);
+                    break;
+                case SearchByTypeConstantsHelper.ARTIST:
+                    targetFragment = ArtistFragment.newInstance(itemId);
+                    break;
+                case SearchByTypeConstantsHelper.PLAYLIST:
+                    targetFragment = PlaylistHomeFragment.newInstance(itemId);
+                    break;
+                case SearchByTypeConstantsHelper.USER:
+                    targetFragment = UserProfile.newInstance(itemId);
+                    break;
+                default:
+                    targetFragment = AlbumFragment
+                            .newInstance(((SearchTrack) result1).getAlbum());
+                    break;
+            }
+
+            fragment.getParentFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                            R.anim.fade_out)
+                    .replace(R.id.nav_host_fragment, targetFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
 
     @Override
     public int getItemCount() {
         return mDataset.size();
     }
-
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -179,100 +271,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             info = v.findViewById(R.id.search_item_info_text_view);
             image = v.findViewById(R.id.search_item_image_view);
 
-            v.setOnClickListener(v1 -> {
-
-                Object result = mDataset.get(getAdapterPosition());
-                itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-                if (result instanceof SearchAlbum) {
-                    itemType = SearchByTypeConstantsHelper.ALBUM;
-                    itemId = ((SearchAlbum) result).getId();
-                    itemName = ((SearchAlbum) result).getName();
-                    itemInfo = "Album";
-                    List<Image> images = ((SearchAlbum) result).getImages();
-                    if (!images.isEmpty()) {
-                        itemImageUrl = images.get(0).getUrl();
-                    }
-                } else if (result instanceof SearchArtist) {
-                    itemType = SearchByTypeConstantsHelper.ARTIST;
-                    itemId = ((SearchArtist) result).getId();
-                    itemName = ((SearchArtist) result).getName();
-                    itemInfo = "Artist";
-                    List<Image> images = ((SearchArtist) result).getImages();
-                    if (images != null) {
-                        if(!images.isEmpty())
-                            itemImageUrl = images.get(0).getUrl();
-                    }
-                }
-                if (result instanceof User) {
-                    itemType = SearchByTypeConstantsHelper.USER;
-                    itemId = ((User) result).getId();
-                    itemName = ((User) result).getName();
-                    itemInfo = "User";
-                    List<Image> images = ((User) result).getImages();
-                    if (images != null) {
-                        if (!images.isEmpty()) {
-                            itemImageUrl = images.get(0).getUrl();
-                        }
-                    }
-                } else if (result instanceof SearchPlaylist) {
-                    itemType = SearchByTypeConstantsHelper.PLAYLIST;
-                    itemId = ((SearchPlaylist) result).getId();
-                    itemName = ((SearchPlaylist) result).getName();
-                    itemInfo = "Playlist";
-                    List<Image> images = ((SearchPlaylist) result).getImages();
-                    if (!images.isEmpty()) {
-                        itemImageUrl = images.get(0).getUrl();
-                    }
-                } else if (result instanceof SearchTrack) {
-                    SearchTrack mTrack = (SearchTrack) result;
-                    itemType = SearchByTypeConstantsHelper.TRACK;
-                    itemId = mTrack.getId();
-                    itemName = mTrack.getName();
-                    itemInfo = mTrack.getArtistsNames();
-                    if (mTrack.getImageUrl() != null) {
-                        itemImageUrl = mTrack.getImageUrl();
-                    }
-                }
-
-                RecentSearches recentSearches = new RecentSearches();
-                recentSearches.itemName = itemName;
-                recentSearches.itemInfo = itemInfo;
-                recentSearches.itemImageUrl = itemImageUrl;
-                recentSearches.itemType = itemType;
-                recentSearches.itemId = itemId;
-                if (!SearchFragment.mySearchHistory.contains(recentSearches)) {
-                    db.recentSearchesDao().insertAll(recentSearches);
-                }
-
-                //TODO: Adjust Album and Track when album fragment is finished
-                Fragment targetFragment;
-                switch (itemType) {
-                    case SearchByTypeConstantsHelper.ALBUM:
-                        targetFragment = AlbumFragment.newInstance(itemId);
-                        break;
-                    case SearchByTypeConstantsHelper.ARTIST:
-                        targetFragment = ArtistFragment.newInstance(itemId);
-                        break;
-                    case SearchByTypeConstantsHelper.PLAYLIST:
-                        targetFragment = PlaylistHomeFragment.newInstance(itemId);
-                        break;
-                    case SearchByTypeConstantsHelper.USER:
-                        targetFragment = UserProfile.newInstance(itemId);
-                        break;
-                    default:
-                        targetFragment = AlbumFragment
-                                .newInstance(((SearchTrack) result).getAlbum());
-                        break;
-                }
-
-                fragment.getParentFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
-                                R.anim.fade_out)
-                        .replace(R.id.nav_host_fragment, targetFragment)
-                        .addToBackStack(null)
-                        .commit();
-            });
         }
     }
 

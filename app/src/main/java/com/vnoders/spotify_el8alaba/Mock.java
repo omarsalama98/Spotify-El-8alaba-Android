@@ -12,7 +12,6 @@ import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
-import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.ArtistUserInfo;
 import java.util.ArrayList;
 
@@ -219,13 +218,10 @@ public class Mock {
         recentlyPlayed.add(new SearchArtist("Hamo Bika", artistUserInfo, "07775000"));
         recentlyPlayed.add(new SearchArtist("Hamo Bika", artistUserInfo, "07775006"));
 
-        ArrayList<Image> image = new ArrayList<>();
-        image.add(
-                new Image("https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
-        recentlyPlayed.add(new SearchAlbum("Koto Moto", image, "07775008"));
-        recentlyPlayed.add(new SearchAlbum("Koto Moto", image, "07775004"));
-        recentlyPlayed.add(new SearchPlaylist("Hamo Bika", image, "07775003"));
-        recentlyPlayed.add(new SearchPlaylist("Hamo Bika", image, "07775002"));
+        recentlyPlayed.add(new SearchAlbum("Koto Moto", images, "07775008"));
+        recentlyPlayed.add(new SearchAlbum("Koto Moto", images, "07775004"));
+        recentlyPlayed.add(new SearchPlaylist("Hamo Bika", images, "07775003"));
+        recentlyPlayed.add(new SearchPlaylist("Hamo Bika", images, "07775002"));
 
         return recentlyPlayed;
     }

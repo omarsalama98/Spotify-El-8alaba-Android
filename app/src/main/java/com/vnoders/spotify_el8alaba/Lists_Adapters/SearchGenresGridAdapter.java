@@ -2,7 +2,6 @@ package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
@@ -51,27 +49,11 @@ public class SearchGenresGridAdapter extends
         final Bitmap[] genreImageBitmap = new Bitmap[1];
 
         if (!backGenresList.get(position).getImages().isEmpty()) {
-            //Picasso.get().load(backGenresList.get(position).getIcons().get(0).getUrl()).into(holder.genreImage);
+            String imgUrl = backGenresList.get(position).getImages().get(0).getUrl();
             Picasso.get()
-                    .load(backGenresList.get(position).getImages().get(0).getUrl())
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                            genreImageBitmap[0] = bitmap;
-                            holder.genreImage.setImageBitmap(bitmap);
-                            GradientUtils.generate(genreImageBitmap[0], holder.genreLayout);
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
+                    .load(imgUrl)
+                    .into(holder.genreImage);
+            GradientUtils.generate(imgUrl, holder.genreLayout);
         } else {
             BitmapDrawable bD = (BitmapDrawable) (holder.genreImage.getDrawable());
             GradientUtils.generate(bD.getBitmap(), holder.genreLayout);
