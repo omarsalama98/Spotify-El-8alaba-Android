@@ -921,16 +921,12 @@ public class LibraryRepository {
                         List<TrackItem> likedTracks = response.body().getTrackItems();
 
                         for (Track track : tracks) {
-                            boolean isLiked = false;
-
                             for (TrackItem likedTrack : likedTracks) {
                                 if (Objects.equals(likedTrack.getTrack().getId(), track.getId())) {
-                                    isLiked = true;
+                                    track.setLiked(true);
                                     break;
                                 }
                             }
-
-                            track.setLiked(isLiked);
                         }
                     }
 
@@ -972,16 +968,12 @@ public class LibraryRepository {
                             Track track = Track.createFromSimpleAlbumTrack(albumTrack,
                                     albumName, albumImageUrl, artistName);
 
-                            boolean isLiked = false;
-
                             for (TrackItem likedTrack : likedTracks) {
                                 if (Objects.equals(likedTrack.getTrack().getId(), track.getId())) {
-                                    isLiked = true;
+                                    track.setLiked(true);
                                     break;
                                 }
                             }
-
-                            track.setLiked(isLiked);
 
                             tracks.add(track);
                         }
