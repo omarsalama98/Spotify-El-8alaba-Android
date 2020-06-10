@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
@@ -44,6 +45,10 @@ public class RetrofitClient {
     private static final String HEADER_CACHE_CONTROL = "Cache-Control";
     private static final String HEADER_PRAGMA = "Pragma";
 
+    private static final String HEADER_ENABLE_CACHE = "Enable-Cache";
+    private static final String HEADER_TRUE = "true";
+
+    public static final String HEADERS_ENABLE_CACHE = HEADER_ENABLE_CACHE + ":" + HEADER_TRUE;
 
     // volatile keyword ensures that all threads use the same object that is in main memory
     private static volatile RetrofitClient mRetrofitClient = null;
@@ -65,10 +70,8 @@ public class RetrofitClient {
         headers.addHeader(HEADER_CONTENT_TYPE, TYPE_JSON);
         headers.addHeader(HEADER_USER_AGENT, getUserAgent());
 
-       // httpClientBuilder.cache(getCache())
-
-        //        .addInterceptor(useCachedResponsesInterceptor())
-        //        .addNetworkInterceptor(cacheResponsesInterceptor());
+        httpClientBuilder.cache(getCache()).addInterceptor(useCachedResponsesInterceptor())
+                .addNetworkInterceptor(cacheResponsesInterceptor());
 
         // Logging must be the last added interceptor
         // in order to log other interceptors
@@ -205,7 +208,8 @@ public class RetrofitClient {
                 Request request = chain.request();
 
                 // Caching is allowed only in GET requests
-                if (request.method().equals("GET")) {
+                if (request.method().equals("GET")
+                        && Objects.equals(chain.request().header("enable-cache"), "true")) {
 
                     // prevent caching when network is on. For that we use the cacheResponsesInterceptor
                     if (!isOnline()) {
@@ -241,7 +245,8 @@ public class RetrofitClient {
                 Response response = chain.proceed(chain.request());
 
                 // Caching is allowed only in GET requests
-                if (chain.request().method().equals("GET")) {
+                if (chain.request().method().equals("GET")
+                        && Objects.equals(chain.request().header("enable-cache"), "true")) {
 
                     CacheControl cacheControl = new CacheControl.Builder()
                             // if the response of this request was received in less than 5 minutes
