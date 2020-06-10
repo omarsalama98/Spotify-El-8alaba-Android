@@ -243,8 +243,10 @@ public class ArtistFragment extends Fragment {
                     isFollowed = !followState;
                 }
                 if (isFollowed) {
+                    follow.setImageResource(R.drawable.like_track_liked);
                     artistViewModel.followArtist();
                 } else {
+                    follow.setImageResource(R.drawable.like_track_unliked);
                     artistViewModel.unfollowArtist();
                 }
             }

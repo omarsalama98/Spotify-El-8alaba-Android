@@ -241,8 +241,10 @@ public class AlbumFragment extends Fragment {
                     isFollowed = !followState;
                 }
                 if (isFollowed) {
+                    follow.setImageResource(R.drawable.like_track_liked);
                     albumViewModel.followAlbum();
                 } else {
+                    follow.setImageResource(R.drawable.like_track_unliked);
                     albumViewModel.unfollowAlbum();
                 }
             }

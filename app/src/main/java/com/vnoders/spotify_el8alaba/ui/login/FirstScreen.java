@@ -82,10 +82,13 @@ public class FirstScreen extends AppCompatActivity {
                         String jsonRespone = null;
                         try {
                             if (response.code() == 200) {
-                                AndroidThreeTen.init(getApplication());
+                                String[] header=response.headers().get("Set-Cookie").split("Expires");
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss");
+                                String acessTokenDate=header[1].substring(1,26);
+                                /*AndroidThreeTen.init(getApplication());
                                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                                 LocalDateTime now = LocalDateTime.now();
-                                String loginDate=now.format(formatter);
+                                String loginDate=now.format(formatter);*/
                                 Gson gson = new Gson();
                                 try {
                                     jsonRespone = response.body().string();
@@ -97,7 +100,7 @@ public class FirstScreen extends AppCompatActivity {
                                 String token = jsonObject.getString("token");
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("token", token);
-                                editor.putString("loginDate",loginDate);
+                                editor.putString("loginDate",acessTokenDate);
                                 editor.commit();
                                 JSONObject data = jsonObject.getJSONObject("data");
                                 JSONObject user = data.getJSONObject("user");
