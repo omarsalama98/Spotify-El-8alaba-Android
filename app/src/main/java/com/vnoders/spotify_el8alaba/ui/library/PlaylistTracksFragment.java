@@ -3,13 +3,13 @@ package com.vnoders.spotify_el8alaba.ui.library;
 import static com.vnoders.spotify_el8alaba.ui.library.TracksAdapter.TRACKS_TYPE.LIKED_TRACKS;
 import static com.vnoders.spotify_el8alaba.ui.library.TracksAdapter.TRACKS_TYPE.PLAYLIST_TRACKS;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
@@ -152,10 +152,18 @@ public class PlaylistTracksFragment extends Fragment {
         playlistName = root.findViewById(R.id.playlist_tracks_name);
         appBar = root.findViewById(R.id.app_bar);
         toolbar = root.findViewById(R.id.toolbar);
+        ImageView upButton = root.findViewById(R.id.playlist_tracks_up);
         shuffle = root.findViewById(R.id.playlist_tracks_shuffle);
         recyclerView = root.findViewById(R.id.playlist_recycler_view);
 
         progressBar = root.findViewById(R.id.progress_bar);
+
+        upButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
 
         shuffle.setOnClickListener(new OnClickListener() {
             @Override

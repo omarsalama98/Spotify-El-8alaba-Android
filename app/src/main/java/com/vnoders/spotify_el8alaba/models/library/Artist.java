@@ -74,11 +74,7 @@ public class Artist {
     }
 
     public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        return userInfo != null ? userInfo.getId() : id;
     }
 
     public String getName() {
@@ -122,21 +118,12 @@ public class Artist {
     }
 
     public List<Image> getImages() {
-        return images;
+        return (userInfo != null && userInfo.getImages() != null) ? userInfo.getImages() : images;
     }
 
     public void setImages(List<Image> images) {
         this.images = images;
     }
-
-    public ArtistUserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(ArtistUserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -148,7 +135,7 @@ public class Artist {
         }
         Artist artist = (Artist) obj;
         return Objects.equals(href, artist.href) &&
-                Objects.equals(id, artist.id) &&
+                Objects.equals(getId(), artist.getId()) &&
                 Objects.equals(name, artist.name) &&
                 Objects.equals(uri, artist.uri);
     }

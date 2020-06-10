@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.ui.library.RelatedArtistsAdapter.RelatedArtistViewHolder;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -121,11 +120,6 @@ class RelatedArtistsAdapter extends RecyclerView.Adapter<RelatedArtistViewHolder
             String imageUrl = null;
             if (artist.getImages() != null && !artist.getImages().isEmpty()) {
                 imageUrl = artist.getImages().get(0).getUrl();
-            } else if (artist.getUserInfo() != null) {
-                List<Image> images = artist.getUserInfo().getImages();
-                if (images != null && !images.isEmpty()) {
-                    imageUrl = images.get(0).getUrl();
-                }
             }
 
             Picasso.get().load(imageUrl).placeholder(R.drawable.artist).into(artistImage);

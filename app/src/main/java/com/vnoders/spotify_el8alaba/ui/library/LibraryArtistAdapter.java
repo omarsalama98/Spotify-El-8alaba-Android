@@ -113,11 +113,6 @@ public class LibraryArtistAdapter extends ListAdapter<Artist, ArtistViewHolder> 
             String imageUrl = null;
             if (artist.getImages() != null && !artist.getImages().isEmpty()) {
                 imageUrl = artist.getImages().get(0).getUrl();
-            } else if (artist.getUserInfo() != null) {
-                List<Image> images = artist.getUserInfo().getImages();
-                if (images != null && !images.isEmpty()) {
-                    imageUrl = images.get(0).getUrl();
-                }
             }
 
             Picasso.get().load(imageUrl).placeholder(R.drawable.artist).into(artistImage);
