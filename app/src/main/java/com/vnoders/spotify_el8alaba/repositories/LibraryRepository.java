@@ -15,6 +15,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.library.AlbumTracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumItem;
@@ -24,10 +25,12 @@ import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Owner;
 import com.vnoders.spotify_el8alaba.models.library.Playlist;
 import com.vnoders.spotify_el8alaba.models.library.RequestBodyIds;
+import com.vnoders.spotify_el8alaba.models.library.SimpleAlbumTrack;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.models.library.TrackItem;
 import com.vnoders.spotify_el8alaba.models.library.TracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.ui.library.AddArtistsViewModel;
+import com.vnoders.spotify_el8alaba.ui.library.AlbumTracksViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.AlbumViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistTracksViewModel;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistViewModel;
@@ -877,4 +880,36 @@ public class LibraryRepository {
     }
 
 
+    public static void updateAlbumTracks(AlbumTracksViewModel viewModel) {
+        Call<AlbumTracksPagingWrapper> request = libraryApi.getAlbumTracks(viewModel.getAlbumId());
+
+        request.enqueue(new Callback<AlbumTracksPagingWrapper>() {
+            @Override
+            public void onResponse(@NotNull Call<AlbumTracksPagingWrapper> call,
+                    @NotNull Response<AlbumTracksPagingWrapper> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                    List<SimpleAlbumTrack> items = response.body().getItems();
+                    List<Track> tracks = new ArrayList<>();
+                    if (items != null && !items.isEmpty()) {
+                        String albumName = viewModel.getAlbumName();
+                        String albumImageUrl = viewModel.getAlbumImageUrl();
+                        String artistName = viewModel.getArtistName();
+
+                        for (SimpleAlbumTrack simpleTrack : items) {
+                            tracks.add(Track.createFromSimpleAlbumTrack(simpleTrack,
+                                    albumName, albumImageUrl, artistName));
+                        }
+                    }
+                    viewModel.setTracks(tracks);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AlbumTracksPagingWrapper> call, Throwable t) {
+
+            }
+        });
+
+    }
 }

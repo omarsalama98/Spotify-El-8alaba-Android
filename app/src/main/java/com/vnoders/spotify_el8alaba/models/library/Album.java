@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +59,11 @@ public class Album {
     @SerializedName("uri")
     @Expose
     private String uri;
+
+    public Album(String name, String imageUrl) {
+        this.images = Collections.singletonList(new TrackImage(imageUrl));
+        this.name = name;
+    }
 
     public String getAlbumType() {
         return albumType;

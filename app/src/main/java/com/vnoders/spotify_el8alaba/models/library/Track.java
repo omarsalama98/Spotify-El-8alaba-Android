@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba.models.library;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -193,6 +194,17 @@ public class Track {
         isLiked = liked;
     }
 
+    public static Track createFromSimpleAlbumTrack(SimpleAlbumTrack albumTrack,
+            String albumName, String albumImageUrl, String artistName) {
+
+        Track track = new Track();
+        track.setId(albumTrack.getId());
+        track.setName(albumTrack.getName());
+        track.setAlbum(new Album(albumName, albumImageUrl));
+        track.setArtists(Collections.singletonList(new Artist(artistName)));
+
+        return track;
+    }
 
     @Override
     public boolean equals(Object obj) {
