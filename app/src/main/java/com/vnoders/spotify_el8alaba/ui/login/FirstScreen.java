@@ -85,10 +85,6 @@ public class FirstScreen extends AppCompatActivity {
                                 String[] header=response.headers().get("Set-Cookie").split("Expires");
                                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss");
                                 String acessTokenDate=header[1].substring(1,26);
-                                /*AndroidThreeTen.init(getApplication());
-                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                                LocalDateTime now = LocalDateTime.now();
-                                String loginDate=now.format(formatter);*/
                                 Gson gson = new Gson();
                                 try {
                                     jsonRespone = response.body().string();

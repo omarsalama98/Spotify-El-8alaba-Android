@@ -87,7 +87,6 @@ public class LoginActivit extends AppCompatActivity {
                         String[] header=response.headers().get("Set-Cookie").split("Expires");
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss");
                         String acessTokenDate=header[1].substring(1,26);
-                        Log.d("FUCKIN DATE",acessTokenDate);
                         //LocalDateTime checkLoginDate = LocalDateTime.parse(loginDate, formatter);
                         /*AndroidThreeTen.init(getApplication());
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
