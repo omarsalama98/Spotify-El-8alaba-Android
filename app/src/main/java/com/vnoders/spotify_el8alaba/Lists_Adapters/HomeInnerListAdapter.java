@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
-import com.vnoders.spotify_el8alaba.Lists_Items.HomeInnerListItem;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
@@ -19,25 +18,9 @@ import java.util.List;
 public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private static ArrayList<HomeInnerListItem> mockDataset;
     private static ArrayList<HomePlaylist> backDataset;
 
-    //               The difference between these two constructors is that one uses mock data and the other
-    //                  uses data retrieved from the server and the mock data one will be removed later on.
-
-    /**
-     * @param myDataset List Of Playlists in the home Category lists
-     * @param fragment  The fragment where this list is in (Used to load another fragment)
-     */
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public HomeInnerListAdapter(ArrayList<HomeInnerListItem> myDataset, Fragment fragment) {
-        backDataset = new ArrayList<>();
-        mockDataset = myDataset;
-        HomeInnerListAdapter.fragment = fragment;
-    }
-
     HomeInnerListAdapter(Fragment fragment, ArrayList<HomePlaylist> backDataset) {
-        mockDataset = new ArrayList<>();
         HomeInnerListAdapter.backDataset = backDataset;
         HomeInnerListAdapter.fragment = fragment;
     }

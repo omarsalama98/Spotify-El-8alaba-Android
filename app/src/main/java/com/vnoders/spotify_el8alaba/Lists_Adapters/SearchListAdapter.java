@@ -78,7 +78,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
         } else if (result instanceof SearchArtist) {
             itemName = ((SearchArtist) result).getName();
             holder.name.setText(itemName);
-            List<Image> images = ((SearchArtist) result).getImages();
+            List<TrackImage> images = ((SearchArtist) result).getImages();
             itemInfo = "Artist";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
@@ -198,7 +198,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     itemId = ((SearchArtist) result).getId();
                     itemName = ((SearchArtist) result).getName();
                     itemInfo = "Artist";
-                    List<Image> images = ((SearchArtist) result).getImages();
+                    List<TrackImage> images = ((SearchArtist) result).getImages();
                     if (images != null) {
                         if(!images.isEmpty())
                             itemImageUrl = images.get(0).getUrl();

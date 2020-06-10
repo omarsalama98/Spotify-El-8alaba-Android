@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-        xmlns:app = "http://schemas.android.com/apk/res-auto"
         android:orientation = "vertical"
         android:foreground = "@drawable/home_playlists_ripple"
         android:paddingEnd = "10dp"
@@ -10,25 +9,26 @@
 
     <ImageView
             android:id = "@+id/home_inner_list_item_image"
-            android:layout_width = "wrap_content"
-            android:layout_height = "wrap_content"
+            android:layout_width = "150dp"
+            android:layout_height = "140dp"
             android:contentDescription = "@string/playlist_image" />
     <TextView
             android:id = "@+id/home_inner_list_item_title"
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
             android:text = "Title"
+            android:padding = "5dp"
             android:layout_alignStart = "@id/home_inner_list_item_image"
             android:layout_alignEnd = "@id/home_inner_list_item_image"
             android:maxLines = "1"
             android:layout_below = "@id/home_inner_list_item_image"
             android:textColor = "@color/white"
             android:textSize = "16sp"
-            android:textStyle = "bold"
-            android:layout_marginVertical = "5dp" />
-    <androidx.constraintlayout.widget.ConstraintLayout
+            android:textStyle = "bold" />
+    <LinearLayout
             android:layout_width = "wrap_content"
             android:layout_height = "wrap_content"
+            android:orientation = "horizontal"
             android:layout_below = "@id/home_inner_list_item_title"
             android:layout_alignEnd = "@id/home_inner_list_item_image"
             android:layout_alignStart = "@id/home_inner_list_item_image">
@@ -39,11 +39,7 @@
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
                 android:src = "@drawable/ic_shuffle"
-                android:baselineAlignBottom = "true"
-                app:layout_constraintBaseline_toBaselineOf = "@id/home_inner_list_item_sub_title"
-                app:layout_constraintBottom_toBottomOf = "parent"
-                app:layout_constraintStart_toStartOf = "parent"
-                app:layout_constraintEnd_toStartOf = "@id/home_inner_list_item_sub_title"
+                android:layout_gravity = "center_vertical"
                 android:layout_marginHorizontal = "5dp" />
 
         <TextView
@@ -55,10 +51,7 @@
                 android:textSize = "15sp"
                 android:text = "subTitle"
                 android:ellipsize = "end"
-                android:maxLines = "2"
-                app:layout_constraintStart_toEndOf = "@id/home_inner_list_item_shuffle_icon"
-                app:layout_constraintTop_toTopOf = "parent"
-                app:layout_constraintEnd_toEndOf = "parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:maxLines = "2" />
+    </LinearLayout>
 
 </RelativeLayout>

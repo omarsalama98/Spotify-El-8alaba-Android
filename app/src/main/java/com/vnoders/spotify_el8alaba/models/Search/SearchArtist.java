@@ -2,7 +2,7 @@ package com.vnoders.spotify_el8alaba.models.Search;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vnoders.spotify_el8alaba.models.Image;
+import com.vnoders.spotify_el8alaba.models.TrackImage;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ public class SearchArtist {
 
     @SerializedName("image")
     @Expose
-    private List<Image> images = null;
+    private List<TrackImage> images = null;
 
     @SerializedName("name")
     @Expose
@@ -20,13 +20,19 @@ public class SearchArtist {
     @Expose
     private String id;
 
+    public SearchArtist(List<TrackImage> images, String name, String id) {
+        this.images = images;
+        this.name = name;
+        this.id = id;
+    }
+
     private boolean isSelected = false;
 
-    public List<Image> getImages() {
+    public List<TrackImage> getImages() {
         return images;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<TrackImage> images) {
         this.images = images;
     }
 

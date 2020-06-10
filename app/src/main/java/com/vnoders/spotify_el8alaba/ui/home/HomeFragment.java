@@ -188,7 +188,7 @@ public class HomeFragment extends Fragment {
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mainListRecyclerView.setHasFixedSize(true);
         mainListRecyclerView.setAdapter(adapter);
-
+        loadingView.setVisibility(View.GONE);
         Call<List<Category>> call = apiService.getHomeCategories();
         call.enqueue(new Callback<List<Category>>() {
             @Override
@@ -224,13 +224,13 @@ public class HomeFragment extends Fragment {
                     .addToBackStack(null).commit();
         });
 
-        Call<RecentlyPlayed> call2 = apiService
-                .getRecentlyPlayed();
+        Call<RecentlyPlayed> call2 = apiService.getRecentlyPlayed();
 
         recentlyPlayedRecyclerView.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        recentlyPlayedList = new ArrayList<>();
+        //recentlyPlayedList = new ArrayList<>();
+        recentlyPlayedList = Mock.getRecentlyPlayed();
         recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(
                 HomeFragment.this, recentlyPlayedList);
         recentlyPlayedRecyclerView.setAdapter(recentlyPlayedListAdapter);

@@ -20,6 +20,13 @@ public class SearchPlaylist {
     @Expose
     private String id;
 
+    public SearchPlaylist(String name,
+            List<TrackImage> images, String id) {
+        this.name = name;
+        this.images = images;
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
