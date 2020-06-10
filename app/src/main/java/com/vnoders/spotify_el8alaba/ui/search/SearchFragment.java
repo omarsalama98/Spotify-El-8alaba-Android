@@ -5,6 +5,7 @@ import static com.vnoders.spotify_el8alaba.MainActivity.db;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -76,6 +77,7 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
             searchAllProfilesTextView; //searchAllGenresAndMoodsTextView
     private ArrayList<Object> searchResults;
     private SearchListAdapter searchListAdapter;
+    private Bitmap firstSearchResult;
 
     private void getData() {
         class GetData extends AsyncTask<Void, Void, ArrayList<RecentSearches>> {
@@ -280,19 +282,6 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         assert imm != null;
         imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
-    }
-
-    private void setSearchMainBackgroundColor() {
-        /*TODO:Get image of first search result and determine background based on it
-        Palette palette = Palette.from().generate();
-
-        ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
-        mDrawable.getPaint().setShader
-                (new LinearGradient(0,0,0,200,
-                        palette.getDominantColor(0),
-                        getResources().getColor(R.color.midGray),
-                        TileMode.REPEAT));
-        searchMainBackground.setBackground(mDrawable);*/
     }
 
     @Override
