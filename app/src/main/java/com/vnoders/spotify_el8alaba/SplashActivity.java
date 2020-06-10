@@ -52,13 +52,14 @@ public class SplashActivity extends AppCompatActivity {
                 if (!tokenVal.equals("")&&!tokenVal.equals("token not found")) {
                     AndroidThreeTen.init(getApplication());
                     String loginDate=sharedPreferences.getString("loginDate","noDate");
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss");
                     LocalDateTime checkLoginDate = LocalDateTime.parse(loginDate, formatter);
                     LocalDateTime now = LocalDateTime.now();
                     Duration duration=Duration.between(now,checkLoginDate);
                     long diff=Math.abs(duration.toDays());
                     Log.d("PERIOD",String.valueOf(diff));
-                    if(diff<80) {
+                    if(diff>1) {
                         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                         // set the token that was in the preferences before to retrofit client
                         RetrofitClient.getInstance().setToken(tokenVal);
