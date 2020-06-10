@@ -1475,9 +1475,22 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                     return;
                 }
 
+                String artistName = null;
+                String uri = null;
+                if (items.get(0).getArtists() != null) {
+                    if (items.get(0).getArtists().size() > 0) {
+                        if (items.get(0).getArtists().get(0) != null) {
+                            if (!(TextUtils.isEmpty(items.get(0).getArtists().get(0).getName()))) {
+                                artistName = items.get(0).getArtists().get(0).getName();
+                            }
+                            if (!(TextUtils.isEmpty(items.get(0).getArtists().get(0).getId()))) {
+                                uri = CONTEXT_ARTIST_PREFIX + items.get(0).getArtists().get(0).getId();
+                            }
+                        }
+                    }
+                }
+
                 mTracksList = new ArrayList<>();
-                String artistIdGotten = items.get(0).getArtists().get(0).getId();
-                String uri = CONTEXT_ARTIST_PREFIX + artistIdGotten;
 
                 // read all tracks
                 for (int i = 0; i < items.size(); ++i) {
@@ -1496,9 +1509,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                             }
                         }
                     }
-
-                    String artistName = items.get(0).getArtists().get(0).getName();
-
 
                     Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(),
                             artistName, Track.TYPE_ARTIST, artistName, image, artistId, albumId, uri);

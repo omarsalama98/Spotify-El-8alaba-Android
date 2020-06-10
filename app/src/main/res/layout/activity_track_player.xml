@@ -75,8 +75,10 @@
             android:id="@+id/track_player_ad_text"
             android:layout_below="@id/track_player_ad_image"
             android:layout_centerHorizontal="true"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="24sp"
+            android:layout_margin="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
