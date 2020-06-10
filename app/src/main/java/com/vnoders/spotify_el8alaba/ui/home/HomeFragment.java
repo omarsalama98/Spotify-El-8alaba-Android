@@ -64,7 +64,9 @@ public class HomeFragment extends Fragment {
     private View loadingView;
     private TextView recentlyPlayedText;
     private RecentlyPlayedListAdapter recentlyPlayedListAdapter;
-    private ArrayList<Object> recentlyPlayedList;
+    private static ArrayList<Object> recentlyPlayedList = new ArrayList<>();
+    private static boolean fetchedRequests = false;
+    private static ArrayList<Category> myDataList = new ArrayList<>();
     private int REQUESTS_TBD = 2;
     private int requestsDone = 0;
 
@@ -90,8 +92,9 @@ public class HomeFragment extends Fragment {
                                 recentlyPlayedList.add(response.body());
                                 recentlyPlayedListAdapter.notifyDataSetChanged();
                             }
-                            if (requestsDone == REQUESTS_TBD) {
+                            if (requestsDone == REQUESTS_TBD && !fetchedRequests) {
                                 loadingView.setVisibility(View.GONE);
+                                fetchedRequests = true;
                             }
                         }
                         @Override
@@ -111,8 +114,9 @@ public class HomeFragment extends Fragment {
                                 recentlyPlayedList.add(response.body().get(0));
                                 recentlyPlayedListAdapter.notifyDataSetChanged();
                             }
-                            if (requestsDone == REQUESTS_TBD) {
+                            if (requestsDone == REQUESTS_TBD && !fetchedRequests) {
                                 loadingView.setVisibility(View.GONE);
+                                fetchedRequests = true;
                             }
                         }
                         @Override
@@ -133,8 +137,9 @@ public class HomeFragment extends Fragment {
                                 recentlyPlayedList.add(response.body());
                                 recentlyPlayedListAdapter.notifyDataSetChanged();
                             }
-                            if (requestsDone == REQUESTS_TBD) {
+                            if (requestsDone == REQUESTS_TBD && !fetchedRequests) {
                                 loadingView.setVisibility(View.GONE);
+                                fetchedRequests = true;
                             }
                         }
                         @Override
@@ -181,12 +186,12 @@ public class HomeFragment extends Fragment {
         }
         apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
 
-        ArrayList<Category> myDataList;
+        if (fetchedRequests) {
+            loadingView.setVisibility(View.GONE);
+        }
         if (MainActivity.mock) {
             myDataList = Mock.getHomeList();
             loadingView.setVisibility(View.GONE);
-        } else {
-            myDataList = new ArrayList<>();
         }
 
         HomeMainListAdapter adapter = new HomeMainListAdapter(getContext(), HomeFragment.this,
@@ -196,7 +201,7 @@ public class HomeFragment extends Fragment {
                 new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mainListRecyclerView.setHasFixedSize(true);
         mainListRecyclerView.setAdapter(adapter);
-        if (!MainActivity.mock) {
+        if (!MainActivity.mock && !fetchedRequests) {
             Call<List<Category>> call = apiService.getHomeCategories();
             call.enqueue(new Callback<List<Category>>() {
                 @Override
@@ -212,6 +217,7 @@ public class HomeFragment extends Fragment {
                     }
                     if (requestsDone == REQUESTS_TBD) {
                         loadingView.setVisibility(View.GONE);
+                        fetchedRequests = true;
                     }
                 }
 
@@ -244,8 +250,6 @@ public class HomeFragment extends Fragment {
 
         if (MainActivity.mock) {
             recentlyPlayedList = Mock.getRecentlyPlayed();
-        } else {
-            recentlyPlayedList = new ArrayList<>();
         }
 
         recentlyPlayedListAdapter = new RecentlyPlayedListAdapter(

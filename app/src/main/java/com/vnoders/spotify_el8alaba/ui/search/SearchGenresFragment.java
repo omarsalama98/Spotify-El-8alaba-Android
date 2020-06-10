@@ -41,6 +41,9 @@ public class SearchGenresFragment extends Fragment {
     private int REQUESTS_TBD = 2;
     private int requestsDone = 0;
     private View loadingView;
+    private static ArrayList<Category> topCategories = new ArrayList<>();
+    private static ArrayList<Category> otherCategories = new ArrayList<>();
+    private static boolean fetchedRequest = false;
 
     public SearchGenresFragment() {
         // Required empty public constructor
@@ -77,6 +80,9 @@ public class SearchGenresFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (fetchedRequest) {
+            loadingView.setVisibility(View.GONE);
+        }
         BottomNavigationView navView = getActivity().findViewById(R.id.nav_view);
         if (navView.getSelectedItemId() != R.id.navigation_search) {
             navView.setSelectedItemId(R.id.navigation_search);
@@ -90,59 +96,68 @@ public class SearchGenresFragment extends Fragment {
         topGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         topGenresGridView
                 .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
-
-        Call<List<Category>> call = apiService.getTopCategories();
-        call.enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                requestsDone += 1;
-                if (response.body() != null) {
-                    topGenresGridView
-                            .setAdapter(
-                                    new SearchGenresGridAdapter(
-                                            (ArrayList<Category>) response.body(),
-                                            SearchGenresFragment.this));
-                    // topCategories[0] will be put in the adapter
+        SearchGenresGridAdapter topCategoriesAdapter = new SearchGenresGridAdapter(
+                topCategories,
+                SearchGenresFragment.this);
+        topGenresGridView
+                .setAdapter(topCategoriesAdapter);
+        if (!fetchedRequest) {
+            Call<List<Category>> call = apiService.getTopCategories();
+            call.enqueue(new Callback<List<Category>>() {
+                @Override
+                public void onResponse(Call<List<Category>> call,
+                        Response<List<Category>> response) {
+                    requestsDone += 1;
+                    if (response.body() != null) {
+                        topCategories.addAll(response.body());
+                        topCategoriesAdapter.notifyDataSetChanged();
+                        // topCategories[0] will be put in the adapter
+                    }
+                    if (requestsDone == REQUESTS_TBD) {
+                        loadingView.setVisibility(View.GONE);
+                        fetchedRequest = true;
+                    }
                 }
-                if (requestsDone == REQUESTS_TBD) {
-                    loadingView.setVisibility(View.GONE);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve Categories");
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Category>> call, Throwable t) {
+                    Log.d(TAG, "failed to retrieve Categories");
+                }
+            });
+        }
 
         browseAllGenresGridView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         browseAllGenresGridView
                 .addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, false));
-
-        Call<List<Category>> call2 = apiService.getAllCategories();
-        call2.enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                requestsDone += 1;
-                if (response.body() != null) {
-                    browseAllGenresGridView
-                            .setAdapter(
-                                    new SearchGenresGridAdapter(
-                                            (ArrayList<Category>) response.body(),
-                                            SearchGenresFragment.this));
-                    // allCategories[0] will be put in the adapter
+        SearchGenresGridAdapter otherCategoriesAdapter = new SearchGenresGridAdapter(
+                otherCategories,
+                SearchGenresFragment.this);
+        browseAllGenresGridView
+                .setAdapter(otherCategoriesAdapter);
+        if (!fetchedRequest) {
+            Call<List<Category>> call2 = apiService.getAllCategories();
+            call2.enqueue(new Callback<List<Category>>() {
+                @Override
+                public void onResponse(Call<List<Category>> call,
+                        Response<List<Category>> response) {
+                    requestsDone += 1;
+                    if (response.body() != null) {
+                        otherCategories.addAll(response.body());
+                        otherCategoriesAdapter.notifyDataSetChanged();
+                        // allCategories[0] will be put in the adapter
+                    }
+                    if (requestsDone == REQUESTS_TBD) {
+                        loadingView.setVisibility(View.GONE);
+                        fetchedRequest = true;
+                    }
                 }
-                if (requestsDone == REQUESTS_TBD) {
-                    loadingView.setVisibility(View.GONE);
+
+                @Override
+                public void onFailure(Call<List<Category>> call, Throwable t) {
+                    Log.d(TAG, "failed to retrieve Categories");
                 }
-            }
-
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d(TAG, "failed to retrieve Categories");
-            }
-        });
-
+            });
+        }
         genresSearchTextLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
