@@ -258,8 +258,10 @@ public class PlaylistHomeFragment extends Fragment {
                 }
                 if (isFollowed) {
                     playlistHomeViewModel.followPlaylist();
+                    follow.setImageResource(R.drawable.like_track_liked);
                 } else {
                     playlistHomeViewModel.unfollowPlaylist();
+                    follow.setImageResource(R.drawable.like_track_unliked);
                 }
             }
         });
