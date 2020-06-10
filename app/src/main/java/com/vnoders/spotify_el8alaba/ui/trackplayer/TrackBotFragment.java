@@ -275,7 +275,11 @@ public class TrackBotFragment extends Fragment {
         // get the duration and scale it to 0-100
         int songTime = mCurrentTrack.getDuration();
 
-        int progressScaled = progress * 100 / songTime;
+        int progressScaled = 0;
+
+        if (songTime > 0) {
+            progressScaled = progress * 100 / songTime;
+        }
 
         // if SDK is above Nougat can call the set progress with animation
         // if below then just set it without animation

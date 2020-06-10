@@ -3,6 +3,9 @@ package com.vnoders.spotify_el8alaba.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * @author Mohamed Samy
+ */
 public class ChangePasswordData {
 
     public ChangePasswordData(String password, String newPassword, String newPasswordConfirm) {

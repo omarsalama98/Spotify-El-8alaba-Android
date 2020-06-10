@@ -21,11 +21,13 @@ import com.vnoders.spotify_el8alaba.ui.currentUserProfile.FollowAdapter.onFollow
 import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * @author Mohamed Samy
  * A simple {@link Fragment} subclass. Use the {@link Following#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -138,7 +140,7 @@ public class Following extends Fragment {
             @Override
             public void onFailure(Call<List<CurrentUserProfile>> call, Throwable t) {
                 ConnectionDialog dialog = new ConnectionDialog();
-                dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
             }
         });
 
@@ -154,7 +156,9 @@ public class Following extends Fragment {
         return view;
     }
 
-
+    /**
+     * this function is called to get a user's followed users to list them in the following list.
+     */
     public void getUserFollowing(){
         Call<List<CurrentUserProfile>> call=RetrofitClient.getInstance().getAPI(API.class).getUserFollowing(userID);
         call.enqueue(new Callback<List<CurrentUserProfile>>() {
@@ -209,7 +213,7 @@ public class Following extends Fragment {
             @Override
             public void onFailure(Call<List<CurrentUserProfile>> call, Throwable t) {
                 ConnectionDialog dialog = new ConnectionDialog();
-                dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
             }
         });
 

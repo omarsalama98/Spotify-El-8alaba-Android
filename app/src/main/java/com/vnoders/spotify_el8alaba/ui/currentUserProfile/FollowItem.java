@@ -1,5 +1,9 @@
 package com.vnoders.spotify_el8alaba.ui.currentUserProfile;
 
+/**
+ * @author Mohamed Samy
+ * this class containing the follower of following data like the type,name,image url and other data.
+ */
 public class FollowItem {
 
 

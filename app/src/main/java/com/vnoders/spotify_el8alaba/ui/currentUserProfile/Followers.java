@@ -31,6 +31,7 @@ import retrofit2.Response;
 
 
 /**
+ * @author Mohamed Samy
  * A simple {@link Fragment} subclass. Use the {@link Followers#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -54,14 +55,6 @@ public class Followers extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of this fragment using the provided
-     * parameters.
-     *
-     *
-     * @return A new instance of fragment followers.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Followers newInstance(boolean flagUser,String id) {
         Followers fragment = new Followers();
         Bundle args = new Bundle();
@@ -148,10 +141,11 @@ public class Followers extends Fragment {
                 public void onFailure(Call<List<CurrentUserProfile>> call, Throwable t) {
                     progressBar.setVisibility(View.GONE);
                     ConnectionDialog dialog = new ConnectionDialog();
-                    dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                    dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
                 }
             });
         }
+        // if it's not the current user call another endpoint
         else{
             getUserFollowers();
         }
@@ -163,6 +157,10 @@ public class Followers extends Fragment {
 
         return view;
     }
+
+    /**
+     * This method is called to get followers of another user and list them in the followers list.
+     */
     public void getUserFollowers(){
         Call<List<CurrentUserProfile>> call =RetrofitClient.getInstance().getAPI(API.class).getUserFollowers(userID);
         call.enqueue(new Callback<List<CurrentUserProfile>>() {

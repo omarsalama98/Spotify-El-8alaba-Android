@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
@@ -93,17 +95,14 @@ public class CurrentUserProfileFragment extends Fragment {
      * Use this factory method to create a new instance of this fragment using the provided
      * parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     *
      * @return A new instance of fragment CurrentUserProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CurrentUserProfileFragment newInstance(String param1, String param2) {
+    public static CurrentUserProfileFragment newInstance(CurrentUserProfile currentUserProfile) {
         CurrentUserProfileFragment fragment = new CurrentUserProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
+        Log.d("NAME",currentUserProfile.getName());
         fragment.setArguments(args);
         return fragment;
     }
@@ -146,7 +145,9 @@ public class CurrentUserProfileFragment extends Fragment {
         playListWrap = root.findViewById(R.id.followPlaylistsWrap);
         playlistNumber.setText("-");
         editProfileButton=root.findViewById(R.id.edit_profile_button);
-            Picasso.get().load(imageUrl).into(userImage);
+            Picasso.get().load(imageUrl).networkPolicy(NetworkPolicy.NO_CACHE).memoryPolicy(
+                MemoryPolicy.NO_CACHE)
+                .into(userImage);
         GradientUtils.generate(imageUrl,appBarLayout,GradientUtils.GRADIENT_LINEAR_BLACK);
         followerNumber.setText(currentUserProfile.getFollowers().toString());
         userName.setText(currentUserProfile.getName());

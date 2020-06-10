@@ -23,6 +23,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
+ * @author Mohamed Samy
+ * This fragment is used to view the current user notification settings and enable the user to cutom them.
  * A simple {@link Fragment} subclass. Use the {@link NotificationSettings#newInstance} factory
  * method to create an instance of this fragment.
  */
@@ -42,16 +44,6 @@ public class NotificationSettings extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of this fragment using the provided
-     * parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     *
-     * @return A new instance of fragment NotificationSettings.
-     */
-    // TODO: Rename and change types and number of parameters
     public static NotificationSettings newInstance(String param1, String param2) {
         NotificationSettings fragment = new NotificationSettings();
         return fragment;
@@ -86,6 +78,9 @@ public class NotificationSettings extends Fragment {
          return view;
     }
 
+    /**
+     * This method is called to get the current user's notification settings
+     */
     public void requestNotificationStatus(){
         Call<ResponseBody> call= RetrofitClient.getInstance().getAPI(API.class).getNotificationStatus();
         call.enqueue(new Callback<ResponseBody>() {
@@ -118,12 +113,16 @@ public class NotificationSettings extends Fragment {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 ConnectionDialog dialog = new ConnectionDialog();
-                dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
             }
 
 
         });
     }
+
+    /**
+     * This method is used to set the current user notification settings.
+     */
     public void sendNotificationStatus(){
         Integer setProileFollows=(switchProfileFollows.isChecked())? 1:0;
         Integer setPlaylistFollows=(switchPlaylisFollows.isChecked()) ? 1:0;
@@ -145,7 +144,7 @@ public class NotificationSettings extends Fragment {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 ConnectionDialog dialog = new ConnectionDialog();
-                dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
             }
         });
 

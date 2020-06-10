@@ -133,7 +133,7 @@ public class ChangePassword extends Fragment {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 ConnectionDialog dialog = new ConnectionDialog();
-                dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
             }
         });
 

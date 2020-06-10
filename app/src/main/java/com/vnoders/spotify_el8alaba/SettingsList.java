@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -19,12 +20,17 @@ import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 import com.vnoders.spotify_el8alaba.ui.currentUserProfile.CurrentUserProfileFragment;
+import com.vnoders.spotify_el8alaba.ui.home.HomeFragment;
 import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * This is a fragment to implement a list containing settings and user profile.
+ * @author Mohamed Samy
+ */
 
 public class SettingsList extends Fragment {
     private TextView mCurrentUserProfile;
@@ -36,6 +42,7 @@ public class SettingsList extends Fragment {
     SharedPreferences sharedPreferences;
     private TextView notificationSettings;
     private TextView changePassword;
+    private ImageButton settingsBackButton;
 
 
     @Override
@@ -55,6 +62,16 @@ public class SettingsList extends Fragment {
         logout=view.findViewById(R.id.logout);
         notificationSettings=view.findViewById(R.id.notification_settings);
         changePassword=view.findViewById(R.id.change_password);
+        settingsBackButton=view.findViewById(R.id.back_button_settings);
+        settingsBackButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeFragment homeFragment=new HomeFragment();
+                mFragmentManager=getActivity().getSupportFragmentManager();
+                mFragmentTransaction=mFragmentManager.beginTransaction();
+                mFragmentTransaction.replace(R.id.nav_host_fragment,homeFragment).commit();
+            }
+        });
         notificationSettings.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +102,7 @@ public class SettingsList extends Fragment {
                     @Override
                     public void onFailure(Call<CurrentUserProfile> call, Throwable t) {
                         ConnectionDialog dialog = new ConnectionDialog();
-                        dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                        dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
                     }
                 });
 
@@ -123,6 +140,10 @@ public class SettingsList extends Fragment {
 
         return view;
     }
+
+    /**
+     * This method is called when a user preform a logout to remove the notification token
+     */
     public void removeNotificationToken(){
         String token=notificationShared.getString("notification_token","token_not_found");
         NotificationToken notificationToken=new NotificationToken(token);

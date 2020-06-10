@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import com.vnoders.spotify_el8alaba.R;
 
+/**
+ * @author Mohamed Samy
+ */
 public class ConfirmationEmailDialog extends DialogFragment {
 
     private Button ok_button;
