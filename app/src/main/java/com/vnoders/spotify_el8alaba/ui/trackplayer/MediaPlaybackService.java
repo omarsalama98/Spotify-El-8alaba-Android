@@ -307,6 +307,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mRepeat = repeat;
         setRepeatState(mRepeat);
 
+        mFirstInit = false;
+        mFirstProgress = 0;
+
         getTrack(trackId);
     }
 
@@ -328,6 +331,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mRepeat = repeat;
         setRepeatState(mRepeat);
 
+        mFirstInit = false;
+        mFirstProgress = 0;
+
         getSeveralTracks(trackIds, shuffle, trackId);
     }
 
@@ -346,6 +352,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
         mRepeat = repeat;
         setRepeatState(mRepeat);
+
+        mFirstInit = false;
+        mFirstProgress = 0;
 
         getAlbum(albumId, shuffle, trackId);
     }
@@ -366,6 +375,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mRepeat = repeat;
         setRepeatState(mRepeat);
 
+        mFirstInit = false;
+        mFirstProgress = 0;
+
         getPlaylist(playlistId, shuffle, trackId);
     }
 
@@ -384,6 +396,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
         mRepeat = repeat;
         setRepeatState(mRepeat);
+
+        mFirstInit = false;
+        mFirstProgress = 0;
 
         getArtistTopTracks(artistId, shuffle, trackId);
     }
@@ -1461,7 +1476,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 }
 
                 mTracksList = new ArrayList<>();
-                String uri = CONTEXT_ARTIST_PREFIX + artistId;
+                String artistIdGotten = items.get(0).getArtists().get(0).getId();
+                String uri = CONTEXT_ARTIST_PREFIX + artistIdGotten;
 
                 // read all tracks
                 for (int i = 0; i < items.size(); ++i) {
@@ -1481,23 +1497,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                         }
                     }
 
-                    String artistName = null;
-                    if (track.getArtists() != null) {
-                        if (track.getArtists().size() > 0) {
-                            for (int j = 0; j < track.getArtists().size(); ++j) {
-                                GetArtistTopTracksInfo artist = track.getArtists().get(j);
+                    String artistName = items.get(0).getArtists().get(0).getName();
 
-                                if (artist != null) {
-                                    if (artist.getId() != null) {
-                                        if (artist.getId().equals(artistId)) {
-                                            artistName = artist.getName();
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
 
                     Track addTrack = new Track(track.getId(), track.getName(), track.getDuration(),
                             artistName, Track.TYPE_ARTIST, artistName, image, artistId, albumId, uri);
