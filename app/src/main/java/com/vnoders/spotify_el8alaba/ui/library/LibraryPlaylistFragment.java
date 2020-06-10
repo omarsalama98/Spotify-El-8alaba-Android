@@ -3,7 +3,6 @@ package com.vnoders.spotify_el8alaba.ui.library;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,6 +31,7 @@ public class LibraryPlaylistFragment extends Fragment {
     static final String REQUEST_DATA_CREATED_PLAYLIST_ID = "id";
 
     private ProgressBar progressBar;
+    private LibraryPlaylistViewModel playlistViewModel;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -51,7 +50,7 @@ public class LibraryPlaylistFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        LibraryPlaylistViewModel playlistViewModel = new ViewModelProvider(requireActivity())
+        playlistViewModel = new ViewModelProvider(requireActivity())
                 .get(LibraryPlaylistViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_library_playlist, container, false);
@@ -76,8 +75,6 @@ public class LibraryPlaylistFragment extends Fragment {
         recyclerView.setAdapter(playlistAdapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        playlistViewModel.requestUserPlaylists();
 
         playlistViewModel.getUserPlaylists().observe(getViewLifecycleOwner(),
                 new Observer<List<LibraryPlaylistItem>>() {
@@ -119,6 +116,18 @@ public class LibraryPlaylistFragment extends Fragment {
                 });
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        playlistViewModel.requestUserPlaylists();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 }

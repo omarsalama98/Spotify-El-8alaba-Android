@@ -3,7 +3,7 @@ package com.vnoders.spotify_el8alaba.models.library;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +43,7 @@ public class Playlist implements Serializable {
 
     @SerializedName("images")
     @Expose(serialize = false)
-    private List<TrackImage> images = null;
+    private List<Image> images = null;
 
     @SerializedName("type")
     @Expose(serialize = false)
@@ -125,11 +125,11 @@ public class Playlist implements Serializable {
         this.owner = owner;
     }
 
-    public List<TrackImage> getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<TrackImage> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 

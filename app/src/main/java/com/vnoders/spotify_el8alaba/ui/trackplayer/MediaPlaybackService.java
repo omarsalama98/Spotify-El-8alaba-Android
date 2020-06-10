@@ -307,6 +307,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mRepeat = repeat;
         setRepeatState(mRepeat);
 
+        mFirstInit = false;
+        mFirstProgress = 0;
+
         getTrack(trackId);
     }
 
@@ -328,6 +331,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mRepeat = repeat;
         setRepeatState(mRepeat);
 
+        mFirstInit = false;
+        mFirstProgress = 0;
+
         getSeveralTracks(trackIds, shuffle, trackId);
     }
 
@@ -346,6 +352,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
         mRepeat = repeat;
         setRepeatState(mRepeat);
+
+        mFirstInit = false;
+        mFirstProgress = 0;
 
         getAlbum(albumId, shuffle, trackId);
     }
@@ -366,6 +375,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
         mRepeat = repeat;
         setRepeatState(mRepeat);
 
+        mFirstInit = false;
+        mFirstProgress = 0;
+
         getPlaylist(playlistId, shuffle, trackId);
     }
 
@@ -384,6 +396,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
 
         mRepeat = repeat;
         setRepeatState(mRepeat);
+
+        mFirstInit = false;
+        mFirstProgress = 0;
 
         getArtistTopTracks(artistId, shuffle, trackId);
     }
@@ -1144,15 +1159,24 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 }
 
                 String uri = null;
-                if (track.getArtists().size() > 0)
-                    uri = CONTEXT_ARTIST_PREFIX + track.getArtists().get(0);
-
                 String artistId = null;
-                if (track.getArtists().size() > 0)
-                    artistId = track.getArtists().get(0);
+                String artistName = null;
+                if (track.getArtists() != null) {
+                    if (track.getArtists().size() > 0) {
+                        if (track.getArtists().get(0) != null) {
+                            if (!(TextUtils.isEmpty(track.getArtists().get(0).getId()))) {
+                                artistId = track.getArtists().get(0).getId();
+                                uri = CONTEXT_ARTIST_PREFIX + artistId;
+                            }
+                            if (!(TextUtils.isEmpty(track.getArtists().get(0).getName()))) {
+                                artistName = track.getArtists().get(0).getName();
+                            }
+                        }
+                    }
+                }
 
                 Track currentTrack = new Track(track.getId(), track.getName(), track.getDuration(),
-                        null, Track.TYPE_ARTIST, null, null,
+                        artistName, Track.TYPE_ARTIST, artistName, null,
                         artistId, track.getAlbumId(), uri);
 
                 mShuffle = false;
@@ -1220,13 +1244,26 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                     if (currentLoop == null)
                         continue;
 
+                    String uri = null;
                     String artistId = null;
-                    if (currentLoop.getArtists().size() > 0)
-                        artistId = currentLoop.getArtists().get(0);
-                    String uri = CONTEXT_ARTIST_PREFIX + artistId;
+                    String artistName = null;
+                    if (currentLoop.getArtists() != null) {
+                        if (currentLoop.getArtists().size() > 0) {
+                            if (currentLoop.getArtists().get(0) != null) {
+                                if (!(TextUtils.isEmpty(currentLoop.getArtists().get(0).getId()))) {
+                                    artistId = currentLoop.getArtists().get(0).getId();
+                                    uri = CONTEXT_ARTIST_PREFIX + artistId;
+                                }
+                                if (!(TextUtils.isEmpty(currentLoop.getArtists().get(0).getName()))) {
+                                    artistName = currentLoop.getArtists().get(0).getName();
+                                }
+                            }
+                        }
+                    }
+
                     Track addTrack = new Track(currentLoop.getId(), currentLoop.getName(),
-                            currentLoop.getDuration(), null, Track.TYPE_ARTIST,
-                            null, null, artistId,
+                            currentLoop.getDuration(), artistName, Track.TYPE_ARTIST,
+                            artistName, null, artistId,
                             currentLoop.getAlbumId(), uri);
                     mTracksList.add(addTrack);
                 }
@@ -1290,8 +1327,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                 GetAlbum album = response.body();
 
                 String imageUrl = null;
-                if (album.getImages().size() > 0)
-                    imageUrl = album.getImages().get(0).getUrl();
+                if (album.getImages() != null) {
+                    if (album.getImages().size() > 0) {
+                        if (!(TextUtils.isEmpty(album.getImages().get(0).getUrl()))) {
+                            imageUrl = album.getImages().get(0).getUrl();
+                        }
+                    }
+                }
 
                 List<GetTrack> tracks = album.getTracks();
                 String albumName = album.getName();
@@ -1308,10 +1350,22 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                         continue;
 
                     String artistId = null;
-                    if (track.getArtists().size() > 0)
-                        artistId = track.getArtists().get(0);
+                    String artistName = null;
+                    if (track.getArtists() != null) {
+                        if (track.getArtists().size() > 0) {
+                            if (track.getArtists().get(0) != null) {
+                                if (!(TextUtils.isEmpty(track.getArtists().get(0).getId()))) {
+                                    artistId = track.getArtists().get(0).getId();
+                                }
+                                if (!(TextUtils.isEmpty(track.getArtists().get(0).getName()))) {
+                                    artistName = track.getArtists().get(0).getName();
+                                }
+                            }
+                        }
+                    }
+
                     Track addTrack = new Track(track.getId(), track.getName(),
-                            track.getDuration(), null, Track.TYPE_ALBUM, albumName,
+                            track.getDuration(), artistName, Track.TYPE_ALBUM, albumName,
                             imageUrl, artistId, null, uri);
                     mTracksList.add(addTrack);
                 }
@@ -1460,8 +1514,22 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                     return;
                 }
 
+                String artistName = null;
+                String uri = null;
+                if (items.get(0).getArtists() != null) {
+                    if (items.get(0).getArtists().size() > 0) {
+                        if (items.get(0).getArtists().get(0) != null) {
+                            if (!(TextUtils.isEmpty(items.get(0).getArtists().get(0).getName()))) {
+                                artistName = items.get(0).getArtists().get(0).getName();
+                            }
+                            if (!(TextUtils.isEmpty(items.get(0).getArtists().get(0).getId()))) {
+                                uri = CONTEXT_ARTIST_PREFIX + items.get(0).getArtists().get(0).getId();
+                            }
+                        }
+                    }
+                }
+
                 mTracksList = new ArrayList<>();
-                String uri = CONTEXT_ARTIST_PREFIX + artistId;
 
                 // read all tracks
                 for (int i = 0; i < items.size(); ++i) {
@@ -1477,24 +1545,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat implements
                         if (track.getAlbum().getImages() != null) {
                             if (track.getAlbum().getImages().size() > 0) {
                                 image = track.getAlbum().getImages().get(0).getUrl();
-                            }
-                        }
-                    }
-
-                    String artistName = null;
-                    if (track.getArtists() != null) {
-                        if (track.getArtists().size() > 0) {
-                            for (int j = 0; j < track.getArtists().size(); ++j) {
-                                GetArtistTopTracksInfo artist = track.getArtists().get(j);
-
-                                if (artist != null) {
-                                    if (artist.getId() != null) {
-                                        if (artist.getId().equals(artistId)) {
-                                            artistName = artist.getName();
-                                            break;
-                                        }
-                                    }
-                                }
                             }
                         }
                     }

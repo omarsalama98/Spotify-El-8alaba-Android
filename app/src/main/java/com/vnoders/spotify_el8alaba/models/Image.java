@@ -8,10 +8,12 @@ public class Image implements Serializable {
 
     @SerializedName("width")
     @Expose
-    private Integer width;
+    private int width;
+
     @SerializedName("height")
     @Expose
-    private Integer height;
+    private int height;
+
     @SerializedName("url")
     @Expose
     private String url;
@@ -20,19 +22,19 @@ public class Image implements Serializable {
         this.url = url;
     }
 
-    public Integer getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(Integer width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
-    public Integer getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 

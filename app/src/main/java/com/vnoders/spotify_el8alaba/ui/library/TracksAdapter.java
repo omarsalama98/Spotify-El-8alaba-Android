@@ -19,7 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.Track;
 import com.vnoders.spotify_el8alaba.repositories.LibraryRepository;
@@ -40,9 +40,9 @@ public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
 
     private List<Track> tracks;
 
-    public TracksAdapter(String playlistId, TRACKS_TYPE type, MediaPlaybackService mediaPlayer) {
+    public TracksAdapter(String id, TRACKS_TYPE type, MediaPlaybackService mediaPlayer) {
         this.tracks = new ArrayList<>();
-        TrackViewHolder.collectionId = playlistId;
+        TrackViewHolder.collectionId = id;
         TrackViewHolder.mediaPlaybackService = mediaPlayer;
         TrackViewHolder.type = type;
     }
@@ -172,6 +172,9 @@ public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
                             mediaPlaybackService
                                     .playArtistTopTracks(collectionId, true, true, trackId);
                             break;
+                        case ALBUM_TRACKS:
+                            mediaPlaybackService.playAlbum(collectionId, true, true, trackId);
+                            break;
                     }
                 }
             });
@@ -236,7 +239,7 @@ public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
             trackName.setText(track.getName());
 
             if (track.getAlbum() != null && track.getAlbum().getImages() != null) {
-                List<TrackImage> images = track.getAlbum().getImages();
+                List<Image> images = track.getAlbum().getImages();
                 if (!images.isEmpty()) {
                     Picasso.get().load(images.get(0).getUrl()).placeholder(R.drawable.add_song)
                             .into(trackArt);

@@ -26,7 +26,7 @@ public class GetTrack {
 
     @SerializedName("artists")
     @Expose
-    private List<String> mArtists;
+    private List<AlbumArtist> mArtists;
 
     @SerializedName("album")
     @Expose
@@ -52,7 +52,7 @@ public class GetTrack {
         return ((int)this.mDuration);
     }
 
-    public List<String> getArtists() {
+    public List<AlbumArtist> getArtists() {
         return this.mArtists;
     }
 

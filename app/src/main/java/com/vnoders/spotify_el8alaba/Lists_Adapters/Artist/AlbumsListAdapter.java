@@ -13,7 +13,7 @@ import com.vnoders.spotify_el8alaba.Artist.ArtistConstantsHelper;
 import com.vnoders.spotify_el8alaba.Artist.ArtistEditAlbumFragment;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Artist.ArtistAlbum;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class AlbumsListAdapter extends RecyclerView.Adapter<AlbumsListAdapter.My
         holder.title.setText(mDataset.get(position).getName());
 
         String imageUrl;
-        List<TrackImage> images = mDataset.get(position).getImages();
+        List<Image> images = mDataset.get(position).getImages();
         if (!images.isEmpty()) {
             imageUrl = images.get(0).getUrl();
         } else {
@@ -93,7 +93,7 @@ public class AlbumsListAdapter extends RecyclerView.Adapter<AlbumsListAdapter.My
                         mDataset.get(getAdapterPosition()).getName());
 
                 String imageUrl;
-                List<TrackImage> images = mDataset.get(getAdapterPosition()).getImages();
+                List<Image> images = mDataset.get(getAdapterPosition()).getImages();
                 if (!images.isEmpty()) {
                     imageUrl = images.get(0).getUrl();
                 } else {

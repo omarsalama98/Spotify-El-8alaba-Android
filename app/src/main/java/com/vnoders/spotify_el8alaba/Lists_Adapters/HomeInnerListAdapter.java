@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
         holder.subTitle.setText(backDataset.get(position).getDescription());
 
         String imageUrl;
-        List<TrackImage> images = backDataset.get(position).getImages();
+        List<Image> images = backDataset.get(position).getImages();
         if (images != null && !images.isEmpty()) {
             imageUrl = images.get(0).getUrl();
         } else {

@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.library.Owner;
 import com.vnoders.spotify_el8alaba.ui.library.LibraryPlaylistAdapter.PlaylistViewHolder;
@@ -166,7 +166,7 @@ public class LibraryPlaylistAdapter extends ListAdapter<LibraryPlaylistItem, Pla
 
             playlistId = playlist.getId();
 
-            List<TrackImage> images = playlist.getImages();
+            List<Image> images = playlist.getImages();
             String imageUrl = null;
             if (images != null && images.size() > 0) {
                 imageUrl = images.get(0).getUrl();

@@ -70,8 +70,8 @@ public class RetrofitClient {
         headers.addHeader(HEADER_CONTENT_TYPE, TYPE_JSON);
         headers.addHeader(HEADER_USER_AGENT, getUserAgent());
 
-        httpClientBuilder.cache(getCache()).addInterceptor(useCachedResponsesInterceptor())
-                .addNetworkInterceptor(cacheResponsesInterceptor());
+//        httpClientBuilder.cache(getCache()).addInterceptor(useCachedResponsesInterceptor())
+//                .addNetworkInterceptor(cacheResponsesInterceptor());
 
         // Logging must be the last added interceptor
         // in order to log other interceptors
@@ -209,7 +209,7 @@ public class RetrofitClient {
 
                 // Caching is allowed only in GET requests
                 if (request.method().equals("GET")
-                        && Objects.equals(chain.request().header("enable-cache"), "true")) {
+                        && Objects.equals(request.header(HEADER_ENABLE_CACHE), HEADER_TRUE)) {
 
                     // prevent caching when network is on. For that we use the cacheResponsesInterceptor
                     if (!isOnline()) {
@@ -246,7 +246,8 @@ public class RetrofitClient {
 
                 // Caching is allowed only in GET requests
                 if (chain.request().method().equals("GET")
-                        && Objects.equals(chain.request().header("enable-cache"), "true")) {
+                        && Objects
+                        .equals(chain.request().header(HEADER_ENABLE_CACHE), HEADER_TRUE)) {
 
                     CacheControl cacheControl = new CacheControl.Builder()
                             // if the response of this request was received in less than 5 minutes

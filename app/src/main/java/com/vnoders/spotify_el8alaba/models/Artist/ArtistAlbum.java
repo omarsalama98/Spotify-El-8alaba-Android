@@ -2,7 +2,7 @@ package com.vnoders.spotify_el8alaba.models.Artist;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import java.util.List;
 
 public class ArtistAlbum {
@@ -21,7 +21,7 @@ public class ArtistAlbum {
     private String albumType;
     @SerializedName("images")
     @Expose
-    private List<TrackImage> images = null;
+    private List<Image> images = null;
     @SerializedName("uri")
     @Expose
     private String uri;
@@ -67,11 +67,11 @@ public class ArtistAlbum {
         this.albumType = albumType;
     }
 
-    public List<TrackImage> getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<TrackImage> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 

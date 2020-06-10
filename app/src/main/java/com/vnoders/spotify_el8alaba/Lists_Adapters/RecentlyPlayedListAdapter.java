@@ -12,7 +12,6 @@ import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
@@ -55,7 +54,7 @@ public class RecentlyPlayedListAdapter extends
             SearchArtist mArtist = (SearchArtist) result;
             String imageUrl;
             holder.title.setText(mArtist.getName());
-            List<Image> images = mArtist.getUserInfo().getImages();
+            List<Image> images = mArtist.getImages();
             if (!images.isEmpty()) {
                 imageUrl = images.get(0).getUrl();
             } else {
@@ -66,7 +65,7 @@ public class RecentlyPlayedListAdapter extends
             SearchAlbum mAlbum = (SearchAlbum) result;
             String imageUrl;
             holder.title.setText(mAlbum.getName());
-            List<TrackImage> images = mAlbum.getImages();
+            List<Image> images = mAlbum.getImages();
             if (!images.isEmpty()) {
                 imageUrl = images.get(0).getUrl();
             } else {
@@ -78,7 +77,7 @@ public class RecentlyPlayedListAdapter extends
             SearchPlaylist mPlaylist = (SearchPlaylist) result;
             String imageUrl;
             holder.title.setText(mPlaylist.getName());
-            List<TrackImage> images = mPlaylist.getImages();
+            List<Image> images = mPlaylist.getImages();
             if (!images.isEmpty()) {
                 imageUrl = images.get(0).getUrl();
             } else {

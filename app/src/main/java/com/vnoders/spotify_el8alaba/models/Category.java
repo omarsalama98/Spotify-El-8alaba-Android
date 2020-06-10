@@ -18,10 +18,8 @@ public class Category {
     private String name;
     @SerializedName("icons")
     @Expose
-    private List<Icon> icons = null;
-    @SerializedName("__v")
-    @Expose
-    private Integer v;
+    private List<Image> images = null;
+
 
     public Category(List<HomePlaylist> playlists, String name) {
         this.playlists = playlists;
@@ -52,20 +50,12 @@ public class Category {
         this.name = name;
     }
 
-    public List<Icon> getIcons() {
-        return icons;
+    public List<Image> getImages() {
+        return images;
     }
 
-    public void setIcons(List<Icon> icons) {
-        this.icons = icons;
-    }
-
-    public Integer getV() {
-        return v;
-    }
-
-    public void setV(Integer v) {
-        this.v = v;
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
 }

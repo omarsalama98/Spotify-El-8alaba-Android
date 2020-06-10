@@ -12,9 +12,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
 import com.vnoders.spotify_el8alaba.models.library.AlbumTracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
@@ -40,6 +40,7 @@ import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -115,7 +116,7 @@ public class LibraryRepository {
                         viewModel.setTracksSummary(buildTracksInfo(tracks.getTrackItems()));
                     }
 
-                    List<TrackImage> images = playlist.getImages();
+                    List<Image> images = playlist.getImages();
                     if (images != null && images.size() > 0) {
                         viewModel.setImageUrl(images.get(0).getUrl());
                     }
@@ -278,15 +279,15 @@ public class LibraryRepository {
      *                  request
      */
     public static void updatePlaylistCoverImages(PlaylistTracksViewModel viewModel) {
-        Call<List<TrackImage>> request = libraryApi
+        Call<List<Image>> request = libraryApi
                 .getPlaylistCoverImages(viewModel.getPlaylistId());
 
-        request.enqueue(new Callback<List<TrackImage>>() {
+        request.enqueue(new Callback<List<Image>>() {
             @Override
-            public void onResponse(@NotNull Call<List<TrackImage>> call,
-                    @NotNull Response<List<TrackImage>> response) {
+            public void onResponse(@NotNull Call<List<Image>> call,
+                    @NotNull Response<List<Image>> response) {
 
-                List<TrackImage> images = response.body();
+                List<Image> images = response.body();
                 if (response.isSuccessful() && images != null && images.size() > 0) {
                     String imageUrl = images.get(0).getUrl();
                     viewModel.setPlaylistImageUrl(imageUrl);
@@ -295,7 +296,7 @@ public class LibraryRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<List<TrackImage>> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<List<Image>> call, @NotNull Throwable t) {
 
             }
         });
@@ -746,7 +747,7 @@ public class LibraryRepository {
             @Override
             public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    viewModel.setTracks(response.body());
+                    updateLikedStatusInTracks(response.body(), viewModel);
                 }
             }
 
@@ -812,7 +813,7 @@ public class LibraryRepository {
                     viewModel.setReleaseDate(album.getReleaseDate());
                     viewModel.setTracksSummary(album.getTracks());
 
-                    List<TrackImage> albumImages = album.getImages();
+                    List<Image> albumImages = album.getImages();
                     if (albumImages != null && !albumImages.isEmpty()) {
                         viewModel.setImageUrl(albumImages.get(0).getUrl());
                     }
@@ -889,19 +890,10 @@ public class LibraryRepository {
                     @NotNull Response<AlbumTracksPagingWrapper> response) {
                 if (response.isSuccessful() && response.body() != null) {
 
-                    List<SimpleAlbumTrack> items = response.body().getItems();
-                    List<Track> tracks = new ArrayList<>();
-                    if (items != null && !items.isEmpty()) {
-                        String albumName = viewModel.getAlbumName();
-                        String albumImageUrl = viewModel.getAlbumImageUrl();
-                        String artistName = viewModel.getArtistName();
-
-                        for (SimpleAlbumTrack simpleTrack : items) {
-                            tracks.add(Track.createFromSimpleAlbumTrack(simpleTrack,
-                                    albumName, albumImageUrl, artistName));
-                        }
+                    List<SimpleAlbumTrack> albumTracks = response.body().getItems();
+                    if (albumTracks != null) {
+                        updateLikedStatusInTracks(albumTracks, viewModel);
                     }
-                    viewModel.setTracks(tracks);
                 }
             }
 
@@ -912,4 +904,94 @@ public class LibraryRepository {
         });
 
     }
+
+
+    public static void updateLikedStatusInTracks(List<Track> tracks,
+            ArtistTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> likedTracksRequest = libraryApi.getLikedTracks();
+
+        new AsyncTask<Void, Void, List<Track>>() {
+            @Override
+            protected List<Track> doInBackground(Void... voids) {
+                try {
+                    Response<TracksPagingWrapper> response = likedTracksRequest.execute();
+
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<TrackItem> likedTracks = response.body().getTrackItems();
+
+                        for (Track track : tracks) {
+                            for (TrackItem likedTrack : likedTracks) {
+                                if (Objects.equals(likedTrack.getTrack().getId(), track.getId())) {
+                                    track.setLiked(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return tracks;
+            }
+
+            @Override
+            protected void onPostExecute(List<Track> tracks) {
+                viewModel.setTracks(tracks);
+            }
+
+        }.execute();
+    }
+
+
+    public static void updateLikedStatusInTracks(List<SimpleAlbumTrack> albumTracks,
+            AlbumTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> likedTracksRequest = libraryApi.getLikedTracks();
+
+        String albumName = viewModel.getAlbumName();
+        String albumImageUrl = viewModel.getAlbumImageUrl();
+        String artistName = viewModel.getArtistName();
+
+        new AsyncTask<Void, Void, List<Track>>() {
+            @Override
+            protected List<Track> doInBackground(Void... voids) {
+                List<Track> tracks = new ArrayList<>();
+                try {
+                    Response<TracksPagingWrapper> response = likedTracksRequest.execute();
+
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<TrackItem> likedTracks = response.body().getTrackItems();
+
+                        for (SimpleAlbumTrack albumTrack : albumTracks) {
+                            Track track = Track.createFromSimpleAlbumTrack(albumTrack,
+                                    albumName, albumImageUrl, artistName);
+
+                            for (TrackItem likedTrack : likedTracks) {
+                                if (Objects.equals(likedTrack.getTrack().getId(), track.getId())) {
+                                    track.setLiked(true);
+                                    break;
+                                }
+                            }
+
+                            tracks.add(track);
+                        }
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return tracks;
+            }
+
+            @Override
+            protected void onPostExecute(List<Track> tracks) {
+                viewModel.setTracks(tracks);
+            }
+
+        }.execute();
+    }
+
 }

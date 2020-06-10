@@ -72,7 +72,7 @@ public class Track {
     @Expose
     private String uri;
 
-    private boolean isLiked;
+    private boolean isLiked = false;
 
     public Album getAlbum() {
         return album;

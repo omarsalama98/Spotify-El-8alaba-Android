@@ -21,16 +21,18 @@ import java.util.List;
  */
 public class LibraryAlbumFragment extends Fragment {
 
+    private LibraryAlbumViewModel albumViewModel;
+    private ProgressBar progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        LibraryAlbumViewModel albumViewModel = new ViewModelProvider(requireActivity())
-                .get(LibraryAlbumViewModel.class);
+        albumViewModel = new ViewModelProvider(requireActivity()).get(LibraryAlbumViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_library_album, container, false);
 
-        ProgressBar progressBar = root.findViewById(R.id.progress_bar);
+        progressBar = root.findViewById(R.id.progress_bar);
 
         LibraryAlbumAdapter albumAdapter = new LibraryAlbumAdapter(
                 requireActivity().getSupportFragmentManager());
@@ -40,8 +42,6 @@ public class LibraryAlbumFragment extends Fragment {
         recyclerView.setAdapter(albumAdapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        albumViewModel.requestUserAlbums();
 
         albumViewModel.getUserAlbums().observe(getViewLifecycleOwner(),
                 new Observer<List<LibraryAlbumItem>>() {
@@ -55,4 +55,15 @@ public class LibraryAlbumFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        albumViewModel.requestUserAlbums();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        progressBar.setVisibility(View.VISIBLE);
+    }
 }

@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,11 +71,16 @@ public class LibraryArtistFragment extends Fragment {
 
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         viewModel.requestUserFollowedArtists();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

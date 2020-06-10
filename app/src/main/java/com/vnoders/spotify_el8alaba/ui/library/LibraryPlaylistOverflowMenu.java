@@ -4,7 +4,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import androidx.lifecycle.ViewModelProvider;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.LibraryPlaylistItem;
 import com.vnoders.spotify_el8alaba.models.library.Owner;
 import com.vnoders.spotify_el8alaba.models.overflowmenu.OverflowMenu;
@@ -30,7 +30,7 @@ public class LibraryPlaylistOverflowMenu extends OverflowMenu {
             ownerName = owner.getName();
         }
 
-        List<TrackImage> images = playlist.getImages();
+        List<Image> images = playlist.getImages();
         String imageUrl = null;
 
         if (images != null && images.size() > 0) {
