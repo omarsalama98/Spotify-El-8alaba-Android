@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
@@ -146,7 +148,9 @@ public class CurrentUserProfileFragment extends Fragment {
         playListWrap = root.findViewById(R.id.followPlaylistsWrap);
         playlistNumber.setText("-");
         editProfileButton=root.findViewById(R.id.edit_profile_button);
-            Picasso.get().load(imageUrl).into(userImage);
+            Picasso.get().load(imageUrl).networkPolicy(NetworkPolicy.NO_CACHE).memoryPolicy(
+                MemoryPolicy.NO_CACHE)
+                .into(userImage);
         GradientUtils.generate(imageUrl,appBarLayout,GradientUtils.GRADIENT_LINEAR_BLACK);
         followerNumber.setText(currentUserProfile.getFollowers().toString());
         userName.setText(currentUserProfile.getName());
