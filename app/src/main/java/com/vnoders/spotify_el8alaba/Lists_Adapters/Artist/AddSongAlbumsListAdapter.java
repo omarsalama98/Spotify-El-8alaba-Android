@@ -54,6 +54,7 @@ public class AddSongAlbumsListAdapter extends
             AddSongAlbumsListAdapter.MyViewHolder holder, final int position) {
 
         holder.title.setText(mDataset.get(position).getName());
+        holder.title.setTextColor(fragment.getResources().getColor(R.color.lightGray));
         holder.addSongImage.setVisibility(View.GONE);
         String imageUrl;
         String imgUrl = mDataset.get(position).getImgUrl();

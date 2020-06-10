@@ -65,9 +65,14 @@ public class SearchArtist {
         isSelected = selected;
     }
 
-    public void toggleSelection(){
+    public void toggleSelection() {
         isSelected = !isSelected;
     }
+
+    public ArtistUserInfo getUserInfo() {
+        return userInfo;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

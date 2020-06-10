@@ -112,40 +112,42 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
     private ArrayList<Object> getTwosOfEach(SearchResult searchListResults) {
 
         ArrayList<Object> mSearchResult = new ArrayList<>();
-        List<SearchPlaylist> playlists = searchListResults.getPlaylists();
-        if (playlists.size() == 1) {
-            mSearchResult.add(playlists.get(0));
-        } else if (playlists.size() > 1) {
-            mSearchResult.add(playlists.get(0));
-            mSearchResult.add(playlists.get(1));
-        }
-        List<SearchAlbum> albums = searchListResults.getAlbums();
-        if (albums.size() == 1) {
-            mSearchResult.add(albums.get(0));
-        } else if (albums.size() > 1) {
-            mSearchResult.add(albums.get(0));
-            mSearchResult.add(albums.get(1));
-        }
-        List<SearchArtist> artists = searchListResults.getArtists();
-        if (artists.size() == 1) {
-            mSearchResult.add(artists.get(0));
-        } else if (artists.size() > 1) {
-            mSearchResult.add(artists.get(0));
-            mSearchResult.add(artists.get(1));
-        }
-        List<SearchTrack> tracks = searchListResults.getTracks();
-        if (tracks.size() == 1) {
-            mSearchResult.add(tracks.get(0));
-        } else if (tracks.size() > 1) {
-            mSearchResult.add(tracks.get(0));
-            mSearchResult.add(tracks.get(1));
-        }
-        List<User> users = searchListResults.getUsers();
-        if (users.size() == 1) {
-            mSearchResult.add(users.get(0));
-        } else if (users.size() > 1) {
-            mSearchResult.add(users.get(0));
-            mSearchResult.add(users.get(1));
+        if (searchListResults != null) {
+            List<SearchPlaylist> playlists = searchListResults.getPlaylists();
+            if (playlists.size() == 1) {
+                mSearchResult.add(playlists.get(0));
+            } else if (playlists.size() > 1) {
+                mSearchResult.add(playlists.get(0));
+                mSearchResult.add(playlists.get(1));
+            }
+            List<SearchAlbum> albums = searchListResults.getAlbums();
+            if (albums.size() == 1) {
+                mSearchResult.add(albums.get(0));
+            } else if (albums.size() > 1) {
+                mSearchResult.add(albums.get(0));
+                mSearchResult.add(albums.get(1));
+            }
+            List<SearchArtist> artists = searchListResults.getArtists();
+            if (artists.size() == 1) {
+                mSearchResult.add(artists.get(0));
+            } else if (artists.size() > 1) {
+                mSearchResult.add(artists.get(0));
+                mSearchResult.add(artists.get(1));
+            }
+            List<SearchTrack> tracks = searchListResults.getTracks();
+            if (tracks.size() == 1) {
+                mSearchResult.add(tracks.get(0));
+            } else if (tracks.size() > 1) {
+                mSearchResult.add(tracks.get(0));
+                mSearchResult.add(tracks.get(1));
+            }
+            List<User> users = searchListResults.getUsers();
+            if (users.size() == 1) {
+                mSearchResult.add(users.get(0));
+            } else if (users.size() > 1) {
+                mSearchResult.add(users.get(0));
+                mSearchResult.add(users.get(1));
+            }
         }
         return mSearchResult;
     }

@@ -67,6 +67,9 @@ public class ArtistLibraryFragment extends Fragment {
             songsRecyclerView.setVisibility(View.GONE);
             noSongsTextView.setVisibility(View.VISIBLE);
         }
+        if (mAlbums.isEmpty()) {
+            addSongBtn.setVisibility(View.GONE);
+        }
 
         songsTextView.setOnClickListener(v -> {
             albumsTextView.setTextColor(getResources().getColor(R.color.pressed_grey));

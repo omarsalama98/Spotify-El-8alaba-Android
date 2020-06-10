@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment {
                                 Response<List<SearchArtist>> response) {
                             requestsDone += 1;
                             if (response.body() != null) {
-                                recentlyPlayedList.add(response.body());
+                                recentlyPlayedList.add(response.body().get(0));
                                 recentlyPlayedListAdapter.notifyDataSetChanged();
                             }
                             if (requestsDone == REQUESTS_TBD) {
@@ -117,6 +117,7 @@ public class HomeFragment extends Fragment {
                         }
                         @Override
                         public void onFailure(Call<List<SearchArtist>> call, Throwable t) {
+                            Log.d("", t.getMessage());
                         }
                     });
                     break;
