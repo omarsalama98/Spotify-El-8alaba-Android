@@ -1,6 +1,5 @@
 package com.vnoders.spotify_el8alaba.ui.library;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -185,8 +183,6 @@ public class PlaylistHomeFragment extends Fragment {
                     }
                 });
 
-        playlistHomeViewModel.updateData();
-
     }
 
     /**
@@ -281,4 +277,16 @@ public class PlaylistHomeFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        playlistHomeViewModel.updateData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        progressBar.setVisibility(View.VISIBLE);
+        playlistHomeViewModel.setFinishedLoading(false);
+    }
 }
