@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
-import com.vnoders.spotify_el8alaba.repositories.APIInterface;
-import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
 
 public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapter.MyViewHolder> {
@@ -50,19 +48,15 @@ public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapte
 
         holder.title.setText(backDataset.get(position).getName());
 
-        APIInterface apiService = RetrofitClient.getInstance().getAPI(APIInterface.class);
-
         holder.innerList.setLayoutManager(
                 new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
-        ArrayList<HomePlaylist> myDataList = new ArrayList<>();
+        ArrayList<HomePlaylist> myDataList = (ArrayList<HomePlaylist>) backDataset.get(position)
+                .getPlaylists();
         HomeInnerListAdapter adapter = new HomeInnerListAdapter(fragment, myDataList);
         holder.innerList.setAdapter(adapter);
         holder.innerList.addItemDecoration(
                 new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL));
-
-        myDataList.addAll(backDataset.get(position).getPlaylists());
-        adapter.notifyDataSetChanged();
 
     }
 

@@ -38,6 +38,9 @@ public class SearchGenresFragment extends Fragment {
     private RecyclerView browseAllGenresGridView;
     private RecyclerView topGenresGridView;
     private TextView genresSearchTextLayout;
+    private int REQUESTS_TBD = 2;
+    private int requestsDone = 0;
+    private View loadingView;
 
     public SearchGenresFragment() {
         // Required empty public constructor
@@ -49,6 +52,7 @@ public class SearchGenresFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_search_genres, container, false);
         genresSearchTextLayout = v.findViewById(R.id.genres_search_bar_text_view);
+        loadingView = v.findViewById(R.id.loading_view);
 
         topGenresGridView = v
                 .findViewById(R.id.search_top_genres_gridview);
@@ -91,6 +95,7 @@ public class SearchGenresFragment extends Fragment {
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                requestsDone += 1;
                 if (response.body() != null) {
                     topGenresGridView
                             .setAdapter(
@@ -98,6 +103,9 @@ public class SearchGenresFragment extends Fragment {
                                             (ArrayList<Category>) response.body(),
                                             SearchGenresFragment.this));
                     // topCategories[0] will be put in the adapter
+                }
+                if (requestsDone == REQUESTS_TBD) {
+                    loadingView.setVisibility(View.GONE);
                 }
             }
 
@@ -115,6 +123,7 @@ public class SearchGenresFragment extends Fragment {
         call2.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                requestsDone += 1;
                 if (response.body() != null) {
                     browseAllGenresGridView
                             .setAdapter(
@@ -122,6 +131,9 @@ public class SearchGenresFragment extends Fragment {
                                             (ArrayList<Category>) response.body(),
                                             SearchGenresFragment.this));
                     // allCategories[0] will be put in the adapter
+                }
+                if (requestsDone == REQUESTS_TBD) {
+                    loadingView.setVisibility(View.GONE);
                 }
             }
 

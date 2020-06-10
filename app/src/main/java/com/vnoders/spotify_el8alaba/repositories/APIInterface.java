@@ -97,7 +97,7 @@ public interface APIInterface {
      * @return Returns a list of Categories to show in Home. Not quite what should be shown and will
      * be changed later.
      */
-    @GET("browse/categories?limit=10&offset=5")
+    @GET("browse/categories?limit=10")
     Call<List<Category>> getHomeCategories();
 
     /**

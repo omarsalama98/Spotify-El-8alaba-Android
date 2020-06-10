@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
     private String accType;
     private APIInterface apiService;
     private View loadingView;
-    private ProgressBar loadingIcon;
+    private TextView recentlyPlayedText;
     private RecentlyPlayedListAdapter recentlyPlayedListAdapter;
     private ArrayList<Object> recentlyPlayedList;
     private int REQUESTS_TBD = 2;
@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment {
         settingsButton = root.findViewById(R.id.settings_image_view);
         spotifyArtistButton = root.findViewById(R.id.spotify_artist_image_view);
         loadingView = root.findViewById(R.id.loading_view);
-        loadingIcon = root.findViewById(R.id.loading_home_progress);
+        recentlyPlayedText = root.findViewById(R.id.home_recently_played_title);
 
         mainListRecyclerView = root.findViewById(R.id.home_main_list_recycler_view);
         recentlyPlayedRecyclerView = root.findViewById(R.id.home_recently_played_recycler_view);
@@ -206,6 +206,9 @@ public class HomeFragment extends Fragment {
                     if (response.body() != null) {
                         myDataList.addAll(response.body());
                         adapter.notifyDataSetChanged();
+                        if (myDataList.isEmpty()) {
+                            recentlyPlayedText.setVisibility(View.GONE);
+                        }
                     }
                     if (requestsDone == REQUESTS_TBD) {
                         loadingView.setVisibility(View.GONE);

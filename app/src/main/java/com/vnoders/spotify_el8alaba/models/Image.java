@@ -16,6 +16,10 @@ public class Image implements Serializable {
     @Expose
     private String url;
 
+    public Image(String url) {
+        this.url = url;
+    }
+
     public Integer getWidth() {
         return width;
     }

@@ -17,6 +17,9 @@ public class ArtistUserInfo {
     @Expose
     private List<Image> images;
 
+    public ArtistUserInfo(List<Image> images) {
+        this.images = images;
+    }
 
     public String getId() {
         return id;

@@ -18,10 +18,10 @@ import java.util.List;
 public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private static ArrayList<HomePlaylist> backDataset;
+    private ArrayList<HomePlaylist> backDataset;
 
-    HomeInnerListAdapter(Fragment fragment, ArrayList<HomePlaylist> backDataset) {
-        HomeInnerListAdapter.backDataset = backDataset;
+    HomeInnerListAdapter(Fragment fragment, ArrayList<HomePlaylist> mbackDataset) {
+        backDataset = mbackDataset;
         HomeInnerListAdapter.fragment = fragment;
     }
 
@@ -39,19 +39,29 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        //TODO: Replace the former with the latter code when backend is completed
         holder.title.setText(backDataset.get(position).getName());
         holder.subTitle.setText(backDataset.get(position).getDescription());
 
         String imageUrl;
         List<TrackImage> images = backDataset.get(position).getImages();
-        if (!images.isEmpty()) {
+        if (images != null && !images.isEmpty()) {
             imageUrl = images.get(0).getUrl();
         } else {
             imageUrl = "https://getdrawings.com/free-icon-bw/black-music-icons-23.png";
         }
         Picasso.get().load(imageUrl).placeholder(R.drawable.spotify).into(holder.image);
 
+        holder.itemView.setOnClickListener(v -> {
+            Fragment targetFragment = PlaylistHomeFragment
+                    .newInstance(backDataset.get(position).getId());
+            fragment.getParentFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
+                            R.anim.fade_out)
+                    .replace(R.id.nav_host_fragment, targetFragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -66,7 +76,7 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         // each data item is just a string in this case
-        public View v;
+        public View view;
         public TextView title;
         TextView subTitle;
         public ImageView image;
@@ -76,19 +86,6 @@ public class HomeInnerListAdapter extends RecyclerView.Adapter<HomeInnerListAdap
             title = v.findViewById(R.id.home_inner_list_item_title);
             subTitle = v.findViewById(R.id.home_inner_list_item_sub_title);
             image = v.findViewById(R.id.home_inner_list_item_image);
-
-            v.setOnClickListener(v1 -> {
-
-                Fragment targetFragment = PlaylistHomeFragment
-                        .newInstance(backDataset.get(getAdapterPosition()).getId());
-                fragment.getParentFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in,
-                                R.anim.fade_out)
-                        .replace(R.id.nav_host_fragment, targetFragment)
-                        .addToBackStack(null)
-                        .commit();
-            });
         }
     }
 

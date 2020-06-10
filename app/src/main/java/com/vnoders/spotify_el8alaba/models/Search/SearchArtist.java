@@ -25,8 +25,8 @@ public class SearchArtist {
     @Expose
     private String id;
 
-    public SearchArtist(List<TrackImage> images, String name, String id) {
-        this.images = images;
+    public SearchArtist(String name, ArtistUserInfo userInfo, String id) {
+        this.userInfo = userInfo;
         this.name = name;
         this.id = id;
     }

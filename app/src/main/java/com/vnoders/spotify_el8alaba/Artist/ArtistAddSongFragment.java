@@ -70,10 +70,6 @@ public class ArtistAddSongFragment extends Fragment {
     }
 
     private void uploadTrack(RequestBody description, MultipartBody.Part body) {
-        isUploading = true;
-        uploadingProgress.setVisibility(View.VISIBLE);
-        uploadingText.setVisibility(View.VISIBLE);
-
         Call<ResponseBody> call = apiService.uploadTrack(description, body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -157,7 +153,6 @@ public class ArtistAddSongFragment extends Fragment {
 
         chooseSongBtn.setOnClickListener(v -> {
             if (hasNoPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Permission ask
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
             }
@@ -193,6 +188,11 @@ public class ArtistAddSongFragment extends Fragment {
             } else {
                 chooseSongError.setVisibility(View.GONE);
             }
+
+            isUploading = true;
+            uploadingProgress.setVisibility(View.VISIBLE);
+            uploadingText.setVisibility(View.VISIBLE);
+
             File file = new File(FileUtils.getPath(getContext(), audioUri));
 
             RequestBody requestFile =

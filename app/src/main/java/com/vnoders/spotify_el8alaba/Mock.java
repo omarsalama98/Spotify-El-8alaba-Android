@@ -8,10 +8,12 @@ import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.Genre;
 import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.library.ArtistUserInfo;
 import java.util.ArrayList;
 
 /**
@@ -47,10 +49,55 @@ public class Mock {
                 , "194"));
 
         mainListItems.add(new Category(innerListItems, "A7la sho8l"));
-        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
-        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
-        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
-        mainListItems.add(new Category(innerListItems, "A7la sho8l"));
+
+        ArrayList<HomePlaylist> innerListItems2;
+        innerListItems2 = new ArrayList<>();
+        ArrayList<TrackImage> images2 = new ArrayList<>();
+        images2.add(
+                new TrackImage("https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+
+        innerListItems2.add(new HomePlaylist("Akpan", "Akpro",
+                images2
+                , "194"));
+        innerListItems2.add(new HomePlaylist("Akpan", "Akpro",
+                images2
+                , "194"));
+        innerListItems2.add(new HomePlaylist("Akpan", "Akpro",
+                images2
+                , "194"));
+        innerListItems2.add(new HomePlaylist("Akpan", "Akpro",
+                images2
+                , "194"));
+        innerListItems2.add(new HomePlaylist("Akpa", "Akpro",
+                images2
+                , "194"));
+
+        mainListItems.add(new Category(innerListItems2, "A7la sho8l2"));
+        mainListItems.add(new Category(innerListItems, "A7la sho8l3"));
+        mainListItems.add(new Category(innerListItems, "A7la sho8l4"));
+
+        ArrayList<HomePlaylist> innerListItems3;
+        innerListItems3 = new ArrayList<>();
+        ArrayList<TrackImage> images3 = new ArrayList<>();
+        images3.add(
+                new TrackImage("https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+
+        innerListItems3.add(new HomePlaylist("Akpass", "Akpro",
+                images3
+                , "194"));
+        innerListItems3.add(new HomePlaylist("Akpass", "Akpro",
+                images3
+                , "194"));
+        innerListItems3.add(new HomePlaylist("Akpass", "Akpro",
+                images3
+                , "194"));
+        innerListItems3.add(new HomePlaylist("Akpass", "Akpro",
+                images3
+                , "194"));
+        innerListItems3.add(new HomePlaylist("Akpa", "Akpro",
+                images3
+                , "194"));
+        mainListItems.add(new Category(innerListItems3, "A7la sho8l5"));
 
         return mainListItems;
     }
@@ -165,16 +212,20 @@ public class Mock {
     public static ArrayList<Object> getRecentlyPlayed() {
         ArrayList<Object> recentlyPlayed = new ArrayList<>();
 
-        ArrayList<TrackImage> images = new ArrayList<>();
+        ArrayList<Image> images = new ArrayList<>();
         images.add(
-                new TrackImage("https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+                new Image("https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+        ArtistUserInfo artistUserInfo = new ArtistUserInfo(images);
+        recentlyPlayed.add(new SearchArtist("Hamo Bika", artistUserInfo, "07775000"));
+        recentlyPlayed.add(new SearchArtist("Hamo Bika", artistUserInfo, "07775006"));
 
-        recentlyPlayed.add(new SearchArtist(images, "Hamo Bika", "07775000"));
-        recentlyPlayed.add(new SearchArtist(images, "Hamo Bika", "07775006"));
-        recentlyPlayed.add(new SearchAlbum("Koto Moto", images, "07775008"));
-        recentlyPlayed.add(new SearchAlbum("Koto Moto", images, "07775004"));
-        recentlyPlayed.add(new SearchPlaylist("Hamo Bika", images, "07775003"));
-        recentlyPlayed.add(new SearchPlaylist("Hamo Bika", images, "07775002"));
+        ArrayList<TrackImage> image = new ArrayList<>();
+        image.add(
+                new TrackImage("https://i.scdn.co/image/ab67706f00000002aa93fe4e8c2d24fc62556cba"));
+        recentlyPlayed.add(new SearchAlbum("Koto Moto", image, "07775008"));
+        recentlyPlayed.add(new SearchAlbum("Koto Moto", image, "07775004"));
+        recentlyPlayed.add(new SearchPlaylist("Hamo Bika", image, "07775003"));
+        recentlyPlayed.add(new SearchPlaylist("Hamo Bika", image, "07775002"));
 
         return recentlyPlayed;
     }
