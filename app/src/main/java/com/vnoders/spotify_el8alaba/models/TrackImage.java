@@ -38,10 +38,6 @@ public class TrackImage {
         return url;
     }
 
-    public TrackImage(String url) {
-        this.url = url;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
