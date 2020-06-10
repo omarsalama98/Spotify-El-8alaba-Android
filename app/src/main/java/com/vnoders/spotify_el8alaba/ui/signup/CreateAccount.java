@@ -26,7 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+/**
+ * @author Mohamed Samy
+ */
 public class CreateAccount extends Fragment {
 
     private String email_address;
@@ -98,56 +100,14 @@ public class CreateAccount extends Fragment {
                     @Override
                     public void onResponse(Call<ResponseBody> call,
                             Response<ResponseBody> response) {
-                        // String jsonRespone = null;
-                        // try {
                             if (response.code() == 200) {
                                 ConfirmationEmailDialog dialog = new ConfirmationEmailDialog();
                                 dialog.show(getFragmentManager(), "CONFIRMATIONEMAILDIALOG");
 
-                                Gson gson = new Gson();
-                                /*try {
-                                    jsonRespone = response.body().string();
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }*/
-                              /*  JSONObject jsonObject = new JSONObject(jsonRespone);
-                                String token = jsonObject.getString("token");
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("token", token);
-                                editor.commit();
-                                JSONObject data = jsonObject.getJSONObject("data");
-                                JSONObject user = data.getJSONObject("user");
-                                if (type.equals("artist")) {
-                                    JSONObject userInfo = user.getJSONObject("userInfo");
-                                    JSONObject jsonCurrentlyPlayed = userInfo
-                                            .getJSONObject("currentlyPlaying");
-                                    String id=userInfo.getString("id");
-                                    editor.putString("id",id).commit();
-                                    CurrentlyPlaying currentlyPlaying = gson.fromJson(
-                                            jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
-                                } else if(type.equals("user")) {
-
-                                    JSONObject jsonCurrentlyPlayed = user
-                                            .getJSONObject("currentlyPlaying");
-                                    String id=user.getString("id");
-                                    editor.putString("id",id).commit();
-                                    CurrentlyPlaying currentlyPlaying = gson.fromJson(
-                                            jsonCurrentlyPlayed.toString(), CurrentlyPlaying.class);
-                                }
-                                RetrofitClient.getInstance().setToken(token);
-                                Intent intent = new Intent(getActivity(), MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                getActivity().finish();*/
                             } else {
                                 Toast.makeText(getActivity(), "Email already Exists!",
                                         Toast.LENGTH_LONG).show();
                             }
-
-                         /*catch (JSONException e) {
-                            e.printStackTrace();
-                        }*/
 
                     }
 

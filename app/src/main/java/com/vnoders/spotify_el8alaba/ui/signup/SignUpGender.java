@@ -13,7 +13,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.vnoders.spotify_el8alaba.R;
 
-
+/**
+ * @author Mohamed Samy
+ */
 public class SignUpGender extends Fragment {
 
     private Button male;

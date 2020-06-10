@@ -5,6 +5,7 @@
         android:id = "@+id/current_user_profile_fragment"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
+        android:background="@color/black"
         tools:context = ".ui.currentUserProfile.CurrentUserProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -212,14 +213,16 @@
                     android:textStyle = "bold"
                     android:visibility="gone"
                     />
+
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recent_activities_recycler_view"
                     android:layout_marginTop="20dp"
+                    android:background="@color/black"
                     android:layout_width = "match_parent"
-                    android:layout_height = "match_parent"
+                    android:layout_height = "wrap_content"
                     tools:listitem = "@layout/notification_item"
-
                     />
+
         </LinearLayout>
 
 

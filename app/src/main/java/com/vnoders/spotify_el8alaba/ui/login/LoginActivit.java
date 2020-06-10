@@ -33,6 +33,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * @author Mohamed Samy
+ */
 public class LoginActivit extends AppCompatActivity {
 
 
@@ -66,7 +69,9 @@ public class LoginActivit extends AppCompatActivity {
         }
     };
 
-
+    /**
+     * This method preforms a login request by email and password of a user and handles the response.
+     */
     private void login() {
         LoginInfo loginInfo = new LoginInfo(email_address_holder, password_holder);
         Call<ResponseBody> call = RetrofitClient.getInstance().getAPI(API.class)

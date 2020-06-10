@@ -3,6 +3,9 @@ package com.vnoders.spotify_el8alaba.models.Notifications;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * @author Mohamed Samy
+ */
 public class NotificationStatus {
 
     public int isUserFollowed() {

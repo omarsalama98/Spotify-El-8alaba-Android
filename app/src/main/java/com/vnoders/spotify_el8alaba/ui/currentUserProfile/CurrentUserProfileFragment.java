@@ -95,17 +95,14 @@ public class CurrentUserProfileFragment extends Fragment {
      * Use this factory method to create a new instance of this fragment using the provided
      * parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     *
      * @return A new instance of fragment CurrentUserProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CurrentUserProfileFragment newInstance(String param1, String param2) {
+    public static CurrentUserProfileFragment newInstance(CurrentUserProfile currentUserProfile) {
         CurrentUserProfileFragment fragment = new CurrentUserProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
+        Log.d("NAME",currentUserProfile.getName());
         fragment.setArguments(args);
         return fragment;
     }

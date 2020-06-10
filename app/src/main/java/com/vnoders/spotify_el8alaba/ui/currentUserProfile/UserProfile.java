@@ -219,6 +219,9 @@ public class UserProfile extends Fragment {
         });
     }
 
+    /**
+     * This method is called when the current user wants to follow specific user.
+     */
     public void followUser() {
         List<String> userId = new ArrayList<>();
         userId.add(mUserId);
@@ -239,12 +242,15 @@ public class UserProfile extends Fragment {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 ConnectionDialog connectionDialog = new ConnectionDialog();
-                connectionDialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                connectionDialog.show(requireActivity().getFragmentManager(), "connection_dialog");
 
             }
         });
     }
 
+    /**
+     * This method is used to preform unfollow request.
+     */
     public void unFollowUser() {
         List<String> userId = new ArrayList<>();
         userId.add(mUserId);
@@ -265,7 +271,7 @@ public class UserProfile extends Fragment {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 ConnectionDialog connectionDialog = new ConnectionDialog();
-                connectionDialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                connectionDialog.show(requireActivity().getFragmentManager(), "connection_dialog");
             }
         });
     }

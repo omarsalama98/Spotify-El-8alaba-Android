@@ -48,23 +48,6 @@ public class FirstScreen extends AppCompatActivity {
     SharedPreferences sharedPreferences;
 
 
-   /* AccessTokenTracker tokenTracker = new AccessTokenTracker() {
-        @Override
-        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                AccessToken currentAccessToken) {
-
-            if (currentAccessToken != null) {
-
-                Intent intent = new Intent(FirstScreen.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                RetrofitClient.getInstance().setToken(currentAccessToken.getToken());
-                finish();
-            }
-
-        }
-    };*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +65,7 @@ public class FirstScreen extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         facebook_button = findViewById(R.id.facebook_button);
         facebook_button.setReadPermissions(Arrays.asList("email", "user_birthday"));
+        //send a request to facebook API to get a token for the user.
         facebook_button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {

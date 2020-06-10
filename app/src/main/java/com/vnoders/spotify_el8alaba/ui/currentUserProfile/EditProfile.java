@@ -64,6 +64,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.threeten.bp.LocalDateTime;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,6 +73,7 @@ import retrofit2.http.Multipart;
 /**
  * A simple {@link Fragment} subclass. Use the {@link EditProfile#newInstance} factory method to
  * create an instance of this fragment.
+ *
  */
 public class EditProfile extends Fragment {
 
@@ -180,29 +182,31 @@ public class EditProfile extends Fragment {
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             //dialog here will be created
                             ConnectionDialog dialog = new ConnectionDialog();
-                            dialog.show(getActivity().getFragmentManager(), "connection_dialog");
+                            dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
                         }
                     });
                 }
                 if (changeAvatar) {
                     sendImage(absolutePath);
                 }
-                bundle.putSerializable("CURRENT_USER_PROFILE", currentUserProfile);
-                CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
-                currentUserProfileFragment.setArguments(bundle);
+                //bundle.putSerializable("CURRENT_USER_PROFILE", currentUserProfile);
+                //CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
+                //currentUserProfileFragment.setArguments(bundle);
                 FragmentManager fragmentManager = getActivity()
                         .getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager
                         .beginTransaction();
                 fragmentTransaction
-                        .replace(R.id.nav_host_fragment, currentUserProfileFragment,
-                                "CURRENT_USER_PROFILE").addToBackStack(null)
-                        .commit();
+                        .replace(R.id.nav_host_fragment, CurrentUserProfileFragment.newInstance(currentUserProfile),
+                                "CURRENT_USER_PROFILE").commit();
             }
         });
         return view;
     }
 
+    /**
+     * This method responsible give a user options to change his profile picture via Gallery or Camera.
+     */
     public void pickImage() {
         AlertDialog.Builder changeImageDialog = new AlertDialog.Builder(getActivity());
         changeImageDialog.setTitle("change profile photo");
@@ -300,8 +304,9 @@ public class EditProfile extends Fragment {
     public File createImageFile() throws IOException {
         byte[] array = new byte[10]; // length is bounded by 7
         new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
-        String imageFileName = "SPOTIFY" + generatedString + ".jpg";
+        LocalDateTime now = LocalDateTime.now();
+        String date=now.toString();
+        String imageFileName = "SPOTIFY" + date + ".jpg";
         File storageDir = new File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         .toString());
@@ -361,6 +366,10 @@ public class EditProfile extends Fragment {
         }
     }
 
+    /**
+     * This method is used to send request to our API to change profile picture via camera or Gallery.
+     * @param filePath is the path which the image is saved in
+     */
     public void sendImage(String filePath) {
         File file = new File(filePath);
         RequestBody imageUploadRequest = RequestBody.create(MediaType.parse("image/*"), file);

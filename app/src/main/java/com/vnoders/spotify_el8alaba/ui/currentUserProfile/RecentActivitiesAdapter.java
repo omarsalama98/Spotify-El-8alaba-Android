@@ -11,6 +11,10 @@ import com.vnoders.spotify_el8alaba.response.Notifications.Notification;
 import com.vnoders.spotify_el8alaba.response.Notifications.RecentActivities;
 import java.util.ArrayList;
 
+/**
+ * @author Mohamed Samy
+ * this class is used to put the last recent activities data in its recycler view.
+ */
 public class RecentActivitiesAdapter extends RecyclerView.Adapter<RecentActivitiesAdapter.RecentActivitiesViewHolder> {
     private ArrayList<NotificationItem> mRecentActivitiesArrayList;
 

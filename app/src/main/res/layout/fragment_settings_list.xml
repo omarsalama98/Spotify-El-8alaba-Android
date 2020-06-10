@@ -19,7 +19,7 @@
         <ImageButton
                 android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
-                android:id = "@+id/back_button"
+                android:id = "@+id/back_button_settings"
                 android:layout_width = "wrap_content"
                 android:layout_height = "wrap_content"
                 android:src = "@drawable/ic_left_arrow"

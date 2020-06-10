@@ -12,6 +12,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.vnoders.spotify_el8alaba.R;
 
+/**
+ * @author Mohamed Samy
+ */
 public class UserType extends Fragment {
     private Button user;
     private Button artist;
