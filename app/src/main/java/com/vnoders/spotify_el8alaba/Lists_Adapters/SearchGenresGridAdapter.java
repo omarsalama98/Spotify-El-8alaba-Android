@@ -50,10 +50,10 @@ public class SearchGenresGridAdapter extends
 
         final Bitmap[] genreImageBitmap = new Bitmap[1];
 
-        if (!backGenresList.get(position).getIcons().isEmpty()) {
+        if (!backGenresList.get(position).getImages().isEmpty()) {
             //Picasso.get().load(backGenresList.get(position).getIcons().get(0).getUrl()).into(holder.genreImage);
             Picasso.get()
-                    .load(backGenresList.get(position).getIcons().get(0).getUrl())
+                    .load(backGenresList.get(position).getImages().get(0).getUrl())
                     .into(new Target() {
                         @Override
                         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {

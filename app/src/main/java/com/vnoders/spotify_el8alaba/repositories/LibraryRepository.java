@@ -14,7 +14,7 @@ import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.AlbumTracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
@@ -115,7 +115,7 @@ public class LibraryRepository {
                         viewModel.setTracksSummary(buildTracksInfo(tracks.getTrackItems()));
                     }
 
-                    List<TrackImage> images = playlist.getImages();
+                    List<Image> images = playlist.getImages();
                     if (images != null && images.size() > 0) {
                         viewModel.setImageUrl(images.get(0).getUrl());
                     }
@@ -278,15 +278,15 @@ public class LibraryRepository {
      *                  request
      */
     public static void updatePlaylistCoverImages(PlaylistTracksViewModel viewModel) {
-        Call<List<TrackImage>> request = libraryApi
+        Call<List<Image>> request = libraryApi
                 .getPlaylistCoverImages(viewModel.getPlaylistId());
 
-        request.enqueue(new Callback<List<TrackImage>>() {
+        request.enqueue(new Callback<List<Image>>() {
             @Override
-            public void onResponse(@NotNull Call<List<TrackImage>> call,
-                    @NotNull Response<List<TrackImage>> response) {
+            public void onResponse(@NotNull Call<List<Image>> call,
+                    @NotNull Response<List<Image>> response) {
 
-                List<TrackImage> images = response.body();
+                List<Image> images = response.body();
                 if (response.isSuccessful() && images != null && images.size() > 0) {
                     String imageUrl = images.get(0).getUrl();
                     viewModel.setPlaylistImageUrl(imageUrl);
@@ -295,7 +295,7 @@ public class LibraryRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<List<TrackImage>> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<List<Image>> call, @NotNull Throwable t) {
 
             }
         });
@@ -812,7 +812,7 @@ public class LibraryRepository {
                     viewModel.setReleaseDate(album.getReleaseDate());
                     viewModel.setTracksSummary(album.getTracks());
 
-                    List<TrackImage> albumImages = album.getImages();
+                    List<Image> albumImages = album.getImages();
                     if (albumImages != null && !albumImages.isEmpty()) {
                         viewModel.setImageUrl(albumImages.get(0).getUrl());
                     }

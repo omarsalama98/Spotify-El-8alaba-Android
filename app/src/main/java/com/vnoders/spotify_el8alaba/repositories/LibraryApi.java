@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.AlbumTracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
@@ -65,7 +65,7 @@ public interface LibraryApi {
      * @return List of cover images (different sizes) of the requested playlist
      */
     @GET("playlists/{playlist_id}/images")
-    Call<List<TrackImage>> getPlaylistCoverImages(@Path("playlist_id") String playlistId);
+    Call<List<Image>> getPlaylistCoverImages(@Path("playlist_id") String playlistId);
 
 
     @GET("playlists/{playlist_id}/followers/contains")

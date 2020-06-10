@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.R;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbumItem;
@@ -159,7 +159,7 @@ public class LibraryAlbumAdapter extends ListAdapter<LibraryAlbumItem, AlbumView
                 albumArtist.setText(artists.get(0).getName());
             }
 
-            List<TrackImage> images = album.getImages();
+            List<Image> images = album.getImages();
             String imageUrl = null;
             if (images != null && images.size() > 0) {
                 imageUrl = images.get(0).getUrl();

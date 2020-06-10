@@ -60,7 +60,7 @@ public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyVi
 
         /*
         String imageUrl;
-        List<TrackImage> images = backDataset.get(position).get();
+        List<Image> images = backDataset.get(position).get();
         if (!images.isEmpty()) {
             imageUrl = images.get(0).getUrl();
         } else {

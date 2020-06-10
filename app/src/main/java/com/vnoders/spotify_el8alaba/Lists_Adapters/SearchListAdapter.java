@@ -19,7 +19,7 @@ import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchPlaylist;
 import com.vnoders.spotify_el8alaba.models.Search.SearchTrack;
 import com.vnoders.spotify_el8alaba.models.Search.User;
-import com.vnoders.spotify_el8alaba.models.TrackImage;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
@@ -66,7 +66,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
         if (result instanceof SearchAlbum) {
             itemName = ((SearchAlbum) result).getName();
             holder.name.setText(itemName);
-            List<TrackImage> images = ((SearchAlbum) result).getImages();
+            List<Image> images = ((SearchAlbum) result).getImages();
             itemInfo = "Album";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
@@ -77,7 +77,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
         } else if (result instanceof SearchArtist) {
             itemName = ((SearchArtist) result).getName();
             holder.name.setText(itemName);
-            List<TrackImage> images = ((SearchArtist) result).getImages();
+            List<Image> images = ((SearchArtist) result).getImages();
             itemInfo = "Artist";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
@@ -107,7 +107,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
             itemInfo = "Playlist";
             holder.info.setText(itemInfo);
             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
-            List<TrackImage> images = ((SearchPlaylist) result).getImages();
+            List<Image> images = ((SearchPlaylist) result).getImages();
             if (images != null) {
                 if (!images.isEmpty()) {
                     itemImageUrl = images.get(0).getUrl();
@@ -133,7 +133,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                             for (int i = 0; i < response.body().getArtists().size(); i++) {
                                 itemInfo += response.body().getArtists().get(i).getName() + " ";
                             }
-                            List<TrackImage> images = response.body().getImages();
+                            List<Image> images = response.body().getImages();
                             itemImageUrl = "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4";
                             if (images != null) {
                                 if (!images.isEmpty()) {
@@ -188,7 +188,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     itemId = ((SearchAlbum) result).getId();
                     itemName = ((SearchAlbum) result).getName();
                     itemInfo = "Album";
-                    List<TrackImage> images = ((SearchAlbum) result).getImages();
+                    List<Image> images = ((SearchAlbum) result).getImages();
                     if (!images.isEmpty()) {
                         itemImageUrl = images.get(0).getUrl();
                     }
@@ -197,7 +197,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     itemId = ((SearchArtist) result).getId();
                     itemName = ((SearchArtist) result).getName();
                     itemInfo = "Artist";
-                    List<TrackImage> images = ((SearchArtist) result).getImages();
+                    List<Image> images = ((SearchArtist) result).getImages();
                     if (images != null) {
                         if(!images.isEmpty())
                             itemImageUrl = images.get(0).getUrl();
@@ -219,7 +219,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                     itemId = ((SearchPlaylist) result).getId();
                     itemName = ((SearchPlaylist) result).getName();
                     itemInfo = "Playlist";
-                    List<TrackImage> images = ((SearchPlaylist) result).getImages();
+                    List<Image> images = ((SearchPlaylist) result).getImages();
                     if (!images.isEmpty()) {
                         itemImageUrl = images.get(0).getUrl();
                     }
