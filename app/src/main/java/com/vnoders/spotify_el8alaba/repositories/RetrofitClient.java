@@ -70,8 +70,8 @@ public class RetrofitClient {
         headers.addHeader(HEADER_CONTENT_TYPE, TYPE_JSON);
         headers.addHeader(HEADER_USER_AGENT, getUserAgent());
 
-        httpClientBuilder.cache(getCache()).addInterceptor(useCachedResponsesInterceptor())
-                .addNetworkInterceptor(cacheResponsesInterceptor());
+//        httpClientBuilder.cache(getCache()).addInterceptor(useCachedResponsesInterceptor())
+//                .addNetworkInterceptor(cacheResponsesInterceptor());
 
         // Logging must be the last added interceptor
         // in order to log other interceptors
