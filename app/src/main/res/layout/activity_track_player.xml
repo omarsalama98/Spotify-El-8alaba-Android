@@ -37,7 +37,7 @@
                 android:layout_centerInParent="true"
                 android:layout_margin="48dp"
                 android:contentDescription="@string/song_picture_desc"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerInside" />
 
         </RelativeLayout>
 
