@@ -40,9 +40,9 @@ public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
 
     private List<Track> tracks;
 
-    public TracksAdapter(String playlistId, TRACKS_TYPE type, MediaPlaybackService mediaPlayer) {
+    public TracksAdapter(String id, TRACKS_TYPE type, MediaPlaybackService mediaPlayer) {
         this.tracks = new ArrayList<>();
-        TrackViewHolder.collectionId = playlistId;
+        TrackViewHolder.collectionId = id;
         TrackViewHolder.mediaPlaybackService = mediaPlayer;
         TrackViewHolder.type = type;
     }
@@ -171,6 +171,9 @@ public class TracksAdapter extends RecyclerView.Adapter<TrackViewHolder> {
                         case ARTIST_TRACKS:
                             mediaPlaybackService
                                     .playArtistTopTracks(collectionId, true, true, trackId);
+                            break;
+                        case ALBUM_TRACKS:
+                            mediaPlaybackService.playAlbum(collectionId, true, true, trackId);
                             break;
                     }
                 }
