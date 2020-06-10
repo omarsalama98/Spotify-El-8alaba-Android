@@ -12,9 +12,9 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.JsonObject;
 import com.vnoders.spotify_el8alaba.App;
 import com.vnoders.spotify_el8alaba.R;
+import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.Artists;
 import com.vnoders.spotify_el8alaba.models.Search.SearchArtist;
-import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.library.AlbumTracksPagingWrapper;
 import com.vnoders.spotify_el8alaba.models.library.Artist;
 import com.vnoders.spotify_el8alaba.models.library.LibraryAlbum;
@@ -40,6 +40,7 @@ import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -746,7 +747,7 @@ public class LibraryRepository {
             @Override
             public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    viewModel.setTracks(response.body());
+                    updateLikedStatusInTracks(response.body(), viewModel);
                 }
             }
 
@@ -912,4 +913,48 @@ public class LibraryRepository {
         });
 
     }
+
+
+    public static void updateLikedStatusInTracks(List<Track> tracks,
+            ArtistTracksViewModel viewModel) {
+
+        Call<TracksPagingWrapper> likedTracksRequest = libraryApi.getLikedTracks();
+
+        new AsyncTask<Void, Void, List<Track>>() {
+            @Override
+            protected List<Track> doInBackground(Void... voids) {
+                try {
+                    Response<TracksPagingWrapper> response = likedTracksRequest.execute();
+
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<TrackItem> likedTracks = response.body().getTrackItems();
+
+                        for (Track track : tracks) {
+                            boolean isLiked = false;
+
+                            for (TrackItem likedTrack : likedTracks) {
+                                if (Objects.equals(likedTrack.getTrack().getId(), track.getId())) {
+                                    isLiked = true;
+                                    break;
+                                }
+                            }
+
+                            track.setLiked(isLiked);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return tracks;
+            }
+
+            @Override
+            protected void onPostExecute(List<Track> tracks) {
+                viewModel.setTracks(tracks);
+            }
+
+        }.execute();
+    }
+
 }
