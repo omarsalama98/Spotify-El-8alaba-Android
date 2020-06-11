@@ -65,8 +65,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
 //          Remove these two lines to disable debugging
-//            debuggable true
-//            testCoverageEnabled true
+            debuggable true
+            testCoverageEnabled true
         }
         debug {
             def API_BASE_URL_DEBUG = "\"http://${InetAddress.localHost.hostAddress}:8000/api/v1/\""
