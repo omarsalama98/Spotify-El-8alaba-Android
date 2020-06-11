@@ -28,6 +28,10 @@ public class ArtistHomeFragment extends Fragment {
     private static View artistTopSongLayout;
     private ImageView artistTopSongImageView, spotifyUserImageView;
 
+    /**
+     * Is called from artist main activity to load the lists and text views after fetching the data
+     * from the server.
+     */
     static void updateUI() {
         if (allSongsStreams != null) {
             if (allSongsStreams.equals("0")) {

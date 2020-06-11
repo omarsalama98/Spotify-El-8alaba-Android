@@ -79,6 +79,9 @@ public class SearchFragment extends Fragment implements OnClickListener, TextWat
     private SearchListAdapter searchListAdapter;
     private Bitmap firstSearchResult;
 
+    /**
+     * Fetches the recent searches history saved locally.
+     */
     private void getData() {
         class GetData extends AsyncTask<Void, Void, ArrayList<RecentSearches>> {
 

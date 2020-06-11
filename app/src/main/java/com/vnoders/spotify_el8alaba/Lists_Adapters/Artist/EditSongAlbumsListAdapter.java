@@ -17,25 +17,14 @@ public class EditSongAlbumsListAdapter extends
         RecyclerView.Adapter<EditSongAlbumsListAdapter.MyViewHolder> {
 
     private static Fragment fragment;
-    private static ArrayList<MyAlbum> mockDataset;
     private static ArrayList<MyAlbum> backDataset;
 
-    //               The difference between these two constructors is that one uses mock data and the other
-    //                  uses data retrieved from the server and the mock data one will be removed later on.
-
     /**
-     * @param myDataset List Of Playlists in the home Category lists
-     * @param fragment  The fragment where this list is in (Used to load another fragment)
+     * @param backDataset List Of Albums in the artist's edit song fragment.
+     * @param fragment    The fragment where this list is in
      */
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public EditSongAlbumsListAdapter(ArrayList<MyAlbum> myDataset, Fragment fragment) {
-        backDataset = new ArrayList<>();
-        mockDataset = myDataset;
-        EditSongAlbumsListAdapter.fragment = fragment;
-    }
 
     public EditSongAlbumsListAdapter(Fragment fragment, ArrayList<MyAlbum> backDataset) {
-        mockDataset = new ArrayList<>();
         EditSongAlbumsListAdapter.backDataset = backDataset;
         EditSongAlbumsListAdapter.fragment = fragment;
     }

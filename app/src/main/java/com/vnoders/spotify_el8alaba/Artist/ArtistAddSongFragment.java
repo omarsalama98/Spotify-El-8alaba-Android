@@ -69,8 +69,12 @@ public class ArtistAddSongFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private void uploadTrack(RequestBody description, MultipartBody.Part body) {
-        Call<ResponseBody> call = apiService.uploadTrack(description, body);
+    /**
+     * @param id   The id of the song to upload the track to.
+     * @param body The song part for the multipart request.
+     */
+    private void uploadTrack(RequestBody id, MultipartBody.Part body) {
+        Call<ResponseBody> call = apiService.uploadTrack(id, body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -85,6 +89,7 @@ public class ArtistAddSongFragment extends Fragment {
                             .show();
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getContext(), "Something went wrong. Try again later",
@@ -94,6 +99,12 @@ public class ArtistAddSongFragment extends Fragment {
         });
     }
 
+    /**
+     * @param context     the context of the calling function.
+     * @param permissions permissions to check if they were granted.
+     *
+     * @return If the permission wasn't granted it returns true(It doesn't have the permission)
+     */
     private static boolean hasNoPermissions(Context context, String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null
                 && permissions != null) {

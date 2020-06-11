@@ -61,6 +61,10 @@ public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeL
         // Required empty public constructor
     }
 
+    /**
+     * @param albumId the id of the album which we want to add an image to.
+     * @param body    the image part to be uploaded.
+     */
     private void uploadAlbumImage(String albumId, MultipartBody.Part body) {
         Call<ResponseBody> call1 = apiService.uploadAlbumImage(albumId, body);
         call1.enqueue(new Callback<ResponseBody>() {
@@ -81,7 +85,13 @@ public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeL
         });
     }
 
-    private static boolean hasPermissions(Context context, String... permissions) {
+    /**
+     * @param context     the context of the calling function.
+     * @param permissions permissions to check if they were granted.
+     *
+     * @return If the permission wasn't granted it returns true(It doesn't have the permission)
+     */
+    private static boolean hasNoPermissions(Context context, String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null
                 && permissions != null) {
             for (String permission : permissions) {
@@ -128,7 +138,7 @@ public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeL
         super.onViewCreated(view, savedInstanceState);
 
         chooseAlbumPicBtn.setOnClickListener(v -> {
-            if (hasPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (hasNoPermissions(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 111);
             }
@@ -247,6 +257,12 @@ public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeL
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * @param buttonView the radio button checked or unchecked.
+     * @param isChecked  the state of the radio button.
+     *                   <p>
+     *                   It is used so that at least one radio button is checked at all times.
+     */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (!rockCB.isChecked() && !popCB.isChecked() && !hipHopCB.isChecked() &&

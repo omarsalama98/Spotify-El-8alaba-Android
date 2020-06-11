@@ -34,8 +34,9 @@ public class GenrePlaylistsGridAdapter extends
     }
 
     /**
-     * @param myDataSet List of Playlists to show for the current Genre
-     * @param fragment  The current fragment where this list will be created
+     * @param myDataSet List of Albums to show for the current Genre if it had albums and not
+     *                  playlists.
+     * @param fragment  The current fragment where this list will be created.
      */
     public GenrePlaylistsGridAdapter(Fragment fragment, ArrayList<SearchAlbum> myDataSet) {
         mAlbums = myDataSet;

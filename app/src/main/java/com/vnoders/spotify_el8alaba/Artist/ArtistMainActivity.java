@@ -65,6 +65,12 @@ public class ArtistMainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Makes a request from the server for the track listens using the track ids received and
+     * specifying a range for the listen time.
+     *
+     * @param trackListensRequestBody a request body with track Ids fetched earlier.
+     */
     private static void getTrackListens(TrackListensRequestBody trackListensRequestBody) {
 
         String endDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -91,6 +97,12 @@ public class ArtistMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Fetches the top track's name using its id and sets it in home fragment and calculates the
+     * total number of listens.
+     *
+     * @param trackListens A list of tracks each with its number of listens.
+     */
     private static void setTracksStatisticsInAPeriod(ArrayList<TrackListens> trackListens) {
         int max = 0, maxPos = 0, totSum = 0, sum;
         if (trackListens.isEmpty()) {
@@ -145,6 +157,11 @@ public class ArtistMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Fetches Tracks' names to be shown in the artist's library.
+     *
+     * @param tracksIds an artist's top tracks Ids
+     */
     private void getArtistsTracksNames(String tracksIds) {
 
         Call<List<ArtistTrack>> call = apiService.getTracks(tracksIds);
@@ -175,6 +192,9 @@ public class ArtistMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Fetches the currently logged in artist's info.
+     */
     private static void getArtistInfo() {
         Call<List<Artist>> call1 = apiService.getArtist(artistId);
         call1.enqueue(new Callback<List<Artist>>() {
@@ -192,6 +212,9 @@ public class ArtistMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Fetches the currently logged in artist's albums to be shown in their library.
+     */
     static void getArtistAlbums() {
         Call<ArtistAlbums> call = apiService.getArtistAlbums(artistId);
         call.enqueue(new Callback<ArtistAlbums>() {
@@ -211,6 +234,9 @@ public class ArtistMainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Fetches the currently logged in artist's top tracks to be shown in their library.
+     */
     static void getArtistTopTracks() {
         Call<List<Track>> call = apiService.getArtistTopTracks(artistId);
         call.enqueue(new Callback<List<Track>>() {
