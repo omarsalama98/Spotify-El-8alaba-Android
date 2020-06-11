@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Class to send the track context in a post request to backend API
  */
 public class TrackContext {

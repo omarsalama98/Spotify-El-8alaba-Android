@@ -23,7 +23,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * @author Mohamed Samy
+ *
  * This fragment is used to view the current user notification settings and enable the user to cutom them.
  * A simple {@link Fragment} subclass. Use the {@link NotificationSettings#newInstance} factory
  * method to create an instance of this fragment.

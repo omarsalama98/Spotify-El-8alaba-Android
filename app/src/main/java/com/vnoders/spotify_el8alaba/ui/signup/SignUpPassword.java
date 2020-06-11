@@ -18,9 +18,7 @@ import com.vnoders.spotify_el8alaba.R;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author Mohamed Samy
- */
+
 public class SignUpPassword extends Fragment {
     private FragmentManager fragmentManager;
     private TextView password_status;

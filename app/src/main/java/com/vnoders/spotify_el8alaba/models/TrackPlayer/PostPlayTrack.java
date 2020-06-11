@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * To send the data about the track to play to backend API
  */
 public class PostPlayTrack {

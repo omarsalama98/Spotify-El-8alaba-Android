@@ -8,6 +8,9 @@ import java.util.List;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * To turn the JSON to POJO from backend API
  */
 public class GetArtistTrack {

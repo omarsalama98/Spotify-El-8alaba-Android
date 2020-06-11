@@ -19,6 +19,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Adapter to use in recycler view to display the playlist item
  */
 public class OwnedPlaylistsAdapter extends RecyclerView.Adapter<OwnedPlaylistsAdapter.OwnedPlaylistViewHolder> {

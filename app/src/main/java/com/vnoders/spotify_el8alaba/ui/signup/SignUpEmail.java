@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.vnoders.spotify_el8alaba.R;
 
 /**
- * @author Mohamed Samy
+ *
  */
 public class SignUpEmail extends AppCompatActivity {
 

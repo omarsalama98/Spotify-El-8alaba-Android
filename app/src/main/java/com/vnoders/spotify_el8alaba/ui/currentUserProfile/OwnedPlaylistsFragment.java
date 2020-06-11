@@ -25,7 +25,9 @@ import retrofit2.Response;
 
 /**
  * @author Ali Adel
- *
+ */
+
+/**
  * Class to implement fragment for displaying the created playlists by user
  */
 public class OwnedPlaylistsFragment extends Fragment implements OwnedPlaylistsAdapter.OwnedPlaylistItemClick {

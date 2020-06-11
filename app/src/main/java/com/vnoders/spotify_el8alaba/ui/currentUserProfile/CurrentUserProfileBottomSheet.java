@@ -16,7 +16,7 @@ import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfi
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * @author Mohamed Samy
+ *
  * This class implements a bottom sheet containing options of find friends and share your profile.
  */
 
