@@ -2,6 +2,9 @@ package com.vnoders.spotify_el8alaba.models.TrackPlayer;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * This is the track representor class that the track player module uses as a track that
  * gets played and has all data about the track to display
  */

@@ -27,7 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * @author Mohamed Samy
+ *
  * A simple {@link Fragment} subclass. Use the {@link Following#newInstance} factory method to
  * create an instance of this fragment.
  */

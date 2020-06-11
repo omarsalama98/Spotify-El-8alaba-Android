@@ -64,6 +64,9 @@ import retrofit2.Response;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Media playback service to play music from background even when activity is not visible
  */
 public class MediaPlaybackService extends MediaBrowserServiceCompat implements

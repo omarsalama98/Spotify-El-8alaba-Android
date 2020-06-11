@@ -27,7 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * @author Mohamed Samy
+ *
  */
 public class CreateAccount extends Fragment {
 

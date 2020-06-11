@@ -9,7 +9,11 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.CurrentlyPlayingTrack;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
- * @author Ali Adel TrackViewModel with singleton pattern to have only 1 instance of current song
+ * @author Ali Adel
+ */
+
+/**
+ * TrackViewModel with singleton pattern to have only 1 instance of current song
  * being played globally
  */
 public class TrackViewModel extends ViewModel {

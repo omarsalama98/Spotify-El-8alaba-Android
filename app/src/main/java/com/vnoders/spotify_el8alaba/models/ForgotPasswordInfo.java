@@ -5,7 +5,7 @@
 
  /**
      * This class holds the email address of the user who has forgotten his password
-     * @author Mohamed Samy
+     *
      */
     public class ForgotPasswordInfo {
 

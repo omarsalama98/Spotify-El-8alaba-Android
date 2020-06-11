@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment;
 import com.vnoders.spotify_el8alaba.R;
 
 /**
- * @author Mohamed Samy
+ *
  */
 public class SignUpDialog extends DialogFragment {
 

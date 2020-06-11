@@ -17,7 +17,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
 
 /**
- * @author Mohamed Samy
+ *
  * This class is used to handle the followers and following list and rendering the data in the recycler view correctly.
  */
 public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.FollowViewHolder> {

@@ -33,7 +33,11 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 
 /**
- * @author Ali Adel Class that shows the media player and binds with media playback service
+ * @author Ali Adel
+ */
+
+/**
+ * Class that shows the media player and binds with media playback service
  */
 public class TrackPlayerActivity extends AppCompatActivity {
 

@@ -29,7 +29,7 @@ import retrofit2.Response;
 
 /**
  * This is a fragment to implement a list containing settings and user profile.
- * @author Mohamed Samy
+ *
  */
 
 public class SettingsList extends Fragment {

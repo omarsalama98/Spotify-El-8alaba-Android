@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Class to get the external url to share
  */
 public class ShareTrackResponse {

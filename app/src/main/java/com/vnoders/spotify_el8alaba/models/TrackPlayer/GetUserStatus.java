@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * get user status from backend to see if is premium or not
  */
 public class GetUserStatus {

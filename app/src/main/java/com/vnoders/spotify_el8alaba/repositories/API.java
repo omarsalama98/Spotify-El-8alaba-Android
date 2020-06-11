@@ -33,7 +33,7 @@ import retrofit2.http.Query;
 /**
  * This interface will include all the back-end functions which will handle the API requests
  *
- * @author Mohamed Samy
+ *
  */
 public interface API {
 
