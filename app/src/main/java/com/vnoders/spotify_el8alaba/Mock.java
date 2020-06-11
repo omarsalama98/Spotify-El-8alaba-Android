@@ -4,7 +4,6 @@ package com.vnoders.spotify_el8alaba;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import androidx.fragment.app.Fragment;
-import com.vnoders.spotify_el8alaba.Lists_Items.SearchListItem;
 import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.Genre;
 import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
@@ -101,41 +100,8 @@ public class Mock {
         return mainListItems;
     }
 
-    public static ArrayList<SearchListItem> getMockSearchData() {
-
-        ArrayList<SearchListItem> myList = new ArrayList<>();
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL2 xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("DD xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOLAT xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("ROFL", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("Song", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "mad",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-        myList.add(new SearchListItem("LOL xd", "Rar",
-                "https://i.scdn.co/image/8522fc78be4bf4e83fea8e67bb742e7d3dfe21b4"));
-
-        return myList;
+    public static ArrayList<Object> getMockSearchData() {
+        return new ArrayList<>();
     }
 
     public static ArrayList<Genre> getTopGenres(Fragment fragment) {

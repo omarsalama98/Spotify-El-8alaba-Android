@@ -19,6 +19,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A RecyclerView Adapter for showing a user's recently played contexts(Playlists, Albums and
+ * Artists).
+ */
 public class RecentlyPlayedListAdapter extends
         RecyclerView.Adapter<RecentlyPlayedListAdapter.MyViewHolder> {
 

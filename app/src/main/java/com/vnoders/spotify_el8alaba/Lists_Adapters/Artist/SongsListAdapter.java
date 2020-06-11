@@ -14,6 +14,9 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Artist.MyTrack;
 import java.util.ArrayList;
 
+/**
+ * A RecyclerView Adapter for showing artist's songs in Spotify Artist library.
+ */
 public class SongsListAdapter extends RecyclerView.Adapter<SongsListAdapter.MyViewHolder> {
 
     private static Fragment fragment;

@@ -34,6 +34,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * A RecyclerView Adapter for showing all search results in SearchFragment.
+ */
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.MyViewHolder> {
 
     private ArrayList<Object> mDataset;

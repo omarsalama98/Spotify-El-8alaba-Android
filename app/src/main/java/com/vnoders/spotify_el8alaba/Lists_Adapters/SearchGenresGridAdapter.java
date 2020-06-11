@@ -19,6 +19,9 @@ import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.ui.search.GenreFragment;
 import java.util.ArrayList;
 
+/**
+ * A RecyclerView Adapter for showing a grid of genres in SearchGenresFragment.
+ */
 public class SearchGenresGridAdapter extends
         RecyclerView.Adapter<SearchGenresGridAdapter.MyViewHolder> {
 

@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link Fragment} subclass for browsing genres and navigating to search.
  */
 public class SearchGenresFragment extends Fragment {
 

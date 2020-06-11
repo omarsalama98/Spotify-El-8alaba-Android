@@ -17,6 +17,9 @@ import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A RecyclerView Adapter for showing a genre's playlists in GenreFragment.
+ */
 public class GenrePlaylistsGridAdapter extends
         RecyclerView.Adapter<GenrePlaylistsGridAdapter.MyViewHolder> {
 

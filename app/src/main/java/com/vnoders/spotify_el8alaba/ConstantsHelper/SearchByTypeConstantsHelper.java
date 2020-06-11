@@ -1,5 +1,9 @@
 package com.vnoders.spotify_el8alaba.ConstantsHelper;
 
+/**
+ * A helper class for Search By Type fragment constants used in transitioning to the different
+ * types.
+ */
 public class SearchByTypeConstantsHelper {
 
     public static final String ARTISTS = "Artists";

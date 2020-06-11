@@ -53,6 +53,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+/**
+ * A {@link Fragment} for searching for artists, songs, albums, playlists and users and showing
+ * search history.
+ */
 public class SearchFragment extends Fragment implements OnClickListener, TextWatcher {
 
     public static ArrayList<RecentSearches> mySearchHistory;

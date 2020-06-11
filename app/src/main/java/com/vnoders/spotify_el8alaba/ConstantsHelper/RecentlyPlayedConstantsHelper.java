@@ -1,5 +1,9 @@
 package com.vnoders.spotify_el8alaba.ConstantsHelper;
 
+
+/**
+ * A helper class for constant strings used for recently played list.
+ */
 public class RecentlyPlayedConstantsHelper {
 
     public static final String ARTIST = "artist";
