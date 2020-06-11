@@ -10,6 +10,10 @@ import android.widget.RemoteViews;
 import com.vnoders.spotify_el8alaba.R;
 
 /**
+ * @author Ali Adel
+ */
+
+/**
  * Implementation of App Widget functionality.
  */
 public class SpotifyEl8alabaWidget extends AppWidgetProvider {

@@ -1,6 +1,5 @@
 package com.vnoders.spotify_el8alaba.Lists_Adapters;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,9 +15,8 @@ import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
-import com.vnoders.spotify_el8alaba.ui.search.ChartsFragment;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import com.vnoders.spotify_el8alaba.ui.search.GenreFragment;
-import com.vnoders.spotify_el8alaba.ui.search.SpecialGenresFragment;
 import java.util.ArrayList;
 
 public class SearchGenresGridAdapter extends
@@ -26,6 +24,7 @@ public class SearchGenresGridAdapter extends
 
     private ArrayList<Category> backGenresList;
     private static Fragment mFragment;
+    public static ArrayList<SearchAlbum> newReleases;
 
     public SearchGenresGridAdapter(ArrayList<Category> myDataset, Fragment fragment) {
         backGenresList = myDataset;
@@ -46,49 +45,66 @@ public class SearchGenresGridAdapter extends
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        final Bitmap[] genreImageBitmap = new Bitmap[1];
+        if (backGenresList.get(position).getPlaylists() != null) {
+            if (!backGenresList.get(position).getImages().isEmpty()) {
+                String imgUrl = backGenresList.get(position).getImages().get(0).getUrl();
+                Picasso.get()
+                        .load(imgUrl)
+                        .into(holder.genreImage);
+                GradientUtils.generate(imgUrl, holder.genreLayout);
+            } else {
+                BitmapDrawable bD = (BitmapDrawable) (holder.genreImage.getDrawable());
+                GradientUtils.generate(bD.getBitmap(), holder.genreLayout);
+            }
+            holder.genreTitle.setText(backGenresList.get(position).getName());
 
-        if (!backGenresList.get(position).getImages().isEmpty()) {
-            String imgUrl = backGenresList.get(position).getImages().get(0).getUrl();
+            holder.genreLayout.setOnClickListener(v -> {
+                Fragment fragment = new GenreFragment();
+                Bundle arguments = new Bundle();
+                arguments.putString(SearchByTypeConstantsHelper.GENRE_ID_KEY,
+                        backGenresList.get(position).getId());
+                arguments.putString(SearchByTypeConstantsHelper.GENRE_NAME_KEY,
+                        backGenresList.get(position).getName());
+                fragment.setArguments(arguments);
+                mFragment.getParentFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left,
+                                R.anim.slide_in_left,
+                                R.anim.slide_out_right)
+                        .replace(R.id.nav_host_fragment, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        } else if (backGenresList.get(position).getAlbums() != null) {
+            ArrayList<SearchAlbum> albums = (ArrayList<SearchAlbum>) backGenresList.get(position)
+                    .getAlbums();
+            String imgUrl = "https://t.scdn.co/images/acc7b5d7b1264d0593ec05c020d0a689.jpeg";
             Picasso.get()
                     .load(imgUrl)
                     .into(holder.genreImage);
             GradientUtils.generate(imgUrl, holder.genreLayout);
-        } else {
-            BitmapDrawable bD = (BitmapDrawable) (holder.genreImage.getDrawable());
-            GradientUtils.generate(bD.getBitmap(), holder.genreLayout);
-        }
-        holder.genreTitle.setText(backGenresList.get(position).getName());
 
-        holder.genreLayout.setOnClickListener(v -> {
-            Fragment fragment;
-            switch (position) {
-                case 0:
-                    fragment = new SpecialGenresFragment();
-                    break;
-                case 1:
-                    fragment = new ChartsFragment();
-                    break;
-                default:
-                    fragment = new GenreFragment();
-                    break;
-            }
-            Bundle arguments = new Bundle();
-            arguments.putString(SearchByTypeConstantsHelper.GENRE_ID_KEY,
-                    backGenresList.get(position).getId());
-            arguments.putString(SearchByTypeConstantsHelper.GENRE_NAME_KEY,
-                    backGenresList.get(position).getName());
-            fragment.setArguments(arguments);
-            mFragment.getParentFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right,
-                            R.anim.slide_out_left,
-                            R.anim.slide_in_left,
-                            R.anim.slide_out_right)
-                    .replace(R.id.nav_host_fragment, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
+            holder.genreTitle.setText(backGenresList.get(position).getName());
+
+            holder.genreLayout.setOnClickListener(v -> {
+                Fragment fragment = new GenreFragment();
+                newReleases = albums;
+                Bundle arguments = new Bundle();
+                arguments.putString(SearchByTypeConstantsHelper.GENRE_NAME_KEY,
+                        SearchByTypeConstantsHelper.NEW_RELEASES);
+                fragment.setArguments(arguments);
+                mFragment.getParentFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left,
+                                R.anim.slide_in_left,
+                                R.anim.slide_out_right)
+                        .replace(R.id.nav_host_fragment, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

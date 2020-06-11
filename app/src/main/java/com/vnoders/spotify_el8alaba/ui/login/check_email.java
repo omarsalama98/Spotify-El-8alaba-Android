@@ -11,7 +11,7 @@ import android.os.Bundle;
 import com.vnoders.spotify_el8alaba.R;
 
 /**
- * @author Mohamed Samy
+ *
  */
 
 public class check_email extends AppCompatActivity {

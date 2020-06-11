@@ -11,16 +11,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.GridSpacingItemDecoration;
 import com.vnoders.spotify_el8alaba.Lists_Adapters.SearchGenresGridAdapter;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Category;
+import com.vnoders.spotify_el8alaba.models.Search.Albums;
 import com.vnoders.spotify_el8alaba.repositories.APIInterface;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class SearchGenresFragment extends Fragment {
     private RecyclerView browseAllGenresGridView;
     private RecyclerView topGenresGridView;
     private TextView genresSearchTextLayout;
-    private int REQUESTS_TBD = 2;
+    private int REQUESTS_TBD = 3;
     private int requestsDone = 0;
     private View loadingView;
     private static ArrayList<Category> topCategories = new ArrayList<>();
@@ -135,6 +138,34 @@ public class SearchGenresFragment extends Fragment {
         browseAllGenresGridView
                 .setAdapter(otherCategoriesAdapter);
         if (!fetchedRequest) {
+            Call<Albums> call = apiService.getNewReleases();
+            call.enqueue(new Callback<Albums>() {
+                @Override
+                public void onResponse(Call<Albums> call,
+                        Response<Albums> response) {
+                    requestsDone += 1;
+                    if (response.body() != null) {
+                        Category newReleases = new Category(
+                                SearchByTypeConstantsHelper.NEW_RELEASES,
+                                response.body().getAlbums());
+                        if (otherCategories.size() > 2) {
+                            otherCategories.add(2, newReleases);
+                        } else {
+                            otherCategories.add(newReleases);
+                        }
+                        otherCategoriesAdapter.notifyDataSetChanged();
+                    }
+                    if (requestsDone == REQUESTS_TBD) {
+                        loadingView.setVisibility(View.GONE);
+                        fetchedRequest = true;
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Albums> call, Throwable t) {
+                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
             Call<List<Category>> call2 = apiService.getAllCategories();
             call2.enqueue(new Callback<List<Category>>() {
                 @Override

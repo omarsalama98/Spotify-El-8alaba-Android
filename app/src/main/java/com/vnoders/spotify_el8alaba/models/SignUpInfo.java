@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
  * This class stores all user's information that will be needed in the registration an object of
  * this class will be sent to the post function which creates account to the user
  *
- * @author Mohamed Samy
+ *
  */
 
 public class SignUpInfo {

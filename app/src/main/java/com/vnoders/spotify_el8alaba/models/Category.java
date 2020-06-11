@@ -3,6 +3,7 @@ package com.vnoders.spotify_el8alaba.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
+import com.vnoders.spotify_el8alaba.models.Search.SearchAlbum;
 import java.util.List;
 
 public class Category {
@@ -20,10 +21,20 @@ public class Category {
     @Expose
     private List<Image> images = null;
 
+    private List<SearchAlbum> mAlbums = null;
 
     public Category(List<HomePlaylist> playlists, String name) {
         this.playlists = playlists;
         this.name = name;
+    }
+
+    public Category(String name, List<SearchAlbum> mAlbums) {
+        this.name = name;
+        this.mAlbums = mAlbums;
+    }
+
+    public List<SearchAlbum> getAlbums() {
+        return mAlbums;
     }
 
     public List<HomePlaylist> getPlaylists() {

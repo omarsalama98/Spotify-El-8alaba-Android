@@ -22,7 +22,11 @@ import java.util.List;
 import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
- * @author Ali Adel Top part of track player fragment
+ * @author Ali Adel
+ */
+
+/**
+ * Top part of track player fragment
  */
 public class TrackTopFragment extends Fragment {
 

@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * @author Mohamed Samy
+ *
  */
 public class ChangePasswordData {
 

@@ -7,6 +7,9 @@ import java.util.List;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Class to turn the JSON from the get track endpoint of backend to POJO
  */
 public class GetTrack {

@@ -14,7 +14,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.response.CurrentUserProfile.CurrentUserProfile;
 
 /**
- * @author Mohamed Samy
+ *
  *
  * this class is to implement share profile bottom sheet containing options of sharing your profile
  * via whatsapp,facebook,messanger and other applications.
