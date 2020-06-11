@@ -73,10 +73,15 @@ public class HomeFragment extends Fragment {
     private int REQUESTS_TBD = 2;
     private int requestsDone = 0;
 
+    /**
+     * Populates the Recently played list using context uris by parsing ids and types from them.
+     *
+     * @param recentlyPlayed An object containing the recently played contexts uris.
+     */
     private void populateRecentlyPlayed(RecentlyPlayed recentlyPlayed) {
         ArrayList<PlayContext> mContexts = (ArrayList<PlayContext>) recentlyPlayed
                 .getPlayContexts();
-        //recentlyPlayedList.clear();
+        recentlyPlayedList.clear();
         REQUESTS_TBD += mContexts.size();
         for (int i = 0; i < mContexts.size(); i++) {
             String type = mContexts.get(i).getUri().split(":")[1];
@@ -234,7 +239,6 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        //spotifyArtistButton.setVisibility(View.VISIBLE);
         spotifyArtistButton.setOnClickListener(v -> {
             ((MainActivity) getActivity()).getService().pause();
             startActivity(new Intent(getActivity(), ArtistMainActivity.class));
@@ -262,7 +266,7 @@ public class HomeFragment extends Fragment {
                 HomeFragment.this, recentlyPlayedList);
         recentlyPlayedRecyclerView.setAdapter(recentlyPlayedListAdapter);
 
-        if (!MainActivity.mock) {
+        if (!MainActivity.mock && !fetchedRequests) {
             call2.enqueue(new Callback<RecentlyPlayed>() {
                 @Override
                 public void onResponse(Call<RecentlyPlayed> call,
@@ -273,6 +277,7 @@ public class HomeFragment extends Fragment {
                     }
                     if (requestsDone == REQUESTS_TBD) {
                         loadingView.setVisibility(View.GONE);
+                        fetchedRequests = true;
                     }
                 }
 
