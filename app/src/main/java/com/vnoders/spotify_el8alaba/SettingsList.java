@@ -131,10 +131,14 @@ public class SettingsList extends Fragment {
                 editor.putString("id","");
                 editor.commit();
                 Intent intent=new Intent(getActivity(), FirstScreen.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                 // stop playing songs
                 ((MainActivity) getActivity()).getService().pause();
                 startActivity(intent);
+                getActivity().finish();
+
             }
         });
 
