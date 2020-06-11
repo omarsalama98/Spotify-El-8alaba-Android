@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+/**
+ * A utility class used in parsing uris of files.
+ */
 public class FileUtils {
 
     private static Uri contentUri = null;

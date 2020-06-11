@@ -31,6 +31,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * The Main Class controlling the three main fragments and navigation between them for Spotify
+ * Artist.
+ */
 public class ArtistMainActivity extends AppCompatActivity {
 
     private static int prevFragment = R.id.navigation_artist_home;

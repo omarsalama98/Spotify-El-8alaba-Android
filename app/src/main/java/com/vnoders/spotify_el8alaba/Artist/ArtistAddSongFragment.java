@@ -47,7 +47,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link Fragment} class for adding a song.
  */
 public class ArtistAddSongFragment extends Fragment {
 

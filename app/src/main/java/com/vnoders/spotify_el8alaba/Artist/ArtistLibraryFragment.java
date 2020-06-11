@@ -19,7 +19,7 @@ import com.vnoders.spotify_el8alaba.Lists_Adapters.Artist.SongsListAdapter;
 import com.vnoders.spotify_el8alaba.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link Fragment} class for an artist's library containing songs and albums.
  */
 public class ArtistLibraryFragment extends Fragment {
 

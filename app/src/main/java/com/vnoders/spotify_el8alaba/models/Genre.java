@@ -1,7 +1,11 @@
 package com.vnoders.spotify_el8alaba.models;
 
 import android.graphics.Bitmap;
+import com.google.gson.Gson;
 
+/**
+ * This class is used to model data parsed from json network response using {@link Gson} library
+ */
 public class Genre {
 
     private Bitmap imageBitmap;

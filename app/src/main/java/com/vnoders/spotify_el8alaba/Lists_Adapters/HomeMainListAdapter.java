@@ -14,6 +14,9 @@ import com.vnoders.spotify_el8alaba.models.Category;
 import com.vnoders.spotify_el8alaba.models.Home.HomePlaylist;
 import java.util.ArrayList;
 
+/**
+ * A RecyclerView Adapter for showing categories and loading their adapters in home fragment.
+ */
 public class HomeMainListAdapter extends RecyclerView.Adapter<HomeMainListAdapter.MyViewHolder> {
 
     private ArrayList<Category> backDataset;

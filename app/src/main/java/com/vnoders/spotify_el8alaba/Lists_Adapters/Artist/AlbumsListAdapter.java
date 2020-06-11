@@ -17,6 +17,9 @@ import com.vnoders.spotify_el8alaba.models.Image;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A RecyclerView Adapter for showing artist's albums in Spotify Artist library.
+ */
 public class AlbumsListAdapter extends RecyclerView.Adapter<AlbumsListAdapter.MyViewHolder> {
 
     private static Fragment fragment;

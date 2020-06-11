@@ -1,5 +1,10 @@
 package com.vnoders.spotify_el8alaba.models.Artist;
 
+import com.google.gson.Gson;
+
+/**
+ * This class is used to model data parsed from json network response using {@link Gson} library
+ */
 public class MyAlbum {
 
     private String id;

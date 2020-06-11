@@ -1,5 +1,8 @@
 package com.vnoders.spotify_el8alaba.Artist;
 
+/**
+ * A helper class for some constants used in Spotify artist navigations.
+ */
 public class ArtistConstantsHelper {
 
     public static String SONG_NAME = "song_name";

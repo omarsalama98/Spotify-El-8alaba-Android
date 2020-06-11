@@ -20,6 +20,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vnoders.spotify_el8alaba.MainActivity;
 import com.vnoders.spotify_el8alaba.R;
 
+/**
+ * A {@link Fragment} class for showing some statistics for an artist.
+ */
 public class ArtistHomeFragment extends Fragment {
 
     @SuppressLint("StaticFieldLeak")

@@ -21,6 +21,9 @@ import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 
+/**
+ * A RecyclerView Adapter for showing a user's search history list in SearchFragment.
+ */
 public class SearchHistoryListAdapter extends
         RecyclerView.Adapter<SearchHistoryListAdapter.MyViewHolder> {
 

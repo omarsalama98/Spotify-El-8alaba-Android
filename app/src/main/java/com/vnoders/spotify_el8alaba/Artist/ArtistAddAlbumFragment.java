@@ -42,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link Fragment} class for adding an album.
  */
 public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeListener {
 
@@ -258,10 +258,10 @@ public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeL
     }
 
     /**
+     * It is used so that at least one radio button is checked at all times.
+     *
      * @param buttonView the radio button checked or unchecked.
      * @param isChecked  the state of the radio button.
-     *                   <p>
-     *                   It is used so that at least one radio button is checked at all times.
      */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

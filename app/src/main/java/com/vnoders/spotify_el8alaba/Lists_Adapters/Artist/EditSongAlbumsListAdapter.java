@@ -13,6 +13,10 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Artist.MyAlbum;
 import java.util.ArrayList;
 
+/**
+ * A RecyclerView Adapter for showing artist's albums in edit song fragment in Spotify Artist
+ * library.
+ */
 public class EditSongAlbumsListAdapter extends
         RecyclerView.Adapter<EditSongAlbumsListAdapter.MyViewHolder> {
 

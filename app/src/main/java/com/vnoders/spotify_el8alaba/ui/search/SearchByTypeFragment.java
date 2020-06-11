@@ -29,10 +29,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * A {@link Fragment} for showing search results for a certain type.
+ */
 public class SearchByTypeFragment extends Fragment {
 
     private Toolbar toolbar;
-    private RecyclerView searchByTypeResultsRecyclerView;
     private String searchQuery;
     private String searchType;
     private TextView searchByTypeTitleTextView;
@@ -58,7 +60,7 @@ public class SearchByTypeFragment extends Fragment {
 
         searchByTypeTitleTextView = root.findViewById(R.id.search_by_type_fragment_title);
         toolbar = root.findViewById(R.id.search_by_type_fragment_toolbar);
-        searchByTypeResultsRecyclerView = root
+        RecyclerView searchByTypeResultsRecyclerView = root
                 .findViewById(R.id.search_by_type_results_recycler_view);
         searchResults = new ArrayList<>();
         mSearchListAdapter = new SearchListAdapter(searchResults, this);

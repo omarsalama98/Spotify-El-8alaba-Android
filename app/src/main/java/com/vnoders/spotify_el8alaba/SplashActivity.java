@@ -7,7 +7,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,20 +14,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.jakewharton.threetenabp.AndroidThreeTen;
-import com.vnoders.spotify_el8alaba.models.Notifications.NotificationToken;
-import com.vnoders.spotify_el8alaba.repositories.API;
 import com.vnoders.spotify_el8alaba.repositories.RetrofitClient;
 import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
-import okhttp3.ResponseBody;
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.Period;
 import org.threeten.bp.format.DateTimeFormatter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
+/**
+ * An activity for the splash screen with our app's logo.
+ */
 public class SplashActivity extends AppCompatActivity {
+
     SharedPreferences notificationShared;
 
     @Override
@@ -64,8 +60,7 @@ public class SplashActivity extends AppCompatActivity {
                         // set the token that was in the preferences before to retrofit client
                         RetrofitClient.getInstance().setToken(tokenVal);
                         startActivity(intent);
-                    }
-                    else{
+                    } else{
                         notificationShared = getSharedPreferences("NOTIFICATION_TOKEN", Context.MODE_PRIVATE);
                         Editor notificationTokenEditor=notificationShared.edit();
                         notificationTokenEditor.putString("notSent","true");

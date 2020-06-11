@@ -9,7 +9,8 @@ import com.vnoders.spotify_el8alaba.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass to show special playlists for users. (Will be implemented
+ * later on)
  */
 public class MadeForYouFragment extends Fragment {
 
