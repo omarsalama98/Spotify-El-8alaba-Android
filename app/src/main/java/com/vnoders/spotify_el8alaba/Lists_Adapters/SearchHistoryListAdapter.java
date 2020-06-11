@@ -14,10 +14,10 @@ import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.repositories.LocalDB.RecentSearches;
+import com.vnoders.spotify_el8alaba.ui.currentUserProfile.UserProfile;
 import com.vnoders.spotify_el8alaba.ui.library.AlbumFragment;
 import com.vnoders.spotify_el8alaba.ui.library.ArtistFragment;
 import com.vnoders.spotify_el8alaba.ui.library.PlaylistHomeFragment;
-import com.vnoders.spotify_el8alaba.ui.library.PlaylistTracksFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import java.util.ArrayList;
 
@@ -103,7 +103,7 @@ public class SearchHistoryListAdapter extends
 
                     switch (type) {
                         case SearchByTypeConstantsHelper.ALBUM:
-                            targetFragment = new AlbumFragment();
+                            targetFragment = AlbumFragment.newInstance(itemId);
                             break;
                         case SearchByTypeConstantsHelper.ARTIST:
                             targetFragment = ArtistFragment.newInstance(itemId);
@@ -112,7 +112,7 @@ public class SearchHistoryListAdapter extends
                             targetFragment = PlaylistHomeFragment.newInstance(itemId);
                             break;
                         default:
-                            targetFragment = new PlaylistTracksFragment();
+                            targetFragment = UserProfile.newInstance(itemId);
                             break;
                     }
 
