@@ -6,6 +6,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import java.util.List;
 
+/**
+ * A Data Access object interface for room database implementation.
+ */
 @Dao
 public interface RecentSearchesDao {
 

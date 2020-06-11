@@ -9,6 +9,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import com.vnoders.spotify_el8alaba.R;
 
+/**
+ * A fragment for showing trending and top charts.
+ */
 public class ChartsFragment extends Fragment {
 
 

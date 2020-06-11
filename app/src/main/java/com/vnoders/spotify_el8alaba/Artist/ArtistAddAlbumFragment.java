@@ -42,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link Fragment} class for adding an album.
  */
 public class ArtistAddAlbumFragment extends Fragment implements OnCheckedChangeListener {
 

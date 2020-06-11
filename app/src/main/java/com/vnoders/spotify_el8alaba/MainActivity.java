@@ -22,6 +22,9 @@ import com.vnoders.spotify_el8alaba.ui.search.SearchFragment;
 import com.vnoders.spotify_el8alaba.ui.search.SearchGenresFragment;
 import com.vnoders.spotify_el8alaba.ui.trackplayer.MediaPlaybackService;
 
+/**
+ * The Main Class controlling the four main fragments and navigation between them.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static int prevFragment = R.id.navigation_home;

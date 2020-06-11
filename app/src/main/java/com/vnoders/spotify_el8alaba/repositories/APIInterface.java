@@ -41,6 +41,9 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/**
+ * An interface for all home, search and artist requests from server.
+ */
 public interface APIInterface {
 
     @GET("search?type=album")

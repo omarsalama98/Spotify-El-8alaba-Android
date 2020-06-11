@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * A class for objects added in Room database.
+ */
 @Entity
 public class RecentSearches {
 

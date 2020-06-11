@@ -49,6 +49,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
+/**
+ * A {@link Fragment} class for home layout.
+ */
 public class HomeFragment extends Fragment {
 
     private SharedPreferences notificationTokenShared;
@@ -97,6 +100,7 @@ public class HomeFragment extends Fragment {
                                 fetchedRequests = true;
                             }
                         }
+
                         @Override
                         public void onFailure(Call<SearchAlbum> call, Throwable t) {
                         }
@@ -119,6 +123,7 @@ public class HomeFragment extends Fragment {
                                 fetchedRequests = true;
                             }
                         }
+
                         @Override
                         public void onFailure(Call<List<SearchArtist>> call, Throwable t) {
                             Log.d("", t.getMessage());
@@ -142,6 +147,7 @@ public class HomeFragment extends Fragment {
                                 fetchedRequests = true;
                             }
                         }
+
                         @Override
                         public void onFailure(Call<SearchPlaylist> call, Throwable t) {
                         }

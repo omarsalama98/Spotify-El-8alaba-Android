@@ -9,7 +9,8 @@ import com.vnoders.spotify_el8alaba.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass for showing new releases. (Isn't currently used but will be
+ * updated later)
  */
 public class NewReleasesFragment extends Fragment {
 

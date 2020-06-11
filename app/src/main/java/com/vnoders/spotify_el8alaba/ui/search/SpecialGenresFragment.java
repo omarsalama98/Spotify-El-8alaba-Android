@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A {@link Fragment} class for showing Genres that contain other genres and playlists.
  */
 public class SpecialGenresFragment extends Fragment {
 
