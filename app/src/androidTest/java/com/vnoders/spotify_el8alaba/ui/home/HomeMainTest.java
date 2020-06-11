@@ -73,7 +73,6 @@ public class HomeMainTest {
     public void settingsIconClickTest() {
         onView(withId(R.id.settings_image_view)).perform(click());
         onView(withId(R.id.current_user_profile_fragment)).check(matches(isDisplayed()));
-        onView(withId(R.id.appBarLayout)).check(matches(isDisplayed()));
         onView(withId(R.id.user_name)).check(matches(isDisplayed()));
         pressBack();
         onView(withId(R.id.home_fragment_container)).check(matches(isDisplayed()));

@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.vnoders.spotify_el8alaba.ConstantsHelper.SearchByTypeConstantsHelper;
-import com.vnoders.spotify_el8alaba.GradientUtils;
 import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.models.Image;
 import com.vnoders.spotify_el8alaba.models.Search.AlbumForTrack;
@@ -148,10 +147,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.My
                         mTrack.setImageUrl(itemImageUrl);
                         Picasso.get().load(itemImageUrl).placeholder(R.drawable.spotify)
                                 .into(holder.image);
-                        GradientUtils.generate(itemImageUrl,
-                                fragment.getView().findViewById(R.id.search_main_background_layout),
-                                GradientUtils.GRADIENT_LINEAR);
-
                     }
 
                     @Override

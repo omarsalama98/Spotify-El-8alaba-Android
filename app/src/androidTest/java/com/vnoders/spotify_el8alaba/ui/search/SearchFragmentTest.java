@@ -70,8 +70,6 @@ public class SearchFragmentTest {
                 .check(matches(withEffectiveVisibility(Visibility.GONE)));
         onView(withId(R.id.see_all_albums_text_view))
                 .check(matches(withEffectiveVisibility(Visibility.GONE)));
-        onView(withId(R.id.see_all_genres_and_moods_text_view))
-                .check(matches(withEffectiveVisibility(Visibility.GONE)));
         onView(withId(R.id.see_all_profiles_text_view))
                 .check(matches(withEffectiveVisibility(Visibility.GONE)));
 
@@ -121,8 +119,6 @@ public class SearchFragmentTest {
         onView(withId(R.id.see_all_playlists_text_view))
                 .check(matches(withEffectiveVisibility(Visibility.VISIBLE)));
         onView(withId(R.id.see_all_albums_text_view))
-                .check(matches(withEffectiveVisibility(Visibility.VISIBLE)));
-        onView(withId(R.id.see_all_genres_and_moods_text_view))
                 .check(matches(withEffectiveVisibility(Visibility.VISIBLE)));
         onView(withId(R.id.see_all_profiles_text_view))
                 .check(matches(withEffectiveVisibility(Visibility.VISIBLE)));
