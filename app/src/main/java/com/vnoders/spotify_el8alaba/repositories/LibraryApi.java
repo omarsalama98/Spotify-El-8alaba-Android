@@ -73,16 +73,6 @@ public interface LibraryApi {
             @Query("ids") List<String> userIds);
 
 
-    @GET("playlists/{playlist_id}/followers/contains")
-    default Call<List<Boolean>> doesCurrentUserFollowPlaylist(
-            @Path("playlist_id") String playlistId) {
-
-        String currentUserId = App.getInstance().getCurrentUserId();
-
-        return doesUsersFollowPlaylist(playlistId, Collections.singletonList(currentUserId));
-    }
-
-
     @PUT("playlists/{playlist_id}/followers")
     Call<Void> followPlaylist(@Path("playlist_id") String playlistId);
 

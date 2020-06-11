@@ -303,8 +303,10 @@ public class LibraryRepository {
     }
 
     public static void updatePlaylistFollowState(PlaylistHomeViewModel viewModel) {
-        Call<List<Boolean>> request = libraryApi
-                .doesCurrentUserFollowPlaylist(viewModel.getPlaylistId());
+        String currentUserId = App.getInstance().getCurrentUserId();
+
+        Call<List<Boolean>> request = libraryApi.doesUsersFollowPlaylist(viewModel.getPlaylistId(),
+                Collections.singletonList(currentUserId));
 
         request.enqueue(new Callback<List<Boolean>>() {
             @Override
