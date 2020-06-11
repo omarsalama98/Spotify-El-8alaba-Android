@@ -121,7 +121,8 @@ public class ChangePassword extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.code()==200){
-                    Toast.makeText(getActivity(),"your password is updated successfully",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"your password is updated successfully,Logout and login again!",Toast.LENGTH_LONG).show();
+
                 }
                 else {
                     Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_LONG).show();
