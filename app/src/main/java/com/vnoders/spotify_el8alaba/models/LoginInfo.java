@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
  * This class stores user's rmail and password that will be needed in the LOGIN an object of this
  * class will be sent to the post function which log the user into the application
  *
- * @author Mohamed Samy
+ *
  */
 
 public class LoginInfo {

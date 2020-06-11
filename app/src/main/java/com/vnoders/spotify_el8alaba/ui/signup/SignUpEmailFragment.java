@@ -26,7 +26,7 @@ import com.vnoders.spotify_el8alaba.R;
 import com.vnoders.spotify_el8alaba.ui.login.FirstScreen;
 
 /**
- * @author Mohamed Samy
+ *
  */
 public class SignUpEmailFragment extends Fragment {
 

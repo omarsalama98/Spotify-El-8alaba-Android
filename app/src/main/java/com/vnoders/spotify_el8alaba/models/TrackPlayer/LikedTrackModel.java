@@ -5,7 +5,11 @@ import com.google.gson.annotations.SerializedName;
 
 
 /**
- * @author Ali Adel Class to turn JSON into POJO received from backend
+ * @author Ali Adel
+ */
+
+/**
+ * Class to turn JSON into POJO received from backend
  */
 public class LikedTrackModel {
 

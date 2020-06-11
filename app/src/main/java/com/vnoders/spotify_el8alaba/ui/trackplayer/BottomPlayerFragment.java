@@ -26,6 +26,9 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Player that is displayed with main activity at bottom which shows all the time
  */
 public class BottomPlayerFragment extends Fragment {

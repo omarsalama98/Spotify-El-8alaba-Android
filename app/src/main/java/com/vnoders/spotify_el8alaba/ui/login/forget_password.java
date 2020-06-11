@@ -21,7 +21,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * @author Mohamed Samy
+ *
  */
 public class forget_password extends AppCompatActivity {
     private ImageButton back;

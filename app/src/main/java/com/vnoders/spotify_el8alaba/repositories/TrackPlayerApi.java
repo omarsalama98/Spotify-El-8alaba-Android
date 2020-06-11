@@ -25,6 +25,9 @@ import retrofit2.http.Query;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * API representation to hit end-points of backend for use by track player module
  */
 public interface TrackPlayerApi {

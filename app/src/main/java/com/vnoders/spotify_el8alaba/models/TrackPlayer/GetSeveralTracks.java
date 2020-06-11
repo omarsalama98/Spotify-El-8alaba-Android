@@ -7,6 +7,9 @@ import java.util.List;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * To be used to turn the JSON of several tracks to one object
  */
 public class GetSeveralTracks {

@@ -7,6 +7,9 @@ import java.util.List;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Used to get an ad from backend and convert JSON to POJO
  */
 public class AdItem {

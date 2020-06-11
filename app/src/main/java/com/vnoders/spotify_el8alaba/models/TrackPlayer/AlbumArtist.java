@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Class to turn the JSON from the get track endpoint of backend to POJO
  */
 public class AlbumArtist {

@@ -111,6 +111,9 @@ public interface APIInterface {
     @GET("me/player/recently-played-contexts")
     Call<RecentlyPlayed> getRecentlyPlayed();
 
+    @GET("browse/new-releases?limit=20&offset=0")
+    Call<Albums> getNewReleases();
+
     @POST("tracks/listens")
     Call<List<TrackListens>> getTrackListens(@Body TrackListensRequestBody trackListensRequestBody);
 

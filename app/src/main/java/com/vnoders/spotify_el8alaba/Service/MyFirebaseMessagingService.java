@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * @author Mohamed Samy
+ *
  * This class extends {@link FirebaseMessagingService} to handle the coming notifications and render
  * them correctly while the application in foreground or back ground
  */

@@ -6,7 +6,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * @author Ali Adel helper custom class to detect swipe gestures and click
+ * @author Ali Adel
+ */
+
+/**
+ * helper custom class to detect swipe gestures and click
  */
 public class OnSwipeTouchListener implements View.OnTouchListener {
 

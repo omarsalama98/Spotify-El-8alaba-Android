@@ -27,6 +27,9 @@ import com.vnoders.spotify_el8alaba.models.TrackPlayer.Track;
 
 /**
  * @author Ali Adel
+ */
+
+/**
  * Bottom part of track player to play music from
  */
 @SuppressWarnings("deprecation")
