@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -43,6 +44,7 @@ public class SettingsList extends Fragment {
     private TextView notificationSettings;
     private TextView changePassword;
     private ImageButton settingsBackButton;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -60,6 +62,7 @@ public class SettingsList extends Fragment {
         notificationShared=getActivity().getSharedPreferences("NOTIFICATION_TOKEN",MODE_PRIVATE);
         mCurrentUserProfile=view.findViewById(R.id.current_user_profile);
         logout=view.findViewById(R.id.logout);
+        progressBar=view.findViewById(R.id.settings_progress_bar);
         notificationSettings=view.findViewById(R.id.notification_settings);
         changePassword=view.findViewById(R.id.change_password);
         settingsBackButton=view.findViewById(R.id.back_button_settings);
@@ -84,23 +87,29 @@ public class SettingsList extends Fragment {
         mCurrentUserProfile.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 Call<CurrentUserProfile> currentUserProfileCall= RetrofitClient.getInstance().getAPI(
                         API.class).getCurrentUserProfile();
                 currentUserProfileCall.enqueue(new Callback<CurrentUserProfile>() {
                     @Override
                     public void onResponse(Call<CurrentUserProfile> call, Response<CurrentUserProfile> response) {
-                        CurrentUserProfile currentUserProfile=response.body();
-                        bundle.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
-                        CurrentUserProfileFragment currentUserProfileFragment=new CurrentUserProfileFragment();
-                        mFragmentManager=getActivity().getSupportFragmentManager();
-                        currentUserProfileFragment.setArguments(bundle);
-                        mFragmentTransaction=mFragmentManager.beginTransaction();
-                        mFragmentTransaction.replace(R.id.nav_host_fragment,currentUserProfileFragment,"CURRENT_USER_PROFILE").addToBackStack(null).commit();
-
+                        progressBar.setVisibility(View.GONE);
+                        if(response.code()==200) {
+                            CurrentUserProfile currentUserProfile = response.body();
+                            bundle.putSerializable("CURRENT_USER_PROFILE", currentUserProfile);
+                            CurrentUserProfileFragment currentUserProfileFragment = new CurrentUserProfileFragment();
+                            mFragmentManager = getActivity().getSupportFragmentManager();
+                            currentUserProfileFragment.setArguments(bundle);
+                            mFragmentTransaction = mFragmentManager.beginTransaction();
+                            mFragmentTransaction
+                                    .replace(R.id.nav_host_fragment, currentUserProfileFragment,
+                                            "CURRENT_USER_PROFILE").addToBackStack(null).commit();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<CurrentUserProfile> call, Throwable t) {
+                        progressBar.setVisibility(View.GONE);
                         ConnectionDialog dialog = new ConnectionDialog();
                         dialog.show(requireActivity().getFragmentManager(), "connection_dialog");
                     }

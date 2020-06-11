@@ -8,6 +8,15 @@
         android:orientation="vertical"
         android:background="@color/endColor"
         >
+    <ProgressBar
+            android:id = "@+id/settings_progress_bar"
+            android:elevation = "2dp"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:padding = "150dp"
+            android:layout_gravity = "center"
+            android:visibility="gone"
+            />
     <RelativeLayout
             android:layout_marginTop="20dp"
             android:background="@color/endColor"
