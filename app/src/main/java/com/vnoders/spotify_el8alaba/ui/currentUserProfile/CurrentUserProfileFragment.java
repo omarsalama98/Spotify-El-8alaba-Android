@@ -121,137 +121,158 @@ public class CurrentUserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        List<Image> userImages =currentUserProfile.getImage();
-        if(userImages!=null&&userImages.size()>0) {
-             imageUrl = userImages.get(1).getUrl();
-        }
-        recentActivitesArrayList=new ArrayList<NotificationItem>();
-        // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_current_user_profile, container, false);
-        followingLayout=root.findViewById(R.id.following_layout);
-        followersLayout=root.findViewById(R.id.followers_layout);
-        userNameToolbar=root.findViewById(R.id.user_name_toobar);
-        emptyActivities=root.findViewById(R.id.no_recent_activities);
-        emptyActivities.setVisibility(View.GONE);
-        userName=root.findViewById(R.id.user_name);
-        backArrowImage = root.findViewById(R.id.back_button);
-        toolbar=root.findViewById(R.id.toolbar);
-        appBarLayout=root.findViewById(R.id.appBar);
-        userImage=root.findViewById(R.id.user_image);
-        bottomSheetButton=root.findViewById(R.id.bottom_sheet_button);
-        followerNumber=root.findViewById(R.id.followers_number);
-        followingNumber=root.findViewById(R.id.following_numbers);
-        playlistNumber=root.findViewById(R.id.playlist_number);
-        playListWrap = root.findViewById(R.id.followPlaylistsWrap);
-        playlistNumber.setText("-");
-        editProfileButton=root.findViewById(R.id.edit_profile_button);
+
+        if(currentUserProfile==null){
+            SettingsList settingsList =new SettingsList();
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+        else {
+            List<Image> userImages = currentUserProfile.getImage();
+            if (userImages != null && userImages.size() > 0) {
+                imageUrl = userImages.get(1).getUrl();
+            }
+
+            recentActivitesArrayList = new ArrayList<NotificationItem>();
+            // Inflate the layout for this fragment
+            followingLayout = root.findViewById(R.id.following_layout);
+            followersLayout = root.findViewById(R.id.followers_layout);
+            userNameToolbar = root.findViewById(R.id.user_name_toobar);
+            emptyActivities = root.findViewById(R.id.no_recent_activities);
+            emptyActivities.setVisibility(View.GONE);
+            userName = root.findViewById(R.id.user_name);
+            backArrowImage = root.findViewById(R.id.back_button);
+            toolbar = root.findViewById(R.id.toolbar);
+            appBarLayout = root.findViewById(R.id.appBar);
+            userImage = root.findViewById(R.id.user_image);
+            bottomSheetButton = root.findViewById(R.id.bottom_sheet_button);
+            followerNumber = root.findViewById(R.id.followers_number);
+            followingNumber = root.findViewById(R.id.following_numbers);
+            playlistNumber = root.findViewById(R.id.playlist_number);
+            playListWrap = root.findViewById(R.id.followPlaylistsWrap);
+            playlistNumber.setText("-");
+            editProfileButton = root.findViewById(R.id.edit_profile_button);
             Picasso.get().load(imageUrl).networkPolicy(NetworkPolicy.NO_CACHE).memoryPolicy(
-                MemoryPolicy.NO_CACHE)
-                .into(userImage);
-        GradientUtils.generate(imageUrl,appBarLayout,GradientUtils.GRADIENT_LINEAR_BLACK);
-        followerNumber.setText(currentUserProfile.getFollowers().toString());
-        userName.setText(currentUserProfile.getName());
-        userNameToolbar.setText(currentUserProfile.getName());
-        followingNumber.setText(String.valueOf(currentUserProfile.getFollowing().size()));
-        if(currentUserProfile.getFollowers()==0){
-            followersLayout.setEnabled(false);
+                    MemoryPolicy.NO_CACHE)
+                    .into(userImage);
+            GradientUtils.generate(imageUrl, appBarLayout, GradientUtils.GRADIENT_LINEAR_BLACK);
+            followerNumber.setText(currentUserProfile.getFollowers().toString());
+            userName.setText(currentUserProfile.getName());
+            userNameToolbar.setText(currentUserProfile.getName());
+            followingNumber.setText(String.valueOf(currentUserProfile.getFollowing().size()));
+            if (currentUserProfile.getFollowers() == 0) {
+                followersLayout.setEnabled(false);
+            }
+            if (currentUserProfile.getFollowing().size() == 0) {
+                followingLayout.setEnabled(false);
+            }
+            recentActivitiesRV = root.findViewById(R.id.recent_activities_recycler_view);
+
+            appBarLayout.addOnOffsetChangedListener(new OnOffsetChangedListener() {
+                @Override
+                public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                    userNameToolbar
+                            .setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
+                }
+            });
+            followingLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Following following = new Following();
+                    ArrayList<String> followingIds = new ArrayList<String>(
+                            currentUserProfile.getFollowing());
+                    bundle = new Bundle();
+                    bundle.putStringArrayList("FOLLOWING_IDS", followingIds);
+                    following.setArguments(bundle);
+                    fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.nav_host_fragment, following, "FOLLOWING")
+                            .addToBackStack(null).commit();
+
+                }
+            });
+            followersLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ArrayList<String> followingIds = new ArrayList<String>(
+                            currentUserProfile.getFollowing());
+                    bundle = new Bundle();
+                    bundle.putStringArrayList("FOLLOWING_IDS", followingIds);
+                    Followers followers = new Followers();
+                    followers.setArguments(bundle);
+                    fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.nav_host_fragment, followers, "FOLLOWERS")
+                            .addToBackStack(null).commit();
+                }
+            });
+            editProfileButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bundle = new Bundle();
+                    //will be uncommented when a user with image is created
+                    // bundle.putString("image_url",currentUserProfile.getImage().getUrl());
+                    bundle.putString("image_url", imageUrl);
+                    bundle.putString("user_name", currentUserProfile.getName());
+                    bundle.putSerializable("CURRENT_USER_PROFILE", currentUserProfile);
+                    EditProfile editProfile = new EditProfile();
+                    editProfile.setArguments(bundle);
+                    fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.nav_host_fragment, editProfile, "EDIT_PROFILE")
+                            .addToBackStack(null).commit();
+                }
+            });
+            bottomSheetButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bundle = new Bundle();
+                    bundle.putString("image_url", imageUrl);
+                    bundle.putString("user_name", currentUserProfile.getName());
+                    bundle.putSerializable("CURRENT_USER_PROFILE", currentUserProfile);
+                    CurrentUserProfileBottomSheet currentUserProfileBottomSheet = new CurrentUserProfileBottomSheet();
+                    currentUserProfileBottomSheet.setArguments(bundle);
+                    currentUserProfileBottomSheet.show(getActivity().getSupportFragmentManager(),
+                            "CURRENT_USER_PROFILE_BOTTOM_SHEET");
+
+                }
+            });
+            backArrowImage.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SettingsList settingsList = new SettingsList();
+                    fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction
+                            .replace(R.id.nav_host_fragment, settingsList, "SETTING_LIST")
+                            .addToBackStack(null).commit();
+                }
+            });
+
+            getRecentActivities();
+
+            // make request to display the owned playlists correctly
+            setPlaylistsNumber();
+
+            // setup the click on the playlists
+            playListWrap.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OwnedPlaylistsFragment ownedPlaylistsFragment = OwnedPlaylistsFragment
+                            .newInstance(currentUserProfile.getId());
+                    fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.nav_host_fragment, ownedPlaylistsFragment,
+                            "OWNED_PLAYLISTS").addToBackStack(null).commit();
+                }
+            });
+            recentActivitiesAdapter = new RecentActivitiesAdapter(recentActivitesArrayList);
+            recentActivitiesLayoutManager = new LinearLayoutManager(getContext());
+            recentActivitiesRV.setLayoutManager(recentActivitiesLayoutManager);
+            recentActivitiesRV.setAdapter(recentActivitiesAdapter);
+            return root;
         }
-        if(currentUserProfile.getFollowing().size()==0){
-            followingLayout.setEnabled(false);
-        }
-        recentActivitiesRV=root.findViewById(R.id.recent_activities_recycler_view);
 
-        appBarLayout.addOnOffsetChangedListener(new OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                userNameToolbar.setAlpha(-1.0f * verticalOffset / appBarLayout.getTotalScrollRange());
-            }
-        });
-        followingLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            Following following=new Following();
-                ArrayList<String> followingIds=new ArrayList<String>(currentUserProfile.getFollowing());
-                bundle=new Bundle();
-                bundle.putStringArrayList("FOLLOWING_IDS",followingIds);
-                following.setArguments(bundle);
-                fragmentManager=getActivity().getSupportFragmentManager();
-                fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment,following,"FOLLOWING").addToBackStack(null).commit();
-
-            }
-        });
-        followersLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<String> followingIds=new ArrayList<String>(currentUserProfile.getFollowing());
-                bundle=new Bundle();
-                bundle.putStringArrayList("FOLLOWING_IDS",followingIds);
-                Followers followers=new Followers();
-                followers.setArguments(bundle);
-                fragmentManager=getActivity().getSupportFragmentManager();
-                fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment,followers,"FOLLOWERS").addToBackStack(null).commit();
-            }
-        });
-        editProfileButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle=new Bundle();
-                //will be uncommented when a user with image is created
-               // bundle.putString("image_url",currentUserProfile.getImage().getUrl());
-                bundle.putString("image_url",imageUrl);
-                bundle.putString("user_name",currentUserProfile.getName());
-                bundle.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
-                EditProfile editProfile=new EditProfile();
-                editProfile.setArguments(bundle);
-                fragmentManager=getActivity().getSupportFragmentManager();
-                fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment,editProfile,"EDIT_PROFILE").addToBackStack(null).commit();
-            }
-        });
-        bottomSheetButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bundle=new Bundle();
-                bundle.putString("image_url",imageUrl);
-                bundle.putString("user_name",currentUserProfile.getName());
-                bundle.putSerializable("CURRENT_USER_PROFILE",currentUserProfile);
-                CurrentUserProfileBottomSheet currentUserProfileBottomSheet=new CurrentUserProfileBottomSheet();
-                currentUserProfileBottomSheet.setArguments(bundle);
-                currentUserProfileBottomSheet.show(getActivity().getSupportFragmentManager(),"CURRENT_USER_PROFILE_BOTTOM_SHEET");
-
-            }
-        });
-        backArrowImage.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SettingsList settingsList =new SettingsList();
-                fragmentManager=getActivity().getSupportFragmentManager();
-                fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment,settingsList,"SETTING_LIST").addToBackStack(null).commit();
-            }
-        });
-
-        getRecentActivities();
-
-        // make request to display the owned playlists correctly
-        setPlaylistsNumber();
-
-        // setup the click on the playlists
-        playListWrap.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OwnedPlaylistsFragment ownedPlaylistsFragment = OwnedPlaylistsFragment.newInstance(currentUserProfile.getId());
-                fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_fragment, ownedPlaylistsFragment,"OWNED_PLAYLISTS").addToBackStack(null).commit();
-            }
-        });
-        recentActivitiesAdapter=new RecentActivitiesAdapter(recentActivitesArrayList);
-        recentActivitiesLayoutManager = new LinearLayoutManager(getContext());
-        recentActivitiesRV.setLayoutManager(recentActivitiesLayoutManager);
-        recentActivitiesRV.setAdapter(recentActivitiesAdapter);
         return root;
     }
 
