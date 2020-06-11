@@ -22,4 +22,6 @@ public class SearchByTypeConstantsHelper {
     public static final String GENRE_ID_KEY = "Genre Id";
     public static final String GENRE_NAME_KEY = "Genre Name";
 
+    public static final String NEW_RELEASES = "New Releases";
+
 }
