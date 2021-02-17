@@ -1,18 +1,27 @@
-# Project Description
+# Spotify El Ghalaba
+### This is a spotify's android application clone.
 
-spotify-elghalaba is an educational project that is developed by Computer Engineering students
-related for software engineering course.
+### The project was originally hosted on [gitlab](https://gitlab.com/spotify_el8alaba/android)
+
+### This is a part of a bigger spotify clone including [front-end](https://gitlab.com/spotify_el8alaba/front) and [back-end](https://gitlab.com/spotify_el8alaba/back)
+
+### Note: The application will no longer work as the back-end server hosting subscription has ended
+
+# Screenshots
+![](screenshots/screen_01.png) |![](screenshots/screen_02.png) |![](screenshots/screen_03.png)
+:-----------------------------:|:-----------------------------:|:-----------------------------:
+![](screenshots/screen_04.png) |![](screenshots/screen_05.png) |![](screenshots/screen_06.png)
+![](screenshots/screen_07.png) |![](screenshots/screen_08.png) |![](screenshots/screen_09.png)
+![](screenshots/screen_10.png) |![](screenshots/screen_11.png) |![](screenshots/screen_12.png)
+![](screenshots/screen_13.png) |![](screenshots/screen_14.png) |![](screenshots/screen_15.png)
+
 
 ### Prerequisites
-Before installation, you must have Android Studio and emulator or a real device. 
-For Android Studio: 
-use this link for downloading:https://developer.android.com/studio/?gclid=CjwKCAjw1cX0BRBmEiwAy9tKHivgmj9Zw3k6UyaLNcaUMGOfA9FjEZ7GeuxzzKVX-KSyadNyNZcWwhoC5S8QAvD_BwE&gclsrc=aw.ds
-Minimum SDK version is 21
-Target SDK version is 29
-
+- [Android Studio 4 or higher](https://developer.android.com/studio/)
+- Minimum SDK version is 21 (Android Lollipop)
 
 ### How to run for developers
-1. Get spotify-elghalaba project. 
+1. Clone the repository. 
 2. Open Android Studio, click on "open" from "File" tab to open the project from the corresponding directory. 
 3. Connect a mobile phone to the device and wait for build gradles to finish. 
 4. Click on run button from the toolbar.
@@ -41,5 +50,11 @@ Target SDK version is 29
 1. Click on tools tab in toolbar and then select generate JavaDoc
 2. Select prefered options to generate the required JavaDoc
 3. Specify the output directory then click OK
-  
 
+### Used Tools and technologies
+- Retrofit (Connection with REST API)
+- Picasso (Download and display images)
+- gson (JSON Serialization and Deserialization)
+- Espresso (UI testing)
+- MVVM Architectural Design Pattern
+- Singleton Design Pattern
