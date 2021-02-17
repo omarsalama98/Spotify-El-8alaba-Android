@@ -3,7 +3,7 @@
 
 ### The project was originally hosted on [gitlab](https://gitlab.com/spotify_el8alaba/android)
 
-### This is a part of a bigger spotify clone including [front-end](https://gitlab.com/spotify_el8alaba/front) and [back-end](https://gitlab.com/spotify_el8alaba/back)
+### This is a part of a bigger [spotify clone project](https://gitlab.com/spotify_el8alaba/) including [front-end](https://github.com/Happysword/Spotify-El8alaba-FrontEnd) and [back-end](https://github.com/yousefwalid/SpotifyElGhalaba)
 
 ### Note: The application will no longer work as the back-end server hosting subscription has ended
 
